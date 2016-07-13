@@ -29,7 +29,7 @@ nconf
     'PORT'
   ])
   // 3. Config file
-  .file({ file: path.join(__dirname, 'config.json') })
+  .file({file: path.join(__dirname, 'config.json')})
   // 4. Defaults
   .defaults({
     // Typically you will create a bucket with the same name as your project ID.
@@ -47,7 +47,7 @@ nconf
 checkConfig('GCLOUD_PROJECT');
 checkConfig('CLOUD_BUCKET');
 
-function checkConfig (setting) {
+function checkConfig(setting) {
   if (!nconf.get(setting)) {
     throw new Error('You must set the ' + setting + ' environment variable or' +
       ' add it to config.json!');

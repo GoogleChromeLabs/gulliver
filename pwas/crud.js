@@ -24,7 +24,7 @@ function getModel() {
   return require('../lib/model-' + config.get('DATA_BACKEND'));
 }
 
-var router = express.Router();
+var router = express.Router(); // eslint-disable-line
 
 // Set Content-Type for all responses for these routes
 router.use(function(req, res, next) {
@@ -38,7 +38,7 @@ router.use(function(req, res, next) {
  * Display a page of PWAs (up to ten at a time).
  */
 router.get('/', function list(req, res, next) {
-  getModel().list(PWA, 10, req.query.pageToken, function(err, entities, cursor) {
+  function callback(err, entities, cursor) {
     if (err) {
       return next(err);
     }
@@ -46,7 +46,8 @@ router.get('/', function list(req, res, next) {
       pwas: entities,
       nextPageToken: cursor
     });
-  });
+  }
+  getModel().list(PWA, 10, req.query.pageToken, callback);
 });
 
 /**
@@ -135,6 +136,9 @@ router.post(
         console.log(json);
         data.manifest = JSON.stringify(json);
         getModel().update(PWA, req.params.pwa, data, function(err, savedData) {
+          if (err) {
+            return;
+          }
         });
       });
     });

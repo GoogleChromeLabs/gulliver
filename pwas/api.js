@@ -23,7 +23,7 @@ function getModel() {
   return require('../lib/model-' + config.get('DATA_BACKEND'));
 }
 
-var router = express.Router();
+var router = express.Router(); // eslint-disable-line
 
 // Automatically parse request body as JSON
 router.use(bodyParser.json());
@@ -34,7 +34,7 @@ router.use(bodyParser.json());
  * Retrieve a page of PWAs (up to ten at a time).
  */
 router.get('/', function list(req, res, next) {
-  getModel().list(PWA, 10, req.query.pageToken, function(err, entities, cursor) {
+  function callback(err, entities, cursor) {
     if (err) {
       return next(err);
     }
@@ -42,7 +42,8 @@ router.get('/', function list(req, res, next) {
       items: entities,
       nextPageToken: cursor
     });
-  });
+  }
+  getModel().list(PWA, 10, req.query.pageToken, callback);
 });
 
 /**
