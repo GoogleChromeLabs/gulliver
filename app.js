@@ -34,17 +34,17 @@ app.use('/pwas', require('./pwas/crud'));
 app.use('/api/pwas', require('./pwas/api'));
 
 // Redirect root to /pwas
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
   res.redirect('/pwas');
 });
 
 // Basic 404 handler
-app.use(function (req, res) {
+app.use(function(req, res) {
   res.status(404).send('Not Found');
 });
 
 // Basic error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   /* jshint unused:false */
   console.error(err);
   // If our routes specified a specific response, then send that. Otherwise,
@@ -54,7 +54,7 @@ app.use(function (err, req, res, next) {
 
 if (module === require.main) {
   // Start the server
-  var server = app.listen(config.get('PORT'), function () {
+  var server = app.listen(config.get('PORT'), function() {
     var port = server.address().port;
     console.log('App listening on port %s', port);
   });
