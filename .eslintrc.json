@@ -3,7 +3,8 @@
   "installedESLint": true,
   // http://eslint.org/docs/rules/
   "rules": {
-    "require-jsdoc": 0
+    "require-jsdoc": 0,
+    "no-var": 1
   },
   // http://eslint.org/docs/user-guide/configuring#specifying-environments
   "env": {
