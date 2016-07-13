@@ -9,11 +9,10 @@ A PWA Directory example.
 
 ## Installation
 
-1. Fork the repository.
-2. Clone the repository on your computer.
-3. Run `gcloud init` and follow the on-screen instructions. 
-4. Run `npm i` to install dependencies.
-5. Start the project with `npm start`
+1. Clone the repository on your computer.
+2. Run `gcloud init` and follow the on-screen instructions. 
+3. Run `npm i` to install dependencies.
+4. Start the project with `npm start`
 
 Summary:
 
@@ -24,7 +23,6 @@ $ gcloud init
 $ npm i
 $ npm start
 ```
-For this to work, `gcloud` must be configured to point to a project you have the appropriate access to. Otherwise, the app will fail with a mysterious `Error: Not authorized.` error message. To check this, run `gcloud info`. If an unexpected account and project are listed, fix via `gcloud init` and choose the `Re-initialize this configuration [default] with new settings` option.
 
 ## License
 
