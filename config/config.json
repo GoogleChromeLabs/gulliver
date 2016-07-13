@@ -1,0 +1,5 @@
+{
+  "GCLOUD_PROJECT": "google.com:gulliver",
+  "DATA_BACKEND": "datastore",
+  "CLOUD_BUCKET": "gulliver.google.com.a.appspot.com"
+}
