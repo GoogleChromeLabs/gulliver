@@ -2,7 +2,7 @@
 
 A PWA Directory example.
 
-## Instalation
+## Installation
 
 1. Fork the repository.
 2. Install [NodeJS](https://nodejs.org).
