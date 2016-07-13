@@ -11,22 +11,22 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 'use strict';
 
-var express = require('express');
-var config = require('../config/config');
-var images = require('../lib/images');
-var fetch = require('node-fetch');
+const express = require('express');
+const config = require('../config/config');
+const images = require('../lib/images');
+const fetch = require('node-fetch');
 
-var PWA = 'PWA';
+const PWA = 'PWA';
 
 function getModel() {
   return require('../lib/model-' + config.get('DATA_BACKEND'));
 }
 
-var router = express.Router(); // eslint-disable-line
+const router = express.Router(); // eslint-disable-line
 
 // Set Content-Type for all responses for these routes
 router.use(function(req, res, next) {
@@ -75,7 +75,7 @@ router.post(
   images.multer.single('image'),
   images.sendUploadToGCS,
   function insert(req, res, next) {
-    var data = req.body;
+    const data = req.body;
 
     // Was an image uploaded? If so, we'll use its public URL
     // in cloud storage.
@@ -131,7 +131,7 @@ router.post(
   images.multer.single('image'),
   images.sendUploadToGCS,
   function update(req, res, next) {
-    var data = req.body;
+    const data = req.body;
 
     fetch(data.manifestUrl).then(response => {
       response.json().then(json => {

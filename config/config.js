@@ -11,14 +11,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 'use strict';
 
 // Hierarchical node.js configuration with command-line arguments, environment
 // variables, and files.
-var nconf = module.exports = require('nconf');
-var path = require('path');
+const nconf = module.exports = require('nconf');
+const path = require('path');
 
 nconf
   // 1. Command-line arguments

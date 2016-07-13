@@ -11,15 +11,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 'use strict';
 
-var path = require('path');
-var express = require('express');
-var config = require('./config/config');
+const path = require('path');
+const express = require('express');
+const config = require('./config/config');
 
-var app = express();
+const app = express();
 
 app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));
@@ -44,7 +44,7 @@ app.use(function(req, res) {
 });
 
 // Basic error handler
-app.use(function(err, req, res, next) {
+app.use(function(err, req, res) {
   /* jshint unused:false */
   console.error(err);
   // If our routes specified a specific response, then send that. Otherwise,
@@ -54,8 +54,8 @@ app.use(function(err, req, res, next) {
 
 if (module === require.main) {
   // Start the server
-  var server = app.listen(config.get('PORT'), function() {
-    var port = server.address().port;
+  const server = app.listen(config.get('PORT'), function() {
+    const port = server.address().port;
     console.log('App listening on port %s', port);
   });
 }
