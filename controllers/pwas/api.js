@@ -17,12 +17,12 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../config/config');
+const config = require('../../config/config');
 
 const PWA = 'PWA';
 
 function getModel() {
-  return require('../lib/model-' + config.get('DATA_BACKEND'));
+  return require('../../lib/model-' + config.get('DATA_BACKEND'));
 }
 
 const router = express.Router(); // eslint-disable-line

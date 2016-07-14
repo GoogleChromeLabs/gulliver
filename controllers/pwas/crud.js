@@ -16,14 +16,14 @@
 'use strict';
 
 const express = require('express');
-const config = require('../config/config');
-const images = require('../lib/images');
+const config = require('../../config/config');
+const images = require('../../lib/images');
 const fetch = require('node-fetch');
 
 const PWA = 'PWA';
 
 function getModel() {
-  return require('../lib/model-' + config.get('DATA_BACKEND'));
+  return require('../../lib/model-' + config.get('DATA_BACKEND'));
 }
 
 const router = express.Router(); // eslint-disable-line
