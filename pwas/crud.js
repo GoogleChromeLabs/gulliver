@@ -93,8 +93,7 @@ router.post(
         response.json().then(json => {
           savedData.manifest = JSON.stringify(json);
           console.log(savedData);
-          getModel().update(PWA, savedData.id, savedData, function(err, savedData) {
-          });
+          getModel().update(PWA, savedData.id, savedData);
         });
       });
 
@@ -137,11 +136,7 @@ router.post(
       response.json().then(json => {
         console.log(json);
         data.manifest = JSON.stringify(json);
-        getModel().update(PWA, req.params.pwa, data, function(err, savedData) {
-          if (err) {
-            return;
-          }
-        });
+        getModel().update(PWA, req.params.pwa, data);
       });
     });
 
