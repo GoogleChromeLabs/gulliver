@@ -29,14 +29,8 @@ app.set('trust proxy', true);
 // Static files
 app.use(express.static('public'));
 
-// PWAs
-app.use('/pwas', require('./pwas/crud'));
-app.use('/api/pwas', require('./pwas/api'));
-
-// Redirect root to /pwas
-app.get('/', function(req, res) {
-  res.redirect('/pwas');
-});
+// Controllers
+app.use(require('./controllers'));
 
 // Basic 404 handler
 app.use(function(req, res) {
