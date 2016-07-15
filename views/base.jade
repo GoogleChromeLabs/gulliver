@@ -18,6 +18,14 @@ html(lang="en")
     meta(charset='utf-8')
     meta(name="viewport", content="width=device-width, initial-scale=1")
     link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css")
+    script.
+      window.gapiReady = new Promise(resolve => {
+        window.gapiResolve = () => {
+          resolve(window.gapi);
+        };
+      });
+    script(src="https://apis.google.com/js/api.js?onload=gapiResolve" async defer)
+    script(src="/js/gulliver.js" async defer)
   body
     .navbar.navbar-default
       .container
@@ -27,6 +35,9 @@ html(lang="en")
         ul.nav.navbar-nav
           li
             a(href="/pwas") PWAs
+          li
+            button(id="login" type="button", class="btn btn-default" disabled) Login
+            button(id="logout" type="button", class="btn btn-default" disabled) Logout
 
     .container
       block content
