@@ -28,7 +28,7 @@ function gapiLoad(name) {
  * @param {string} [version="v1"] version
  * @return {Promise<T>} Promise resolving to gapi.client[name]
  */
-function clientLoad(name, version) {
+function clientLoad(name, version) { // eslint-disable-line no-unused-vars
   version = version ? version : 'v1';
   return gapiLoad('client').then(client => {
     return new Promise(resolve => {
