@@ -89,7 +89,17 @@ router.post(
         return next(err);
       }
 
-      fetch(savedData.manifestUrl).then(response => {
+      const options = {
+        method: 'GET',
+        headers: {
+          'user-agent': [
+            'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36',
+            '(KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36'
+          ].join(' ')
+        }
+      };
+
+      fetch(savedData.manifestUrl, options).then(response => {
         response.json().then(json => {
           savedData.manifest = JSON.stringify(json);
           console.log(savedData);
