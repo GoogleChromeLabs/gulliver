@@ -41,7 +41,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.13.4",
-    "gcloud": "~0.31.0",
+    "gcloud": "~0.36.0",
     "jade": "^1.11.0",
     "multer": "^1.1.0",
     "nconf": "^0.8.4",
