@@ -26,7 +26,7 @@ function getModel() {
   return require('../../lib/model-' + config.get('DATA_BACKEND'));
 }
 
-const router = express.Router(); // eslint-disable-line
+const router = express.Router(); // eslint-disable-line new-cap
 
 // Set Content-Type for all responses for these routes
 router.use(function(req, res, next) {
