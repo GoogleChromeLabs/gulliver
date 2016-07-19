@@ -44,7 +44,7 @@ router.get('/', function list(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.render('pwas/list.jade', {
+    res.render('pwas/list.hbs', {
       pwas: entities,
       nextPageToken: cursor
     });
@@ -58,7 +58,7 @@ router.get('/', function list(req, res, next) {
  * Display a form for creating a PWA.
  */
 router.get('/add', function addForm(req, res) {
-  res.render('pwas/form.jade', {
+  res.render('pwas/form.hbs', {
     pwa: {},
     action: 'Add'
   });
@@ -123,7 +123,7 @@ router.get('/:pwa/edit', function editForm(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.render('pwas/form.jade', {
+    res.render('pwas/form.hbs', {
       pwa: entity,
       action: 'Edit'
     });
@@ -175,7 +175,7 @@ router.get('/:pwa', function get(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.render('pwas/view.jade', {
+    res.render('pwas/view.hbs', {
       pwa: entity
     });
   });
