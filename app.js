@@ -26,7 +26,7 @@ app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.set('trust proxy', true);
-hbs.registerPartials(__dirname + '/views/includes/');
+hbs.registerPartials(path.join(__dirname, '/views/includes/'));
 
 // Static files
 app.use(express.static('public'));
