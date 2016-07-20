@@ -61,7 +61,7 @@ router.post(
   '/add',
   images.multer.single('image'),
   images.sendUploadToGCS,
-  function(req, res, next) {
+  (req, res, next) => {
     const data = req.body;
 
     const callback = function(err, savedData) {
@@ -77,8 +77,7 @@ router.post(
       data.imageUrl = req.file.cloudStoragePublicUrl;
     }
     pwaModel.save(data, callback);
-  }
-);
+  });
 // [END add]
 
 /**
@@ -132,11 +131,24 @@ router.get('/:pwa', function get(req, res, next) {
       return next(err);
     }
 
+    const manifest = entity.manifest ? JSON.parse(entity.manifest) : {};
+    const titleColor = manifest.theme_color ? getContrastYIQ(manifest.theme_color) : 'black';
+
     res.render('pwas/view.hbs', {
-      pwa: entity
+      pwa: entity,
+      manifest: manifest,
+      titleColor: titleColor
     });
   });
 });
+
+function getContrastYIQ(hexcolor) {
+  const r = parseInt(hexcolor.substr(0, 2), 16);
+  const g = parseInt(hexcolor.substr(2, 2), 16);
+  const b = parseInt(hexcolor.substr(4, 2), 16);
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return (yiq >= 128) ? 'black' : 'white';
+}
 
 /**
  * GET /pwas/:id/delete
