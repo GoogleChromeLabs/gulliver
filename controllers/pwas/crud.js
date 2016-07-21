@@ -16,17 +16,10 @@
 'use strict';
 
 const express = require('express');
-const config = require('../../config/config');
 const images = require('../../lib/images');
-const fetch = require('node-fetch');
-
-const PWA = 'PWA';
-
-function getModel() {
-  return require('../../lib/model-' + config.get('DATA_BACKEND'));
-}
-
+const pwaModel = require('../../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
+const LIST_PAGE_SIZE = 10;
 
 // Set Content-Type for all responses for these routes
 router.use(function(req, res, next) {
@@ -49,7 +42,7 @@ router.get('/', function list(req, res, next) {
       nextPageToken: cursor
     });
   }
-  getModel().list(PWA, 10, req.query.pageToken, callback);
+  pwaModel.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
 });
 
 /**
@@ -74,41 +67,22 @@ router.post(
   '/add',
   images.multer.single('image'),
   images.sendUploadToGCS,
-  function insert(req, res, next) {
+  function(req, res, next) {
     const data = req.body;
+
+    const callback = function(err, savedData) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(req.baseUrl + '/' + savedData.id);
+    };
 
     // Was an image uploaded? If so, we'll use its public URL
     // in cloud storage.
     if (req.file && req.file.cloudStoragePublicUrl) {
       data.imageUrl = req.file.cloudStoragePublicUrl;
     }
-
-    // Save the data to the database.
-    getModel().create(PWA, data, function(err, savedData) {
-      if (err) {
-        return next(err);
-      }
-
-      const options = {
-        method: 'GET',
-        headers: {
-          'user-agent': [
-            'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36',
-            '(KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36'
-          ].join(' ')
-        }
-      };
-
-      fetch(savedData.manifestUrl, options).then(response => {
-        response.json().then(json => {
-          savedData.manifest = JSON.stringify(json);
-          console.log(savedData);
-          getModel().update(PWA, savedData.id, savedData);
-        });
-      });
-
-      res.redirect(req.baseUrl + '/' + savedData.id);
-    });
+    pwaModel.save(data, callback);
   }
 );
 // [END add]
@@ -118,11 +92,12 @@ router.post(
  *
  * Display a pwa for editing.
  */
-router.get('/:pwa/edit', function editForm(req, res, next) {
-  getModel().read(PWA, req.params.pwa, function(err, entity) {
+router.get('/:pwa/edit', (req, res, next) => {
+  pwaModel.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
+
     res.render('pwas/form.hbs', {
       pwa: entity,
       action: 'Edit'
@@ -139,24 +114,11 @@ router.post(
   '/:pwa/edit',
   images.multer.single('image'),
   images.sendUploadToGCS,
-  function update(req, res, next) {
+  (req, res, next) => {
     const data = req.body;
+    data.id = req.params.pwa;
 
-    fetch(data.manifestUrl).then(response => {
-      response.json().then(json => {
-        console.log(json);
-        data.manifest = JSON.stringify(json);
-        getModel().update(PWA, req.params.pwa, data);
-      });
-    });
-
-    // Was an image uploaded? If so, we'll use its public URL
-    // in cloud storage.
-    if (req.file && req.file.cloudStoragePublicUrl) {
-      req.body.imageUrl = req.file.cloudStoragePublicUrl;
-    }
-
-    getModel().update(PWA, req.params.pwa, data, function(err, savedData) {
+    pwaModel.save(data, (err, savedData) => {
       if (err) {
         return next(err);
       }
@@ -171,10 +133,11 @@ router.post(
  * Display a PWA.
  */
 router.get('/:pwa', function get(req, res, next) {
-  getModel().read(PWA, req.params.pwa, function(err, entity) {
+  pwaModel.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
+
     res.render('pwas/view.hbs', {
       pwa: entity
     });
@@ -186,8 +149,8 @@ router.get('/:pwa', function get(req, res, next) {
  *
  * Delete a PWA.
  */
-router.get('/:pwa/delete', function _delete(req, res, next) {
-  getModel().delete(PWA, req.params.pwa, function(err) {
+router.get('/:pwa/delete', (req, res, next) => {
+  pwaModel.delete(req.params.pwa, function(err) {
     if (err) {
       return next(err);
     }
@@ -198,7 +161,7 @@ router.get('/:pwa/delete', function _delete(req, res, next) {
 /**
  * Errors on "/pwas/*" routes.
  */
-router.use(function handleRpcError(err, req, res, next) {
+router.use((err, req, res, next) => {
   // Format error and forward to generic error handler for logging and
   // responding to the request
   err.response = err.message;
