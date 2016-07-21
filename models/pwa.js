@@ -43,16 +43,16 @@ exports.find = function(key, callback) {
 
 exports.findByManifestUrl = function(manifestUrl, callback) {
   const query = ds.createQuery(ENTITY_NAME).filter('manifestUrl', manifestUrl);
-  ds.runQuery(query, (err, dbPWAs) => {
+  ds.runQuery(query, (err, pwas) => {
     if (err) {
       return callback(err, null);
     }
 
-    if (dbPWAs.length === 0) {
+    if (pwas.length === 0) {
       return callback(null, null);
     }
 
-    const pwa = dbPWAs[0];
+    const pwa = pwas[0];
     pwa.data.id = pwa.key.id;
 
     return callback(null, pwa);
@@ -65,21 +65,21 @@ exports.save = function(pwa, callback) {
     return callback('Missing manifestUrl', null);
   }
 
-  this.findByManifestUrl(pwa.manifestUrl, (err, manifestPwa) => {
+  this.findByManifestUrl(pwa.manifestUrl, (err, existingPwa) => {
     if (err) {
       return callback(err);
     }
 
-    if (manifestPwa && (!pwa.id || manifestPwa.data.id.toString() !== pwa.id)) {
+    if (existingPwa && (!pwa.id || existingPwa.data.id.toString() !== pwa.id)) {
       return callback(
           'Manifest already Registered for a different PWA', null);
     }
 
-    manifest.fetch(pwa.manifestUrl, (err, json) => {
+    manifest.fetch(pwa.manifestUrl, (err, manifest) => {
       if (err) {
         return callback(err);
       }
-      pwa.manifest = JSON.stringify(json);
+      pwa.manifest = JSON.stringify(manifest);
       db.update(ENTITY_NAME, pwa.id, pwa, callback);
     });
   });
