@@ -31,6 +31,9 @@ hbs.registerPartials(path.join(__dirname, '/views/includes/'));
 // Static files
 app.use(express.static('public'));
 
+// Middlewares
+app.use(require('./middlewares'));
+
 // Controllers
 app.use(require('./controllers'));
 
