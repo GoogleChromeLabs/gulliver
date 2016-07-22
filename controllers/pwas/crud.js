@@ -21,12 +21,6 @@ const pwaModel = require('../../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const LIST_PAGE_SIZE = 10;
 
-// Set Content-Type for all responses for these routes
-router.use(function(req, res, next) {
-  res.set('Content-Type', 'text/html');
-  next();
-});
-
 /**
  * GET /pwas/add
  *
