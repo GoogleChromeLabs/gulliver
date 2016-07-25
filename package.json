@@ -39,26 +39,18 @@
     ]
   },
   "dependencies": {
-    "body-parser": "^1.15.0",
+    "body-parser": "^1.15.2",
     "express": "^4.13.4",
-    "gcloud": "~0.31.0",
-    "jade": "^1.11.0",
-    "kerberos": "^0.0.19",
-    "lodash": "^4.11.1",
+    "gcloud": "~0.36.0",
+    "handlebars": "^4.0.5",
+    "hbs": "^4.0.0",
     "multer": "^1.1.0",
     "nconf": "^0.8.4",
-    "node-fetch": "^1.5.3",
-    "prompt": "^1.0.0"
+    "node-fetch": "^1.5.3"
   },
   "devDependencies": {
     "eslint": "^3.0.1",
-    "eslint-config-google": "^0.6.0",
-    "mocha": "^2.4.5",
-    "nodejs-repo-tools": "git+https://github.com/GoogleCloudPlatform/nodejs-repo-tools.git#21daa823090c43fb667157c8b5b0c3b7f45a8357",
-    "proxyquire": "^1.7.4",
-    "semistandard": "^7.0.5",
-    "sinon": "^1.17.3",
-    "supertest": "^1.2.0"
+    "eslint-config-google": "^0.6.0"
   },
   "engines": {
     "node": ">=0.12.7"

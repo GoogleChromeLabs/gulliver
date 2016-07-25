@@ -16,23 +16,10 @@
 'use strict';
 
 const express = require('express');
-const config = require('../../config/config');
 const images = require('../../lib/images');
-const fetch = require('node-fetch');
-
-const PWA = 'PWA';
-
-function getModel() {
-  return require('../../lib/model-' + config.get('DATA_BACKEND'));
-}
-
-const router = express.Router(); // eslint-disable-line
-
-// Set Content-Type for all responses for these routes
-router.use(function(req, res, next) {
-  res.set('Content-Type', 'text/html');
-  next();
-});
+const pwaModel = require('../../models/pwa');
+const router = express.Router(); // eslint-disable-line new-cap
+const LIST_PAGE_SIZE = 10;
 
 /**
  * GET /pwas/add
@@ -44,12 +31,12 @@ router.get('/', function list(req, res, next) {
     if (err) {
       return next(err);
     }
-    res.render('pwas/list.jade', {
+    res.render('pwas/list.hbs', {
       pwas: entities,
       nextPageToken: cursor
     });
   }
-  getModel().list(PWA, 10, req.query.pageToken, callback);
+  pwaModel.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
 });
 
 /**
@@ -58,7 +45,7 @@ router.get('/', function list(req, res, next) {
  * Display a form for creating a PWA.
  */
 router.get('/add', function addForm(req, res) {
-  res.render('pwas/form.jade', {
+  res.render('pwas/form.hbs', {
     pwa: {},
     action: 'Add'
   });
@@ -74,31 +61,22 @@ router.post(
   '/add',
   images.multer.single('image'),
   images.sendUploadToGCS,
-  function insert(req, res, next) {
+  function(req, res, next) {
     const data = req.body;
+
+    const callback = function(err, savedData) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(req.baseUrl + '/' + savedData.id);
+    };
 
     // Was an image uploaded? If so, we'll use its public URL
     // in cloud storage.
     if (req.file && req.file.cloudStoragePublicUrl) {
       data.imageUrl = req.file.cloudStoragePublicUrl;
     }
-
-    // Save the data to the database.
-    getModel().create(PWA, data, function(err, savedData) {
-      if (err) {
-        return next(err);
-      }
-
-      fetch(savedData.manifestUrl).then(response => {
-        response.json().then(json => {
-          savedData.manifest = JSON.stringify(json);
-          console.log(savedData);
-          getModel().update(PWA, savedData.id, savedData);
-        });
-      });
-
-      res.redirect(req.baseUrl + '/' + savedData.id);
-    });
+    pwaModel.save(data, callback);
   }
 );
 // [END add]
@@ -108,12 +86,13 @@ router.post(
  *
  * Display a pwa for editing.
  */
-router.get('/:pwa/edit', function editForm(req, res, next) {
-  getModel().read(PWA, req.params.pwa, function(err, entity) {
+router.get('/:pwa/edit', (req, res, next) => {
+  pwaModel.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
-    res.render('pwas/form.jade', {
+
+    res.render('pwas/form.hbs', {
       pwa: entity,
       action: 'Edit'
     });
@@ -129,24 +108,11 @@ router.post(
   '/:pwa/edit',
   images.multer.single('image'),
   images.sendUploadToGCS,
-  function update(req, res, next) {
+  (req, res, next) => {
     const data = req.body;
+    data.id = req.params.pwa;
 
-    fetch(data.manifestUrl).then(response => {
-      response.json().then(json => {
-        console.log(json);
-        data.manifest = JSON.stringify(json);
-        getModel().update(PWA, req.params.pwa, data);
-      });
-    });
-
-    // Was an image uploaded? If so, we'll use its public URL
-    // in cloud storage.
-    if (req.file && req.file.cloudStoragePublicUrl) {
-      req.body.imageUrl = req.file.cloudStoragePublicUrl;
-    }
-
-    getModel().update(PWA, req.params.pwa, data, function(err, savedData) {
+    pwaModel.save(data, (err, savedData) => {
       if (err) {
         return next(err);
       }
@@ -161,11 +127,12 @@ router.post(
  * Display a PWA.
  */
 router.get('/:pwa', function get(req, res, next) {
-  getModel().read(PWA, req.params.pwa, function(err, entity) {
+  pwaModel.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
-    res.render('pwas/view.jade', {
+
+    res.render('pwas/view.hbs', {
       pwa: entity
     });
   });
@@ -176,8 +143,8 @@ router.get('/:pwa', function get(req, res, next) {
  *
  * Delete a PWA.
  */
-router.get('/:pwa/delete', function _delete(req, res, next) {
-  getModel().delete(PWA, req.params.pwa, function(err) {
+router.get('/:pwa/delete', (req, res, next) => {
+  pwaModel.delete(req.params.pwa, function(err) {
     if (err) {
       return next(err);
     }
@@ -188,7 +155,7 @@ router.get('/:pwa/delete', function _delete(req, res, next) {
 /**
  * Errors on "/pwas/*" routes.
  */
-router.use(function handleRpcError(err, req, res, next) {
+router.use((err, req, res, next) => {
   // Format error and forward to generic error handler for logging and
   // responding to the request
   err.response = err.message;
