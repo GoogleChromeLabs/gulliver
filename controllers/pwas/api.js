@@ -17,15 +17,9 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../../config/config');
-
-const PWA = 'PWA';
-
-function getModel() {
-  return require('../../lib/model-' + config.get('DATA_BACKEND'));
-}
-
+const pwaModel = require('../../models/pwa');
 const router = express.Router(); // eslint-disable-line
+const LIST_PAGE_SIZE = 10;
 
 // Automatically parse request body as JSON
 router.use(bodyParser.json());
@@ -35,7 +29,7 @@ router.use(bodyParser.json());
  *
  * Retrieve a page of PWAs (up to ten at a time).
  */
-router.get('/', function list(req, res, next) {
+router.get('/', (req, res, next) => {
   function callback(err, entities, cursor) {
     if (err) {
       return next(err);
@@ -45,7 +39,7 @@ router.get('/', function list(req, res, next) {
       nextPageToken: cursor
     });
   }
-  getModel().list(PWA, 10, req.query.pageToken, callback);
+  pwaModel.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
 });
 
 /**
@@ -53,8 +47,8 @@ router.get('/', function list(req, res, next) {
  *
  * Create a new PWA.
  */
-router.post('/', function insert(req, res, next) {
-  getModel().create(PWA, req.body, function(err, entity) {
+router.post('/', (req, res, next) => {
+  pwaModel.save(req.body, (err, entity) => {
     if (err) {
       return next(err);
     }
@@ -67,8 +61,8 @@ router.post('/', function insert(req, res, next) {
  *
  * Retrieve a PWA.
  */
-router.get('/:pwa', function get(req, res, next) {
-  getModel().read(PWA, req.params.pwa, function(err, entity) {
+router.get('/:pwa', (req, res, next) => {
+  pwaModel.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
@@ -81,8 +75,10 @@ router.get('/:pwa', function get(req, res, next) {
  *
  * Update a PWA.
  */
-router.put('/:pwa', function update(req, res, next) {
-  getModel().update(PWA, req.params.pwa, req.body, function(err, entity) {
+router.put('/:pwa', (req, res, next) => {
+  const pwa = req.body;
+  pwa.id = req.params.pwa;
+  pwaModel.save(pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
@@ -95,8 +91,8 @@ router.put('/:pwa', function update(req, res, next) {
  *
  * Delete a PWA.
  */
-router.delete('/:pwa', function _delete(req, res, next) {
-  getModel().delete(PWA, req.params.pwa, function(err) {
+router.delete('/:pwa', (req, res, next) => {
+  pwaModel.delete(req.params.pwa, err => {
     if (err) {
       return next(err);
     }
@@ -107,7 +103,7 @@ router.delete('/:pwa', function _delete(req, res, next) {
 /**
  * Errors on "/api/pwas/*" routes.
  */
-router.use(function handleRpcError(err, req, res, next) {
+router.use((err, req, res, next) => {
   // Format error and forward to generic error handler for logging and
   // responding to the request
   err.response = {
