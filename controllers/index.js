@@ -21,7 +21,7 @@ const router = require('express').Router(); // eslint-disable-line
 router.use('/pwas', require('./pwas/crud'));
 router.use('/api/pwas', require('./pwas/api'));
 
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
   req.url = '/pwas';
   router.handle(req, res);
 });
