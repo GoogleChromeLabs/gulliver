@@ -31,6 +31,11 @@ router.get('/', (req, res, next) => {
     if (err) {
       return next(err);
     }
+
+    for (let pwa of entities) {
+      pwa.firstletter = pwa.name[0];
+    }
+
     res.render('pwas/list.hbs', {
       pwas: entities,
       nextPageToken: cursor
@@ -132,6 +137,7 @@ router.get('/:pwa', (req, res, next) => {
       return next(err);
     }
 
+    entity.firstletter = entity.name[0];
     res.render('pwas/view.hbs', {
       pwa: entity
     });
