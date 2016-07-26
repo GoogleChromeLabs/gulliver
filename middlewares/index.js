@@ -16,7 +16,7 @@
 const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
 
-router.use(function(req, res, next) {
+router.use((req, res, next) => {
   // Set content-type for the API requests
   if (req.url.indexOf('/api/') > -1) {
     res.setHeader('Content-Type', 'application/json');

@@ -26,7 +26,7 @@ const LIST_PAGE_SIZE = 10;
  *
  * Display a page of PWAs (up to ten at a time).
  */
-router.get('/', function list(req, res, next) {
+router.get('/', (req, res, next) => {
   function callback(err, entities, cursor) {
     if (err) {
       return next(err);
@@ -44,7 +44,7 @@ router.get('/', function list(req, res, next) {
  *
  * Display a form for creating a PWA.
  */
-router.get('/add', function addForm(req, res) {
+router.get('/add', (req, res) => {
   res.render('pwas/form.hbs', {
     pwa: {},
     action: 'Add'
@@ -61,10 +61,10 @@ router.post(
   '/add',
   images.multer.single('image'),
   images.sendUploadToGCS,
-  function(req, res, next) {
+  (req, res, next) => {
     const data = req.body;
 
-    const callback = function(err, savedData) {
+    const callback = (err, savedData) => {
       if (err) {
         return next(err);
       }
@@ -126,7 +126,7 @@ router.post(
  *
  * Display a PWA.
  */
-router.get('/:pwa', function get(req, res, next) {
+router.get('/:pwa', (req, res, next) => {
   pwaModel.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
@@ -144,7 +144,7 @@ router.get('/:pwa', function get(req, res, next) {
  * Delete a PWA.
  */
 router.get('/:pwa/delete', (req, res, next) => {
-  pwaModel.delete(req.params.pwa, function(err) {
+  pwaModel.delete(req.params.pwa, err => {
     if (err) {
       return next(err);
     }
