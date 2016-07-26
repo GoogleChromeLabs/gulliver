@@ -21,6 +21,17 @@ const pwaModel = require('../../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const LIST_PAGE_SIZE = 10;
 
+function getContrastYIQ(hexcolor) {
+  if (hexcolor[0] === '#') {
+    hexcolor = hexcolor.substr(1, hexcolor.length);
+  }
+  const r = parseInt(hexcolor.substr(0, 2), 16);
+  const g = parseInt(hexcolor.substr(2, 2), 16);
+  const b = parseInt(hexcolor.substr(4, 2), 16);
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return (yiq >= 128) ? 'black' : 'white';
+}
+
 /**
  * GET /pwas/add
  *
@@ -34,6 +45,7 @@ router.get('/', (req, res, next) => {
 
     for (let pwa of entities) {
       pwa.firstletter = pwa.name[0];
+      pwa.fgcolor = getContrastYIQ(pwa.backgroundColor);
     }
 
     res.render('pwas/list.hbs', {
@@ -138,6 +150,7 @@ router.get('/:pwa', (req, res, next) => {
     }
 
     entity.firstletter = entity.name[0];
+    entity.fgcolor = getContrastYIQ(entity.backgroundColor);
     res.render('pwas/view.hbs', {
       pwa: entity
     });
