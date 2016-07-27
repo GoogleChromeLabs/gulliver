@@ -16,26 +16,62 @@
 'use strict';
 
 const fetch = require('node-fetch');
+const DOMAIN_REGEXP = /(http[s]*:\/\/[a-z0-9A-Z-\.]+)(\/(.*?\/)*)*/;
 
-exports.fetch = function(manifestUrl, callback) {
-  const options = {
-    method: 'GET',
-    headers: {
-      'user-agent': [
-        'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36',
-        '(KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36'
-      ].join(' ')
+class Manifest {
+  constructor(url, json) {
+    this.url = url;
+
+    //Copy JSON properties to Manifest
+    const keys = Object.keys(json);
+    for (let i = 0; i < keys.length; i++) {
+      this[keys[i]] = json[keys[i]];            
     }
-  };
+  }
 
-  fetch(manifestUrl, options)
-    .then(response => {
-      return response.json();
-    })
-    .then(json => {
-      return callback(null, json);
-    })
-    .catch(err => {
-      return callback(err);
-    });
-};
+  /** Gets the Url for the largest icon in the Manifest */
+  getBestIconUrl() {
+    if (!this.icons) {
+      return '';
+    }
+    const iconUrl = this.icons[0].src;
+    if (iconUrl.match(DOMAIN_REGEXP)) {
+      return iconUrl;
+    }
+
+    const match = DOMAIN_REGEXP.exec(this.url);
+    const domain = match[1];
+    const path = match[2] || '';
+
+    if (iconUrl[0] === '/') {
+      return domain + iconUrl;
+    }
+
+    return domain + path + iconUrl;
+  }
+
+  static fetch(manifestUrl, callback) {
+    const options = {
+      method: 'GET',
+      headers: {
+        'user-agent': [
+          'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36',
+          '(KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36'
+        ].join(' ')
+      }
+    };
+
+    fetch(manifestUrl, options)
+      .then(response => {
+        return response.json();
+      })
+      .then(json => {
+        return callback(null, new Manifest(manifestUrl, json));
+      })
+      .catch(err => {
+        return callback(err);
+      });
+  }
+}
+
+module.exports.Manifest = Manifest;

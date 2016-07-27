@@ -25,10 +25,16 @@
             <div class="media">
                 <a href="/pwas/{{id}}">
                     <div class="media-left">
-                        <svg width="64" height="64">
-                            <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
-                            <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
-                        </svg>                
+                        {{#if iconUrl}} 
+                            <div style="background-color: {{backgroundColor}}">                        
+                                <img src="{{iconUrl}}" width="64" height="64"/>
+                            </div>
+                        {{else}}                                                
+                            <svg width="64" height="64">
+                                <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
+                                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
+                            </svg>
+                        {{/if}}                
                     </div>
                     <div class="media-body">
                         <h4>{{name}}</h4>
