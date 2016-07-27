@@ -79,6 +79,10 @@ exports.save = function(pwa, callback) {
       if (err) {
         return callback(err);
       }
+
+      pwa.name = manifest.name;
+      pwa.startUrl = manifest.start_url || '';
+      pwa.backgroundColor = manifest.background_color || '#ffffff';
       pwa.manifest = JSON.stringify(manifest);
       db.update(ENTITY_NAME, pwa.id, pwa, callback);
     });

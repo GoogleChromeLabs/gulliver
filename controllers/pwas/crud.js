@@ -31,6 +31,7 @@ router.get('/', (req, res, next) => {
     if (err) {
       return next(err);
     }
+
     res.render('pwas/list.hbs', {
       pwas: entities,
       nextPageToken: cursor

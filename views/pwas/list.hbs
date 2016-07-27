@@ -24,11 +24,15 @@
             {{#each pwas}}
             <div class="media">
                 <a href="/pwas/{{id}}">
-                    <div class="media-left"><img src="/pwa.png">
+                    <div class="media-left">
+                        <svg width="64" height="64">
+                            <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
+                            <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
+                        </svg>                
                     </div>
                     <div class="media-body">
                         <h4>{{name}}</h4>
-                        <h4>{{manifestUrl}}</h4>
+                        <h5>{{manifestUrl}}</h5>
                         <p>{{startUrl}}</p>
                     </div>
                 </a>
