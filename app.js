@@ -19,7 +19,7 @@ const path = require('path');
 const express = require('express');
 const config = require('./config/config');
 const hbs = require('hbs');
-
+const helpers = require('./views/helpers');
 const app = express();
 
 app.disable('etag');
@@ -27,6 +27,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.set('trust proxy', true);
 hbs.registerPartials(path.join(__dirname, '/views/includes/'));
+helpers.registerHelpers(hbs);
 
 // Static files
 app.use(express.static('public'));
