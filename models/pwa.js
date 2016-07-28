@@ -16,7 +16,7 @@
 'use strict';
 
 const config = require('../config/config');
-const manifest = require('./manifest');
+const Manifest = require('./manifest');
 const db = require('../lib/model-' + config.get('DATA_BACKEND'));
 const gcloud = require('gcloud');
 const ds = gcloud.datastore({
@@ -83,7 +83,7 @@ exports.save = function(pwa, callback) {
           'Manifest already Registered for a different PWA', null);
     }
 
-    manifest.Manifest.fetch(pwa.manifestUrl, (err, manifest) => {
+    Manifest.fetch(pwa.manifestUrl, (err, manifest) => {
       if (err) {
         return callback(err);
       }

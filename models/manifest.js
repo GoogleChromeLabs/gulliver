@@ -16,30 +16,56 @@
 'use strict';
 
 const fetch = require('node-fetch');
-const DOMAIN_REGEXP = /(http[s]*:\/\/[a-z0-9A-Z-\.]+)(\/(.*?\/)*)*/;
+const DOMAIN_PATH_REGEXP = /(http[s]*:\/\/[a-z0-9A-Z-\.]+)(\/(.*?\/)*)*/;
 
 class Manifest {
-  constructor(url, json) {
-    this.url = url;
+  getBestIcon() {
+    function getIconSize(icon) {
+      if (!icon.sizes) {
+        return 0;
+      }
 
-    //Copy JSON properties to Manifest
-    const keys = Object.keys(json);
-    for (let i = 0; i < keys.length; i++) {
-      this[keys[i]] = json[keys[i]];            
+      return parseInt(icon.sizes.substring(0, icon.sizes.indexOf('x')), 10);
     }
+
+    if (!this.icons) {
+      return null;
+    }
+
+    let bestIcon;
+    let bestIconSize;
+
+    this.icons.forEach(icon => {
+      if (!bestIcon) {
+        bestIcon = icon;
+        bestIconSize = getIconSize(icon);
+        return;
+      }
+
+      const iconSize = getIconSize(icon);
+      if (iconSize > bestIconSize) {
+        bestIcon = icon;
+        bestIconSize = iconSize;
+      }
+    });
+
+    return bestIcon;
   }
 
   /** Gets the Url for the largest icon in the Manifest */
   getBestIconUrl() {
-    if (!this.icons) {
+    const bestIcon = this.getBestIcon();
+
+    if (!bestIcon) {
       return '';
     }
-    const iconUrl = this.icons[0].src;
-    if (iconUrl.match(DOMAIN_REGEXP)) {
+
+    const iconUrl = bestIcon.src;
+    if (iconUrl.match(DOMAIN_PATH_REGEXP)) {
       return iconUrl;
     }
 
-    const match = DOMAIN_REGEXP.exec(this.url);
+    const match = DOMAIN_PATH_REGEXP.exec(this.url);
     const domain = match[1];
     const path = match[2] || '';
 
@@ -66,12 +92,24 @@ class Manifest {
         return response.json();
       })
       .then(json => {
-        return callback(null, new Manifest(manifestUrl, json));
+        return callback(null, Manifest.fromJson(manifestUrl, json));
       })
       .catch(err => {
         return callback(err);
       });
   }
+
+  static fromJson(url, json) {
+    const manifest = new Manifest();
+    manifest.url = url;
+
+    // Copy JSON properties to Manifest.
+    Object.keys(json).forEach(key => {
+      manifest[key] = json[key];
+    });
+
+    return manifest;
+  }
 }
 
-module.exports.Manifest = Manifest;
+module.exports = Manifest;
