@@ -16,13 +16,21 @@
 'use strict';
 
 const config = require('../config/config');
-const manifest = require('./manifest');
+const Manifest = require('./manifest');
 const db = require('../lib/model-' + config.get('DATA_BACKEND'));
 const gcloud = require('gcloud');
 const ds = gcloud.datastore({
   projectId: config.get('GCLOUD_PROJECT')
 });
 const ENTITY_NAME = 'PWA';
+
+function mergeManifest(pwa, manifest) {
+  pwa.name = manifest.name;
+  pwa.startUrl = manifest.start_url || '';
+  pwa.backgroundColor = manifest.background_color || '#ffffff';
+  pwa.manifest = JSON.stringify(manifest);
+  pwa.iconUrl = manifest.getBestIconUrl();
+}
 
 exports.list = function(numResults, pageToken, callback) {
   db.list(ENTITY_NAME, numResults, pageToken, callback);
@@ -75,15 +83,11 @@ exports.save = function(pwa, callback) {
           'Manifest already Registered for a different PWA', null);
     }
 
-    manifest.fetch(pwa.manifestUrl, (err, manifest) => {
+    Manifest.fetch(pwa.manifestUrl, (err, manifest) => {
       if (err) {
         return callback(err);
       }
-
-      pwa.name = manifest.name;
-      pwa.startUrl = manifest.start_url || '';
-      pwa.backgroundColor = manifest.background_color || '#ffffff';
-      pwa.manifest = JSON.stringify(manifest);
+      mergeManifest(pwa, manifest);
       db.update(ENTITY_NAME, pwa.id, pwa, callback);
     });
   });

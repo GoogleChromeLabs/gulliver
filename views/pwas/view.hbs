@@ -29,12 +29,18 @@
                     <i class="glyphicon glyphicon-trash"></i><span> Delete PWA</span>
                 </a>
             </div>
-            <div class="media">
+            <div class="media" style="background-color: {{pwa.backgroundColor}}; color: {{contrastColor pwa.backgroundColor}};">
                 <div class="media-left">
-                    <svg width="256" height="256">
-                        <rect width="100%" height="100%" stroke-width="4" fill="{{pwa.backgroundColor}}" />
-                        <text x="50%" y="50%" fill="{{contrastColor pwa.backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="128px">{{firstLetter pwa.name}}</text>
-                    </svg>                    
+                    {{#if pwa.iconUrl}}
+                        <div style="background-color: {{pwa.backgroundColor}}">
+                            <img src="{{pwa.iconUrl}}" width="256" height="256"/>
+                        </div>
+                    {{else}}
+                        <svg width="256" height="256">
+                            <rect width="100%" height="100%" stroke-width="4" fill="{{pwa.backgroundColor}}" />
+                            <text x="50%" y="50%" fill="{{contrastColor pwa.backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="128px">{{firstLetter pwa.name}}</text>
+                        </svg>
+                    {{/if}}                    
                 </div>
                 <div class="media-body">
                     <h4>{{pwa.name}}</h4>
