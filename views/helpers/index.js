@@ -15,15 +15,19 @@
 
 'use strict';
 
-const router = require('express').Router(); // eslint-disable-line
+exports.registerHelpers = function(hbs) {
+  hbs.registerHelper('firstLetter', text => {
+    return text ? text[0] : '';
+  });
 
-// PWAs
-router.use('/pwas', require('./pwas/crud'));
-router.use('/api/pwas', require('./pwas/api'));
-
-router.get('/', (req, res) => {
-  req.url = '/pwas';
-  router.handle(req, res);
-});
-
-module.exports = router;
+  hbs.registerHelper('contrastColor', hexcolor => {
+    if (hexcolor[0] === '#') {
+      hexcolor = hexcolor.substr(1, hexcolor.length);
+    }
+    const r = parseInt(hexcolor.substr(0, 2), 16);
+    const g = parseInt(hexcolor.substr(2, 2), 16);
+    const b = parseInt(hexcolor.substr(4, 2), 16);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 128) ? 'black' : 'white';
+  });
+};

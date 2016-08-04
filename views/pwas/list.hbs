@@ -16,19 +16,35 @@
     <head>
         <title>Gulliver - PWA Directory</title>
         {{> head}}
+
+        <style>
+            .media {
+                border: 1px solid lightgray;
+                padding: 8px 4px 4px 8px;
+                text-overflow: ellipsis;
+            }
+        </style>
     </head>
     <body>
         {{> header}}    
         <div class="container">
             <h3>PWAs</h3><a href="/pwas/add" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-plus"></i><span> Add PWA</span></a>
             {{#each pwas}}
-            <div class="media">
-                <a href="/pwas/{{id}}">
-                    <div class="media-left"><img src="/pwa.png">
+            <div class="media" style="background-color: {{backgroundColor}}">
+                <a href="/pwas/{{id}}" style="color:{{contrastColor backgroundColor}}">
+                    <div class="media-left">
+                        {{#if iconUrl}}
+                            <img src="{{iconUrl}}" width="64" height="64"/>
+                        {{else}}
+                            <svg width="64" height="64">
+                                <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
+                                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
+                            </svg>
+                        {{/if}}
                     </div>
                     <div class="media-body">
                         <h4>{{name}}</h4>
-                        <h4>{{manifestUrl}}</h4>
+                        <h5>{{manifestUrl}}</h5>
                         <p>{{startUrl}}</p>
                     </div>
                 </a>

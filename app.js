@@ -19,14 +19,18 @@ const path = require('path');
 const express = require('express');
 const config = require('./config/config');
 const hbs = require('hbs');
-
+const helpers = require('./views/helpers');
 const app = express();
+const bodyParser = require('body-parser');
 
 app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.set('trust proxy', true);
 hbs.registerPartials(path.join(__dirname, '/views/includes/'));
+helpers.registerHelpers(hbs);
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Static files
 app.use(express.static('public'));
@@ -38,12 +42,12 @@ app.use(require('./middlewares'));
 app.use(require('./controllers'));
 
 // Basic 404 handler
-app.use(function(req, res) {
+app.use((req, res) => {
   res.status(404).send('Not Found');
 });
 
 // Basic error handler
-app.use(function(err, req, res) {
+app.use((err, req, res) => {
   /* jshint unused:false */
   console.error(err);
   // If our routes specified a specific response, then send that. Otherwise,
@@ -53,7 +57,7 @@ app.use(function(err, req, res) {
 
 if (module === require.main) {
   // Start the server
-  const server = app.listen(config.get('PORT'), function() {
+  const server = app.listen(config.get('PORT'), () => {
     const port = server.address().port;
     console.log('App listening on port %s', port);
   });

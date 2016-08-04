@@ -16,7 +16,6 @@
 'use strict';
 
 const express = require('express');
-const images = require('../../lib/images');
 const pwaModel = require('../../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const LIST_PAGE_SIZE = 10;
@@ -26,11 +25,12 @@ const LIST_PAGE_SIZE = 10;
  *
  * Display a page of PWAs (up to ten at a time).
  */
-router.get('/', function list(req, res, next) {
+router.get('/', (req, res, next) => {
   function callback(err, entities, cursor) {
     if (err) {
       return next(err);
     }
+
     res.render('pwas/list.hbs', {
       pwas: entities,
       nextPageToken: cursor
@@ -44,7 +44,7 @@ router.get('/', function list(req, res, next) {
  *
  * Display a form for creating a PWA.
  */
-router.get('/add', function addForm(req, res) {
+router.get('/add', (req, res) => {
   res.render('pwas/form.hbs', {
     pwa: {},
     action: 'Add'
@@ -57,28 +57,18 @@ router.get('/add', function addForm(req, res) {
  * Create a PWA.
  */
 // [START add]
-router.post(
-  '/add',
-  images.multer.single('image'),
-  images.sendUploadToGCS,
-  function(req, res, next) {
-    const data = req.body;
+router.post('/add', (req, res, next) => {
+  const data = req.body;
 
-    const callback = function(err, savedData) {
-      if (err) {
-        return next(err);
-      }
-      res.redirect(req.baseUrl + '/' + savedData.id);
-    };
-
-    // Was an image uploaded? If so, we'll use its public URL
-    // in cloud storage.
-    if (req.file && req.file.cloudStoragePublicUrl) {
-      data.imageUrl = req.file.cloudStoragePublicUrl;
+  const callback = (err, savedData) => {
+    if (err) {
+      return next(err);
     }
-    pwaModel.save(data, callback);
-  }
-);
+    res.redirect(req.baseUrl + '/' + savedData.id);
+  };
+
+  pwaModel.save(data, callback);
+});
 // [END add]
 
 /**
@@ -104,29 +94,25 @@ router.get('/:pwa/edit', (req, res, next) => {
  *
  * Update a PWA.
  */
-router.post(
-  '/:pwa/edit',
-  images.multer.single('image'),
-  images.sendUploadToGCS,
-  (req, res, next) => {
-    const data = req.body;
-    data.id = req.params.pwa;
 
-    pwaModel.save(data, (err, savedData) => {
-      if (err) {
-        return next(err);
-      }
-      res.redirect(req.baseUrl + '/' + savedData.id);
-    });
-  }
-);
+router.post('/:pwa/edit', (req, res, next) => {
+  const data = req.body;
+  data.id = req.params.pwa;
+
+  pwaModel.save(data, (err, savedData) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect(req.baseUrl + '/' + savedData.id);
+  });
+});
 
 /**
  * GET /pwas/:id
  *
  * Display a PWA.
  */
-router.get('/:pwa', function get(req, res, next) {
+router.get('/:pwa', (req, res, next) => {
   pwaModel.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
@@ -144,7 +130,7 @@ router.get('/:pwa', function get(req, res, next) {
  * Delete a PWA.
  */
 router.get('/:pwa/delete', (req, res, next) => {
-  pwaModel.delete(req.params.pwa, function(err) {
+  pwaModel.delete(req.params.pwa, err => {
     if (err) {
       return next(err);
     }
