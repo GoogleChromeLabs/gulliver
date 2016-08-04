@@ -26,8 +26,9 @@ $ npm start
 
 ## Running Tests
 
-1. `./node_modules/.bin/mocha test/**/*.js` to run all tests.
-2. `./node_modules/.bin/istanbul cover _mocha test/**/*.js` for test coverage report.
+1. `npm test` to run lint + tests + coverage report.
+2. `npm run mocha` to run all the tests only.
+3. `npm run coverage` to run tests + coverage report.
 
 ## License
 
