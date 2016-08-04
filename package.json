@@ -50,7 +50,9 @@
   },
   "devDependencies": {
     "eslint": "^3.0.1",
-    "eslint-config-google": "^0.6.0"
+    "eslint-config-google": "^0.6.0",
+    "istanbul": "^0.4.4",
+    "mocha": "^3.0.1"
   },
   "engines": {
     "node": ">=0.12.7"

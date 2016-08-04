@@ -24,6 +24,11 @@ $ npm i
 $ npm start
 ```
 
+## Running Tests
+
+1. `./node_modules/.bin/mocha test/**/*.js` to run all tests.
+2. `./node_modules/.bin/istanbul cover _mocha test/**/*.js` for test coverage report.
+
 ## License
 
 See [LICENSE](./LICENSE) for more.
