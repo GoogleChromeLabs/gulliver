@@ -24,6 +24,12 @@ $ npm i
 $ npm start
 ```
 
+## Running Tests
+
+1. `npm test` to run lint + tests + coverage report.
+2. `npm run mocha` to run all the tests only.
+3. `npm run coverage` to run tests + coverage report.
+
 ## License
 
 See [LICENSE](./LICENSE) for more.

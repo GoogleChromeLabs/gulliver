@@ -16,6 +16,7 @@
 'use strict';
 
 const config = require('../config/config');
+const images = require('../lib/images');
 const Manifest = require('./manifest');
 const db = require('../lib/model-' + config.get('DATA_BACKEND'));
 const gcloud = require('gcloud');
@@ -29,7 +30,6 @@ function mergeManifest(pwa, manifest) {
   pwa.startUrl = manifest.start_url || '';
   pwa.backgroundColor = manifest.background_color || '#ffffff';
   pwa.manifest = JSON.stringify(manifest);
-  pwa.iconUrl = manifest.getBestIconUrl();
 }
 
 exports.list = function(numResults, pageToken, callback) {
@@ -43,7 +43,7 @@ exports.find = function(key, callback) {
     }
 
     // Transform manifest into useful data.
-    data.manifestData = JSON.parse(data.manifest);
+    data.manifestData = Manifest.fromJson(data.url, JSON.parse(data.manifest));
 
     callback(null, data);
   });
@@ -78,7 +78,7 @@ exports.save = function(pwa, callback) {
       return callback(err);
     }
 
-    if (existingPwa && (!pwa.id || existingPwa.data.id.toString() !== pwa.id)) {
+    if (existingPwa && (!pwa.id || existingPwa.data.id.toString() !== pwa.id.toString())) {
       return callback(
           'Manifest already Registered for a different PWA', null);
     }
@@ -88,10 +88,36 @@ exports.save = function(pwa, callback) {
         return callback(err);
       }
       mergeManifest(pwa, manifest);
-      db.update(ENTITY_NAME, pwa.id, pwa, callback);
+      db.update(ENTITY_NAME, pwa.id, pwa, (err, savedPwa) => {
+        if (!err) {
+          updateIcon(savedPwa, manifest);
+        }
+        callback(err, savedPwa);
+      });
     });
   });
 };
+
+function updateIcon(pwa, manifest) {
+  const url = manifest.getBestIconUrl();
+  const extension = url.substring(url.lastIndexOf('.'), url.length);
+  const bucketFileName = pwa.id + extension;
+
+  images.fetchAndSave(url, bucketFileName)
+    .then(savedUrl => {
+      pwa.iconUrl = savedUrl;
+      db.update(ENTITY_NAME, pwa.id, pwa, err => {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        console.log('Updated PWA Image: ', pwa.id);
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}
 
 exports.delete = function(key, callback) {
   db.delete(ENTITY_NAME, key, callback);
