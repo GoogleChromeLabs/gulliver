@@ -10,50 +10,50 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License. -->
- 
+
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Gulliver - PWA Directory - {{pwa.name}}</title>
-        {{> head}}
-    </head>
-    <body>
-        {{> header}}    
-        <div class="container">
-            <h3>PWA<small></small></h3>
-            <div class="btn-group">
-                <a href="/pwas/{{pwa.id}}/edit" class="btn btn-primary btn-sm">
-                    <i class="glyphicon glyphicon-edit"></i><span> Edit PWA</span>
-                </a>
-                <a href="/pwas/{{pwa.id}}/delete" class="btn btn-danger btn-sm">
-                    <i class="glyphicon glyphicon-trash"></i><span> Delete PWA</span>
-                </a>
-            </div>
-            <div class="media" style="background-color: {{pwa.backgroundColor}}; color: {{contrastColor pwa.backgroundColor}};">
-                <div class="media-left">
-                    {{#if pwa.iconUrl}}
-                        <div style="background-color: {{pwa.backgroundColor}}">
-                            <img src="{{pwa.iconUrl}}" width="256" height="256"/>
-                        </div>
-                    {{else}}
-                        <svg width="256" height="256">
-                            <rect width="100%" height="100%" stroke-width="4" fill="{{pwa.backgroundColor}}" />
-                            <text x="50%" y="50%" fill="{{contrastColor pwa.backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="128px">{{firstLetter pwa.name}}</text>
-                        </svg>
-                    {{/if}}                    
-                </div>
-                <div class="media-body">
-                    <h4>{{pwa.name}}</h4>
-                    <h4>{{pwa.manifestUrl}}</h4>
-                    <p>
-                        {{pwa.description}}
-                    </p>
-                    <p>
-                        {{pwa.manifest}}
-                    </p>
-                </div>
-            </div>
+  <head>
+    <title>Gulliver - PWA Directory - {{pwa.name}}</title>
+
+    {{> head}}
+  </head>
+  <body>
+    {{> header}}    
+    <div class="section-title">PWA Details</div>
+    <div class="container">
+      <div>
+        <div class="button blue">
+          <a href="/pwas/{{pwa.id}}/edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit PWA</a>
         </div>
-        {{> footer}}
-    </body>
+        <div class="button red">
+          <a href="/pwas/{{pwa.id}}/delete"><i class="fa fa-trash" aria-hidden="true"></i> Delete PWA</a>
+        </div>
+      </div>
+
+      <div class="pwabox" style="background-color: {{pwa.backgroundColor}}; color: {{contrastColor pwa.backgroundColor}};">
+        <div class="pwabox-left">
+          {{#if pwa.iconUrl}}
+          <div style="background-color: {{pwa.backgroundColor}}">
+            <img src="{{pwa.iconUrl}}" width="256" height="256"/>
+          </div>
+          {{else}}
+          <svg width="256" height="256">
+            <rect width="100%" height="100%" stroke-width="4" fill="{{pwa.backgroundColor}}" />
+            <text x="50%" y="50%" fill="{{contrastColor pwa.backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="128px">{{firstLetter pwa.name}}</text>
+          </svg>
+          {{/if}}                    
+        </div>
+
+        <div class="pwabox-body">
+          <h4>{{pwa.name}}</h4>
+          <h4><a href="{{pwa.manifestUrl}}">{{pwa.manifestUrl}}</a></h4>
+          <p>{{pwa.description}}</p>
+          <p>{{startUrl}}</p>
+        </div>
+      </div>
+    </div>
+
+    {{> footer}}
+  </body>
 </html>

@@ -1,0 +1,181 @@
+{{!-- Copyright 2015-2016, Google, Inc.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License. --}}
+
+html, body {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: #F5F5F5;
+}
+
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto
+}
+
+.navbar {
+  height: 80px;
+  background: #424242;
+  display: flex;
+  flex-direction: column;
+}
+.navbar-title {
+  color: white;
+  font-size: 30px;
+  text-align: center;
+  margin-top: 10px;
+}
+.navbar-subtitle {
+  color: white;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+
+.section-title {
+  height: 30px;
+  color: white;
+  font-size: 18px;
+  background: #757575;
+  padding-top: 5px;
+  padding-left: 15px;
+  margin-bottom: 15px;
+}
+
+.button {
+  font-size: 14px;
+  color: white;
+  width: 100px;
+  height: 30px;
+  text-align: center;
+  line-height: 30px;
+  margin-bottom: 15px;
+  display: inline-block;
+  border:none;
+}
+.green {
+  background: #33691E;
+}
+.blue {
+  background: #0D47A1;
+}
+.red {
+  background: #B71C1C;
+}
+.button  a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pwabox {
+  border: 2px solid lightgray;
+  padding: 8px 4px 4px 8px;
+  text-overflow: hidden;
+}
+.pwabox-left {
+    display: table-cell;
+    vertical-align: top;
+    padding-right: 10px;
+}
+.pwabox-body {
+    display: table-cell;
+    vertical-align: top;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px
+}
+.form-input {
+    height: 20px;
+    width: 80%;
+    padding: 10px 16px;
+    font-size: 16px;
+}
+.form-textbox {
+    width: 80%;
+    padding: 10px 16px;
+    font-size: 16px;
+    background: #F5F5F5;
+    overflow: scroll;
+    border: 1px solid lightgray;
+}
+
+/* Flex List of PWAs */
+.items {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -10px;
+  margin-top: -10px;
+}
+.item a {
+  text-decoration: none;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.items .item {
+  flex: 1 0 300px;
+  box-sizing: border-box;
+  background: #e0ddd5;
+  color: #171e42;
+  padding: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+}
+@media (min-width: 620px) {
+  .items .item {
+    max-width: calc(50% - 10px);
+  }
+}
+@media (min-width: 930px) {
+  .items .item {
+    max-width: calc(33.33333% - 10px);
+  }
+}
+@media (min-width: 1240px) {
+  .items .item {
+    max-width: calc(25% - 10px);
+  }
+}
+@media (min-width: 1540px) {
+  .items .item {
+    max-width: calc(20% - 10px);
+  }
+}
+@media (min-width: 1850px) {
+  .items .item {
+    max-width: calc(16.66667% - 10px);
+  }
+}
+@media (min-width: 2160px) {
+  .items .item {
+    max-width: calc(14.28571% - 10px);
+  }
+}

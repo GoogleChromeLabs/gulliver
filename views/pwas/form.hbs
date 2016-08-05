@@ -11,29 +11,37 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
  
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Gulliver - Submit a PWA</title>
-        {{> head}}
-    </head>
-    <body>
-        {{> header}}    
-        <div class="container">
-            <h3>Add PWA</h3>
-            <form method="POST">
-                <div class="form-group">
-                    <label for="manifestUrl">Manifest URL</label>
-                    <input type="text" name="manifestUrl" id="manifestUrl" class="form-control">
-                </div>
-                
-                <div class="form-group">
-                    <label for="manifest">Manifest content</label>
-                    <input type="text" name="manifest" id="manifest" readonly class="form-control">
-                </div>
-                
-                <button type="submit" class="btn btn-success">Save</button></form></div>            
+  <head>
+    <title>Gulliver - Submit a PWA</title>
+    {{> head}}
+  </head>
+  <body>
+    {{> header}}
+    
+    {{#if pwa.manifestUrl}}
+    <div class="section-title">Edit a PWA</div>
+    {{else}}
+    <div class="section-title">Submit a PWA</div>
+    {{/if}}
+
+    <div class="container">
+      <form method="POST">
+        <div class="form-group">
+          <label for="manifestUrl">Manifest URL</label>
+          <input type="text" name="manifestUrl" id="manifestUrl" class="form-input" value="{{pwa.manifestUrl}}">
         </div>
-        {{> footer}}
-    </body>
+        {{#if pwa.manifest}}
+        <div class="form-group">
+          <label for="manifest">Manifest content</label>
+          <div class="form-textbox">{{pwa.manifest}}</div>
+        </div>
+        {{/if}}
+        <button type="submit" class="button green"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+      </form>
+      </div>            
+    </div>
+    {{> footer}}
+  </body>
 </html>
