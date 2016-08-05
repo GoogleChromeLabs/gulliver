@@ -48,7 +48,7 @@ function verifyIdToken(clientId, clientSecret, idToken) {
 router.use(bodyParser.json());
 
 // Handle middleware errors
-router.use((err, req, res, next) => { // eslint-disable-line no-unused-vars 
+router.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   console.error(err.stack);
   res.status(400).send({
     error: 'couldn\'t parse JSON'
