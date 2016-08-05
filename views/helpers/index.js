@@ -15,19 +15,26 @@
 
 'use strict';
 
-exports.registerHelpers = function(hbs) {
-  hbs.registerHelper('firstLetter', text => {
-    return text ? text[0] : '';
-  });
+exports.contrastColor = function(hexcolor) {
+  if (!hexcolor) {
+    return 'white';
+  }
 
-  hbs.registerHelper('contrastColor', hexcolor => {
-    if (hexcolor[0] === '#') {
-      hexcolor = hexcolor.substr(1, hexcolor.length);
-    }
-    const r = parseInt(hexcolor.substr(0, 2), 16);
-    const g = parseInt(hexcolor.substr(2, 2), 16);
-    const b = parseInt(hexcolor.substr(4, 2), 16);
-    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-    return (yiq >= 128) ? 'black' : 'white';
-  });
+  if (hexcolor[0] === '#') {
+    hexcolor = hexcolor.substr(1, hexcolor.length);
+  }
+  const r = parseInt(hexcolor.substr(0, 2), 16);
+  const g = parseInt(hexcolor.substr(2, 2), 16);
+  const b = parseInt(hexcolor.substr(4, 2), 16);
+  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+  return (yiq >= 128) ? 'black' : 'white';
+};
+
+exports.firstLetter = function(text) {
+  return (text ? text[0] : '').toUpperCase();
+};
+
+exports.registerHelpers = function(hbs) {
+  hbs.registerHelper('firstLetter', exports.firstLetter);
+  hbs.registerHelper('contrastColor', exports.contrastColor);
 };

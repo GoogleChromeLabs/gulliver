@@ -8,9 +8,10 @@
     "start": "node app.js",
     "monitor": "nodemon app.js",
     "deploy": "gcloud preview app deploy app.yaml",
-    "mocha": "mocha test/index.js -t 30000",
+    "mocha": "node_modules/.bin/mocha test/**/*.js -t 60000",
+    "coverage": "node_modules/.bin/istanbul cover _mocha test/**/*.js",
     "lint": "node_modules/.bin/eslint .",
-    "test": "npm run lint"
+    "test": "npm run lint && npm run coverage"
   },
   "author": "Google Inc.",
   "contributors": [
@@ -50,7 +51,9 @@
   },
   "devDependencies": {
     "eslint": "^3.0.1",
-    "eslint-config-google": "^0.6.0"
+    "eslint-config-google": "^0.6.0",
+    "istanbul": "^0.4.4",
+    "mocha": "^3.0.1"
   },
   "engines": {
     "node": ">=0.12.7"
