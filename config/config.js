@@ -28,7 +28,9 @@ nconf
     'CLOUD_BUCKET',
     'DATA_BACKEND',
     'GCLOUD_PROJECT',
-    'PORT'
+    'PORT',
+    'CLIENT_ID',
+    'CLIENT_SECRET'
   ])
   // 3. Config file
   .file({file: path.join(__dirname, 'config.json')})
@@ -48,6 +50,8 @@ nconf
 // Check for required settings
 checkConfig('GCLOUD_PROJECT');
 checkConfig('CLOUD_BUCKET');
+checkConfig('CLIENT_ID');
+checkConfig('CLIENT_SECRET');
 
 function checkConfig(setting) {
   if (!nconf.get(setting)) {

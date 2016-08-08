@@ -66,10 +66,22 @@ function authInit(params) {
    */
   function onChange(user) {
     if (user.isSignedIn()) {
-      // @TODO Send id_token to backend
       console.log('id_token', user.getAuthResponse().id_token);
       login.disabled = true;
       logout.disabled = false;
+      fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json'
+        },
+        body: JSON.stringify({
+          idToken: user.getAuthResponse().id_token
+        })
+      }).then(res => {
+        return res.json();
+      }).then(body => {
+        console.log(body);
+      });
     } else {
       console.log('user signed out/never signed in');
       login.disabled = false;
