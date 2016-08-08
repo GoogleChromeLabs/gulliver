@@ -13,12 +13,9 @@
  * limitations under the License.
  */
 
-// const CLIENTID = '605287872172-js6omne47i1k79hnfo7d4bdu9rlemslr.apps.googleusercontent.com';
-// const CLIENTSECRET = 'jc3R9JIRCes-yeEYqjnGKrhL';
-
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('../../config/config');
+const config = require('../config/config');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
