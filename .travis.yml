@@ -9,6 +9,5 @@ before_script:
 script:
   - npm test
 env:
-  - CLIENT_ID=dummy
-  - CLIENT_SECRET=dummy
+  - CLIENT_ID=dummy CLIENT_SECRET=dummy
 
