@@ -90,8 +90,8 @@ describe('lib.model-datastore', () => {
 
     it('list objects', () => {
       return db.list(ENTITY_NAME)
-        .then(entities => {
-          assert.equal(entities.length, 3, 'Returns 3 entities');
+        .then(result => {
+          assert.equal(result.entities.length, 3, 'Returns 3 entities');
         });
     });
   });

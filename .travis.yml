@@ -8,3 +8,7 @@ before_script:
   - npm install
 script:
   - npm test
+env:
+  - CLIENT_ID=dummy
+  - CLIENT_SECRET=dummy
+

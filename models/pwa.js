@@ -34,8 +34,8 @@ function mergeManifest(pwa, manifest) {
 
 exports.list = function(numResults, pageToken, callback) {
   db.list(ENTITY_NAME, numResults, pageToken)
-    .then((pwas, hasMore) => {
-      callback(null, pwas, hasMore);
+    .then(result => {
+      callback(null, result.entities, result.hasMore);
     })
     .catch(err => {
       callback(err);
