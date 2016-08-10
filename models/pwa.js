@@ -33,20 +33,24 @@ function mergeManifest(pwa, manifest) {
 }
 
 exports.list = function(numResults, pageToken, callback) {
-  db.list(ENTITY_NAME, numResults, pageToken, callback);
+  db.list(ENTITY_NAME, numResults, pageToken)
+    .then(result => {
+      callback(null, result.entities, result.hasMore);
+    })
+    .catch(err => {
+      callback(err);
+    });
 };
 
 exports.find = function(key, callback) {
-  db.read(ENTITY_NAME, key, (err, data) => {
-    if (err) {
-      return callback(err, null);
-    }
-
-    // Transform manifest into useful data.
-    data.manifestData = Manifest.fromJson(data.url, JSON.parse(data.manifest));
-
-    callback(null, data);
-  });
+  db.read(ENTITY_NAME, key)
+    .then(pwa => {
+      pwa.manifestData = Manifest.fromJson(pwa.url, JSON.parse(pwa.manifest));
+      callback(null, pwa);
+    })
+    .catch(err => {
+      callback(err);
+    });
 };
 
 exports.findByManifestUrl = function(manifestUrl, callback) {
@@ -88,12 +92,14 @@ exports.save = function(pwa, callback) {
         return callback(err);
       }
       mergeManifest(pwa, manifest);
-      db.update(ENTITY_NAME, pwa.id, pwa, (err, savedPwa) => {
-        if (!err) {
+      db.update(ENTITY_NAME, pwa.id, pwa)
+        .then(savedPwa => {
           updateIcon(savedPwa, manifest);
-        }
-        callback(err, savedPwa);
-      });
+          callback(null, savedPwa);
+        })
+        .catch(err => {
+          callback(err);
+        });
     });
   });
 };
@@ -106,13 +112,10 @@ function updateIcon(pwa, manifest) {
   images.fetchAndSave(url, bucketFileName)
     .then(savedUrl => {
       pwa.iconUrl = savedUrl;
-      db.update(ENTITY_NAME, pwa.id, pwa, err => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        console.log('Updated PWA Image: ', pwa.id);
-      });
+      return db.update(ENTITY_NAME, pwa.id, pwa);
+    })
+    .then(pwa => {
+      console.log('Updated PWA Image: ', pwa.id);
     })
     .catch(err => {
       console.log(err);
@@ -120,5 +123,11 @@ function updateIcon(pwa, manifest) {
 }
 
 exports.delete = function(key, callback) {
-  db.delete(ENTITY_NAME, key, callback);
+  db.delete(ENTITY_NAME, key)
+    .then(() => {
+      callback();
+    })
+    .catch(err => {
+      callback(err);
+    });
 };

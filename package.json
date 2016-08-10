@@ -8,8 +8,8 @@
     "start": "node app.js",
     "monitor": "nodemon app.js",
     "deploy": "gcloud preview app deploy app.yaml",
-    "mocha": "node_modules/.bin/mocha test/**/*.js -t 60000",
-    "coverage": "node_modules/.bin/istanbul cover _mocha test/**/*.js",
+    "mocha": "node_modules/.bin/mocha -R test/ -t 60000",
+    "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -R  test/**/*",
     "lint": "node_modules/.bin/eslint .",
     "test": "npm run lint && npm run coverage"
   },
