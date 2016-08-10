@@ -29,8 +29,14 @@ const DB_OBJECT = {
 };
 
 describe('lib.model-datastore', () => {
-  // Deletes all entities on the 'test' namespace before each test.
-  beforeEach(() => {
+  const skipTests = process.env.TRAVIS;
+  // Skip tests if Running in CI
+  beforeEach(function() { // es-lint-ignore prefer-arrow-callback
+    if (skipTests) {
+      this.skip();
+      return;
+    }
+    // Deletes all entities on the 'test' namespace before each test.
     return new Promise((resolve, reject) => {
       const q = ds.createQuery(ENTITY_NAME);
       ds.runQuery(q, (err, entities) => {
@@ -64,7 +70,11 @@ describe('lib.model-datastore', () => {
   describe('#find', () => {
     let objectId;
 
-    beforeEach(() => {
+    beforeEach(function() {
+      if (skipTests) {
+        this.skip();
+        return;
+      }
       return db.update(ENTITY_NAME, null, DB_OBJECT).then(testObject => {
         objectId = testObject.id;
       });
@@ -80,7 +90,12 @@ describe('lib.model-datastore', () => {
   });
 
   describe('#list', () => {
-    beforeEach(() => {
+    beforeEach(function() {
+      if (skipTests) {
+        this.skip();
+        return;
+      }
+
       return Promise.all([
         db.update(ENTITY_NAME, null, DB_OBJECT),
         db.update(ENTITY_NAME, null, DB_OBJECT),
@@ -99,7 +114,11 @@ describe('lib.model-datastore', () => {
   describe('#delete', () => {
     let objectId;
 
-    beforeEach(() => {
+    beforeEach(function() {
+      if (skipTests) {
+        this.skip();
+        return;
+      }
       return db.update(ENTITY_NAME, null, DB_OBJECT).then(testObject => {
         objectId = testObject.id;
       });
