@@ -82,6 +82,10 @@ exports.save = function(pwa, callback) {
     return callback('Missing manifestUrl', null);
   }
 
+  if (!pwa.user || !pwa.user.id) {
+    return callback('Missing user information', null);
+  }
+
   this.findByManifestUrl(pwa.manifestUrl, (err, existingPwa) => {
     if (err) {
       return callback(err);
