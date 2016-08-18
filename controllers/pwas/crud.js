@@ -62,6 +62,19 @@ router.post('/add', (req, res, next) => {
 
   const callback = (err, savedData) => {
     if (err) {
+      if (typeof err === 'number') {
+        switch (err) {
+          case pwaModel.E_ALREADY_EXISTS:
+            res.render('pwas/form.hbs', {
+              pwa: {
+                manifestUrl: data.manifestUrl
+              },
+              error: 'manifest already exists'
+            });
+            return;
+          default:
+        }
+      }
       return next(err);
     }
     res.redirect(req.baseUrl + '/' + savedData.id);
