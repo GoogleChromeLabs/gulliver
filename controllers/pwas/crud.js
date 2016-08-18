@@ -72,6 +72,14 @@ router.post('/add', (req, res, next) => {
               error: 'manifest already exists'
             });
             return;
+          case pwaModel.E_MANIFEST_ERROR:
+            res.render('pwas/form.hbs', {
+              pwa: {
+                manifestUrl: data.manifestUrl
+              },
+              error: 'error loading manifest' // could be 404, not JSON, domain does not exist
+            });
+            return;
           default:
         }
       }
