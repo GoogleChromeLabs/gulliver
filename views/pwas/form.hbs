@@ -30,6 +30,9 @@
       <form method="POST">
         <div class="form-group">
           <label for="manifestUrl">Manifest URL</label>
+          {{#if error}}
+          <p class="error">Error: {{error}}.</p>
+          {{/if}}
           <input type="text" name="manifestUrl" id="manifestUrl" class="form-input" value="{{pwa.manifestUrl}}">
         </div>
         {{#if pwa.manifest}}

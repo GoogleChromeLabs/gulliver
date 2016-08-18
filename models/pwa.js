@@ -25,6 +25,9 @@ const ds = gcloud.datastore({
 });
 const ENTITY_NAME = 'PWA';
 
+const E_ALREADY_EXISTS = exports.E_ALREADY_EXISTS = 1;
+const E_MANIFEST_ERROR = exports.E_MANIFEST_ERROR = 2;
+
 function mergeManifest(pwa, manifest) {
   pwa.name = manifest.name;
   pwa.startUrl = manifest.start_url || '';
@@ -72,7 +75,7 @@ exports.findByManifestUrl = function(manifestUrl, callback) {
 };
 
 exports.save = function(pwa, callback) {
-   // TODO Check manifestUrl with regexp
+  // TODO Check manifestUrl with regexp
   if (!pwa.manifestUrl) {
     return callback('Missing manifestUrl', null);
   }
@@ -83,13 +86,12 @@ exports.save = function(pwa, callback) {
     }
 
     if (existingPwa && (!pwa.id || existingPwa.data.id.toString() !== pwa.id.toString())) {
-      return callback(
-          'Manifest already Registered for a different PWA', null);
+      return callback(E_ALREADY_EXISTS, null);
     }
 
     Manifest.fetch(pwa.manifestUrl, (err, manifest) => {
       if (err) {
-        return callback(err);
+        return callback(E_MANIFEST_ERROR);
       }
       mergeManifest(pwa, manifest);
       db.update(ENTITY_NAME, pwa.id, pwa)

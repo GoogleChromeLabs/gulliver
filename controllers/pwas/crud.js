@@ -62,6 +62,27 @@ router.post('/add', (req, res, next) => {
 
   const callback = (err, savedData) => {
     if (err) {
+      if (typeof err === 'number') {
+        switch (err) {
+          case pwaModel.E_ALREADY_EXISTS:
+            res.render('pwas/form.hbs', {
+              pwa: {
+                manifestUrl: data.manifestUrl
+              },
+              error: 'manifest already exists'
+            });
+            return;
+          case pwaModel.E_MANIFEST_ERROR:
+            res.render('pwas/form.hbs', {
+              pwa: {
+                manifestUrl: data.manifestUrl
+              },
+              error: 'error loading manifest' // could be 404, not JSON, domain does not exist
+            });
+            return;
+          default:
+        }
+      }
       return next(err);
     }
     res.redirect(req.baseUrl + '/' + savedData.id);
