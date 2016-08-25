@@ -28,6 +28,7 @@ router.get('/', (req, res) => {
   router.handle(req, res);
 });
 
+// Make the contents of node_modules/sw-toolbox available at /sw-toolbox
 router.use('/sw-toolbox', express.static('node_modules/sw-toolbox'));
 
 module.exports = router;
