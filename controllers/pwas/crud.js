@@ -136,7 +136,8 @@ router.post('/:pwa/edit', (req, res, next) => {
 router.get('/:pwa', (req, res, next) => {
   pwaModel.find(req.params.pwa, (err, entity) => {
     if (err) {
-      return next(err);
+      // Not really an error: the pwa wasn't found in the db. Fall through to 404 page.
+      return next();
     }
 
     res.render('pwas/view.hbs', {
