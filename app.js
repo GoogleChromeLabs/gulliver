@@ -41,14 +41,13 @@ app.use(require('./middlewares'));
 // Controllers
 app.use(require('./controllers'));
 
-// Basic 404 handler
+// If no route has matched, return 404
 app.use((req, res) => {
-  res.status(404).send('Not Found');
+  res.status(404).render('404.hbs');
 });
 
 // Basic error handler
 app.use((err, req, res) => {
-  /* jshint unused:false */
   console.error(err);
   // If our routes specified a specific response, then send that. Otherwise,
   // send a generic message so as not to leak anything.
