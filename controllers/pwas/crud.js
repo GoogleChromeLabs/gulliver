@@ -18,6 +18,10 @@
 const express = require('express');
 const pwaModel = require('../../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
+const config = require('../../config/config');
+const CLIENT_ID = config.get('CLIENT_ID');
+const CLIENT_SECRET = config.get('CLIENT_SECRET');
+const crypto = require('crypto');
 const LIST_PAGE_SIZE = 10;
 
 /**
@@ -58,37 +62,77 @@ router.get('/add', (req, res) => {
  */
 // [START add]
 router.post('/add', (req, res, next) => {
-  const data = req.body;
+  const manifestUrl = req.body.manifestUrl;
+  const idToken = req.body.idToken;
 
-  const callback = (err, savedData) => {
-    if (err) {
-      if (typeof err === 'number') {
-        switch (err) {
-          case pwaModel.E_ALREADY_EXISTS:
-            res.render('pwas/form.hbs', {
-              pwa: {
-                manifestUrl: data.manifestUrl
-              },
-              error: 'manifest already exists'
-            });
-            return;
-          case pwaModel.E_MANIFEST_ERROR:
-            res.render('pwas/form.hbs', {
-              pwa: {
-                manifestUrl: data.manifestUrl
-              },
-              error: 'error loading manifest' // could be 404, not JSON, domain does not exist
-            });
-            return;
-          default:
+  if (!manifestUrl) {
+    res.render('pwas/form.hbs', {
+      pwa: {
+        manifestUrl: ''
+      },
+      error: 'no manifest provided'
+    });
+    return;
+  }
+
+  if (!idToken) {
+    res.render('pwas/form.hbs', {
+      pwa: {
+        manifestUrl: manifestUrl
+      },
+      error: 'user not logged in'
+    });
+    return;
+  }
+
+  verifyIdToken(CLIENT_ID, CLIENT_SECRET, idToken)
+    .then(user => {
+      const pwa = {
+        manifestUrl: manifestUrl,
+        createdOn: new Date(),
+        updatedOn: new Date(),
+        user: {
+          id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')
         }
-      }
-      return next(err);
-    }
-    res.redirect(req.baseUrl + '/' + savedData.id);
-  };
-
-  pwaModel.save(data, callback);
+      };
+      const callback = (err, savedData) => {
+        if (err) {
+          if (typeof err === 'number') {
+            switch (err) {
+              case pwaModel.E_ALREADY_EXISTS:
+                res.render('pwas/form.hbs', {
+                  pwa: {
+                    manifestUrl: pwa.manifestUrl
+                  },
+                  error: 'manifest already exists'
+                });
+                return;
+              case pwaModel.E_MANIFEST_ERROR:
+                res.render('pwas/form.hbs', {
+                  pwa: {
+                    manifestUrl: pwa.manifestUrl
+                  },
+                  error: 'error loading manifest' // could be 404, not JSON, domain does not exist
+                });
+                return;
+              default:
+                return next(err);
+            }
+          }
+        }
+        res.redirect(req.baseUrl + '/' + savedData.id);
+      };
+      pwaModel.save(pwa, callback);
+    })
+    .catch(err => {
+      res.render('pwas/form.hbs', {
+        pwa: {
+          manifestUrl: manifestUrl
+        },
+        error: err
+      });
+      return;
+    });
 });
 // [END add]
 
@@ -169,5 +213,24 @@ router.use((err, req, res, next) => {
   err.response = err.message;
   next(err);
 });
+
+/**
+ * @param {string} clientId
+ * @param {string} clientSecret
+ * @param {string} idToken
+ * @return {Promise<GoogleLogin>}
+ */
+function verifyIdToken(clientId, clientSecret, idToken) {
+  const authFactory = new (require('google-auth-library'))();
+  const client = new authFactory.OAuth2(clientId, clientSecret);
+  return new Promise((resolve, reject) => {
+    client.verifyIdToken(idToken, clientId, (err, user) => {
+      if (err) {
+        reject(err);
+      }
+      resolve(user);
+    });
+  });
+}
 
 module.exports = router;

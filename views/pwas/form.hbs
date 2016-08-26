@@ -27,7 +27,7 @@
     {{/if}}
 
     <div class="container">
-      <form method="POST">
+      <form id="pwaForm" method="POST">
         <div class="form-group">
           <label for="manifestUrl">Manifest URL</label>
           {{#if error}}
@@ -41,7 +41,8 @@
           <div class="form-textbox">{{pwa.manifest}}</div>
         </div>
         {{/if}}
-        <button type="submit" class="button green"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+        <input id="idToken" type="hidden" name="idToken" />
+        <button id="pwaSubmit" type="submit" class="button green" disabled><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
       </form>
       </div>            
     </div>
