@@ -26,7 +26,6 @@ class Manifest {
       if (!icon.sizes) {
         return 0;
       }
-
       return parseInt(icon.sizes.substring(0, icon.sizes.indexOf('x')), 10);
     }
 

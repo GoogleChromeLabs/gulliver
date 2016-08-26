@@ -57,7 +57,6 @@ router.post('/', (req, res) => {
   if (body && body.idToken) {
     verifyIdToken(CLIENT_ID, CLIENT_SECRET, body.idToken)
     .then(user => {
-      console.log(user.getPayload());
       const payload = user.getPayload();
       res.json({
         email: payload.email

@@ -16,7 +16,7 @@
 'use strict';
 
 const express = require('express');
-const pwaModel = require('../../models/pwa');
+const pwaLib = require('../../lib/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const LIST_PAGE_SIZE = 10;
 
@@ -36,7 +36,7 @@ router.get('/', (req, res, next) => {
       nextPageToken: cursor
     });
   }
-  pwaModel.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
+  pwaLib.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
 });
 
 /**
@@ -64,7 +64,7 @@ router.post('/add', (req, res, next) => {
     if (err) {
       if (typeof err === 'number') {
         switch (err) {
-          case pwaModel.E_ALREADY_EXISTS:
+          case pwaLib.E_ALREADY_EXISTS:
             res.render('pwas/form.hbs', {
               pwa: {
                 manifestUrl: data.manifestUrl
@@ -72,7 +72,7 @@ router.post('/add', (req, res, next) => {
               error: 'manifest already exists'
             });
             return;
-          case pwaModel.E_MANIFEST_ERROR:
+          case pwaLib.E_MANIFEST_ERROR:
             res.render('pwas/form.hbs', {
               pwa: {
                 manifestUrl: data.manifestUrl
@@ -88,7 +88,7 @@ router.post('/add', (req, res, next) => {
     res.redirect(req.baseUrl + '/' + savedData.id);
   };
 
-  pwaModel.save(data, callback);
+  pwaLib.save(data, callback);
 });
 // [END add]
 
@@ -98,7 +98,7 @@ router.post('/add', (req, res, next) => {
  * Display a pwa for editing.
  */
 router.get('/:pwa/edit', (req, res, next) => {
-  pwaModel.find(req.params.pwa, (err, entity) => {
+  pwaLib.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
@@ -120,7 +120,7 @@ router.post('/:pwa/edit', (req, res, next) => {
   const data = req.body;
   data.id = req.params.pwa;
 
-  pwaModel.save(data, (err, savedData) => {
+  pwaLib.save(data, (err, savedData) => {
     if (err) {
       return next(err);
     }
@@ -134,7 +134,7 @@ router.post('/:pwa/edit', (req, res, next) => {
  * Display a PWA.
  */
 router.get('/:pwa', (req, res, next) => {
-  pwaModel.find(req.params.pwa, (err, entity) => {
+  pwaLib.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
@@ -151,7 +151,7 @@ router.get('/:pwa', (req, res, next) => {
  * Delete a PWA.
  */
 router.get('/:pwa/delete', (req, res, next) => {
-  pwaModel.delete(req.params.pwa, err => {
+  pwaLib.delete(req.params.pwa, err => {
     if (err) {
       return next(err);
     }
