@@ -94,7 +94,7 @@ function authInit(params) {
 
   /* eslint-disable camelcase */
   const params = {
-    scope: 'email',
+    scope: 'profile',
     client_id: '605287872172-js6omne47i1k79hnfo7d4bdu9rlemslr.apps.googleusercontent.com',
     fetch_basic_profile: false
   };
