@@ -6,7 +6,7 @@
  *
  * @template T
  * @param {string} name the library to load
- * @return {Promise<T>}
+ * @return {Promise<T>} resolves to window.gapi[name]
  */
 function gapiLoad(name) {
   return new Promise((resolve, reject) => {
@@ -26,7 +26,7 @@ function gapiLoad(name) {
  * @template T
  * @param {string} name the API client to load
  * @param {string} [version="v1"] version
- * @return {Promise<T>} Promise resolving to gapi.client[name]
+ * @return {Promise<T>} resolves to gapi.client[name]
  */
 function clientLoad(name, version) { // eslint-disable-line no-unused-vars
   version = version ? version : 'v1';
@@ -59,6 +59,8 @@ function authInit(params) {
 }
 
 (() => {
+  // LOGIN/LOGOUT HANDLER
+
   const [login, logout] = [document.getElementById('login'), document.getElementById('logout')];
 
   /**
@@ -103,5 +105,11 @@ function authInit(params) {
 
     login.addEventListener('click', () => auth.signIn());
     logout.addEventListener('click', () => auth.signOut());
+  });
+
+  // REGISTER SERVICE WORKER
+
+  navigator.serviceWorker.register('/sw.js').then(r => {
+    console.log('REGISTRATION', r);
   });
 })();

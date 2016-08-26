@@ -15,7 +15,8 @@
 
 'use strict';
 
-const router = require('express').Router(); // eslint-disable-line
+const express = require('express');
+const router = express.Router(); // eslint-disable-line
 
 // PWAs
 router.use('/pwas', require('./pwas/crud'));
@@ -26,5 +27,8 @@ router.get('/', (req, res) => {
   req.url = '/pwas';
   router.handle(req, res);
 });
+
+// Make the contents of node_modules/sw-toolbox available at /sw-toolbox
+router.use('/sw-toolbox', express.static('node_modules/sw-toolbox'));
 
 module.exports = router;
