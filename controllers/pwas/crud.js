@@ -92,7 +92,7 @@ router.post('/add', (req, res, next) => {
         createdOn: new Date(),
         updatedOn: new Date(),
         user: {
-          id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex'),
+          id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')
         }
       };
       const callback = (err, savedData) => {
