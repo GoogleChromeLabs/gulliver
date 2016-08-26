@@ -1,0 +1,24 @@
+{
+  "short_name": "LinkedIn SlideShare",
+  "name": "LinkedIn SlideShare",
+  "icons": [
+    {
+      "src": "images/slideshare_icon.png",
+      "sizes": "110x110",
+      "type": "image/png"
+    },
+    {
+      "src": "images/app_icon_square_144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    }
+  ],
+  "display": "browser",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "play",
+      "id": "net.slideshare.mobile"
+    }
+  ]
+}
