@@ -31,8 +31,8 @@ const E_MANIFEST_ERROR = exports.E_MANIFEST_ERROR = 2;
 
 function mergeManifest(pwa, manifest) {
   pwa.name = manifest.name;
-  pwa.startUrl = manifest.start_url || '';
-  pwa.absoluteStartUrl = uri(manifest.start_url).absoluteTo(manifest.url).toString() || '';
+  pwa.startUrl = manifest.start_url || '/';
+  pwa.absoluteStartUrl = uri(pwa.startUrl).absoluteTo(manifest.url).toString() || '';
   pwa.backgroundColor = manifest.background_color || '#ffffff';
   pwa.manifest = JSON.stringify(manifest);
 }
