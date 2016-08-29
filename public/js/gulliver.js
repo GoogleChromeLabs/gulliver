@@ -6,7 +6,7 @@
  *
  * @template T
  * @param {string} name the library to load
- * @return {Promise<T>}
+ * @return {Promise<T>} resolves to window.gapi[name]
  */
 function gapiLoad(name) {
   return new Promise((resolve, reject) => {
@@ -26,7 +26,7 @@ function gapiLoad(name) {
  * @template T
  * @param {string} name the API client to load
  * @param {string} [version="v1"] version
- * @return {Promise<T>} Promise resolving to gapi.client[name]
+ * @return {Promise<T>} resolves to gapi.client[name]
  */
 function clientLoad(name, version) { // eslint-disable-line no-unused-vars
   version = version ? version : 'v1';
@@ -59,6 +59,8 @@ function authInit(params) {
 }
 
 (() => {
+  // LOGIN/LOGOUT HANDLER
+
   const [login, logout] = [document.getElementById('login'), document.getElementById('logout')];
 
   /**
@@ -69,29 +71,32 @@ function authInit(params) {
       console.log('id_token', user.getAuthResponse().id_token);
       login.disabled = true;
       logout.disabled = false;
-      fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json'
-        },
-        body: JSON.stringify({
-          idToken: user.getAuthResponse().id_token
-        })
-      }).then(res => {
-        return res.json();
-      }).then(body => {
-        console.log(body);
-      });
+      const pwaForm = document.getElementById('pwaForm');
+      if (pwaForm) {
+        const idTokenInput = document.getElementById('idToken');
+        idTokenInput.setAttribute('value', user.getAuthResponse().id_token);
+
+        const pwaSubmit = document.getElementById('pwaSubmit');
+        pwaSubmit.removeAttribute('disabled');
+      }
     } else {
       console.log('user signed out/never signed in');
       login.disabled = false;
       logout.disabled = true;
+      const pwaForm = document.getElementById('pwaForm');
+      if (pwaForm) {
+        const idTokenInput = document.getElementById('idToken');
+        idTokenInput.setAttribute('value', '');
+
+        const pwaSubmit = document.getElementById('pwaSubmit');
+        pwaSubmit.setAttribute('disabled', '');
+      }
     }
   }
 
   /* eslint-disable camelcase */
   const params = {
-    scope: 'email',
+    scope: 'profile',
     client_id: '605287872172-js6omne47i1k79hnfo7d4bdu9rlemslr.apps.googleusercontent.com',
     fetch_basic_profile: false
   };
@@ -103,5 +108,11 @@ function authInit(params) {
 
     login.addEventListener('click', () => auth.signIn());
     logout.addEventListener('click', () => auth.signOut());
+  });
+
+  // REGISTER SERVICE WORKER
+
+  navigator.serviceWorker.register('/sw.js').then(r => {
+    console.log('REGISTRATION', r);
   });
 })();

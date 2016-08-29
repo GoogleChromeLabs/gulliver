@@ -15,24 +15,32 @@
 
 'use strict';
 
+const crypto = require('crypto');
 const uri = require('urijs');
 
 class Pwa {
   constructor(manifestUrl) {
     this.manifestUrl = manifestUrl;
     this.id = undefined;
-    this.created = Date.now();
-    this.updated = this.created;
+    this.createdOn = new Date();
+    this.updatedOn = this.createdOn;
     this.visible = true;
   }
 
   mergeManifest(manifest) {
     this.name = manifest.name;
     this.description = manifest.description;
-    this.startUrl = manifest.start_url || '';
-    this.absoluteStartUrl = uri(manifest.start_url).absoluteTo(manifest.url).toString() || '';
+    this.startUrl = manifest.start_url || '/';
+    this.absoluteStartUrl = uri(this.startUrl).absoluteTo(manifest.url).toString() || '';
     this.backgroundColor = manifest.background_color || '#ffffff';
     this.manifest = JSON.stringify(manifest);
+    this.updatedOn = new Date();
+  }
+
+  setUserId(user) {
+    this.user = {
+      id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')
+    };
   }
 }
 
