@@ -16,12 +16,12 @@
 'use strict';
 
 const express = require('express');
-const pwaModel = require('../../models/pwa');
+const pwaLib = require('../../lib/pwa');
+const Pwa = require('../../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const config = require('../../config/config');
 const CLIENT_ID = config.get('CLIENT_ID');
 const CLIENT_SECRET = config.get('CLIENT_SECRET');
-const crypto = require('crypto');
 const LIST_PAGE_SIZE = 10;
 
 /**
@@ -40,7 +40,7 @@ router.get('/', (req, res, next) => {
       nextPageToken: cursor
     });
   }
-  pwaModel.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
+  pwaLib.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
 });
 
 /**
@@ -60,16 +60,14 @@ router.get('/add', (req, res) => {
  *
  * Create a PWA.
  */
-// [START add]
 router.post('/add', (req, res, next) => {
   const manifestUrl = req.body.manifestUrl;
   const idToken = req.body.idToken;
+  var pwa = new Pwa(manifestUrl);
 
   if (!manifestUrl) {
     res.render('pwas/form.hbs', {
-      pwa: {
-        manifestUrl: ''
-      },
+      pwa,
       error: 'no manifest provided'
     });
     return;
@@ -77,9 +75,7 @@ router.post('/add', (req, res, next) => {
 
   if (!idToken) {
     res.render('pwas/form.hbs', {
-      pwa: {
-        manifestUrl: manifestUrl
-      },
+      pwa,
       error: 'user not logged in'
     });
     return;
@@ -87,31 +83,20 @@ router.post('/add', (req, res, next) => {
 
   verifyIdToken(CLIENT_ID, CLIENT_SECRET, idToken)
     .then(user => {
-      const pwa = {
-        manifestUrl: manifestUrl,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-        user: {
-          id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')
-        }
-      };
+      pwa.setUserId(user);
       const callback = (err, savedData) => {
         if (err) {
           if (typeof err === 'number') {
             switch (err) {
-              case pwaModel.E_ALREADY_EXISTS:
+              case pwaLib.E_ALREADY_EXISTS:
                 res.render('pwas/form.hbs', {
-                  pwa: {
-                    manifestUrl: pwa.manifestUrl
-                  },
+                  pwa,
                   error: 'manifest already exists'
                 });
                 return;
-              case pwaModel.E_MANIFEST_ERROR:
+              case pwaLib.E_MANIFEST_ERROR:
                 res.render('pwas/form.hbs', {
-                  pwa: {
-                    manifestUrl: pwa.manifestUrl
-                  },
+                  pwa,
                   error: 'error loading manifest' // could be 404, not JSON, domain does not exist
                 });
                 return;
@@ -122,19 +107,17 @@ router.post('/add', (req, res, next) => {
         }
         res.redirect(req.baseUrl + '/' + savedData.id);
       };
-      pwaModel.save(pwa, callback);
+      pwaLib.save(pwa, callback);
     })
     .catch(err => {
       res.render('pwas/form.hbs', {
-        pwa: {
-          manifestUrl: manifestUrl
-        },
+        pwa,
         error: err
       });
+      console.log(err);
       return;
     });
 });
-// [END add]
 
 /**
  * GET /pwas/:id/edit
@@ -142,7 +125,7 @@ router.post('/add', (req, res, next) => {
  * Display a pwa for editing.
  */
 router.get('/:pwa/edit', (req, res, next) => {
-  pwaModel.find(req.params.pwa, (err, entity) => {
+  pwaLib.find(req.params.pwa, (err, entity) => {
     if (err) {
       return next(err);
     }
@@ -159,17 +142,61 @@ router.get('/:pwa/edit', (req, res, next) => {
  *
  * Update a PWA.
  */
-
 router.post('/:pwa/edit', (req, res, next) => {
+  const manifestUrl = req.body.manifestUrl;
+  const idToken = req.body.idToken;
   const data = req.body;
   data.id = req.params.pwa;
 
-  pwaModel.save(data, (err, savedData) => {
-    if (err) {
-      return next(err);
-    }
-    res.redirect(req.baseUrl + '/' + savedData.id);
-  });
+  var pwa = new Pwa(manifestUrl);
+  pwa.id = data.id;
+
+  if (!manifestUrl) {
+    res.render('pwas/form.hbs', {
+      pwa,
+      error: 'no manifest provided'
+    });
+    return;
+  }
+
+  if (!idToken) {
+    res.render('pwas/form.hbs', {
+      pwa,
+      error: 'user not logged in'
+    });
+    return;
+  }
+
+  verifyIdToken(CLIENT_ID, CLIENT_SECRET, idToken)
+    .then(user => {
+      pwa.setUserId(user);
+      const callback = (err, savedData) => {
+        if (err) {
+          if (typeof err === 'number') {
+            switch (err) {
+              case pwaLib.E_MANIFEST_ERROR:
+                res.render('pwas/form.hbs', {
+                  pwa,
+                  error: 'error loading manifest' // could be 404, not JSON, domain does not exist
+                });
+                return;
+              default:
+                return next(err);
+            }
+          }
+        }
+        res.redirect(req.baseUrl + '/' + savedData.id);
+      };
+      pwaLib.save(pwa, callback);
+    })
+    .catch(err => {
+      res.render('pwas/form.hbs', {
+        pwa,
+        error: err
+      });
+      console.log(err);
+      return;
+    });
 });
 
 /**
@@ -178,7 +205,7 @@ router.post('/:pwa/edit', (req, res, next) => {
  * Display a PWA.
  */
 router.get('/:pwa', (req, res, next) => {
-  pwaModel.find(req.params.pwa, (err, entity) => {
+  pwaLib.find(req.params.pwa, (err, entity) => {
     if (err) {
       // Not really an error: the pwa wasn't found in the db. Fall through to 404 page.
       return next();
@@ -196,7 +223,7 @@ router.get('/:pwa', (req, res, next) => {
  * Delete a PWA.
  */
 router.get('/:pwa/delete', (req, res, next) => {
-  pwaModel.delete(req.params.pwa, err => {
+  pwaLib.delete(req.params.pwa, err => {
     if (err) {
       return next(err);
     }
