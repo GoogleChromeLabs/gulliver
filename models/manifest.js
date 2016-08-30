@@ -35,6 +35,7 @@ class Manifest {
 
     let bestIcon;
     let bestIconSize;
+    console.log(this);
 
     this.icons.forEach(icon => {
       if (!bestIcon) {
