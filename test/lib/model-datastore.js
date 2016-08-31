@@ -24,8 +24,20 @@ const ds = gcloud.datastore({
   projectId: config.get('GCLOUD_PROJECT')
 });
 const ENTITY_NAME = 'test';
+
+class TestClass {
+
+}
+
+const testObject = new TestClass();
+testObject.array = ['A', 'B', 'C'];
+
 const DB_OBJECT = {
-  test: 'test'
+  test: 'test',
+  testObject: testObject,
+  testObject2: {
+    innerTestObject: testObject
+  }
 };
 
 describe('lib.model-datastore', () => {
@@ -63,6 +75,8 @@ describe('lib.model-datastore', () => {
         .then(saved => {
           assert.ok(saved.id, 'An ID has been created');
           assert.equal(saved.test, DB_OBJECT.test, 'The value of the "test" field is correct');
+          assert.ok(Array.isArray(saved.testObject.array),
+             'Check if datastore is not modifying arrays');
         });
     });
   });
