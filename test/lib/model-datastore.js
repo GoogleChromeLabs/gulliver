@@ -75,7 +75,8 @@ describe('lib.model-datastore', () => {
         .then(saved => {
           assert.ok(saved.id, 'An ID has been created');
           assert.equal(saved.test, DB_OBJECT.test, 'The value of the "test" field is correct');
-          assert.ok(Array.isArray(saved.testObject.array), 'Check if datastore is not modifying arrays');
+          assert.ok(Array.isArray(saved.testObject.array),
+             'Check if datastore is not modifying arrays');
         });
     });
   });
