@@ -103,7 +103,7 @@ describe('lib.model-datastore', () => {
     });
   });
 
-  describe('#list', () => {
+  describe.skip('#list', () => {
     beforeEach(function() {
       if (skipTests) {
         this.skip();
