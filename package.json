@@ -54,8 +54,11 @@
     "urijs": "^1.18.1"
   },
   "devDependencies": {
+    "chai": "^3.0.0",
+    "chai-as-promised": "^5.3.0",
     "eslint": "^3.0.1",
     "eslint-config-google": "^0.6.0",
+    "fetch-mock": "^5.1.1",
     "istanbul": "^0.4.4",
     "mocha": "^3.0.1"
   },
