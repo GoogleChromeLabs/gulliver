@@ -211,8 +211,6 @@ router.get('/:pwa', (req, res, next) => {
       return next();
     }
 
-    console.log(entity);
-    console.log(entity.name);
     res.render('pwas/view.hbs', {
       pwa: entity
     });
