@@ -2,40 +2,29 @@
 
 importScripts('/sw-toolbox/sw-toolbox.js'); /* global toolbox */
 
-self.addEventListener('install', () => {
-  console.log('INSTALL');
-});
+// The offline page itself *and* its dependencies
+const OFFLINE = [
+  '/.shell/offline',
+  '/sw.js',
+  '/js/gulliver.js'
+];
 
-self.addEventListener('activate', () => {
-  console.log('ACTIVATE');
-});
+const OFFLINE_URL = '/.shell/offline';
 
-self.addEventListener('fetch', e => {
-  console.log('FETCH', e.request.url);
-});
+toolbox.precache(OFFLINE);
 
 toolbox.options.debug = true;
 toolbox.router.default = (request, values, options) => {
-  return toolbox.networkFirst(request, values, options).catch(e => {
-    console.log('CATCH THEM ALL!', e);
-    return mock();
-  });
+  return toolbox.networkFirst(request, values, options)
+    .catch(_ => {
+      // networkFirst failed (no network and not in cache)
+      return caches.open(toolbox.options.cache.name).then(cache => {
+        return cache.match(OFFLINE_URL).then(response => {
+          return response || new Response('', {
+            status: 500,
+            statusText: 'Offline Page Missing'
+          });
+        });
+      });
+    });
 };
-
-function mock() {
-  var body = [
-    'The great roe is a mythological beast with the head',
-    'of a lion and the body of a lion, though not the same',
-    'lion.'
-  ].join(' ');
-  var res = new Response(body, {
-    status: 200,
-    statusText: 'OK',
-    headers: {
-      'cache-control': 'max-age=86400',
-      'content-type': 'text/plain',
-      'date': new Date().toUTCString()
-    }
-  });
-  return res;
-}
