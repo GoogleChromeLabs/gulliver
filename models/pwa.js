@@ -19,22 +19,55 @@ const crypto = require('crypto');
 const uri = require('urijs');
 
 class Pwa {
-  constructor(manifestUrl) {
+  constructor(manifestUrl, manifest) {
     this.manifestUrl = manifestUrl;
-    this.id = undefined;
-    this.createdOn = new Date();
-    this.updatedOn = this.createdOn;
-    this.visible = true;
+    this.manifest = manifest;
   }
 
-  mergeManifest(manifest) {
-    this.name = manifest.name;
-    this.description = manifest.description;
-    this.startUrl = manifest.start_url || '/';
-    this.absoluteStartUrl = uri(this.startUrl).absoluteTo(manifest.url).toString() || '';
-    this.backgroundColor = manifest.background_color || '#ffffff';
-    this.manifest = JSON.stringify(manifest);
-    this.updatedOn = new Date();
+  get name() {
+    if (!this.manifest) {
+      return '';
+    }
+    return this.manifest.name || '';
+  }
+
+  get description() {
+    if (!this.manifest) {
+      return '';
+    }
+    return this.manifest.description || '';
+  }
+
+  get startUrl() {
+    if (!this.manifest) {
+      return '';
+    }
+    return this.manifest.start_url || '';
+  }
+
+  get absoluteStartUrl() {
+    if (!this.manifestUrl) {
+      return '';
+    }
+
+    const startUrl = this.startUrl || '/';
+    return uri(startUrl).absoluteTo(this.manifestUrl).toString();
+  }
+
+  get backgroundColor() {
+    if (!this.manifest) {
+      return '#ffffff';
+    }
+
+    return this.manifest.background_color || '#ffffff';
+  }
+
+  get manifestAsString() {
+    if (!this.manifest) {
+      return '';
+    }
+
+    return JSON.stringify(this.manifest);
   }
 
   setUserId(user) {
