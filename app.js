@@ -30,6 +30,12 @@ app.set('trust proxy', true);
 hbs.registerPartials(path.join(__dirname, '/views/includes/'));
 helpers.registerHelpers(hbs);
 
+// Make variables available to *all* templates
+hbs.localsAsTemplateData(app);
+app.locals.configstring = JSON.stringify({
+  client_id: config.get('CLIENT_ID') // eslint-disable-line camelcase
+});
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Static files

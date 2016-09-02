@@ -97,7 +97,7 @@ function authInit(params) {
   /* eslint-disable camelcase */
   const params = {
     scope: 'profile',
-    client_id: '605287872172-js6omne47i1k79hnfo7d4bdu9rlemslr.apps.googleusercontent.com',
+    client_id: window.__config.client_id,
     fetch_basic_profile: false
   };
   /* eslint-enable camelcase */
