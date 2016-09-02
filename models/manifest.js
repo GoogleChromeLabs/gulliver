@@ -77,7 +77,7 @@ class Manifest {
     return domain + path + iconUrl;
   }
 
-  static fetch(manifestUrl, callback) {
+  static fetch(manifestUrl) {
     const options = {
       method: 'GET',
       headers: {
@@ -85,16 +85,18 @@ class Manifest {
       }
     };
 
-    fetch(manifestUrl, options)
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        return callback(null, Manifest.fromJson(manifestUrl, json));
-      })
-      .catch(err => {
-        return callback(err);
-      });
+    return new Promise((resolve, reject) => {
+      fetch(manifestUrl, options)
+        .then(response => {
+          return response.json();
+        })
+        .then(json => {
+          resolve(Manifest.fromJson(manifestUrl, json));
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
   }
 
   static fromJson(url, json) {
