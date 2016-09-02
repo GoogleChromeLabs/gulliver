@@ -88,12 +88,6 @@ router.post('/add', (req, res, next) => {
         if (err) {
           if (typeof err === 'number') {
             switch (err) {
-              case pwaLib.E_ALREADY_EXISTS:
-                res.render('pwas/form.hbs', {
-                  pwa,
-                  error: 'manifest already exists'
-                });
-                return;
               case pwaLib.E_MANIFEST_ERROR:
                 res.render('pwas/form.hbs', {
                   pwa,
@@ -114,7 +108,6 @@ router.post('/add', (req, res, next) => {
         pwa,
         error: err
       });
-      console.log(err);
       return;
     });
 });
