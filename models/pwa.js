@@ -32,10 +32,11 @@ class Pwa {
   }
 
   get description() {
-    if (!this.manifest) {
-      return '';
+    if (this.manifest && this.manifest.description) {
+      return this.manifest.description;
     }
-    return this.manifest.description || '';
+
+    return this.metaDescription || '';
   }
 
   get startUrl() {

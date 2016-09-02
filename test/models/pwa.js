@@ -75,4 +75,15 @@ describe('models/pwa.js', () => {
     assert.equal(pwa.createdOn, pwa.updatedOn, 'updatedOn is the same as createdOn');
     assert.ok(pwa.manifestAsString, 'manifestAsString is a non-empty string');
   });
+
+  it('Return the right description', () => {
+    var pwa = new Pwa();
+    assert.equal(pwa.description, '');
+    pwa.metaDescription = 'metaDescription';
+    assert.equal(pwa.description, 'metaDescription');
+    pwa.manifest = {
+      description: 'manifestDescription'
+    };
+    assert.equal(pwa.description, 'manifestDescription');
+  });
 });
