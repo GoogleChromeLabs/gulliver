@@ -28,7 +28,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 app.set('trust proxy', true);
 hbs.registerPartials(path.join(__dirname, '/views/includes/'));
+hbs.localsAsTemplateData(app);
 helpers.registerHelpers(hbs);
+
+app.locals.configstring = JSON.stringify({
+  client_id: config.get('CLIENT_ID') // eslint-disable-line camelcase
+});
 
 app.use(bodyParser.urlencoded({extended: true}));
 
