@@ -58,42 +58,112 @@ function authInit(params) {
   });
 }
 
-(() => {
-  // LOGIN/LOGOUT HANDLER
+/**
+ * Setup handlers for the 'online', 'offline' and 'userchange' events. ('userchange' is
+ * a custom event fired when a user logs in or out.)
+ */
+function setupEventHandlers() {
+  window.addEventListener('online', () => {
+    console.log('ONLINE');
+    const onlineAware = document.querySelectorAll('.gulliver-online-aware');
+    for (const e of onlineAware) {
+      e.dataset.online = JSON.stringify(true);
+      e.dispatchEvent(new CustomEvent('change'));
+    }
+  });
 
-  const [login, logout] = [document.getElementById('login'), document.getElementById('logout')];
+  window.addEventListener('offline', () => {
+    console.log('OFFLINE');
+    const onlineAware = document.querySelectorAll('.gulliver-online-aware');
+    for (const e of onlineAware) {
+      e.dataset.online = JSON.stringify(false);
+      e.dispatchEvent(new CustomEvent('change'));
+    }
+  });
 
-  /**
-   * @param {GoogleUser} user
-   */
-  function onChange(user) {
+  window.addEventListener('userchange', e => {
+    const user = e.detail;
     if (user.isSignedIn()) {
       console.log('id_token', user.getAuthResponse().id_token);
-      login.disabled = true;
-      logout.disabled = false;
       const pwaForm = document.getElementById('pwaForm');
       if (pwaForm) {
         const idTokenInput = document.getElementById('idToken');
         idTokenInput.setAttribute('value', user.getAuthResponse().id_token);
-
-        const pwaSubmit = document.getElementById('pwaSubmit');
-        pwaSubmit.removeAttribute('disabled');
       }
     } else {
       console.log('user signed out/never signed in');
-      login.disabled = false;
-      logout.disabled = true;
       const pwaForm = document.getElementById('pwaForm');
       if (pwaForm) {
         const idTokenInput = document.getElementById('idToken');
         idTokenInput.setAttribute('value', '');
-
-        const pwaSubmit = document.getElementById('pwaSubmit');
-        pwaSubmit.setAttribute('disabled', '');
       }
     }
-  }
+    const signedinAware = document.querySelectorAll('.gulliver-signedin-aware');
+    for (const e of signedinAware) {
+      e.dataset.signedin = JSON.stringify(user.isSignedIn());
+      e.dispatchEvent(new CustomEvent('change'));
+    }
+  });
+}
 
+/**
+ * Setup elements that are aware of the signed in state.
+ */
+function setupSignedinAware() {
+  const list = document.querySelectorAll('.gulliver-signedin-aware.gulliver-online-aware');
+  for (const e of list) {
+    e.dataset.online = JSON.stringify(false);
+    e.dataset.signedin = JSON.stringify(false);
+    e.addEventListener('change', function() {
+      const online = JSON.parse(this.dataset.online);
+      const signedin = JSON.parse(this.dataset.signedin);
+      switch (e.tagName.toLowerCase()) {
+        case 'button':
+          if (e.id === 'login') {
+            // Login is "reversed" for login button
+            this.disabled = !online || signedin;
+          } else {
+            this.disabled = !online || !signedin;
+          }
+          break;
+        case 'div':
+          if (online && signedin) {
+            this.style.opacity = 1;
+            this.onclick = null;
+          } else {
+            this.style.opacity = 0.5;
+            this.onclick = f => f.preventDefault();
+          }
+          break;
+        default:
+      }
+    });
+  }
+}
+
+/**
+ * Setup elements that are aware of the online state.
+ */
+function setupOnlineAware() {
+  const list = document.querySelectorAll('div.gulliver-online-aware');
+  for (const e of list) {
+    e.addEventListener('change', function() {
+      if (JSON.parse(this.dataset.online)) {
+        this.style.opacity = 1;
+        this.onclick = null;
+      } else {
+        this.style.opacity = 0.5;
+        this.onclick = f => f.preventDefault();
+      }
+    });
+  }
+}
+
+/**
+ * Setup/configure Google signin itself. This translates GSI events into 'userchange'
+ * events on the window object.
+ */
+function setupSignin(login, logout) {
   /* eslint-disable camelcase */
   const params = {
     scope: 'profile',
@@ -102,17 +172,45 @@ function authInit(params) {
   };
   /* eslint-enable camelcase */
 
-  authInit(params).then(auth => {
-    auth.currentUser.listen(onChange);
-    onChange(auth.currentUser.get()); // User may be signed in already
+  return authInit(params).then(auth => {
+    // Fire 'userchange' event on page load (not just when status changes)
+    window.dispatchEvent(new CustomEvent('userchange', {
+      detail: auth.currentUser.get()
+    }));
 
+    // Fire 'userchange' event when status changes
+    auth.currentUser.listen(user => {
+      window.dispatchEvent(new CustomEvent('userchange', {
+        detail: user
+      }));
+    });
+
+    // Bind buttons to signIn(), signOut() actions
     login.addEventListener('click', () => auth.signIn());
     logout.addEventListener('click', () => auth.signOut());
+
+    return auth;
   });
+}
 
-  // REGISTER SERVICE WORKER
-
+/**
+ * Register service worker.
+ */
+function setupServiceWorker() {
   navigator.serviceWorker.register('/sw.js').then(r => {
     console.log('REGISTRATION', r);
   });
-})();
+}
+
+setupOnlineAware();
+setupSignedinAware();
+setupSignin(
+  document.getElementById('login'),
+  document.getElementById('logout')
+);
+setupEventHandlers();
+setupServiceWorker();
+
+// Fire 'online' or 'offline' event on page load. (Without this, would only
+// fire on change.)
+window.dispatchEvent(new CustomEvent(navigator.onLine ? 'online' : 'offline'));
