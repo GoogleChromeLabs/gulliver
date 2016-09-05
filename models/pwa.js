@@ -22,6 +22,8 @@ class Pwa {
   constructor(manifestUrl, manifest) {
     this.manifestUrl = manifestUrl;
     this.manifest = manifest;
+    this.created = new Date();
+    this.updated = new Date();
   }
 
   get name() {
