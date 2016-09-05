@@ -13,19 +13,20 @@
  * limitations under the License.
  */
 
+/* global describe it */
 'use strict';
 
-class Lighthouse {
-  constructor(pwaId, absoluteStartUrl, lighthouseJson) {
-    this.pwaId = pwaId;
-    this.absoluteStartUrl = absoluteStartUrl;
-    this.lighthouseInfo = this.processLighthouseJson(lighthouseJson);
-    this.date = (new Date()).toISOString().slice(0, 10);
-  }
+const Lighthouse = require('../../models/lighthouse');
+const lighthouseLib = require('../../lib/lighthouse');
 
-  processLighthouseJson(lighthouseJson) {
-    return lighthouseJson.aggregations;
-  }
-}
+var chai = require('chai');
+var chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+chai.should();
 
-module.exports = Lighthouse;
+describe('save(Lighthouse) object', () => {
+  it('save(dummyLighthouse) should work', () => {
+    var dummyLighthouse = new Lighthouse(123, 'http://www.domain.com', '');
+    return lighthouseLib.save(dummyLighthouse).should.be.fulfilled;
+  });
+});

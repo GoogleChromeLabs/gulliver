@@ -17,6 +17,7 @@
 
 const dataFetcher = require('../lib/data-fetcher');
 const express = require('express');
+const lighthouseLib = require('../lib/lighthouse');
 const pwaLib = require('../lib/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const Lighthouse = require('../models/lighthouse');
@@ -31,8 +32,9 @@ router.post('/lighthouse/:pwaid', (req, res) => {
   pwaLib.find(pwaId)
     .then(pwa => {
       dataFetcher.fetchLighthouseInfo(pwa.absoluteStartUrl)
-        .then(lighthouseJson => {
-          var lighthouse = new Lighthouse(pwaId, pwa.absoluteStartUrl, lighthouseJson);
+        .then(lighthouseJson =>
+          lighthouseLib.save(new Lighthouse(pwaId, pwa.absoluteStartUrl, lighthouseJson)))
+        .then(lighthouse => {
           res.json(lighthouse);
         })
         .catch(err => {
