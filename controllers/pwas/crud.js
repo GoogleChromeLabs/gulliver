@@ -30,17 +30,16 @@ const LIST_PAGE_SIZE = 10;
  * Display a page of PWAs (up to ten at a time).
  */
 router.get('/', (req, res, next) => {
-  function callback(err, entities, cursor) {
-    if (err) {
-      return next(err);
-    }
-
-    res.render('pwas/list.hbs', {
-      pwas: entities,
-      nextPageToken: cursor
+  pwaLib.list(LIST_PAGE_SIZE, req.query.pageToken)
+    .then(result => {
+      res.render('pwas/list.hbs', {
+        pwas: result.pwas,
+        nextPageToken: result.hasMore
+      });
+    })
+    .catch(err => {
+      next(err);
     });
-  }
-  pwaLib.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
 });
 
 /**
@@ -84,26 +83,25 @@ router.post('/add', (req, res, next) => {
   verifyIdToken(CLIENT_ID, CLIENT_SECRET, idToken)
     .then(user => {
       pwa.setUserId(user);
-      const callback = (err, savedData) => {
-        if (err) {
-          if (typeof err === 'number') {
-            switch (err) {
-              case pwaLib.E_MANIFEST_ERROR:
-                res.render('pwas/form.hbs', {
-                  pwa,
-                  error: 'error loading manifest' // could be 404, not JSON, domain does not exist
-                });
-                return;
-              default:
-                return next(err);
-            }
-          }
-        }
-        res.redirect(req.baseUrl + '/' + savedData.id);
-      };
-      pwaLib.save(pwa, callback);
+      return pwaLib.save(pwa);
+    })
+    .then(savedData => {
+      res.redirect(req.baseUrl + '/' + savedData.id);
+      return;
     })
     .catch(err => {
+      if (typeof err === 'number') {
+        switch (err) {
+          case pwaLib.E_MANIFEST_ERROR:
+            res.render('pwas/form.hbs', {
+              pwa,
+              error: 'error loading manifest' // could be 404, not JSON, domain does not exist
+            });
+            return;
+          default:
+            return next(err);
+        }
+      }
       res.render('pwas/form.hbs', {
         pwa,
         error: err
@@ -118,16 +116,16 @@ router.post('/add', (req, res, next) => {
  * Display a pwa for editing.
  */
 router.get('/:pwa/edit', (req, res, next) => {
-  pwaLib.find(req.params.pwa, (err, entity) => {
-    if (err) {
+  pwaLib.find(req.params.pwa)
+    .then(pwa => {
+      res.render('pwas/form.hbs', {
+        pwa: pwa,
+        action: 'Edit'
+      });
+    })
+    .catch(err => {
       return next(err);
-    }
-
-    res.render('pwas/form.hbs', {
-      pwa: entity,
-      action: 'Edit'
     });
-  });
 });
 
 /**
@@ -163,31 +161,28 @@ router.post('/:pwa/edit', (req, res, next) => {
   verifyIdToken(CLIENT_ID, CLIENT_SECRET, idToken)
     .then(user => {
       pwa.setUserId(user);
-      const callback = (err, savedData) => {
-        if (err) {
-          if (typeof err === 'number') {
-            switch (err) {
-              case pwaLib.E_MANIFEST_ERROR:
-                res.render('pwas/form.hbs', {
-                  pwa,
-                  error: 'error loading manifest' // could be 404, not JSON, domain does not exist
-                });
-                return;
-              default:
-                return next(err);
-            }
-          }
-        }
-        res.redirect(req.baseUrl + '/' + savedData.id);
-      };
-      pwaLib.save(pwa, callback);
+      return pwaLib.save(pwa);
+    })
+    .then(savedData => {
+      res.redirect(req.baseUrl + '/' + savedData.id);
     })
     .catch(err => {
+      if (typeof err === 'number') {
+        switch (err) {
+          case pwaLib.E_MANIFEST_ERROR:
+            res.render('pwas/form.hbs', {
+              pwa,
+              error: 'error loading manifest' // could be 404, not JSON, domain does not exist
+            });
+            return;
+          default:
+            return next(err);
+        }
+      }
       res.render('pwas/form.hbs', {
         pwa,
         error: err
       });
-      console.log(err);
       return;
     });
 });
@@ -198,16 +193,15 @@ router.post('/:pwa/edit', (req, res, next) => {
  * Display a PWA.
  */
 router.get('/:pwa', (req, res, next) => {
-  pwaLib.find(req.params.pwa, (err, entity) => {
-    if (err) {
-      // Not really an error: the pwa wasn't found in the db. Fall through to 404 page.
+  pwaLib.find(req.params.pwa)
+    .then(entity => {
+      res.render('pwas/view.hbs', {
+        pwa: entity
+      });
+    })
+    .catch(() => {
       return next();
-    }
-
-    res.render('pwas/view.hbs', {
-      pwa: entity
     });
-  });
 });
 
 /**
@@ -216,12 +210,13 @@ router.get('/:pwa', (req, res, next) => {
  * Delete a PWA.
  */
 router.get('/:pwa/delete', (req, res, next) => {
-  pwaLib.delete(req.params.pwa, err => {
-    if (err) {
+  pwaLib.delete(req.params.pwa)
+    .then(() => {
+      res.redirect(req.baseUrl);
+    })
+    .catch(err => {
       return next(err);
-    }
-    res.redirect(req.baseUrl);
-  });
+    });
 });
 
 /**

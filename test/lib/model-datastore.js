@@ -17,7 +17,7 @@
 'use strict';
 
 const assert = require('assert');
-const gcloud = require('gcloud');
+const gcloud = require('google-cloud');
 const config = require('../../config/config');
 const db = require('../../lib/model-datastore');
 const ds = gcloud.datastore({

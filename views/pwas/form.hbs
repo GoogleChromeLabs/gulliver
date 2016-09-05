@@ -38,11 +38,11 @@
         {{#if pwa.manifest}}
         <div class="form-group">
           <label for="manifest">Manifest content</label>
-          <div class="form-textbox">{{pwa.manifest}}</div>
+          <div class="form-textbox">{{pwa.manifestAsString}}</div>
         </div>
         {{/if}}
         <input id="idToken" type="hidden" name="idToken" />
-        <button id="pwaSubmit" type="submit" class="button green" disabled><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+        <button id="pwaSubmit" type="submit" class="button green gulliver-signedin-aware gulliver-online-aware"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
       </form>
       </div>            
     </div>

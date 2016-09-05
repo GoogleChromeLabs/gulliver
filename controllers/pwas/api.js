@@ -17,7 +17,7 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const pwaModel = require('../../models/pwa');
+const pwaModel = require('../../lib/pwa');
 const router = express.Router(); // eslint-disable-line
 const LIST_PAGE_SIZE = 10;
 
@@ -30,16 +30,16 @@ router.use(bodyParser.json());
  * Retrieve a page of PWAs (up to ten at a time).
  */
 router.get('/', (req, res, next) => {
-  function callback(err, entities, cursor) {
-    if (err) {
-      return next(err);
-    }
-    res.json({
-      items: entities,
-      nextPageToken: cursor
+  pwaModel.list(LIST_PAGE_SIZE, req.query.pageToken)
+    .then(result => {
+      res.json({
+        items: result.pwas,
+        nextPageToken: result.hasMore
+      });
+    })
+    .catch(err => {
+      next(err);
     });
-  }
-  pwaModel.list(LIST_PAGE_SIZE, req.query.pageToken, callback);
 });
 
 /**
@@ -48,12 +48,13 @@ router.get('/', (req, res, next) => {
  * Create a new PWA.
  */
 router.post('/', (req, res, next) => {
-  pwaModel.save(req.body, (err, entity) => {
-    if (err) {
+  pwaModel.save(req.body)
+    .then(entity => {
+      res.json(entity);
+    })
+    .catch(err => {
       return next(err);
-    }
-    res.json(entity);
-  });
+    });
 });
 
 /**
@@ -62,12 +63,14 @@ router.post('/', (req, res, next) => {
  * Retrieve a PWA.
  */
 router.get('/:pwa', (req, res, next) => {
-  pwaModel.find(req.params.pwa, (err, entity) => {
-    if (err) {
+  pwaModel.find(req.params.pwa)
+    .then(pwa => {
+      res.json(pwa);
+      return;
+    })
+    .catch(err => {
       return next(err);
-    }
-    res.json(entity);
-  });
+    });
 });
 
 /**
@@ -78,12 +81,13 @@ router.get('/:pwa', (req, res, next) => {
 router.put('/:pwa', (req, res, next) => {
   const pwa = req.body;
   pwa.id = req.params.pwa;
-  pwaModel.save(pwa, (err, entity) => {
-    if (err) {
+  pwaModel.save(pwa)
+    .then(entity => {
+      res.json(entity);
+    })
+    .catch(err => {
       return next(err);
-    }
-    res.json(entity);
-  });
+    });
 });
 
 /**
@@ -92,12 +96,13 @@ router.put('/:pwa', (req, res, next) => {
  * Delete a PWA.
  */
 router.delete('/:pwa', (req, res, next) => {
-  pwaModel.delete(req.params.pwa, err => {
-    if (err) {
+  pwaModel.delete(req.params.pwa)
+    .then(() => {
+      res.status(200).send('OK');
+    })
+    .catch(err => {
       return next(err);
-    }
-    res.status(200).send('OK');
-  });
+    });
 });
 
 /**

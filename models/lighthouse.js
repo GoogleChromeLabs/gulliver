@@ -25,11 +25,11 @@ class Lighthouse {
   }
 
   get id() {
-  	return this.id;
+    return this.id;
   }
 
-  setId(){
-    this.id = this.pwaId + '-' + this.date.toISOString().slice(0,10);
+  setId() {
+    this.id = this.pwaId + '-' + this.date.toISOString().slice(0, 10);
   }
 }
 
