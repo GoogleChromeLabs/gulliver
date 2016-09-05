@@ -24,6 +24,7 @@ class Pwa {
     this.manifest = manifest;
     this.created = new Date();
     this.updated = new Date();
+    this.visible = true;
   }
 
   get name() {
