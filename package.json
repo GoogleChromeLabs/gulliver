@@ -47,6 +47,7 @@
     "google-cloud": "^0.39.0",
     "handlebars": "^4.0.5",
     "hbs": "^4.0.0",
+    "moment": "^2.14.1",
     "multer": "^1.1.0",
     "nconf": "^0.8.4",
     "node-fetch": "^1.5.3",
