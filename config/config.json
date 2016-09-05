@@ -3,5 +3,6 @@
   "DATA_BACKEND": "datastore",
   "CLOUD_BUCKET": "gulliver.google.com.a.appspot.com",
   "CLIENT_ID": "605287872172-js6omne47i1k79hnfo7d4bdu9rlemslr.apps.googleusercontent.com",
-  "CLIENT_SECRET": "your client secret here"
+  "CLIENT_SECRET": "your client secret here",
+  "LIGHTHOUSE_SERVER": "your lighthouse server URL"
 }
