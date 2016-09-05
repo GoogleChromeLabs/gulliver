@@ -52,10 +52,10 @@
       <p>No PWAs found.</p>
       {{/unless}}
 
-      {{#if nextPagetoek}}
+      {{#if nextPageToken}}
       <nav>
         <ul class="pager">
-          <li><a href="?pageToken=#{encodeURIComponent(nextPageToken)}">More</a></li>
+          <li><a href="?pageToken={{nextPageToken}}">More</a></li>
         </ul>
       </nav>
       {{/if}}       
