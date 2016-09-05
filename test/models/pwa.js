@@ -28,8 +28,12 @@ describe('models/pwa.js', () => {
     assert.equal(pwa.startUrl, '', 'returns empty startUrl');
     assert.equal(pwa.absoluteStartUrl, '', 'returns empty absoluteStartUrl');
     assert.equal(pwa.backgroundColor, '#ffffff', 'backgroundColor is #ffffff');
-    assert.equal(pwa.createdOn, pwa.updatedOn, 'updatedOn is the same as createdOn');
     assert.equal(pwa.manifestAsString, '', 'manifestAsString is an empty string');
+    assert.ok(pwa.created, 'created field exists');
+    assert.ok(pwa.updated, 'updated field exists');
+    assert.ok(pwa.created instanceof Date, 'created is a Date');
+    assert.ok(pwa.updated instanceof Date, 'updated is a Date');
+    assert.equal(pwa.visible, true);
   });
 
   it('Create a PWA with Empty Manifest', () => {
@@ -43,7 +47,6 @@ describe('models/pwa.js', () => {
     assert.equal(pwa.startUrl, '', 'returns empty startUrl');
     assert.equal(pwa.absoluteStartUrl, 'http://www.example.com/', 'returns empty absoluteStartUrl');
     assert.equal(pwa.backgroundColor, '#ffffff', 'backgroundColor is #ffffff');
-    assert.equal(pwa.createdOn, pwa.updatedOn, 'updatedOn is the same as createdOn');
     assert.equal(pwa.manifestAsString, '{}', 'manifestAsString is {}');
   });
 
@@ -72,7 +75,6 @@ describe('models/pwa.js', () => {
     assert.equal(pwa.startUrl, '/index.jsp', 'returns correct startUrl');
     assert.equal(pwa.absoluteStartUrl, 'http://www.example.com/index.jsp', 'returns empty absoluteStartUrl');
     assert.equal(pwa.backgroundColor, '#673AB7', 'backgroundColor is #ffffff');
-    assert.equal(pwa.createdOn, pwa.updatedOn, 'updatedOn is the same as createdOn');
     assert.ok(pwa.manifestAsString, 'manifestAsString is a non-empty string');
   });
 
