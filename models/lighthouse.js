@@ -21,14 +21,6 @@ class Lighthouse {
     this.absoluteStartUrl = absoluteStartUrl;
     this.lighthouseJson = lighthouseJson;
     this.date = new Date();
-    this.setId();
-  }
-
-  get id() {
-    return this.id;
-  }
-
-  setId() {
     this.id = this.pwaId + '-' + this.date.toISOString().slice(0, 10);
   }
 }

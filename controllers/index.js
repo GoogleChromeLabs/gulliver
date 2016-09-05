@@ -27,6 +27,9 @@ router.get('/', (req, res) => {
   router.handle(req, res);
 });
 
+// Tasks
+router.use('/task', require('./task'));
+
 // /.shell hosts app shell dependencies
 router.use('/.shell', require('./shell'));
 
