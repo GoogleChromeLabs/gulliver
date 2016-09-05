@@ -30,7 +30,7 @@ const LIST_PAGE_SIZE = 10;
  * Display a page of PWAs (up to ten at a time).
  */
 router.get('/', (req, res, next) => {
-  pwaLib.list(LIST_PAGE_SIZE, req.query.pageToken)
+  pwaLib.list(LIST_PAGE_SIZE, req.query.pageToken, req.query.sort)
     .then(result => {
       res.render('pwas/list.hbs', {
         pwas: result.pwas,
