@@ -145,15 +145,44 @@ function setupSignedinAware() {
  * Setup elements that are aware of the online state.
  */
 function setupOnlineAware() {
-  const list = document.querySelectorAll('div.gulliver-online-aware');
-  for (const e of list) {
+  const l1 = document.querySelectorAll('div.button.gulliver-online-aware');
+  for (const e of l1) {
     e.addEventListener('change', function() {
       if (JSON.parse(this.dataset.online)) {
+        this.style.transition = 'opacity .5s ease-in-out';
         this.style.opacity = 1;
         this.onclick = null;
       } else {
         this.style.opacity = 0.5;
         this.onclick = f => f.preventDefault();
+      }
+    });
+  }
+  const l2 = document.querySelectorAll('div.pwabox.gulliver-online-aware');
+  for (const e of l2) {
+    e.addEventListener('change', function() {
+      if (JSON.parse(this.dataset.online)) {
+        // Online, make element active
+        this.style.transition = 'opacity .5s ease-in-out';
+        this.style.opacity = 1;
+        this.onclick = null;
+        return;
+      }
+      const href = e.querySelector('a') && e.querySelector('a').getAttribute('href');
+      if (href) {
+        fetch(href, {method: 'HEAD'}).then(r => {
+          if (r.status === 200) {
+            // Offline, but available in cache
+            this.style.transition = 'opacity .5s ease-in-out';
+            this.style.opacity = 1;
+            this.onclick = null;
+          } else {
+            // Offline, but not cached
+            this.style.transition = 'opacity .5s ease-in-out';
+            this.style.opacity = 0.5;
+            this.onclick = f => f.preventDefault();
+          }
+        });
       }
     });
   }
