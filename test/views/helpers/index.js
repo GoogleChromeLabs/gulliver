@@ -50,4 +50,10 @@ describe('views.helpers', () => {
       assert.equal('G', helpers.firstLetter('gulliver'));
     });
   });
+
+  it('#moment', () => {
+    assert.ok(helpers.moment());
+    assert.ok(helpers.moment(null));
+    assert.ok(helpers.moment(new Date()), 'Returns a value for a Date');
+  });
 });

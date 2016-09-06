@@ -10,7 +10,7 @@
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
  limitations under the License. -->
- 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -28,7 +28,7 @@
 
       <div class="items">
         {{#each pwas}}
-        <div class="pwabox item" style="background-color: {{backgroundColor}}">
+        <div class="pwabox item gulliver-online-aware" style="background-color: {{backgroundColor}}">
           <a href="/pwas/{{id}}" style="color:{{contrastColor backgroundColor}}">
             <div class="pwabox-left">
               {{#if iconUrl}}
@@ -58,7 +58,7 @@
           <li><a href="?pageToken=#{encodeURIComponent(nextPageToken)}">More</a></li>
         </ul>
       </nav>
-      {{/if}}       
+      {{/if}}
     </div>
 
     {{> footer}}

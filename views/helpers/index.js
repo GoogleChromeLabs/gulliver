@@ -14,6 +14,7 @@
  */
 
 'use strict';
+const moment = require('moment');
 
 exports.contrastColor = function(hexcolor) {
   if (!hexcolor) {
@@ -34,7 +35,12 @@ exports.firstLetter = function(text) {
   return (text ? text[0] : '').toUpperCase();
 };
 
+exports.moment = function(date) {
+  return moment(date).fromNow();
+};
+
 exports.registerHelpers = function(hbs) {
   hbs.registerHelper('firstLetter', exports.firstLetter);
   hbs.registerHelper('contrastColor', exports.contrastColor);
+  hbs.registerHelper('moment', exports.moment);
 };

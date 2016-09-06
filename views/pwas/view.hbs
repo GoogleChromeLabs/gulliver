@@ -48,6 +48,8 @@
         <div class="pwabox-body">
           <h3>{{pwa.name}}</h4>
           <p>{{pwa.description}}</p>
+          <p>Added {{moment pwa.created}}</p>
+          <p>Updated {{moment pwa.updated}}</p>          
           {{#if pwa.absoluteStartUrl}}
           <h4><a href="{{pwa.absoluteStartUrl}}">Homepage</a></h4>
           {{/if}}
