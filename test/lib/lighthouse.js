@@ -20,19 +20,15 @@ const assert = require('assert');
 const fs = require('fs');
 const lighthouseLib = require('../../lib/lighthouse');
 
+const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
+
 function readfile() {
   return new Promise(function(resolve, reject) {
-    fs.open('./lighthouse-example.json', 'r', function(err, fileToRead) {
+    fs.readFile(LIGHTHOUSE_JSON_EXAMPLE, {encoding: 'utf-8'}, function(err, data) {
       if (err) {
         reject(err);
       } else {
-        fs.readFile(fileToRead, {encoding: 'utf-8'}, function(err, data) {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(data);
-          }
-        });
+        resolve(data);
       }
     });
   });
