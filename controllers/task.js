@@ -15,36 +15,29 @@
 
 'use strict';
 
-const dataFetcher = require('../lib/data-fetcher');
 const express = require('express');
 const lighthouseLib = require('../lib/lighthouse');
-const pwaLib = require('../lib/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
-const Lighthouse = require('../models/lighthouse');
 
 /**
  * POST /task/lighthouse/:pwaid
  *
  * Fetch and store a lighthouse report for the pwaid
  */
-router.post('/lighthouse/:pwaid', (req, res) => {
-  var pwaId = req.params.pwaid;
-  pwaLib.find(pwaId)
-    .then(pwa => {
-      dataFetcher.fetchLighthouseInfo(pwa.absoluteStartUrl)
-        .then(lighthouseJson =>
-          lighthouseLib.save(new Lighthouse(pwaId, pwa.absoluteStartUrl, lighthouseJson)))
-        .then(lighthouse => {
-          res.json(lighthouse);
-        })
-        .catch(err => {
-          console.error(err);
-          res.status(500).send('Error fetching lighthouse report');
-        });
+router.post('/lighthouse/:pwaid', (req, res, next) => {
+  lighthouseLib.fetchAndSave(req.params.pwaid)
+    .then(lighthouse => {
+      res.json(lighthouse);
     })
     .catch(err => {
-      console.error(err);
-      res.status(404).send('Error loading PWA before fetch lighthouse report');
+      switch (err) {
+        case lighthouseLib.E_PWA_NOT_FOUND:
+          return res.status(404).send('Error loading PWA before fetching the Lighthouse report');
+        case lighthouseLib.E_FETCHING_STORING_LIGHTHOUSE:
+          return res.status(500).send('Error fetching/saving the Lighthouse report');
+        default:
+          return next(err);
+      }
     });
 });
 
