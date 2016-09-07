@@ -111,83 +111,6 @@ router.post('/add', (req, res, next) => {
 });
 
 /**
- * GET /pwas/:id/edit
- *
- * Display a pwa for editing.
- */
-router.get('/:pwa/edit', (req, res, next) => {
-  pwaLib.find(req.params.pwa)
-    .then(pwa => {
-      res.render('pwas/form.hbs', {
-        pwa: pwa,
-        action: 'Edit'
-      });
-    })
-    .catch(err => {
-      return next(err);
-    });
-});
-
-/**
- * POST /pwas/:id/edit
- *
- * Update a PWA.
- */
-router.post('/:pwa/edit', (req, res, next) => {
-  const manifestUrl = req.body.manifestUrl;
-  const idToken = req.body.idToken;
-  const data = req.body;
-  data.id = req.params.pwa;
-
-  var pwa = new Pwa(manifestUrl);
-  pwa.id = data.id;
-
-  if (!manifestUrl) {
-    res.render('pwas/form.hbs', {
-      pwa,
-      error: 'no manifest provided'
-    });
-    return;
-  }
-
-  if (!idToken) {
-    res.render('pwas/form.hbs', {
-      pwa,
-      error: 'user not logged in'
-    });
-    return;
-  }
-
-  verifyIdToken(CLIENT_ID, CLIENT_SECRET, idToken)
-    .then(user => {
-      pwa.setUserId(user);
-      return pwaLib.save(pwa);
-    })
-    .then(savedData => {
-      res.redirect(req.baseUrl + '/' + savedData.id);
-    })
-    .catch(err => {
-      if (typeof err === 'number') {
-        switch (err) {
-          case pwaLib.E_MANIFEST_ERROR:
-            res.render('pwas/form.hbs', {
-              pwa,
-              error: 'error loading manifest' // could be 404, not JSON, domain does not exist
-            });
-            return;
-          default:
-            return next(err);
-        }
-      }
-      res.render('pwas/form.hbs', {
-        pwa,
-        error: err
-      });
-      return;
-    });
-});
-
-/**
  * GET /pwas/:id
  *
  * Display a PWA.
@@ -201,21 +124,6 @@ router.get('/:pwa', (req, res, next) => {
     })
     .catch(() => {
       return next();
-    });
-});
-
-/**
- * GET /pwas/:id/delete
- *
- * Delete a PWA.
- */
-router.get('/:pwa/delete', (req, res, next) => {
-  pwaLib.delete(req.params.pwa)
-    .then(() => {
-      res.redirect(req.baseUrl);
-    })
-    .catch(err => {
-      return next(err);
     });
 });
 

@@ -43,21 +43,6 @@ router.get('/', (req, res, next) => {
 });
 
 /**
- * POST /api/pwas
- *
- * Create a new PWA.
- */
-router.post('/', (req, res, next) => {
-  pwaModel.save(req.body)
-    .then(entity => {
-      res.json(entity);
-    })
-    .catch(err => {
-      return next(err);
-    });
-});
-
-/**
  * GET /api/pwas/:id
  *
  * Retrieve a PWA.
@@ -67,38 +52,6 @@ router.get('/:pwa', (req, res, next) => {
     .then(pwa => {
       res.json(pwa);
       return;
-    })
-    .catch(err => {
-      return next(err);
-    });
-});
-
-/**
- * PUT /api/pwas/:id
- *
- * Update a PWA.
- */
-router.put('/:pwa', (req, res, next) => {
-  const pwa = req.body;
-  pwa.id = req.params.pwa;
-  pwaModel.save(pwa)
-    .then(entity => {
-      res.json(entity);
-    })
-    .catch(err => {
-      return next(err);
-    });
-});
-
-/**
- * DELETE /api/pwas/:id
- *
- * Delete a PWA.
- */
-router.delete('/:pwa', (req, res, next) => {
-  pwaModel.delete(req.params.pwa)
-    .then(() => {
-      res.status(200).send('OK');
     })
     .catch(err => {
       return next(err);
