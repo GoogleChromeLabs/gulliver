@@ -44,8 +44,14 @@
           {{#if pwa.absoluteStartUrl}}
           <h4><a href="{{pwa.absoluteStartUrl}}">Homepage</a></h4>
           {{/if}}
-          <h4><a href="{{pwa.manifestUrl}}">Manifest</a></h4>
-        </div>
+          <div>
+            <h4>Manifest</h4>
+            <a href="{{pwa.manifestUrl}}">{{pwa.manifestUrl}}</a>            
+            <pre>
+{{prettyJson pwa.manifest}}          
+            </pre>
+          </div>            
+        </div>        
       </div>
     </div>
 

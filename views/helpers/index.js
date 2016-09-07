@@ -39,8 +39,13 @@ exports.moment = function(date) {
   return moment(date).fromNow();
 };
 
+exports.prettyJson = function(object) {
+  return JSON.stringify(object, null, 4);
+}
+
 exports.registerHelpers = function(hbs) {
   hbs.registerHelper('firstLetter', exports.firstLetter);
   hbs.registerHelper('contrastColor', exports.contrastColor);
   hbs.registerHelper('moment', exports.moment);
+  hbs.registerHelper('prettyJson', exports.prettyJson);  
 };
