@@ -23,8 +23,8 @@ const lighthouseLib = require('../../lib/lighthouse');
 const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
 function readfile() {
-  return new Promise(function(resolve, reject) {
-    fs.readFile(LIGHTHOUSE_JSON_EXAMPLE, {encoding: 'utf-8'}, function(err, data) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(LIGHTHOUSE_JSON_EXAMPLE, {encoding: 'utf-8'}, (err, data) => {
       if (err) {
         reject(err);
       } else {

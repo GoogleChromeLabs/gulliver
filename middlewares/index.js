@@ -20,8 +20,6 @@ router.use((req, res, next) => {
   // Set content-type for the API requests
   if (req.url.indexOf('/api/') > -1) {
     res.setHeader('Content-Type', 'application/json');
-  } else if (req.url.indexOf('/task/') > -1) {
-    res.setHeader('Content-Type', 'application/json');
   } else {
     res.setHeader('Content-Type', 'text/html');
   }
