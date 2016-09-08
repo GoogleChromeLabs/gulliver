@@ -15,6 +15,15 @@
 
 'use strict';
 
+/**
+ * Class representing a Lighthouse report for a PWA
+ *
+ * lighthouseInfo is a JSON with:
+ *   lighthouseInfo.name {string}
+ *   lighthouseInfo.description {string}
+ *	 lighthouseInfo.totalScore {number}
+ *	 lighthouseInfo.scores {array}
+ */
 class Lighthouse {
   constructor(pwaId, absoluteStartUrl, lighthouseInfo) {
     this.pwaId = pwaId;
