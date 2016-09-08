@@ -16,10 +16,10 @@
 'use strict';
 
 const express = require('express');
-const pwaLib = require('../../lib/pwa');
-const Pwa = require('../../models/pwa');
+const pwaLib = require('../lib/pwa');
+const Pwa = require('../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
-const config = require('../../config/config');
+const config = require('../config/config');
 const CLIENT_ID = config.get('CLIENT_ID');
 const CLIENT_SECRET = config.get('CLIENT_SECRET');
 const LIST_PAGE_SIZE = 10;

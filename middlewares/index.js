@@ -17,12 +17,8 @@ const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.use((req, res, next) => {
-  // Set content-type for the API requests
-  if (req.url.indexOf('/api/') > -1) {
-    res.setHeader('Content-Type', 'application/json');
-  } else {
-    res.setHeader('Content-Type', 'text/html');
-  }
+  // The PWA controller only needs text/html, others may need json
+  res.setHeader('Content-Type', 'text/html');
   next();
 });
 
