@@ -60,7 +60,8 @@
     "eslint": "^3.0.1",
     "eslint-config-google": "^0.6.0",
     "istanbul": "^0.4.4",
-    "mocha": "^3.0.1"
+    "mocha": "^3.0.1",
+    "simple-mock": "^0.7.0"
   },
   "engines": {
     "node": ">=0.12.7"

@@ -17,26 +17,14 @@
 'use strict';
 
 const assert = require('assert');
-const fs = require('fs');
 const lighthouseLib = require('../../lib/lighthouse');
+const dataFetcher = require('../../lib/data-fetcher');
 
 const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
-function readfile() {
-  return new Promise((resolve, reject) => {
-    fs.readFile(LIGHTHOUSE_JSON_EXAMPLE, {encoding: 'utf-8'}, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(data);
-      }
-    });
-  });
-}
-
 describe('processLighthouseJson', () => {
   it('processLighthouseJson(lighthouse-example.json) should work', () => {
-    return readfile()
+    return dataFetcher.readfile(LIGHTHOUSE_JSON_EXAMPLE)
       .then(data => {
         var lightHouseInfo = lighthouseLib.processLighthouseJson(JSON.parse(data));
         assert.equal(lightHouseInfo.name, 'Progressive Web App');
