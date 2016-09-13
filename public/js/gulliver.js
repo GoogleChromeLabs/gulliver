@@ -186,6 +186,21 @@ function setupOnlineAware() {
       }
     });
   }
+  const l3 = document.querySelectorAll('div.offline-status.gulliver-online-aware');
+  for (const e of l3) {
+    e.innerHTML = 'Offline';
+    e.addEventListener('change', function() {
+      this.style.opacity = 1;
+      this.style.display = 'block';
+      if (JSON.parse(this.dataset.online)) {
+        this.style.transition = 'opacity .5s ease-in-out';
+        this.style.opacity = 0;
+      } else {
+        this.style.transition = 'opacity .5s ease-in-out';
+        this.style.opacity = 1;
+      }
+    });
+  }
 }
 
 /**
