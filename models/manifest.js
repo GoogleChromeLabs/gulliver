@@ -15,10 +15,7 @@
 
 'use strict';
 
-const fetch = require('node-fetch');
 const DOMAIN_PATH_REGEXP = /(http[s]*:\/\/[a-z0-9A-Z-\.]+)(\/(.*?\/)*)*/;
-const USER_AGENT = ['Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36',
-  '(KHTML, like Gecko) Chrome/48.0.2564.23 Mobile Safari/537.36'].join(' ');
 
 class Manifest {
   getBestIcon() {
@@ -73,35 +70,12 @@ class Manifest {
     if (iconUrl[0] === '/') {
       return domain + iconUrl;
     }
-
     return domain + path + iconUrl;
   }
 
-  static fetch(manifestUrl) {
-    const options = {
-      method: 'GET',
-      headers: {
-        'user-agent': USER_AGENT
-      }
-    };
-
-    return new Promise((resolve, reject) => {
-      fetch(manifestUrl, options)
-        .then(response => {
-          return response.json();
-        })
-        .then(json => {
-          resolve(Manifest.fromJson(manifestUrl, json));
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  }
-
-  static fromJson(url, json) {
+  static fromJson(manifestUrl, json) {
     const manifest = new Manifest();
-    manifest.url = url;
+    manifest.url = manifestUrl;
 
     // Copy JSON properties to Manifest.
     Object.keys(json).forEach(key => {

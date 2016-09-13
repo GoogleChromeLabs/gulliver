@@ -18,7 +18,7 @@
 
 var dataFetcher = require('../../lib/data-fetcher');
 var pwaLib = require('../../lib/pwa');
-var images = require('../../lib/images');
+var libImages = require('../../lib/images');
 var Manifest = require('../../models/manifest');
 var Pwa = require('../../models/pwa');
 var db = require('../../lib/model-datastore');
@@ -35,22 +35,22 @@ const MANIFEST_DATA = './test/manifests/icon-url-with-parameter.json';
 
 describe('lib.pwa', () => {
   it('updateIcon(pwa, manifest) should set iconUrl', () => {
-    return dataFetcher.readfile(MANIFEST_DATA)
-      .then(jsonData => {
-        var manifest = Manifest.fromJson(MANIFEST_URL, JSON.parse(jsonData));
+    return dataFetcher.readFile(MANIFEST_DATA)
+      .then(jsonString => {
+        var manifest = Manifest.fromJson(MANIFEST_URL, JSON.parse(jsonString));
         var pwa = new Pwa(MANIFEST_URL, manifest);
         pwa.id = '123456789';
 
-        // Mock images and bd to avoid making real calls
-        simpleMock.mock(images, 'fetchAndSave').resolveWith(manifest.getBestIconUrl());
-        pwaLib.images = images;
+        // Mock libImages and bd to avoid making real calls
+        simpleMock.mock(libImages, 'fetchAndSave').resolveWith(manifest.getBestIconUrl());
+        pwaLib.libImages = libImages;
         simpleMock.mock(db, 'update').returnWith(pwa);
         pwaLib.db = db;
 
         var promiseUpdateIcon = pwaLib.updateIcon(pwa, manifest);
-        assert.equal(images.fetchAndSave.callCount, 1);
-        assert.equal(images.fetchAndSave.lastCall.args[0], 'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
-        assert.equal(images.fetchAndSave.lastCall.args[1], '123456789.png');
+        assert.equal(libImages.fetchAndSave.callCount, 1);
+        assert.equal(libImages.fetchAndSave.lastCall.args[0], 'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
+        assert.equal(libImages.fetchAndSave.lastCall.args[1], '123456789.png');
         return promiseUpdateIcon.should.eventually.have.property('iconUrl');
       });
   });

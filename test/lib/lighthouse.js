@@ -24,7 +24,7 @@ const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
 describe('processLighthouseJson', () => {
   it('processLighthouseJson(lighthouse-example.json) should work', () => {
-    return dataFetcher.readfile(LIGHTHOUSE_JSON_EXAMPLE)
+    return dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
       .then(data => {
         var lightHouseInfo = lighthouseLib.processLighthouseJson(JSON.parse(data));
         assert.equal(lightHouseInfo.name, 'Progressive Web App');

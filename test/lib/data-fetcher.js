@@ -35,6 +35,6 @@ describe('lib.data-fetcher', () => {
   });
 
   it('readfile(LIGHTHOUSE_JSON_EXAMPLE) should work', () => {
-    return dataFetcher.readfile(LIGHTHOUSE_JSON_EXAMPLE).should.be.fulfilled;
+    return dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE).should.be.fulfilled;
   });
 });
