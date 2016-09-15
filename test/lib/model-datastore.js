@@ -43,7 +43,7 @@ const DB_OBJECT = {
 describe('lib.model-datastore', () => {
   const skipTests = process.env.TRAVIS;
   // Skip tests if Running in CI
-  beforeEach(function() { // es-lint-ignore prefer-arrow-callback
+  beforeEach(function() {
     if (skipTests) {
       this.skip();
       return;
