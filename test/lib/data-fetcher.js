@@ -23,12 +23,18 @@ var chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 chai.should();
 
-describe('fetchMetadataDescription', () => {
+const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
+
+describe('lib.data-fetcher', () => {
   it('fetchMetadataDescription(null) should fail', () => {
     return dataFetcher.fetchMetadataDescription(null).should.be.rejectedWith(Error);
   });
 
   it('fetchMetadataDescription(https://www.google.com) should work', () => {
     return dataFetcher.fetchMetadataDescription('https://www.google.com').should.be.fulfilled;
+  });
+
+  it('readfile(LIGHTHOUSE_JSON_EXAMPLE) should work', () => {
+    return dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE).should.be.fulfilled;
   });
 });
