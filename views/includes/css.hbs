@@ -25,13 +25,14 @@ body {
 }
 
 .container {
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto
 }
 
 .navbar {
+  position: relative;
   height: 70px;
   background: #424242;
   display: flex;
@@ -63,14 +64,10 @@ body {
   line-height: 40px;
 }
 
-.login-buttons {
-  display: flex;
-  flex-direction: row;
-  float: right;
-  margin-right: 15px;
-  line-height: 40px;
-  display: table-cell;
-  vertical-align: middle;
+#auth-button {
+  position: absolute;
+  bottom: -48px;
+  right: 0px;
 }
 
 button {
