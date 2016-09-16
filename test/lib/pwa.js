@@ -13,15 +13,19 @@
  * limitations under the License.
  */
 
-/* global describe it beforeEach */
+/* global describe it before beforeEach afterEach*/
 'use strict';
 
 var dataFetcher = require('../../lib/data-fetcher');
-var pwaLib = require('../../lib/pwa');
+var libPwa = require('../../lib/pwa');
 var libImages = require('../../lib/images');
+var libManifest = require('../../lib/manifest');
+var libLighthouse = require('../../lib/lighthouse');
+var db = require('../../lib/model-datastore');
+
+var Lighthouse = require('../../models/lighthouse');
 var Manifest = require('../../models/manifest');
 var Pwa = require('../../models/pwa');
-var db = require('../../lib/model-datastore');
 
 var simpleMock = require('simple-mock');
 var chai = require('chai');
@@ -32,39 +36,114 @@ var assert = require('chai').assert;
 
 const MANIFEST_URL = 'https://www.terra.com.br/manifest-br.json';
 const MANIFEST_DATA = './test/manifests/icon-url-with-parameter.json';
+const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
 describe('lib.pwa', () => {
+  var manifest;
+  var pwa;
+  var lighthouse;
+  before(done => {
+    dataFetcher.readFile(MANIFEST_DATA)
+      .then(jsonString => {
+        manifest = Manifest.fromJson(MANIFEST_URL, JSON.parse(jsonString));
+        pwa = new Pwa(MANIFEST_URL, manifest);
+        pwa.id = '123456789';
+        dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
+          .then(data => {
+            lighthouse = new Lighthouse('123456789', 'www.domain.com',
+              libLighthouse.processLighthouseJson(JSON.parse(data)));
+            done();
+          });
+      });
+  });
+
   describe('#updateIcon', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
     it('sets iconUrl', () => {
-      return dataFetcher.readFile(MANIFEST_DATA)
-        .then(jsonString => {
-          var manifest = Manifest.fromJson(MANIFEST_URL, JSON.parse(jsonString));
-          var pwa = new Pwa(MANIFEST_URL, manifest);
-          pwa.id = '123456789';
+      // Mock libImages and bd to avoid making real calls
+      simpleMock.mock(libImages, 'fetchAndSave').resolveWith(manifest.getBestIconUrl());
+      simpleMock.mock(db, 'update').returnWith(pwa);
+      simpleMock.mock(libPwa, 'libImages').returnWith(libImages);
+      simpleMock.mock(libPwa, 'db').returnWith(db);
 
-          // Mock libImages and bd to avoid making real calls
-          simpleMock.mock(libImages, 'fetchAndSave').resolveWith(manifest.getBestIconUrl());
-          pwaLib.libImages = libImages;
-          simpleMock.mock(db, 'update').returnWith(pwa);
-          pwaLib.db = db;
-
-          var promiseUpdateIcon = pwaLib.updateIcon(pwa, manifest);
-          assert.equal(libImages.fetchAndSave.callCount, 1);
-          assert.equal(libImages.fetchAndSave.lastCall.args[0], 'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
-          assert.equal(libImages.fetchAndSave.lastCall.args[1], '123456789.png');
-          return promiseUpdateIcon.should.eventually.have.property('iconUrl');
-        });
+      return libPwa.updateIcon(pwa, manifest).should.be.fulfilled.then(updatedPwa => {
+        assert.equal(libImages.fetchAndSave.callCount, 1);
+        assert.equal(libImages.fetchAndSave.lastCall.args[0],
+          'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
+        assert.equal(libImages.fetchAndSave.lastCall.args[1], '123456789.png');
+        assert.equal(db.update.callCount, 1);
+        assert.equal(updatedPwa.iconUrl,
+          'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
+      });
     });
   });
+
+  describe('#updateLighthouseInfo', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+    it('sets lighthouseScore', () => {
+      // Mock libLighthouse and bd to avoid making real calls
+      simpleMock.mock(libLighthouse, 'fetchAndSave').resolveWith(lighthouse);
+      simpleMock.mock(db, 'update').returnWith(pwa);
+      simpleMock.mock(libPwa, 'libLighthouse').returnWith(libLighthouse);
+      simpleMock.mock(libPwa, 'db').returnWith(db);
+      return libPwa.updateLighthouseInfo(pwa).should.be.fulfilled.then(updatedPwa => {
+        assert.equal(libLighthouse.fetchAndSave.callCount, 1);
+        assert.equal(libLighthouse.fetchAndSave.lastCall.args[0], '123456789');
+        assert.equal(db.update.callCount, 1);
+        assert.equal(updatedPwa.lighthouseScore, 82);
+      });
+    });
+  });
+
+  describe('#save (core logic)', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+    it('performs all the save steps', () => {
+      // Mock findByManifestUrl and bd to avoid making real calls
+      simpleMock.mock(libPwa, 'findByManifestUrl').resolveWith(pwa);
+      simpleMock.mock(libManifest, 'fetchManifest').resolveWith(manifest);
+      simpleMock.mock(libPwa, 'fetchMetadataDescription').resolveWith('test-description');
+      simpleMock.mock(db, 'update').returnWith(pwa);
+      simpleMock.mock(libPwa, 'updateIcon').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'updateLighthouseInfo').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'libManifest').returnWith(libManifest);
+      simpleMock.mock(libPwa, 'db').returnWith(db);
+
+      return libPwa._save(pwa).should.be.fulfilled.then(updatedPwa => {
+        assert.equal(libPwa.findByManifestUrl.callCount, 1);
+        assert.equal(libPwa.findByManifestUrl.lastCall.args[0], MANIFEST_URL);
+        assert.equal(libManifest.fetchManifest.callCount, 1);
+        assert.equal(libManifest.fetchManifest.lastCall.args[0], MANIFEST_URL);
+        assert.equal(updatedPwa.manifest, manifest);
+        assert.equal(libPwa.fetchMetadataDescription.callCount, 1);
+        assert.equal(libPwa.fetchMetadataDescription.lastCall.args[0], pwa);
+        assert.equal(updatedPwa.metaDescription, 'test-description');
+        assert.equal(db.update.callCount, 1);
+        assert.equal(libPwa.updateIcon.callCount, 1);
+        assert.equal(libPwa.updateLighthouseInfo.callCount, 1);
+      });
+    });
+    it('handles E_MANIFEST_ERROR error', () => {
+      // Mock findByManifestUrl to avoid making real calls
+      simpleMock.mock(libPwa, 'findByManifestUrl').rejectWith(new Error('Testing error'));
+      return libPwa._save(pwa).should.be.rejectedWith(libPwa.E_MANIFEST_ERROR);
+    });
+  });
+
   describe('#save (validation logic)', () => {
     beforeEach(() => {
       // Patch _save to do nothing (to test the validation logic of save in isolation)
-      pwaLib._save = () => {
+      libPwa._save = () => {
         return Promise.resolve(true);
       };
     });
     it('rejects on null pwa', () => {
-      return pwaLib.save(null).should.be.rejected;
+      return libPwa.save(null).should.be.rejected;
     });
     it('rejects if not passed a Pwa object', () => {
       // The right "shape", but not actually a Pwa object
@@ -74,24 +153,24 @@ describe('lib.pwa', () => {
           id: 'bar'
         }
       };
-      return pwaLib.save(obj).should.be.rejected;
+      return libPwa.save(obj).should.be.rejected;
     });
     it('rejects if passed a Pwa object without a manifestUrl', () => {
       const pwa = new Pwa();
-      return pwaLib.save(pwa).should.be.rejected;
+      return libPwa.save(pwa).should.be.rejected;
     });
     it('rejects if passed a Pwa object with an invalid manifestUrl', () => {
       const pwa = new Pwa('not a manifest URL');
-      return pwaLib.save(pwa).should.be.rejected;
+      return libPwa.save(pwa).should.be.rejected;
     });
     it('rejects if passed a Pwa object with an invalid user.id', () => {
       const pwa = new Pwa('https://example.com/', {user: null});
-      return pwaLib.save(pwa).should.be.rejected;
+      return libPwa.save(pwa).should.be.rejected;
     });
     it('fulfills if passed a valid Pwa objectid', () => {
       const pwa = new Pwa('https://example.com/');
       pwa.user = {id: '7777'};
-      return pwaLib.save(pwa).should.eventually.equal(true);
+      return libPwa.save(pwa).should.eventually.equal(true);
     });
   });
 });
