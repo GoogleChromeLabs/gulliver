@@ -59,8 +59,21 @@ function authInit(params) {
 }
 
 /**
- * Setup handlers for the 'online', 'offline' and 'userchange' events. ('userchange' is
- * a custom event fired when a user logs in or out.)
+ * Translate generic "system" event like 'online', 'offline' and 'userchange'
+ * into Gulliver-specific events. (e.g. as indicated by classes.)
+ *
+ * What this function does:
+ *
+ *   * all elements with class .gulliver-online-aware will:
+ *     * have an 'online' dataset property that reflects the current online state.
+ *     * receive a 'change' event whenever the state changes.
+ *
+ *   * all elements with class .gulliver-signedin-aware will:
+ *     * have a 'signedin' dataset property that reflects the current signed in state.
+ *     * receive a 'change' event whenever the state changes.
+ *
+ *   * the element #pwaForm also gets some special behaviour--see code. (This probably
+ *     shouldn't happen here.)
  */
 function setupEventHandlers() {
   window.addEventListener('online', () => {
@@ -107,7 +120,8 @@ function setupEventHandlers() {
 }
 
 /**
- * Setup elements that are aware of the signed in state.
+ * Configures elements with class `gulliver-signed-aware` and
+ * `gulliver-online-aware` to respond to 'change' events.
  */
 function setupSignedinAware() {
   const list = document.querySelectorAll('.gulliver-signedin-aware.gulliver-online-aware');
@@ -145,7 +159,8 @@ function setupSignedinAware() {
 }
 
 /**
- * Setup elements that are aware of the online state.
+ * Configures elements with class `gulliver-online-aware` to respond to 'change'
+ * events.
  */
 function setupOnlineAware() {
   const l1 = document.querySelectorAll('div.button.gulliver-online-aware');
