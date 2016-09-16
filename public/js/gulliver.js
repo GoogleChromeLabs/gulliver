@@ -131,28 +131,25 @@ function setupSignedinAware() {
     e.addEventListener('change', function() {
       const online = JSON.parse(this.dataset.online);
       const signedin = JSON.parse(this.dataset.signedin);
-
-      if (e.dataset.ignoreSignedIn !== 'true') {
-        switch (e.tagName.toLowerCase()) {
-          case 'button':
-            if (e.id === 'login') {
-              // Login is "reversed" for login button
-              this.disabled = !online || signedin;
-            } else {
-              this.disabled = !online || !signedin;
-            }
-            break;
-          case 'div':
-            if (online && signedin) {
-              this.style.opacity = 1;
-              this.onclick = null;
-            } else {
-              this.style.opacity = 0.5;
-              this.onclick = f => f.preventDefault();
-            }
-            break;
-          default:
-        }
+      switch (e.tagName.toLowerCase()) {
+        case 'button':
+          if (e.id === 'auth-button') {
+            // auth-button state depends only on online state
+            this.disabled = !online;
+          } else {
+            this.disabled = !online || !signedin;
+          }
+          break;
+        case 'div':
+          if (online && signedin) {
+            this.style.opacity = 1;
+            this.onclick = null;
+          } else {
+            this.style.opacity = 0.5;
+            this.onclick = f => f.preventDefault();
+          }
+          break;
+        default:
       }
     });
   }
