@@ -117,25 +117,28 @@ function setupSignedinAware() {
     e.addEventListener('change', function() {
       const online = JSON.parse(this.dataset.online);
       const signedin = JSON.parse(this.dataset.signedin);
-      switch (e.tagName.toLowerCase()) {
-        case 'button':
-          if (e.id === 'login') {
-            // Login is "reversed" for login button
-            this.disabled = !online || signedin;
-          } else {
-            this.disabled = !online || !signedin;
-          }
-          break;
-        case 'div':
-          if (online && signedin) {
-            this.style.opacity = 1;
-            this.onclick = null;
-          } else {
-            this.style.opacity = 0.5;
-            this.onclick = f => f.preventDefault();
-          }
-          break;
-        default:
+
+      if (e.dataset.ignoreSignedIn !== 'true') {
+        switch (e.tagName.toLowerCase()) {
+          case 'button':
+            if (e.id === 'login') {
+              // Login is "reversed" for login button
+              this.disabled = !online || signedin;
+            } else {
+              this.disabled = !online || !signedin;
+            }
+            break;
+          case 'div':
+            if (online && signedin) {
+              this.style.opacity = 1;
+              this.onclick = null;
+            } else {
+              this.style.opacity = 0.5;
+              this.onclick = f => f.preventDefault();
+            }
+            break;
+          default:
+        }
       }
     });
   }
@@ -207,7 +210,7 @@ function setupOnlineAware() {
  * Setup/configure Google signin itself. This translates GSI events into 'userchange'
  * events on the window object.
  */
-function setupSignin(login, logout) {
+function setupSignin() {
   /* eslint-disable camelcase */
   const params = {
     scope: 'profile',
@@ -229,9 +232,28 @@ function setupSignin(login, logout) {
       }));
     });
 
-    // Bind buttons to signIn(), signOut() actions
-    login.addEventListener('click', () => auth.signIn());
-    logout.addEventListener('click', () => auth.signOut());
+    const authButton = document.getElementById('auth-button');
+    const authButtonLabel = document.getElementById('auth-button-label');
+
+    function updateAuthButtonLabel() {
+      authButtonLabel.innerText = authButton.dataset.signedin === 'true' ?
+        'Log out' :
+        'Log in';
+    }
+
+    authButton.addEventListener('change', updateAuthButtonLabel);
+    updateAuthButtonLabel();
+
+    authButton.addEventListener(
+      'click',
+      () => {
+        if (authButton.dataset.signedin === 'true') {
+          auth.signOut();
+        } else {
+          auth.signIn();
+        }
+      }
+    );
 
     return auth;
   });
@@ -248,10 +270,7 @@ function setupServiceWorker() {
 
 setupOnlineAware();
 setupSignedinAware();
-setupSignin(
-  document.getElementById('login'),
-  document.getElementById('logout')
-);
+setupSignin();
 setupEventHandlers();
 setupServiceWorker();
 
