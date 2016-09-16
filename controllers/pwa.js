@@ -92,10 +92,28 @@ router.post('/add', (req, res, next) => {
     .catch(err => {
       if (typeof err === 'number') {
         switch (err) {
-          case pwaLib.E_MANIFEST_ERROR:
+          case pwaLib.E_MANIFEST_INVALID_URL:
             res.render('pwas/form.hbs', {
               pwa,
-              error: 'error loading manifest' // could be 404, not JSON, domain does not exist
+              error: `pwa.manifestUrl [${pwa.manifestUrl}] is not a valid URL`
+            });
+            return;
+          case pwaLib.E_MISING_USER_INFORMATION:
+            res.render('pwas/form.hbs', {
+              pwa,
+              error: 'Missing user information'
+            });
+            return;
+          case pwaLib.E_MANIFEST_URL_MISSING:
+            res.render('pwas/form.hbs', {
+              pwa,
+              error: 'Missing manifestUrl'
+            });
+            return;
+          case pwaLib.E_NOT_A_PWA:
+            res.render('pwas/form.hbs', {
+              pwa,
+              error: 'pwa is not an instance of Pwa'
             });
             return;
           default:
