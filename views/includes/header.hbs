@@ -14,14 +14,17 @@
 <!-- Start of header include. -->
 <div class="navbar">
   <div class="navbar-title"><a id="title" href="/">PWA Directory</a></div>
-  <div class="navbar-subtitle">
+  <div class="navbar-subtitle hide-on-mobile">
     <a id="subtitle" href="/">A Directory of Progressive Web Apps</a>
   </div>
+  <a id="github" href="https://github.com/GoogleChrome/gulliver" target="_blank">
+    <img id="github-logo" srcset="/img/GitHub-Mark-Light-32px.png 1x, /img/GitHub-Mark-Light-64px.png 2x" width="24" height="24" alt="Github" attribution="github" style="width: 24px; height: 24px;">
+    <span class="hide-on-mobile">View on Github</span>
+  </a>
 
   <button
     id="auth-button"
-    class="button blue gulliver-online-aware gulliver-signedin-aware"
-  >
+    class="button blue gulliver-online-aware gulliver-signedin-aware">
     <i class="fa fa-sign-in" aria-hidden="true"></i>
     <span id="auth-button-label">
       Log in

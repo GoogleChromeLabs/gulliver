@@ -18,6 +18,7 @@ html, body {
   margin: 0;
   height: 100%;
   width: 100%;
+  min-width: 310px;
 }
 
 body {
@@ -67,6 +68,15 @@ body {
   color: white;
   text-decoration: none;
 }
+.navbar #github {
+  position: absolute;
+  font-size: 16px;
+  bottom: 28px;
+  right: 15px;
+}
+.navbar #github-logo {
+  vertical-align:middle;
+}
 
 /* Flex NavBar */
 @media (max-width: 930px) {
@@ -75,11 +85,18 @@ body {
     padding-left: 15px;
   }
   .navbar-title {
-    font-size: 32px;
+    font-size: 30px;
     text-align: left;
   }
   .navbar-subtitle {
     height: 0px;
+  }
+  .navbar #github {
+    text-align: right;
+    bottom: 13px;
+    right: 15px;
+  }
+  .hide-on-mobile {
     display: none;
   }
 }
@@ -217,7 +234,7 @@ div.pwabox-body a {
   height: 100%;
 }
 .items .item {
-  flex: 1 0 300px;
+  flex: 1 0 280px;
   box-sizing: border-box;
   background: #e0ddd5;
   color: #171e42;
