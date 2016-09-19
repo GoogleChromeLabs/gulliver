@@ -22,7 +22,7 @@ const router = express.Router(); // eslint-disable-line new-cap
 const config = require('../config/config');
 const CLIENT_ID = config.get('CLIENT_ID');
 const CLIENT_SECRET = config.get('CLIENT_SECRET');
-const LIST_PAGE_SIZE = 1;
+const LIST_PAGE_SIZE = 50;
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_SORT_ORDER = 'newest';
 
