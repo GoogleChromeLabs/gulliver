@@ -51,14 +51,18 @@
       {{#unless pwas}}
       <p>No PWAs found.</p>
       {{/unless}}
-
-      {{#if nextPagetoek}}
+      
       <nav>
         <ul class="pager">
-          <li><a href="?pageToken=#{encodeURIComponent(nextPageToken)}">More</a></li>
+          {{#if hasPreviousPage}}          
+          <li><a href="?page={{previousPageNumber}}">Previous Page</a></li>
+          {{/if}}          
+
+          {{#if hasNextPage}}          
+          <li><a href="?page={{nextPageNumber}}">Next Page</a></li>
+          {{/if}}          
         </ul>
       </nav>
-      {{/if}}
     </div>
 
     {{> footer}}

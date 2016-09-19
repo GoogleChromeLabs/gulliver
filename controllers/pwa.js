@@ -22,7 +22,9 @@ const router = express.Router(); // eslint-disable-line new-cap
 const config = require('../config/config');
 const CLIENT_ID = config.get('CLIENT_ID');
 const CLIENT_SECRET = config.get('CLIENT_SECRET');
-const LIST_PAGE_SIZE = 50;
+const LIST_PAGE_SIZE = 1;
+const DEFAULT_PAGE_NUMBER = 1;
+const DEFAULT_SORT_ORDER = 'newest';
 
 /**
  * GET /pwas/add
@@ -30,11 +32,19 @@ const LIST_PAGE_SIZE = 50;
  * Display a page of PWAs (up to ten at a time).
  */
 router.get('/', (req, res, next) => {
-  pwaLib.list(LIST_PAGE_SIZE, req.query.pageToken, req.query.sort)
+  const pageNumber = parseInt(req.query.page, 10) || DEFAULT_PAGE_NUMBER;
+  const sortOrder = req.query.sort | DEFAULT_SORT_ORDER;
+  const start = (pageNumber - 1) * LIST_PAGE_SIZE;
+
+  pwaLib.list(start, LIST_PAGE_SIZE, sortOrder)
     .then(result => {
       res.render('pwas/list.hbs', {
         pwas: result.pwas,
-        nextPageToken: result.hasMore
+        hasNextPage: result.hasMore,
+        hasPreviousPage: pageNumber > 1,
+        nextPageNumber: pageNumber + 1,
+        previousPageNumber: pageNumber - 1,
+        currentPageNumber: pageNumber
       });
     })
     .catch(err => {
