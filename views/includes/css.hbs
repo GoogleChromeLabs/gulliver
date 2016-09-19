@@ -33,41 +33,72 @@ body {
 
 .navbar {
   position: relative;
-  height: 70px;
-  background: #424242;
+  height: 82px;
+  background: #0A84F5;
   display: flex;
   flex-direction: column;
 }
 .navbar-title {
+  height: 55px;
   color: white;
-  font-size: 30px;
+  font-size: 36px;
   text-align: center;
-  margin-top: 6px;
+  line-height: 55px;
+}
+.navbar-title #title {
+  align-self: flex-start;
+  margin: 0 auto;
+  text-align: left;
+  padding-left: 55px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-image: -webkit-image-set( url(/favicons/android-chrome-48x48.png) 1x, url(/favicons/android-chrome-96x96.png) 2x );
+  -webkit-filter: drop-shadow( 1px 1px 1px #000 );
+  filter: drop-shadow( 1px 1px 1px #000 );
 }
 .navbar-subtitle {
+  height: 20px;
   color: white;
   font-size: 18px;
   text-align: center;
-  margin-bottom: 5px;
+  line-height: 20px;
 }
 .navbar a {
   color: white;
   text-decoration: none;
 }
 
+/* Flex NavBar */
+@media (max-width: 930px) {
+  .navbar {
+    height: 55px;
+    padding-left: 15px;
+  }
+  .navbar-title {
+    font-size: 32px;
+    text-align: left;
+  }
+  .navbar-subtitle {
+    height: 0px;
+    display: none;
+  }
+}
+
 .section-title {
-  color: white;
+  color: #0D47A1;
   font-size: 18px;
-  background: #757575;
+  font-weight: 600;
+  background: #7cc0ff;
   padding-left: 15px;
   margin-bottom: 15px;
   line-height: 40px;
+  height: 40px;
 }
 
 #auth-button {
   position: absolute;
-  bottom: -48px;
-  right: 0px;
+  bottom: -50px;
+  right: 10px;
 }
 
 button {
