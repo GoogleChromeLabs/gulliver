@@ -1,0 +1,21 @@
+{
+	"name": "PWA Directory",
+	"short_name": "PwaDir",
+	"description": "A Directory of PWAs",
+	"start_url": "/",
+	"icons": [
+		{
+			"src": "\/favicons\/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image\/png"
+		},
+		{
+			"src": "\/favicons\/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image\/png"
+		}
+	],
+	"theme_color": "#7cc0ff",
+	"background_color": "#7cc0ff",
+	"display": "standalone"
+}
