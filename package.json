@@ -52,6 +52,7 @@
     "multer": "^1.1.0",
     "nconf": "^0.8.4",
     "node-fetch": "^1.5.3",
+    "parse-color": "^1.0.0",
     "sw-toolbox": "^3.2.1",
     "urijs": "^1.18.1"
   },

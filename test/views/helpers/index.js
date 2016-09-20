@@ -31,6 +31,10 @@ describe('views.helpers', () => {
       assert.equal('black', helpers.contrastColor('#FFFFFF'));
     });
 
+    it('should return "black" when value is "#fff"', () => {
+      assert.equal('black', helpers.contrastColor('#fff'));
+    });
+
     it('should return "white" when value is "#000000"', () => {
       assert.equal('white', helpers.contrastColor('000000'));
       assert.equal('white', helpers.contrastColor('#000000'));
