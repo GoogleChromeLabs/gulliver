@@ -30,7 +30,8 @@ nconf
     'GCLOUD_PROJECT',
     'PORT',
     'CLIENT_ID',
-    'CLIENT_SECRET'
+    'CLIENT_SECRET',
+    'LIGHTHOUSE_SERVER'
   ])
   // 3. Config file
   .file({file: path.join(__dirname, 'config.json')})
