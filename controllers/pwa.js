@@ -125,7 +125,7 @@ router.post('/add', (req, res, next) => {
       if (Array.isArray(err)) {
         const s = err.map(e => {
           const m = e.match(/^ERROR:\s+(.*)\.$/);
-          return m ? m[1] : e; // if no match, just return the string
+          return m ? m[1] : e; // if no match (format changed?), just return the string
         }).join(', ');
         res.render('pwas/form.hbs', {pwa, error: s});
         return;
