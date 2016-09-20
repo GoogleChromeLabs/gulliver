@@ -33,7 +33,7 @@ const DEFAULT_SORT_ORDER = 'newest';
  */
 router.get('/', (req, res, next) => {
   const pageNumber = parseInt(req.query.page, 10) || DEFAULT_PAGE_NUMBER;
-  const sortOrder = req.query.sort | DEFAULT_SORT_ORDER;
+  const sortOrder = req.query.sort || DEFAULT_SORT_ORDER;
   const start = (pageNumber - 1) * LIST_PAGE_SIZE;
 
   pwaLib.list(start, LIST_PAGE_SIZE, sortOrder)
