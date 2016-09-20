@@ -15,18 +15,23 @@
 
 'use strict';
 const moment = require('moment');
+const parseColor = require('parse-color');
 
 exports.contrastColor = function(hexcolor) {
   if (!hexcolor) {
     return 'white';
   }
 
-  if (hexcolor[0] === '#') {
-    hexcolor = hexcolor.substr(1, hexcolor.length);
+  // Assume that a 6 digit string is a color.
+  if (hexcolor.length === 6 && hexcolor[0] !== '#') {
+    hexcolor = '#' + hexcolor;
   }
-  const r = parseInt(hexcolor.substr(0, 2), 16);
-  const g = parseInt(hexcolor.substr(2, 2), 16);
-  const b = parseInt(hexcolor.substr(4, 2), 16);
+
+  const parsedColor = parseColor(hexcolor);
+  const r = parsedColor.rgb[0];
+  const g = parsedColor.rgb[1];
+  const b = parsedColor.rgb[2];
+
   const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
   return (yiq >= 128) ? 'black' : 'white';
 };
