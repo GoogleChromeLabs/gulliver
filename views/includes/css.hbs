@@ -11,24 +11,29 @@
  See the License for the specific language governing permissions and
  limitations under the License. --}}
 
-html, body {
-  font-family: "Helvetica", "Arial", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  margin: 0 0 auto 0;
+html {
   height: 100%;
-  width: 100%;
-  min-width: 310px;
+  margin: 0;
+  padding: 0;
+  background: #0A84F5;
 }
 
 body {
+  font-family: "Helvetica", "Arial", sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  width: 100%;
+  min-width: 310px;
   background: #F5F5F5;
+  position: relative;
+  margin: 0;
+  min-height: 100%;
 }
 
 .container {
   padding-right: 15px;
   padding-left: 15px;
-  padding-bottom: 30px;
+  padding-bottom: 44px;
   margin-right: auto;
   margin-left: auto
 }
@@ -264,22 +269,27 @@ button[disabled=disabled], button:disabled {
   color: #f07;
 }
 .offline-status {
-  position: fixed;
+  position: absolute;
+  right: 0;
   bottom: 0;
-  width: 100%;
+  left: 0;
   background-color: #dc322f;
   color: #ffffff;
-  height: 20px;
+  height: 24px;
+  line-height: 24px;
   padding: 10px 20px 10px 20px;
   display: none;
+  pointer-events: none;
 }
 
 /* Footer */
 .footer {
-  padding-top: 2px;
-  padding-bottom: 2px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
   background: #0A84F5;
-  color: white;  
+  color: white;
 }
 .footer ul {
   display: flex;
