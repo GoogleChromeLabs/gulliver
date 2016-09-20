@@ -27,11 +27,17 @@ describe('processLighthouseJson', () => {
     return dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
       .then(data => {
         var lightHouseInfo = lighthouseLib.processLighthouseJson(JSON.parse(data));
-        assert.equal(lightHouseInfo.name, 'Progressive Web App');
-        assert.equal(lightHouseInfo.description,
-          'These audits validate the aspects of a Progressive Web App.');
-        assert.equal(lightHouseInfo.scores.length, 8);
         assert.equal(lightHouseInfo.totalScore, 82);
+        // Agregation
+        assert.equal(lightHouseInfo.agregation.name, 'Progressive Web App');
+        assert.equal(lightHouseInfo.agregation.description,
+          'These audits validate the aspects of a Progressive Web App.');
+        assert.equal(lightHouseInfo.agregation.scores.length, 8);
+        // Audits
+        assert.equal(lightHouseInfo.audits.length, 33);
+        assert.equal(lightHouseInfo.audits[0].name, 'is-on-https');
+        assert.equal(lightHouseInfo.audits[0].description, 'Site is on HTTPS');
+        assert.equal(lightHouseInfo.audits[0].score, false);
       });
   });
 });
