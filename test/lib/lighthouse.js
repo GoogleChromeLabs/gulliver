@@ -29,10 +29,10 @@ describe('processLighthouseJson', () => {
         var lightHouseInfo = lighthouseLib.processLighthouseJson(JSON.parse(data));
         assert.equal(lightHouseInfo.totalScore, 82);
         // Agregation
-        assert.equal(lightHouseInfo.agregation.name, 'Progressive Web App');
-        assert.equal(lightHouseInfo.agregation.description,
+        assert.equal(lightHouseInfo.aggregation.name, 'Progressive Web App');
+        assert.equal(lightHouseInfo.aggregation.description,
           'These audits validate the aspects of a Progressive Web App.');
-        assert.equal(lightHouseInfo.agregation.scores.length, 8);
+        assert.equal(lightHouseInfo.aggregation.scores.length, 8);
         // Audits
         assert.equal(lightHouseInfo.audits.length, 33);
         assert.equal(lightHouseInfo.audits[0].name, 'is-on-https');
