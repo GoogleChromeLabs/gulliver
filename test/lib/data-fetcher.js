@@ -16,10 +16,10 @@
 /* global describe it */
 'use strict';
 
-var dataFetcher = require('../../lib/data-fetcher');
+let dataFetcher = require('../../lib/data-fetcher');
 
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
+let chai = require('chai');
+let chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 chai.should();
 

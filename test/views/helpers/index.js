@@ -16,8 +16,8 @@
 /* global describe it */
 'use strict';
 
-var assert = require('assert');
-var helpers = require('../../../views/helpers');
+let assert = require('assert');
+let helpers = require('../../../views/helpers');
 
 describe('views.helpers', () => {
   describe('#contrastColor', () => {

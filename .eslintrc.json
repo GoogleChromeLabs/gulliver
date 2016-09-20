@@ -26,7 +26,8 @@
     "quotes": [2, "single"],
     "require-jsdoc": 0,
     "valid-jsdoc": 0,
-    "prefer-arrow-callback": 1
+    "prefer-arrow-callback": 1,
+    "no-var": 1
   },
   // http://eslint.org/docs/user-guide/configuring#specifying-environments
   "env": {

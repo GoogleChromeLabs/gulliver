@@ -72,7 +72,7 @@ router.get('/add', (req, res) => {
 router.post('/add', (req, res, next) => {
   const manifestUrl = req.body.manifestUrl;
   const idToken = req.body.idToken;
-  var pwa = new Pwa(manifestUrl);
+  let pwa = new Pwa(manifestUrl);
 
   if (!manifestUrl) {
     res.render('pwas/form.hbs', {
