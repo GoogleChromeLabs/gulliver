@@ -16,32 +16,32 @@
 /* global describe it before beforeEach afterEach*/
 'use strict';
 
-var dataFetcher = require('../../lib/data-fetcher');
-var libPwa = require('../../lib/pwa');
-var libImages = require('../../lib/images');
-var libManifest = require('../../lib/manifest');
-var libLighthouse = require('../../lib/lighthouse');
-var db = require('../../lib/model-datastore');
+let dataFetcher = require('../../lib/data-fetcher');
+let libPwa = require('../../lib/pwa');
+let libImages = require('../../lib/images');
+let libManifest = require('../../lib/manifest');
+let libLighthouse = require('../../lib/lighthouse');
+let db = require('../../lib/model-datastore');
 
-var Lighthouse = require('../../models/lighthouse');
-var Manifest = require('../../models/manifest');
-var Pwa = require('../../models/pwa');
+let Lighthouse = require('../../models/lighthouse');
+let Manifest = require('../../models/manifest');
+let Pwa = require('../../models/pwa');
 
-var simpleMock = require('simple-mock');
-var chai = require('chai');
-var chaiAsPromised = require('chai-as-promised');
+let simpleMock = require('simple-mock');
+let chai = require('chai');
+let chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 chai.should();
-var assert = require('chai').assert;
+let assert = require('chai').assert;
 
 const MANIFEST_URL = 'https://www.terra.com.br/manifest-br.json';
 const MANIFEST_DATA = './test/manifests/icon-url-with-parameter.json';
 const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
 describe('lib.pwa', () => {
-  var manifest;
-  var pwa;
-  var lighthouse;
+  let manifest;
+  let pwa;
+  let lighthouse;
   before(done => {
     dataFetcher.readFile(MANIFEST_DATA)
       .then(jsonString => {

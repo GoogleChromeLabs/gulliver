@@ -26,7 +26,7 @@ describe('processLighthouseJson', () => {
   it('processLighthouseJson(lighthouse-example.json) should work', () => {
     return dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
       .then(data => {
-        var lightHouseInfo = lighthouseLib.processLighthouseJson(JSON.parse(data));
+        let lightHouseInfo = lighthouseLib.processLighthouseJson(JSON.parse(data));
         assert.equal(lightHouseInfo.totalScore, 82);
         // Agregation
         assert.equal(lightHouseInfo.aggregation.name, 'Progressive Web App');

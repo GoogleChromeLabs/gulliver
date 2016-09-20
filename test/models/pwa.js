@@ -16,12 +16,12 @@
 /* global describe it */
 'use strict';
 
-var assert = require('assert');
-var Pwa = require('../../models/pwa');
+let assert = require('assert');
+let Pwa = require('../../models/pwa');
 
 describe('models/pwa.js', () => {
   it('Create a PWA with no Manifest', () => {
-    var pwa = new Pwa();
+    let pwa = new Pwa();
     assert.equal(pwa.manifestUrl, undefined);
     assert.equal(pwa.name, '', 'returns empty name');
     assert.equal(pwa.description, '', 'returns empty description');
@@ -37,9 +37,9 @@ describe('models/pwa.js', () => {
   });
 
   it('Create a PWA with Empty Manifest', () => {
-    var manifestUrl = 'http://www.example.com';
-    var manifest = {};
-    var pwa = new Pwa(manifestUrl, manifest);
+    let manifestUrl = 'http://www.example.com';
+    let manifest = {};
+    let pwa = new Pwa(manifestUrl, manifest);
     assert.equal(pwa.manifestUrl, manifestUrl);
     assert.equal(pwa.manifest, manifest);
     assert.equal(pwa.name, '', 'returns empty name');
@@ -51,9 +51,9 @@ describe('models/pwa.js', () => {
   });
 
   it('Create a PWA with a Full Manifest', () => {
-    var manifestUrl = 'http://www.example.com';
+    let manifestUrl = 'http://www.example.com';
     /* eslint-disable camelcase */
-    var manifest = {
+    let manifest = {
       name: 'Example PWA',
       description: 'Example PWA',
       icons: [{
@@ -67,7 +67,7 @@ describe('models/pwa.js', () => {
       theme_color: '#512DA8'
     };
     /* eslint-enable camelcase */
-    var pwa = new Pwa(manifestUrl, manifest);
+    let pwa = new Pwa(manifestUrl, manifest);
     assert.equal(pwa.manifestUrl, manifestUrl);
     assert.equal(pwa.manifest, manifest);
     assert.equal(pwa.name, 'Example PWA', 'returns correct name');
@@ -79,7 +79,7 @@ describe('models/pwa.js', () => {
   });
 
   it('Return the right description', () => {
-    var pwa = new Pwa();
+    let pwa = new Pwa();
     assert.equal(pwa.description, '');
     pwa.metaDescription = 'metaDescription';
     assert.equal(pwa.description, 'metaDescription');
