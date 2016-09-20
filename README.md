@@ -7,6 +7,7 @@ A PWA Directory example.
 1. [NodeJS](https://nodejs.org). 
 1. [Google Cloud SDK](https://cloud.google.com/sdk/)
 1. A [Google Cloud Console](https://console.cloud.google.com/) project.
+1. Memcached installed and running on localhost:11211. [Installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data).
 
 ## Installation
 
