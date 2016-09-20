@@ -22,39 +22,29 @@
     {{> header}}    
     <div class="section-title">PWA Details</div>
     <div class="container">
-      <div class="pwabox" style="background-color: {{pwa.backgroundColor}}; color: {{contrastColor pwa.backgroundColor}};">
-        <div class="pwabox-left">
+      <div class="pwadetail" style="background-color: {{pwa.backgroundColor}}; color: {{contrastColor pwa.backgroundColor}};">
+        <div class="pwadetail-logo">
           {{#if pwa.iconUrl}}
           <div style="background-color: {{pwa.backgroundColor}}">
-            <img src="{{pwa.iconUrl}}" width="256" height="256"/>
+            <img src="{{pwa.iconUrl}}" width="128" height="128"/>
           </div>
           {{else}}
-          <svg width="256" height="256">
+          <svg width="128" height="128">
             <rect width="100%" height="100%" stroke-width="4" fill="{{pwa.backgroundColor}}" />
             <text x="50%" y="50%" fill="{{contrastColor pwa.backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="128px">{{firstLetter pwa.name}}</text>
           </svg>
           {{/if}}
         </div>
-
-        <div class="pwabox-body">
-          <h3>{{pwa.name}}</h4>
-          <p>{{pwa.description}}</p>
-          <p>Added {{moment pwa.created}}</p>
-          <p>Updated {{moment pwa.updated}}</p>
-          {{#if pwa.lighthouseScore}}
-          <p>Lighthouse Score {{pwa.lighthouseScore}}/100</p>
-          {{/if}}
-          {{#if pwa.absoluteStartUrl}}
-          <h4><a href="{{pwa.absoluteStartUrl}}">Homepage</a></h4>
-          {{/if}}
-          <div>
-            <h4>Manifest</h4>
-            <a href="{{pwa.manifestUrl}}">{{pwa.manifestUrl}}</a>            
-            <pre>
-{{prettyJson pwa.manifest}}          
-            </pre>
-          </div>            
-        </div>        
+        <div class="name"><a href="{{pwa.absoluteStartUrl}}" style="color: {{contrastColor pwa.backgroundColor}}" target="_blank">{{pwa.name}}</a></div>
+        {{#if pwa.description}}
+        <div>{{pwa.description}}</div>
+        {{/if}}
+        <div><a href="{{pwa.manifestUrl}}" style="color: {{contrastColor pwa.backgroundColor}}" target="_blank">Manifest</a></div>
+        <div class="lighthouseScore">
+          <div class="lighthouseLogo"><img src="/img/lighthouse.svg" width="24" height="24" title="Lighthouse Score"/></div>
+          <div>{{pwa.lighthouseScore}}</div>
+        </div>
+        <div class="dates">Added {{moment pwa.created}}, Updated {{moment pwa.updated}}</div>
       </div>
     </div>
 
