@@ -27,10 +27,7 @@ exports.contrastColor = function(hexcolor) {
     hexcolor = '#' + hexcolor;
   }
 
-  const parsedColor = parseColor(hexcolor);
-  const r = parsedColor.rgb[0];
-  const g = parsedColor.rgb[1];
-  const b = parsedColor.rgb[2];
+  const [r, g, b] = parseColor(hexcolor).rgb;
   const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
   return (yiq >= 128) ? 'black' : 'white';
 };
