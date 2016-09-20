@@ -168,6 +168,7 @@ button[disabled=disabled], button:disabled {
   height: 100%;
 }
 
+/* PWA List Box */
 .pwabox {
   border: 2px solid lightgray;
   text-overflow: hidden;
@@ -207,6 +208,39 @@ button[disabled=disabled], button:disabled {
   padding-right: 5px;
 }
 
+/* PWA Detail box */
+.pwadetail {
+  border: 2px solid lightgray;
+  text-overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 10px 10px 20px 10px;
+  justify-content: space-between;
+  height: 345px;
+  font-size: 14px;
+  font-weight: 400;
+}
+.pwadetail-logo {
+ display:block;
+}
+.pwadetail .name {
+  font-size: 16px;
+  font-weight: 600;
+}
+.pwadetail .lighthouseScore {
+  display: flex;
+  flex-direction: row;
+  height: 24px;
+  line-height: 24px;
+  font-size: 16px;
+}
+.pwadetail .lighthouseLogo {
+  padding-right: 5px;
+}
+.pwadetail .dates {
+  font-style: italic;
+}
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -241,31 +275,26 @@ button[disabled=disabled], button:disabled {
 }
 
 /* Footer */
-
 .footer {
   padding-top: 12px;
   padding-bottom: 12px;
   background: #0A84F5;
   color: white;  
 }
-
 .footer ul {
   display: flex;
   flex-flow: row;
   justify-content: center;
   padding: 0;
 }
-
 .footer ul li:first-child {
   border-left: none;
 }
-
 .footer li {
   display: block;
   padding: 0 1em;
   border-left: 1px solid #fff;
 }
-
 .footer ul li a {
   flex-flow: row wrap;
   justify-content: center;
