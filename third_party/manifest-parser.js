@@ -17,7 +17,10 @@
 'use strict';
 
 const url = require('url');
-const validateColor = require('./web-inspector').Color.parse;
+
+global.WebInspector = {}; // the global is unfortunate, but necessary
+require('./Color.js');
+const validateColor = global.WebInspector.Color.parse;
 
 const ALLOWED_DISPLAY_VALUES = [
   'fullscreen',
