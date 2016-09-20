@@ -130,6 +130,16 @@ router.post('/add', (req, res, next) => {
             return next(err);
         }
       }
+      // Transform err from an array of strings (in a particular format) to a
+      // comma-separated string.
+      if (Array.isArray(err)) {
+        const s = err.map(e => {
+          const m = e.match(/^ERROR:\s+(.*)\.$/);
+          return m ? m[1] : e; // if no match (format changed?), just return the string
+        }).join(', ');
+        res.render('pwas/form.hbs', {pwa, error: s});
+        return;
+      }
       res.render('pwas/form.hbs', {
         pwa,
         error: err

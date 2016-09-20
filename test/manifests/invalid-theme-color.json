@@ -1,0 +1,17 @@
+{
+  "lang": "pt-BR",
+  "short_name": "Terra Brasil",
+  "name": "Terra Brasil",
+  "icons": [
+    {
+      "src": "https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "https://www.terra.com.br/?utm_source=homescreen",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ff7212",
+  "theme_color": "not_a_real_color"
+}
