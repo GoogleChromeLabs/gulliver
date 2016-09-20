@@ -243,8 +243,8 @@ button[disabled=disabled], button:disabled {
 /* Footer */
 
 .footer {
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
   background: #0A84F5;
   color: white;  
 }
@@ -275,6 +275,35 @@ button[disabled=disabled], button:disabled {
   color: #fff;
   padding: 0;
   cursor: pointer;  
+}
+
+/* Pager */
+.pager {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  padding: 0;
+}
+
+.pager li {
+  width: 50%;
+  display: block;
+  padding: 0 1em;
+}
+
+.pager .next {
+  text-align: right;
+}
+
+.pager li a {
+  flex-flow: row wrap;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 400;
+  color: #0D47A1;
+  padding: 0;
+  cursor: pointer;
 }
 
 /* Flex List of PWAs */

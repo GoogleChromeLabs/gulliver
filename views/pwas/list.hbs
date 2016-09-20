@@ -61,11 +61,11 @@
       <nav>
         <ul class="pager">
           {{#if hasPreviousPage}}          
-          <li><a href="?page={{previousPageNumber}}">Previous Page</a></li>
+          <li class="previous"><a href="?page={{previousPageNumber}}">&lt; previous page</a></li>
           {{/if}}          
 
           {{#if hasNextPage}}          
-          <li><a href="?page={{nextPageNumber}}">Next Page</a></li>
+          <li class="next"><a href="?page={{nextPageNumber}}">next page &gt;</a></li>
           {{/if}}          
         </ul>
       </nav>
