@@ -30,18 +30,24 @@
         {{#each pwas}}
         <div class="pwabox item gulliver-online-aware" style="background-color: {{backgroundColor}}">
           <a href="/pwas/{{id}}" style="color:{{contrastColor backgroundColor}}">
-            <div class="pwabox-left">
-              {{#if iconUrl}}
-                <img src="{{iconUrl}}" width="64" height="64"/>
-              {{else}}
-              <svg width="64" height="64">
-                <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
-                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
-              </svg>
-              {{/if}}
+            <div class="pwabox-body">
+              <div class="pwabox-left">
+                {{#if iconUrl}}
+                  <img src="{{iconUrl}}" width="64" height="64"/>
+                {{else}}
+                <svg width="64" height="64">
+                  <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
+                  <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
+                </svg>
+                {{/if}}
               </div>
-              <div class="pwabox-body">
-              <h4>{{name}}</h4>
+              <div class="pwabox-right">
+                <div class="name">{{name}}</div>
+                <div class="lighthouseScore">
+                  <div class="lighthouseLogo"><img src="/img/lighthouse.svg" width="18" height="18" title="Lighthouse Score"/></div>
+                  <div>{{lighthouseScore}}</div>
+                </div>
+              </div>
             </div>
           </a>
         </div>
@@ -51,14 +57,18 @@
       {{#unless pwas}}
       <p>No PWAs found.</p>
       {{/unless}}
-
-      {{#if nextPagetoek}}
+      
       <nav>
         <ul class="pager">
-          <li><a href="?pageToken=#{encodeURIComponent(nextPageToken)}">More</a></li>
+          {{#if hasPreviousPage}}          
+          <li><a href="?page={{previousPageNumber}}">Previous Page</a></li>
+          {{/if}}          
+
+          {{#if hasNextPage}}          
+          <li><a href="?page={{nextPageNumber}}">Next Page</a></li>
+          {{/if}}          
         </ul>
       </nav>
-      {{/if}}
     </div>
 
     {{> footer}}

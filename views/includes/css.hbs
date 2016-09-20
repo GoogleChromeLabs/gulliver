@@ -15,9 +15,10 @@ html, body {
   font-family: "Helvetica", "Arial", sans-serif;
   font-size: 14px;
   font-weight: 400;
-  margin: 0;
+  margin: 0 0 auto 0;
   height: 100%;
   width: 100%;
+  min-width: 310px;
 }
 
 body {
@@ -27,47 +28,95 @@ body {
 .container {
   padding-right: 15px;
   padding-left: 15px;
+  padding-bottom: 30px;
   margin-right: auto;
   margin-left: auto
 }
 
 .navbar {
   position: relative;
-  height: 70px;
-  background: #424242;
+  height: 82px;
+  background: #0A84F5;
   display: flex;
   flex-direction: column;
 }
 .navbar-title {
+  height: 55px;
   color: white;
-  font-size: 30px;
+  font-size: 36px;
   text-align: center;
-  margin-top: 6px;
+  line-height: 55px;
+}
+.navbar-title #title {
+  align-self: flex-start;
+  margin: 0 auto;
+  text-align: left;
+  padding-left: 55px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-image: -webkit-image-set( url(/favicons/android-chrome-48x48.png) 1x, url(/favicons/android-chrome-96x96.png) 2x );
+  -webkit-filter: drop-shadow( 1px 1px 1px #000 );
+  filter: drop-shadow( 1px 1px 1px #000 );
 }
 .navbar-subtitle {
+  height: 20px;
   color: white;
   font-size: 18px;
   text-align: center;
-  margin-bottom: 5px;
+  line-height: 20px;
 }
 .navbar a {
   color: white;
   text-decoration: none;
 }
+.navbar #github {
+  position: absolute;
+  font-size: 16px;
+  bottom: 28px;
+  right: 15px;
+}
+.navbar #github-logo {
+  vertical-align:middle;
+}
+
+/* Flex NavBar */
+@media (max-width: 930px) {
+  .navbar {
+    height: 55px;
+    padding-left: 15px;
+  }
+  .navbar-title {
+    font-size: 30px;
+    text-align: left;
+  }
+  .navbar-subtitle {
+    height: 0px;
+  }
+  .navbar #github {
+    text-align: right;
+    bottom: 13px;
+    right: 15px;
+  }
+  .hide-on-mobile {
+    display: none;
+  }
+}
 
 .section-title {
-  color: white;
+  color: #0D47A1;
   font-size: 18px;
-  background: #757575;
+  font-weight: 600;
+  background: #7cc0ff;
   padding-left: 15px;
   margin-bottom: 15px;
   line-height: 40px;
+  height: 40px;
 }
 
 #auth-button {
   position: absolute;
-  bottom: -48px;
-  right: 0px;
+  bottom: -50px;
+  right: 10px;
 }
 
 button {
@@ -121,22 +170,41 @@ button[disabled=disabled], button:disabled {
 
 .pwabox {
   border: 2px solid lightgray;
-  padding: 8px 4px 4px 8px;
   text-overflow: hidden;
 }
-.pwabox-left {
-    display: table-cell;
-    vertical-align: top;
-    padding-right: 10px;
-}
 .pwabox-body {
-    display: table-cell;
-    vertical-align: top;
+  display: flex;
+  flex-direction: row;
 }
-
-div.pwabox-body a {
-  text-decorations:none;
-  color:inherit;
+.pwabox-left {
+  display:block;
+  width: 85px;
+  padding: 5px 5px 5px 10px;
+}
+.pwabox-right {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px 5px 5px;
+  width: 100%;
+}
+.pwabox-right .name {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+  height: 50px;
+  line-height: 54px;
+}
+.pwabox-right .lighthouseScore {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  height: 18px;
+  line-height: 18px;
+  font-size: 16px;
+  font-weight: 400;
+}
+.pwabox-right .lighthouseLogo {
+  padding-right: 5px;
 }
 
 .form-group {
@@ -145,18 +213,18 @@ div.pwabox-body a {
   margin-bottom: 15px
 }
 .form-input {
-    height: 20px;
-    width: 80%;
-    padding: 10px 16px;
-    font-size: 16px;
+  height: 20px;
+  width: 80%;
+  padding: 10px 16px;
+  font-size: 16px;
 }
 .form-textbox {
-    width: 80%;
-    padding: 10px 16px;
-    font-size: 16px;
-    background: #F5F5F5;
-    overflow: scroll;
-    border: 1px solid lightgray;
+  width: 80%;
+  padding: 10px 16px;
+  font-size: 16px;
+  background: #F5F5F5;
+  overflow: scroll;
+  border: 1px solid lightgray;
 }
 .error {
   color: #f07;
@@ -186,11 +254,10 @@ div.pwabox-body a {
   height: 100%;
 }
 .items .item {
-  flex: 1 0 300px;
+  flex: 1 0 280px;
   box-sizing: border-box;
   background: #e0ddd5;
   color: #171e42;
-  padding: 10px;
   margin-left: 10px;
   margin-top: 10px;
 }
