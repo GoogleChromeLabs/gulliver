@@ -6,11 +6,11 @@
 # (These files are part of lighthouse, but depending on lighthouse would haul in
 # multiple MBs of dependencies. So, we'll just dump the files here.)
 
-curl https://github.com/GoogleChrome/lighthouse/blob/master/lighthouse-core/lib/web-inspector.js
-curl https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/common/Color.js
+curl -sO https://raw.githubusercontent.com/GoogleChrome/lighthouse/master/lighthouse-core/lib/manifest-parser.js
+curl -sO https://raw.githubusercontent.com/ChromeDevTools/devtools-frontend/master/front_end/common/Color.js
 
 # Generate patch via `git diff manifest-parser.js Color.js`
-git patch - << END
+git apply - << END
 diff --git i/third_party/manifest-parser.js w/third_party/manifest-parser.js
 index 5ac9d72..b9e7ead 100644
 --- i/third_party/manifest-parser.js
