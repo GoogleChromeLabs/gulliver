@@ -59,20 +59,20 @@
       {{/unless}}
 
       <div class="pager">
+        {{#if hasPreviousPage}}
         <a href="?page={{previousPageNumber}}">
           <div class="previous">
-            {{#if hasPreviousPage}}
             <i class="fa fa-chevron-left" aria-hidden="true"></i>
-            {{/if}}
           </div>
         </a>
+        {{/if}}
+        {{#if hasNextPage}}
         <a href="?page={{nextPageNumber}}">
           <div class="next">
-            {{#if hasNextPage}}
             <i class="fa fa-chevron-right" aria-hidden="true"></i>
-            {{/if}}
           </div>
         </a>
+        {{/if}}
       </div>
 
     </div>
