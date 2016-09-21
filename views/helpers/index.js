@@ -72,10 +72,29 @@ exports.highlightedJson = function(object) {
   return syntaxHighlight(JSON.stringify(object, null, 4));
 };
 
+exports.getAggregationTableRow = function(aggregation) {
+  var row = '<tr>'
+          + '<td>' + aggregation.name + '</td>'
+          + '<td>' + aggregation.overall + '</td>'
+          + '</tr>';
+  return row;
+};
+
+exports.getAuditTableRow = function(audit) {
+  var row = '<tr>'
+          + '<td>' + audit.description + '</td>'
+          + '<td>' + audit.score + '</td>'
+          + '</tr>';
+  return row;
+};
+
+
 exports.registerHelpers = function(hbs) {
   hbs.registerHelper('firstLetter', exports.firstLetter);
   hbs.registerHelper('contrastColor', exports.contrastColor);
   hbs.registerHelper('moment', exports.moment);
   hbs.registerHelper('prettyJson', exports.prettyJson);
   hbs.registerHelper('highlightedJson', exports.highlightedJson);
+  hbs.registerHelper('getAggregationTableRow', exports.getAggregationTableRow);
+  hbs.registerHelper('getAuditTableRow', exports.getAuditTableRow);
 };
