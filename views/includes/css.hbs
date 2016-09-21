@@ -22,7 +22,7 @@ html, body {
 }
 
 body {
-  background: #F5F5F5;
+  background: #eee;
 }
 
 .container {
@@ -210,18 +210,62 @@ button[disabled=disabled], button:disabled {
 
 /* PWA Detail box */
 .pwadetail {
+  -webkit-display: flex;
+  display: flex;
+  flex-flow: column;
   border: 2px solid lightgray;
   text-overflow: hidden;
   display: flex;
-  flex-direction: column;
   padding: 10px 10px 20px 10px;
   justify-content: space-between;
   height: 345px;
   font-size: 14px;
   font-weight: 400;
+  max-width: 800px;
+  margin: 0 auto;
+}
+.manifest-detail {
+  -webkit-display: flex;
+  display: flex;
+  flex-flow: column;
+  border: 2px solid lightgray;
+  text-overflow: hidden;
+  display: flex;
+  padding: 10px 10px 20px 10px;
+  justify-content: space-between;
+  height: 345px;
+  overflow: scroll;
+  font-size: 14px;
+  font-weight: 400;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.lighthouse-detail {
+  -webkit-display: flex;
+  display: flex;
+  flex-flow: column;
+  border: 2px solid lightgray;
+  text-overflow: hidden;
+  display: flex;
+  padding: 10px 10px 20px 10px;
+  justify-content: space-between;
+  height: 345px;
+  overflow: scroll;
+  font-size: 14px;
+  font-weight: 400;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-top: 10px;
 }
 .pwadetail-logo {
  display:block;
+}
+.pwadetail-general {
+  -webkit-display: flex;
+  display: flex;
+  flex-flow: column;
 }
 .pwadetail .name {
   font-size: 16px;
@@ -386,3 +430,10 @@ button[disabled=disabled], button:disabled {
     max-width: calc(14.28571% - 10px);
   }
 }
+/* Styles for highlighted JSON */
+pre {padding: 5px; margin: 5px; }
+.string { color: #0288D1; }
+.number { color: red; }
+.boolean { color: #FF5252; }
+.null { color: magenta; }
+.key { color: #212121; }

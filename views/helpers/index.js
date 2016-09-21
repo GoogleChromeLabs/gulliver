@@ -16,6 +16,7 @@
 'use strict';
 const moment = require('moment');
 const parseColor = require('parse-color');
+const prism = require('prismjs');
 
 exports.contrastColor = function(hexcolor) {
   if (!hexcolor) {
@@ -44,8 +45,31 @@ exports.moment = function(date) {
   return moment(date).fromNow();
 };
 
+function syntaxHighlight(json) {
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+}
+
 exports.prettyJson = function(object) {
   return JSON.stringify(object, null, 4);
+};
+
+exports.highlightedJson = function(object) {
+  return syntaxHighlight(JSON.stringify(object, null, 4));
 };
 
 exports.registerHelpers = function(hbs) {
@@ -53,4 +77,5 @@ exports.registerHelpers = function(hbs) {
   hbs.registerHelper('contrastColor', exports.contrastColor);
   hbs.registerHelper('moment', exports.moment);
   hbs.registerHelper('prettyJson', exports.prettyJson);
+  hbs.registerHelper('highlightedJson', exports.highlightedJson);
 };
