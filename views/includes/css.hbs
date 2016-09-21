@@ -13,9 +13,13 @@
 
 html {
   height: 100%;
-  margin: 0;
-  padding: 0;
-  background: #0A84F5;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
 }
 
 body {
@@ -27,8 +31,8 @@ body {
   background: #F5F5F5;
   position: relative;
   margin: 0;
-  padding: 0;
   min-height: 100%;
+  padding-bottom: 10px;
 }
 
 .container {
@@ -275,9 +279,9 @@ button[disabled=disabled], button:disabled {
   width: 100%;
   background-color: #dc322f;
   color: #ffffff;
-  height: 29px;
-  line-height: 29px;
-  padding: 10px 20px 10px 20px;
+  height: 24px;
+  line-height: 24px;
+  padding: 10px 20px 34px 20px;
   display: none;
   pointer-events: none;
 }
@@ -323,8 +327,9 @@ button[disabled=disabled], button:disabled {
   justify-content: center;
   font-weight: 800;
   font-size: 20px;
-  height: 40px;
-  line-height: 40px;
+  padding-top: 5px;
+  height: 30px;
+  line-height: 30px;
   text-align: center;
 }
 .previous, .next {
