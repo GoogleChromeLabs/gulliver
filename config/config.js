@@ -31,7 +31,8 @@ nconf
     'PORT',
     'CLIENT_ID',
     'CLIENT_SECRET',
-    'LIGHTHOUSE_SERVER'
+    'LIGHTHOUSE_SERVER',
+    'GOOGLE_ANALYTICS'
   ])
   // 3. Config file
   .file({file: path.join(__dirname, 'config.json')})
