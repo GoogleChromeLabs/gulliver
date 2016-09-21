@@ -27,6 +27,7 @@ body {
   background: #F5F5F5;
   position: relative;
   margin: 0;
+  padding: 0;
   min-height: 100%;
 }
 
@@ -269,14 +270,13 @@ button[disabled=disabled], button:disabled {
   color: #f07;
 }
 .offline-status {
-  position: absolute;
-  right: 0;
+  position: fixed;
   bottom: 0;
-  left: 0;
+  width: 100%;
   background-color: #dc322f;
   color: #ffffff;
-  height: 24px;
-  line-height: 24px;
+  height: 29px;
+  line-height: 29px;
   padding: 10px 20px 10px 20px;
   display: none;
   pointer-events: none;
@@ -321,28 +321,20 @@ button[disabled=disabled], button:disabled {
   display: flex;
   flex-flow: row;
   justify-content: center;
-  padding: 0;
-}
-
-.pager li {
-  width: 50%;
-  display: block;
-  padding: 0 1em;
-}
-
-.pager .next {
-  text-align: right;
-}
-
-.pager li a {
-  flex-flow: row wrap;
-  justify-content: center;
+  font-weight: 800;
+  font-size: 20px;
+  height: 40px;
+  line-height: 40px;
   text-align: center;
-  text-decoration: none;
-  font-weight: 400;
+}
+.previous, .next {
+  padding-left: 20px;
+  padding-right: 20px;
+  width: 20px;
+}
+.pager a {
   color: #0D47A1;
-  padding: 0;
-  cursor: pointer;
+  text-decoration: none;
 }
 
 /* Flex List of PWAs */
