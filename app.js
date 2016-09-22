@@ -36,6 +36,8 @@ app.locals.configstring = JSON.stringify({
   client_id: config.get('CLIENT_ID') // eslint-disable-line camelcase
 });
 
+app.locals.googleAnalytics = config.get('GOOGLE_ANALYTICS');
+
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Static files

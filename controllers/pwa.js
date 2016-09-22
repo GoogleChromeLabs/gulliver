@@ -103,29 +103,17 @@ router.post('/add', (req, res, next) => {
       if (typeof err === 'number') {
         switch (err) {
           case pwaLib.E_MANIFEST_INVALID_URL:
-            res.render('pwas/form.hbs', {
-              pwa,
-              error: `pwa.manifestUrl [${pwa.manifestUrl}] is not a valid URL`
-            });
-            return;
+            err = `pwa.manifestUrl [${pwa.manifestUrl}] is not a valid URL`;
+            break;
           case pwaLib.E_MISING_USER_INFORMATION:
-            res.render('pwas/form.hbs', {
-              pwa,
-              error: 'Missing user information'
-            });
-            return;
+            err = 'Missing user information';
+            break;
           case pwaLib.E_MANIFEST_URL_MISSING:
-            res.render('pwas/form.hbs', {
-              pwa,
-              error: 'Missing manifestUrl'
-            });
-            return;
+            err = 'Missing manifestUrl';
+            break;
           case pwaLib.E_NOT_A_PWA:
-            res.render('pwas/form.hbs', {
-              pwa,
-              error: 'pwa is not an instance of Pwa'
-            });
-            return;
+            err = 'pwa is not an instance of Pwa';
+            break;
           default:
             return next(err);
         }
@@ -137,8 +125,7 @@ router.post('/add', (req, res, next) => {
           const m = e.match(/^ERROR:\s+(.*)\.$/);
           return m ? m[1] : e; // if no match (format changed?), just return the string
         }).join(', ');
-        res.render('pwas/form.hbs', {pwa, error: s});
-        return;
+        err = s;
       }
       res.render('pwas/form.hbs', {
         pwa,
