@@ -22,6 +22,7 @@ let libImages = require('../../lib/images');
 let libManifest = require('../../lib/manifest');
 let libLighthouse = require('../../lib/lighthouse');
 let db = require('../../lib/model-datastore');
+let cache = require('../../lib/data-cache');
 
 let Lighthouse = require('../../models/lighthouse');
 let Manifest = require('../../models/manifest');
@@ -95,6 +96,62 @@ describe('lib.pwa', () => {
         assert.equal(libLighthouse.fetchAndSave.lastCall.args[0], '123456789');
         assert.equal(db.update.callCount, 1);
         assert.equal(updatedPwa.lighthouseScore, 82);
+      });
+    });
+  });
+
+  describe('#getListFromCache', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+
+    it('rejects if no value in cache', () => {
+      simpleMock.mock(cache, 'getMulti').resolveWith({});
+      return libPwa.getListFromCache('KEY').should.be.rejected;
+    });
+
+    it('fulfills if there is a value in cache, but no last update timestamp', () => {
+      simpleMock.mock(cache, 'getMulti').resolveWith({KEY: {value: 'value'}});
+      return libPwa.getListFromCache('KEY').should.be.fulfilled.then(obj => {
+        assert.equal(obj.value, 'value');
+      });
+    });
+
+    it('rejects if last updated timestamp is after value timestamp', () => {
+      simpleMock.mock(cache, 'getMulti').resolveWith(
+        {
+          KEY: {
+            value: 'value',
+            cacheTimestamp: 1
+          },
+          PWA_LIST_LAST_UPDATE: 2
+        });
+      return libPwa.getListFromCache('KEY').should.be.rejected;
+    });
+
+    it('rejects if last updated timestamp is equal to value timestamp', () => {
+      simpleMock.mock(cache, 'getMulti').resolveWith(
+        {
+          KEY: {
+            value: 'value',
+            cacheTimestamp: 1
+          },
+          PWA_LIST_LAST_UPDATE: 1
+        });
+      return libPwa.getListFromCache('KEY').should.be.rejected;
+    });
+
+    it('fulfills if last updated timestamp is before value timestamp', () => {
+      simpleMock.mock(cache, 'getMulti').resolveWith(
+        {
+          KEY: {
+            value: 'value',
+            cacheTimestamp: 2
+          },
+          PWA_LIST_LAST_UPDATE: 1
+        });
+      return libPwa.getListFromCache('KEY').should.be.fulfilled.then(obj => {
+        assert.equal(obj.value, 'value');
       });
     });
   });
