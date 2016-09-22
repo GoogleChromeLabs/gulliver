@@ -91,7 +91,6 @@ exports.getAuditTableRow = function(audit) {
   return row;
 };
 
-
 exports.registerHelpers = function(hbs) {
   hbs.registerHelper('firstLetter', exports.firstLetter);
   hbs.registerHelper('contrastColor', exports.contrastColor);
