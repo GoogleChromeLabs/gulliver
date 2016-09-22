@@ -44,7 +44,10 @@ router.get('/', (req, res, next) => {
         hasPreviousPage: pageNumber > 1,
         nextPageNumber: pageNumber + 1,
         previousPageNumber: pageNumber - 1,
-        currentPageNumber: pageNumber
+        currentPageNumber: pageNumber,
+        sortOrder: sortOrder,
+        showNewest: sortOrder !== 'newest',
+        showScore: sortOrder !== 'score'
       });
     })
     .catch(err => {
