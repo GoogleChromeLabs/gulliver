@@ -201,7 +201,7 @@ button[disabled=disabled], button:disabled {
 .pwabox-right {
   display: flex;
   flex-direction: column;
-  padding: 5px 10px 5px 5px;
+  padding: 15px 10px 5px 5px;
   width: 100%;
 }
 .pwabox-right .name {
@@ -209,7 +209,7 @@ button[disabled=disabled], button:disabled {
   font-size: 16px;
   font-weight: 600;
   height: 50px;
-  line-height: 54px;
+  line-height: 22px;
 }
 .pwabox-right .lighthouseScore {
   display: flex;
@@ -376,33 +376,29 @@ button[disabled=disabled], button:disabled {
   margin-left: 10px;
   margin-top: 10px;
 }
-@media (min-width: 620px) {
+/* Fixes last flex row */
+@media (min-width: 570px) {
   .items .item {
     max-width: calc(50% - 10px);
   }
 }
-@media (min-width: 930px) {
+@media (min-width: 860px) {
   .items .item {
     max-width: calc(33.33333% - 10px);
   }
 }
-@media (min-width: 1240px) {
+@media (min-width: 1150px) {
   .items .item {
     max-width: calc(25% - 10px);
   }
 }
-@media (min-width: 1540px) {
+@media (min-width: 1440px) {
   .items .item {
     max-width: calc(20% - 10px);
   }
 }
-@media (min-width: 1850px) {
+@media (min-width: 1730px) {
   .items .item {
     max-width: calc(16.66667% - 10px);
-  }
-}
-@media (min-width: 2160px) {
-  .items .item {
-    max-width: calc(14.28571% - 10px);
   }
 }
