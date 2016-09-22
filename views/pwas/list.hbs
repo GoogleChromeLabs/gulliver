@@ -14,13 +14,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Gulliver - PWA Directory</title>
+    <title>PWA Directory</title>
     {{> head}}
   </head>
   <body>
     {{> header}}
 
-    <div class="section-title">PWAs</div>
+    <div class="section-title">
+      {{#if showNewest}}
+      <a href="/?sort=newest"><div class="tab">Newest</div></a>
+      <div class="tab activetab">Best Score</div>
+      {{/if}}
+      {{#if showScore}}
+      <div class="tab activetab">Newest</div>
+      <a href="/?sort=score"><div class="tab">Best Score</div></a>
+      {{/if}}
+    </div>
     <div class="container">
       <div class="button green gulliver-online-aware">
         <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
@@ -57,20 +66,25 @@
       {{#unless pwas}}
       <p>No PWAs found.</p>
       {{/unless}}
-      
-      <nav>
-        <ul class="pager">
-          {{#if hasPreviousPage}}          
-          <li class="previous"><a href="?page={{previousPageNumber}}">&lt; previous page</a></li>
-          {{/if}}          
 
-          {{#if hasNextPage}}          
-          <li class="next"><a href="?page={{nextPageNumber}}">next page &gt;</a></li>
-          {{/if}}          
-        </ul>
-      </nav>
+      <div class="pager">
+        {{#if hasPreviousPage}}
+        <a href="?sort={{sortOrder}}&page={{previousPageNumber}}">
+          <div class="previous">
+            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+          </div>
+        </a>
+        {{/if}}
+        {{#if hasNextPage}}
+        <a href="?sort={{sortOrder}}&page={{nextPageNumber}}">
+          <div class="next">
+            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+          </div>
+        </a>
+        {{/if}}
+      </div>
+
     </div>
-
     {{> footer}}
   </body>
 </html>

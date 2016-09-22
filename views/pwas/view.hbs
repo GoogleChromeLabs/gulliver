@@ -14,12 +14,14 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Gulliver - PWA Directory - {{pwa.name}}</title>
+    <title>PWA Directory - {{pwa.name}}</title>
     {{> head}}
   </head>
   <body>  
     {{> header}}    
-    <div class="section-title">PWA Details</div>
+    <div class="section-title">
+      <a href="javascript:history.back()"><div class="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></div></a>
+    </div>
     <div class="container">
       {{> pwadetails pwa=pwa}}
       {{#if pwa.lighthouseScore}}
