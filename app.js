@@ -22,6 +22,7 @@ const hbs = require('hbs');
 const helpers = require('./views/helpers');
 const app = express();
 const bodyParser = require('body-parser');
+const serveStatic = require('serve-static');
 
 app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +42,15 @@ app.locals.googleAnalytics = config.get('GOOGLE_ANALYTICS');
 app.use(bodyParser.urlencoded({extended: true}));
 
 // Static files
-app.use(express.static('public'));
+app.use(serveStatic(path.resolve('./public'), {
+  setHeaders: setCustomCacheControl
+}));
+function setCustomCacheControl(res, path) {
+  let mime = serveStatic.mime.lookup(path);
+  if (mime.match('image*')) {
+    res.setHeader('Cache-Control', 'public, max-age=1d');
+  }
+}
 
 // Middlewares
 app.use(require('./middlewares'));
