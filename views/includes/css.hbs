@@ -65,7 +65,6 @@ body {
   background-position: left center;
   background-repeat: no-repeat;
   background-image: -webkit-image-set( url(/favicons/android-chrome-48x48.png) 1x, url(/favicons/android-chrome-96x96.png) 2x );
-  -webkit-filter: drop-shadow( 1px 1px 1px #000 );
   filter: drop-shadow( 1px 1px 1px #000 );
 }
 .navbar-subtitle {
@@ -113,22 +112,56 @@ body {
 }
 
 .section-title {
+  display: flex;
+  flex-direction: row;
   color: #0D47A1;
-  font-size: 22px;
+  font-size: 16px;
   font-weight: 600;
   background: #7cc0ff;
   padding-left: 15px;
   margin-bottom: 15px;
   line-height: 45px;
   height: 45px;
+  border: 1px grey;
+  border-bottom-style: solid;
 }
 .section-title .back {
+  font-size: 22px;
   padding-right: 20px;
   height: 45px;
   line-height: 45px;
   width: 45px;
 }
-
+.section-title .tab {
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+  height: 35px;
+  line-height: 35px;
+  margin: 10px 0px 0 0px;
+  padding: 0 30px 0 30px;
+}
+@media (max-width: 480px) {
+  .section-title .tab {
+    padding: 0 15px 0 15px;
+  }
+}
+@media (max-width: 380px) {
+  .section-title .tab {
+    font-size: 14px;
+    padding: 0 7px 0 7px;
+  }
+}
+.section-title .activetab {
+  background:#F5F5F5;
+  border: 1px grey;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-left-style: solid;
+}
+.section-title a, .section-title a:visited {
+  color: #0D47A1;
+  text-decoration: none;
+}
 #auth-button {
   position: absolute;
   bottom: -52px;

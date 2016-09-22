@@ -20,7 +20,16 @@
   <body>
     {{> header}}
 
-    <div class="section-title">PWAs</div>
+    <div class="section-title">
+      {{#if showNewest}}
+      <a href="/?sort=newest"><div class="tab">Newest</div></a>
+      <div class="tab activetab">Best Score</div>
+      {{/if}}
+      {{#if showScore}}
+      <div class="tab activetab">Newest</div>
+      <a href="/?sort=score"><div class="tab">Best Score</div></a>
+      {{/if}}
+    </div>
     <div class="container">
       <div class="button green gulliver-online-aware">
         <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
@@ -60,14 +69,14 @@
 
       <div class="pager">
         {{#if hasPreviousPage}}
-        <a href="?page={{previousPageNumber}}">
+        <a href="?sort={{sortOrder}}&page={{previousPageNumber}}">
           <div class="previous">
             <i class="fa fa-chevron-left" aria-hidden="true"></i>
           </div>
         </a>
         {{/if}}
         {{#if hasNextPage}}
-        <a href="?page={{nextPageNumber}}">
+        <a href="?sort={{sortOrder}}&page={{nextPageNumber}}">
           <div class="next">
             <i class="fa fa-chevron-right" aria-hidden="true"></i>
           </div>
