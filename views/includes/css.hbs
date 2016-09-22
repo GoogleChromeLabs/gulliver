@@ -219,7 +219,6 @@ button[disabled=disabled], button:disabled {
   width: 100%;
   height: 100%;
 }
-
 /* PWA List Box */
 .pwabox {
   border: 2px solid lightgray;
@@ -259,9 +258,7 @@ button[disabled=disabled], button:disabled {
 .pwabox-right .lighthouseLogo {
   padding-right: 5px;
 }
-
-/* PWA Detail box */
-.pwadetail {
+.detail-general {
   -webkit-display: flex;
   display: flex;
   flex-flow: column;
@@ -274,50 +271,20 @@ button[disabled=disabled], button:disabled {
   font-size: 14px;
   font-weight: 400;
   max-width: 800px;
-  margin: 0 auto;
+  margin: 0 auto;  
 }
 /* Manifest detail box */
 .manifest-detail {
-/*  -webkit-display: flex;
-  display: flex;*/
-  flex-flow: column;
-  border: 2px solid lightgray;
-  text-overflow: hidden;
-  display: flex;
-  padding: 10px 10px 20px 10px;
-  justify-content: space-between;
-  height: 345px;
   overflow: scroll;
-  font-size: 14px;
-  font-weight: 400;
-  max-width: 800px;
-  margin: 0 auto;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 /* Lighthouse report box */
 .lighthouse-detail {
-/*  -webkit-display: flex;
-  display: flex;*/
-  flex-flow: column;
-  border: 2px solid lightgray;
-  text-overflow: hidden;
-  display: flex;
-  padding: 10px 10px 20px 10px;
-  height: 345px;
   overflow: scroll;
-  font-size: 14px;
-  font-weight: 400;
-  max-width: 800px;
-  margin: 0 auto;
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .pwadetail-logo {
  display:block;
-}
-.pwadetail-general {
-  -webkit-display: flex;
-  display: flex;
-  flex-flow: column;
 }
 .pwadetail .name {
   font-size: 16px;
@@ -336,7 +303,6 @@ button[disabled=disabled], button:disabled {
 .pwadetail .dates {
   font-style: italic;
 }
-
 .form-group {
   display: flex;
   flex-direction: column;
@@ -371,7 +337,6 @@ button[disabled=disabled], button:disabled {
   display: none;
   pointer-events: none;
 }
-
 /* Footer */
 .footer {
   position: absolute;
@@ -405,7 +370,6 @@ button[disabled=disabled], button:disabled {
   padding: 0;
   cursor: pointer;  
 }
-
 /* Pager */
 .pager {
   position: relative;
@@ -434,7 +398,6 @@ button[disabled=disabled], button:disabled {
   color: #0D47A1;
   text-decoration: none;
 }
-
 /* Flex List of PWAs */
 .items {
   display: flex;
@@ -494,36 +457,29 @@ pre {padding: 5px; margin: 5px; }
 .boolean { color: #FF5252; }
 .null { color: magenta; }
 .key { color: #212121; }
-
 /* Styles for lighthouse report */
 #lighthouse-report-section {
   font-weight: bold;
 }
-
 th {
   padding: 5px;
 }
-
 td {
   padding: 10px 5px 3px 5px;
 }
-
 table {
   border-spacing: 0;
   border-collapse: collapse;
 }
-
 td {
   border: 1px solid black;
-/*  border-radius: 5px;*/
 }
-
 .desc {
   width: 400px;
 }
-
 th {
     background-color: #9E9E9E;
 }
-tr:nth-child(even) {background-color: #BDBDBD}
-
+tr:nth-child(even) {
+  background-color: #BDBDBD
+}
