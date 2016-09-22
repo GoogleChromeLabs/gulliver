@@ -14,8 +14,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>PWA Directory</title>
-    <meta name="description" content="PWA Directory: A Directory of Progressive Web Apps">
     {{> head}}
   </head>
   <body>
@@ -43,7 +41,7 @@
             <div class="pwabox-body">
               <div class="pwabox-left">
                 {{#if iconUrl}}
-                  <img src="{{iconUrl}}" width="64" height="64"/>
+                  <img src="{{iconUrl}}" width="64" height="64" alt="logo for {{name}}"/>
                 {{else}}
                 <svg width="64" height="64">
                   <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
@@ -54,7 +52,9 @@
               <div class="pwabox-right">
                 <div class="name">{{name}}</div>
                 <div class="lighthouseScore">
-                  <div class="lighthouseLogo"><img src="/img/lighthouse.svg" width="18" height="18" title="Lighthouse Score"/></div>
+                  <div class="lighthouseLogo">
+                    <img src="/img/lighthouse.svg" width="18" height="18" title="Lighthouse Score" alt="Lighthouse logo"/>
+                  </div>
                   <div>{{lighthouseScore}}</div>
                 </div>
               </div>

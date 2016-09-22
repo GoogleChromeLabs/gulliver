@@ -14,8 +14,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>PWA Directory - {{pwa.name}}</title>
-    <meta name="description" content="PWA Directory: {{pwa.name}} - {{pwa.description}}">
     {{> head}}
   </head>
   <body>
@@ -28,7 +26,7 @@
         <div class="pwadetail-logo">
           {{#if pwa.iconUrl}}
           <div style="background-color: {{pwa.backgroundColor}}">
-            <img src="{{pwa.iconUrl}}" width="128" height="128"/>
+            <img src="{{pwa.iconUrl}}" width="128" height="128" alt="logo for {{pwa.name}}"/>
           </div>
           {{else}}
           <svg width="128" height="128">
@@ -43,7 +41,9 @@
         {{/if}}
         <div><a href="{{pwa.manifestUrl}}" style="color: {{contrastColor pwa.backgroundColor}}" target="_blank">Manifest</a></div>
         <div class="lighthouseScore">
-          <div class="lighthouseLogo"><img src="/img/lighthouse.svg" width="24" height="24" title="Lighthouse Score"/></div>
+          <div class="lighthouseLogo">
+            <img src="/img/lighthouse.svg" width="24" height="24" title="Lighthouse Score" alt="Lighthouse logo"/>
+          </div>
           <div>{{pwa.lighthouseScore}}</div>
         </div>
         <div class="dates">Added {{moment pwa.created}}, Updated {{moment pwa.updated}}</div>

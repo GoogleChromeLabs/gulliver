@@ -20,6 +20,8 @@ const pwaLib = require('../lib/pwa');
 const Pwa = require('../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const config = require('../config/config');
+const libMetadata = require('../lib/metadata');
+
 const CLIENT_ID = config.get('CLIENT_ID');
 const CLIENT_SECRET = config.get('CLIENT_SECRET');
 const LIST_PAGE_SIZE = 12;
@@ -38,7 +40,9 @@ router.get('/', (req, res, next) => {
 
   pwaLib.list(start, LIST_PAGE_SIZE, sortOrder)
     .then(result => {
-      res.render('pwas/list.hbs', {
+      let arg = {
+        title: 'PWA Directory',
+        description: 'PWA Directory: A Directory of Progressive Web Apps',
         pwas: result.pwas,
         hasNextPage: result.hasMore,
         hasPreviousPage: pageNumber > 1,
@@ -48,7 +52,9 @@ router.get('/', (req, res, next) => {
         sortOrder: sortOrder,
         showNewest: sortOrder !== 'newest',
         showScore: sortOrder !== 'score'
-      });
+      };
+      libMetadata.add(arg, req);
+      res.render('pwas/list.hbs', arg);
     })
     .catch(err => {
       next(err);
@@ -61,10 +67,14 @@ router.get('/', (req, res, next) => {
  * Display a form for creating a PWA.
  */
 router.get('/add', (req, res) => {
-  res.render('pwas/form.hbs', {
+  let arg = {
+    title: 'PWA Directory - Submit a PWA',
+    description: 'PWA Directory: Submit a Progressive Web Apps',
     pwa: {},
     action: 'Add'
-  });
+  };
+  libMetadata.add(arg, req);
+  res.render('pwas/form.hbs', arg);
 });
 
 /**
@@ -145,13 +155,17 @@ router.post('/add', (req, res, next) => {
  */
 router.get('/:pwa', (req, res, next) => {
   pwaLib.find(req.params.pwa)
-    .then(entity => {
-      res.render('pwas/view.hbs', {
-        pwa: entity
-      });
+    .then(pwa => {
+      let arg = {
+        pwa: pwa,
+        title: 'PWA Directory: ' + pwa.name,
+        description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description
+      };
+      libMetadata.add(arg, req);
+      res.render('pwas/view.hbs', arg);
     })
-    .catch(() => {
-      return next();
+    .catch(err => {
+      return next(err);
     });
 });
 
