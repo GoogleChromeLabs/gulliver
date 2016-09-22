@@ -113,6 +113,7 @@ describe('lib.pwa', () => {
       simpleMock.mock(libPwa, 'updateLighthouseInfo').resolveWith(pwa);
       simpleMock.mock(libPwa, 'libManifest').returnWith(libManifest);
       simpleMock.mock(libPwa, 'db').returnWith(db);
+      simpleMock.mock(libPwa, 'addPwaToCache');
 
       return libPwa._save(pwa).should.be.fulfilled.then(updatedPwa => {
         assert.equal(libPwa.findByManifestUrl.callCount, 1);
@@ -126,6 +127,7 @@ describe('lib.pwa', () => {
         assert.equal(db.update.callCount, 1);
         assert.equal(libPwa.updateIcon.callCount, 1);
         assert.equal(libPwa.updateLighthouseInfo.callCount, 1);
+        assert.equal(libPwa.addPwaToCache.callCount, 2);
       });
     });
     it('handles E_MANIFEST_ERROR error', () => {
