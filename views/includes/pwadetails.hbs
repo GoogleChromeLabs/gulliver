@@ -1,0 +1,27 @@
+<div class="detail-general pwadetail"
+     style="background-color: {{pwa.backgroundColor}};
+             color: {{contrastColor pwa.backgroundColor}};">
+    <h3>{{pwa.name}} <a href="{{pwa.absoluteStartUrl}}" style="color: {{contrastColor pwa.backgroundColor}}" target="_blank">[Visit]</a></h3>
+    <div class="pwadetail-logo">
+      {{#if pwa.iconUrl}}
+      <div style="background-color: {{pwa.backgroundColor}}">
+        <img src="{{pwa.iconUrl}}" width="128" height="128"/>
+      </div>
+      {{else}}
+      <svg width="128" height="128">
+        <rect width="100%" height="100%" stroke-width="4" fill="{{pwa.backgroundColor}}" />
+        <text x="50%" y="50%" fill="{{contrastColor pwa.backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="128px">{{firstLetter pwa.name}}</text>
+      </svg>
+      {{/if}}
+    </div>
+    {{!-- <div class="name"><a href="{{pwa.absoluteStartUrl}}" style="color: {{contrastColor pwa.backgroundColor}}" target="_blank">{{pwa.name}}</a></div>
+     --}}  {{#if pwa.description}}
+      <div>{{pwa.description}}</div>
+      {{/if}}
+      {{!-- <div><a href="{{pwa.manifestUrl}}" style="color: {{contrastColor pwa.backgroundColor}}" target="_blank">Manifest</a></div> --}}
+      <div class="lighthouseScore">
+        <div class="lighthouseLogo"><img src="/img/lighthouse.svg" width="24" height="24" title="Lighthouse Score"/></div>
+        <div>{{pwa.lighthouseScore}}</div>
+      </div>
+    <div class="dates">Added {{moment pwa.created}}, Updated {{moment pwa.updated}}</div>
+</div>

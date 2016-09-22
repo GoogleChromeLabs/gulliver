@@ -1,0 +1,50 @@
+<div class="detail-general lighthouse-detail">
+  <h3>Lighthouse Report</h3>
+  <div>
+    <div>
+      <div>
+        <span id="lighthouse-report-section">Total Score</span>: 
+         {{lighthouse.lighthouseInfo.totalScore}}
+      </div>
+      <div>
+        <span id="lighthouse-report-section">Date</span>
+        {{lighthouse.date}}
+      </div>
+      <table class="lighthouse-report-table">
+        <colgroup>
+          <col class="desc"/>
+          <col class="score" align="right"/>
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col" align="left">Aggregated Checks</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each lighthouse.lighthouseInfo.aggregation.scores}} 
+            {{{getAggregationTableRow this}}}
+          {{/each}}
+        </tbody>
+      </table>
+      <br>
+      <table class="lighthouse-report-table">
+        <colgroup>
+          <col class="desc"/>
+          <col class="score" align="right"/>
+        </colgroup>
+        <thead>
+          <tr>
+            <th scope="col" align="left">Audits</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each lighthouse.lighthouseInfo.audits }} 
+            {{{getAuditTableRow this}}}
+          {{/each}}
+        </tbody>
+      </table>      
+    </div>
+  </div>
+</div>
