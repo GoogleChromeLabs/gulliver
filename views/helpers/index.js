@@ -16,7 +16,6 @@
 'use strict';
 const moment = require('moment');
 const parseColor = require('parse-color');
-const prism = require('prismjs');
 
 exports.contrastColor = function(hexcolor) {
   if (!hexcolor) {
