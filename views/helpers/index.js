@@ -19,12 +19,12 @@ const parseColor = require('parse-color');
 
 exports.contrastColor = function(hexcolor) {
   if (!hexcolor) {
-  return 'white';
+    return 'white';
   }
 
   // Assume that a 6 digit string is a color.
   if (hexcolor.length === 6 && hexcolor[0] !== '#') {
-  hexcolor = '#' + hexcolor;
+    hexcolor = '#' + hexcolor;
   }
 
   const parsedColor = parseColor(hexcolor);
@@ -50,8 +50,8 @@ exports.moment = function(date) {
 */
 function syntaxHighlight(json) {
   json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-    var cls = 'number';
+  return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, (match) => {
+    const cls = 'number';
     if (/^"/.test(match)) {
       if (/:$/.test(match)) {
         cls = 'key';
