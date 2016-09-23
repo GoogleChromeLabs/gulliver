@@ -40,7 +40,7 @@ router.get('/', (req, res, next) => {
 
   pwaLib.list(start, LIST_PAGE_SIZE, sortOrder)
     .then(result => {
-      let arg = {
+      let arg = Object.assign(libMetadata.fromRequest(req), {
         title: 'PWA Directory',
         description: 'PWA Directory: A Directory of Progressive Web Apps',
         pwas: result.pwas,
@@ -52,8 +52,7 @@ router.get('/', (req, res, next) => {
         sortOrder: sortOrder,
         showNewest: sortOrder !== 'newest',
         showScore: sortOrder !== 'score'
-      };
-      libMetadata.add(arg, req);
+      });
       res.render('pwas/list.hbs', arg);
     })
     .catch(err => {
@@ -67,13 +66,12 @@ router.get('/', (req, res, next) => {
  * Display a form for creating a PWA.
  */
 router.get('/add', (req, res) => {
-  let arg = {
+  let arg = Object.assign(libMetadata.fromRequest(req), {
     title: 'PWA Directory - Submit a PWA',
     description: 'PWA Directory: Submit a Progressive Web Apps',
     pwa: {},
     action: 'Add'
-  };
-  libMetadata.add(arg, req);
+  });
   res.render('pwas/form.hbs', arg);
 });
 
@@ -156,12 +154,11 @@ router.post('/add', (req, res, next) => {
 router.get('/:pwa', (req, res, next) => {
   pwaLib.find(req.params.pwa)
     .then(pwa => {
-      let arg = {
+      let arg = Object.assign(libMetadata.fromRequest(req), {
         pwa: pwa,
         title: 'PWA Directory: ' + pwa.name,
         description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description
-      };
-      libMetadata.add(arg, req);
+      });
       res.render('pwas/view.hbs', arg);
     })
     .catch(err => {
