@@ -1,4 +1,4 @@
-{{!-- Copyright 2015-2016, Google, Inc.
+/* Copyright 2015-2016, Google, Inc.
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -9,46 +9,52 @@
  distributed under the License is distributed on an "AS IS" BASIS,
  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  See the License for the specific language governing permissions and
- limitations under the License. --}}
+ limitations under the License. */
 
 html {
   height: 100%;
   box-sizing: border-box;
 }
-
 *,
 *:before,
 *:after {
   box-sizing: inherit;
 }
-
 body {
   font-family: "Helvetica", "Arial", sans-serif;
   font-size: 14px;
   font-weight: 400;
   width: 100%;
   min-width: 310px;
+  margin: 0;
   background: #F5F5F5;
   position: relative;
-  margin: 0;
   min-height: 100%;
-  padding-bottom: 10px;
 }
-
+h3 { 
+  font-weight: 400;
+}
+a { 
+  text-decoration: none;
+  color: inherit;
+}
+a:hover { 
+  text-decoration: underline; 
+}
 .container {
-  padding-right: 15px;
-  padding-left: 15px;
-  padding-bottom: 44px;
-  margin-right: auto;
-  margin-left: auto
+  padding: 8px;
 }
-
 .navbar {
   position: relative;
   height: 82px;
   background: #0A84F5;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 .navbar-title {
   height: 55px;
@@ -58,14 +64,16 @@ body {
   line-height: 55px;
 }
 .navbar-title #title {
-  align-self: flex-start;
+  -ms-flex-item-align: start;
+      align-self: flex-start;
   margin: 0 auto;
   text-align: left;
   padding-left: 55px;
   background-position: left center;
   background-repeat: no-repeat;
   background-image: -webkit-image-set( url(/favicons/android-chrome-48x48.png) 1x, url(/favicons/android-chrome-96x96.png) 2x );
-  filter: drop-shadow( 1px 1px 1px #000 );
+  -webkit-filter: drop-shadow( 1px 1px 1px #000 );
+          filter: drop-shadow( 1px 1px 1px #000 );
 }
 .navbar-subtitle {
   height: 20px;
@@ -87,7 +95,6 @@ body {
 .navbar #github-logo {
   vertical-align:middle;
 }
-
 /* Flex NavBar */
 @media (max-width: 930px) {
   .navbar {
@@ -110,10 +117,14 @@ body {
     display: none;
   }
 }
-
 .section-title {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
   color: #0D47A1;
   font-size: 16px;
   font-weight: 600;
@@ -167,7 +178,6 @@ body {
   bottom: -52px;
   right: 10px;
 }
-
 button {
   padding: 0 5px 5px 5px;
 }
@@ -216,15 +226,19 @@ button[disabled=disabled], button:disabled {
   width: 100%;
   height: 100%;
 }
-
 /* PWA List Box */
 .pwabox {
   border: 2px solid lightgray;
   text-overflow: hidden;
 }
 .pwabox-body {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
 }
 .pwabox-left {
   display:block;
@@ -232,8 +246,13 @@ button[disabled=disabled], button:disabled {
   padding: 5px 5px 5px 10px;
 }
 .pwabox-right {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   padding: 15px 10px 5px 5px;
   width: 100%;
 }
@@ -245,9 +264,16 @@ button[disabled=disabled], button:disabled {
   line-height: 22px;
 }
 .pwabox-right .lighthouseScore {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
   height: 18px;
   line-height: 18px;
   font-size: 16px;
@@ -256,18 +282,81 @@ button[disabled=disabled], button:disabled {
 .pwabox-right .lighthouseLogo {
   padding-right: 5px;
 }
-
-/* PWA Detail box */
-.pwadetail {
+.detail-general {
+  -webkit-display: flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-flow: column;
+      flex-flow: column;
   border: 2px solid lightgray;
   text-overflow: hidden;
   display: flex;
-  flex-direction: column;
-  padding: 10px 10px 20px 10px;
-  justify-content: space-between;
-  height: 345px;
+  padding: 16px;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   font-size: 14px;
   font-weight: 400;
+  max-width: 600px;
+  margin: 0 auto;  
+}
+.detail-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  margin-bottom: 16px;  
+}
+.detail-header > * {
+  font-size: 24px;
+  margin: 0;
+  padding: 0;
+}  
+.pwadetail-header {
+  -webkit-display: flex;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; 
+  -webkit-box-orient: vertical; 
+  -webkit-box-direction: normal; 
+      -ms-flex-direction: column; 
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 8px;
+}
+.detail-description {
+  line-height: 1.5em;
+  text-align: center;
+}
+/* Manifest detail box */
+.manifest-detail {
+  margin-top: 5px;
+  overflow-x: scroll;
+}
+/* Lighthouse report box */
+.lighthouse-detail {
+  margin-top: 5px;
+}
+.lighthouse-report-table {
+  width: 100%;
+}
+.lighthouse-report-table th:nth-child(1),
+.lighthouse-report-table td:nth-child(1) { 
+  text-align: left;
+}
+.lighthouse-report-table th:nth-child(2),
+.lighthouse-report-table td:nth-child(2) { 
+  width: 60px;
+  text-align: right;
 }
 .pwadetail-logo {
  display:block;
@@ -276,23 +365,20 @@ button[disabled=disabled], button:disabled {
   font-size: 16px;
   font-weight: 600;
 }
-.pwadetail .lighthouseScore {
-  display: flex;
-  flex-direction: row;
-  height: 24px;
-  line-height: 24px;
-  font-size: 16px;
-}
-.pwadetail .lighthouseLogo {
-  padding-right: 5px;
-}
-.pwadetail .dates {
+.detail-general .dates {
   font-style: italic;
+  margin-top: 16px;
+  font-size: 12px;
+  text-align: center;  
 }
-
 .form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   margin-bottom: 15px
 }
 .form-input {
@@ -324,20 +410,30 @@ button[disabled=disabled], button:disabled {
   display: none;
   pointer-events: none;
 }
-
 /* Footer */
 .footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  height: 56px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   background: #0A84F5;
   color: white;
 }
 .footer ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-flow: row;
-  justify-content: center;
+  -ms-flex-flow: row;
+      flex-flow: row;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   padding: 0;
 }
 .footer ul li:first-child {
@@ -349,8 +445,11 @@ button[disabled=disabled], button:disabled {
   border-left: 1px solid #fff;
 }
 .footer ul li a {
-  flex-flow: row wrap;
-  justify-content: center;
+  -ms-flex-flow: row wrap;
+      flex-flow: row wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   text-align: center;
   text-decoration: none;
   font-weight: 400;
@@ -358,7 +457,6 @@ button[disabled=disabled], button:disabled {
   padding: 0;
   cursor: pointer;  
 }
-
 /* Pager */
 .pager {
   position: relative;
@@ -387,11 +485,13 @@ button[disabled=disabled], button:disabled {
   color: #0D47A1;
   text-decoration: none;
 }
-
 /* Flex List of PWAs */
 .items {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   margin-left: -10px;
   margin-top: -10px;
 }
@@ -402,7 +502,9 @@ button[disabled=disabled], button:disabled {
   height: 100%;
 }
 .items .item {
-  flex: 1 0 280px;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 0 280px;
+          flex: 1 0 280px;
   box-sizing: border-box;
   background: #e0ddd5;
   color: #171e42;
@@ -434,4 +536,52 @@ button[disabled=disabled], button:disabled {
   .items .item {
     max-width: calc(16.66667% - 10px);
   }
+}
+@media (min-width: 2160px) {
+  .items .item {
+    max-width: calc(14.28571% - 10px);
+  }
+}
+/* Styles for highlighted JSON */
+pre {padding: 5px; margin: 5px; }
+.string { color: #0288D1; }
+.number { color: red; }
+.boolean { color: #FF5252; }
+.null { color: magenta; }
+.key { color: #212121; }
+/* Styles for lighthouse report */
+#lighthouse-report-section {
+  font-weight: bold;
+}
+th {
+  font-size: 18px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+td {
+  padding: 8px;
+}
+table {
+  border-spacing: 0;
+  border-collapse: collapse;  
+}
+thead,
+td {
+  border: 1px solid black;
+}
+.desc {
+  width: 400px;
+}
+th {
+  background-color: #1976D2;
+  color: #FFFFFF;
+}
+tr:nth-child(even) {
+  background-color: #2196F3;
+  color: #FFFFFF;
+}
+tr:nth-child(odd) {
+  background-color: #BBDEFB;
 }

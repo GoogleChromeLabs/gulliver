@@ -17,6 +17,7 @@
 
 const express = require('express');
 const pwaLib = require('../lib/pwa');
+const lighthouseLib = require('../lib/lighthouse');
 const Pwa = require('../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const config = require('../config/config');
@@ -146,8 +147,12 @@ router.post('/add', (req, res, next) => {
 router.get('/:pwa', (req, res, next) => {
   pwaLib.find(req.params.pwa)
     .then(entity => {
-      res.render('pwas/view.hbs', {
-        pwa: entity
+      lighthouseLib.findByPwaId(req.params.pwa)
+      .then(lighthouse => {
+        res.render('pwas/view.hbs', {
+          pwa: entity,
+          lighthouse: lighthouse
+        });
       });
     })
     .catch(() => {
