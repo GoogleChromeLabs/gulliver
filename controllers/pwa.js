@@ -17,6 +17,7 @@
 
 const express = require('express');
 const pwaLib = require('../lib/pwa');
+const lighthouseLib = require('../lib/lighthouse');
 const Pwa = require('../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const config = require('../config/config');
@@ -81,7 +82,10 @@ router.get('/add', (req, res) => {
  * Create a PWA.
  */
 router.post('/add', (req, res, next) => {
-  const manifestUrl = req.body.manifestUrl;
+  let manifestUrl = req.body.manifestUrl.trim();
+  if (manifestUrl.startsWith('http://')) {
+    manifestUrl = manifestUrl.replace('http://', 'https://');
+  }
   const idToken = req.body.idToken;
   let pwa = new Pwa(manifestUrl);
 
@@ -154,12 +158,16 @@ router.post('/add', (req, res, next) => {
 router.get('/:pwa', (req, res, next) => {
   pwaLib.find(req.params.pwa)
     .then(pwa => {
-      let arg = Object.assign(libMetadata.fromRequest(req), {
-        pwa: pwa,
-        title: 'PWA Directory: ' + pwa.name,
-        description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description
+      lighthouseLib.findByPwaId(req.params.pwa)
+      .then(lighthouse => {
+        let arg = Object.assign(libMetadata.fromRequest(req), {
+          pwa: pwa,
+          lighthouse: lighthouse,
+          title: 'PWA Directory: ' + pwa.name,
+          description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description
+        });
+        res.render('pwas/view.hbs', arg);
       });
-      res.render('pwas/view.hbs', arg);
     })
     .catch(err => {
       return next(err);

@@ -1,0 +1,40 @@
+<div class="detail-general lighthouse-detail">
+  <div class="detail-header">
+    <h3>LIGHTHOUSE</h3>
+    <div>{{pwa.lighthouseScore}}%</div>
+  </div>
+  <div>
+    <div>
+      <table class="lighthouse-report-table">
+        <thead>
+          <tr>
+            <th scope="col">Aggregated Checks</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each lighthouse.lighthouseInfo.aggregation.scores}} 
+            {{{getAggregationTableRow this}}}
+          {{/each}}
+        </tbody>
+      </table>
+      <br>
+      <table class="lighthouse-report-table">
+        <thead>
+          <tr>
+            <th scope="col">Audits</th>
+            <th scope="col">Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each lighthouse.lighthouseInfo.audits }} 
+            {{{getAuditTableRow this}}}
+          {{/each}}
+        </tbody>
+      </table>      
+    </div>
+    <div class="dates">
+      Last updated on {{lighthouse.date}}
+    </div>
+  </div>
+</div>
