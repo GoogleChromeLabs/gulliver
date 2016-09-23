@@ -26,20 +26,23 @@ body {
   font-weight: 400;
   width: 100%;
   min-width: 310px;
-}
-body {
+  margin: 0;
   background: #F5F5F5;
   position: relative;
-  margin: 0;
   min-height: 100%;
-  padding-bottom: 10px;
+}
+h3 { 
+  font-weight: 400;
+}
+a { 
+  text-decoration: none;
+  color: inherit;
+}
+a:hover { 
+  text-decoration: underline; 
 }
 .container {
-  padding-right: 15px;
-  padding-left: 15px;
-  padding-bottom: 44px;
-  margin-right: auto;
-  margin-left: auto
+  padding: 8px;
 }
 .navbar {
   position: relative;
@@ -257,23 +260,55 @@ button[disabled=disabled], button:disabled {
   border: 2px solid lightgray;
   text-overflow: hidden;
   display: flex;
-  padding: 10px 10px 20px 10px;
+  padding: 16px;
   justify-content: space-between;
-  height: 345px;
   font-size: 14px;
   font-weight: 400;
-  max-width: 800px;
+  max-width: 600px;
   margin: 0 auto;  
+}
+.detail-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 16px;  
+}
+.detail-header > * {
+  font-size: 24px;
+  margin: 0;
+  padding: 0;
+}  
+.pwadetail-header {
+  -webkit-display: flex;
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.detail-description {
+  line-height: 1.5em;
+  text-align: center;
 }
 /* Manifest detail box */
 .manifest-detail {
-  overflow: scroll;
   margin-top: 5px;
+  overflow-x: scroll;
 }
 /* Lighthouse report box */
 .lighthouse-detail {
-  overflow: scroll;
   margin-top: 5px;
+}
+.lighthouse-report-table {
+  width: 100%;
+}
+.lighthouse-report-table th:nth-child(1),
+.lighthouse-report-table td:nth-child(1) { 
+  text-align: left;
+}
+.lighthouse-report-table th:nth-child(2),
+.lighthouse-report-table td:nth-child(2) { 
+  width: 60px;
+  text-align: right;
 }
 .pwadetail-logo {
  display:block;
@@ -282,18 +317,11 @@ button[disabled=disabled], button:disabled {
   font-size: 16px;
   font-weight: 600;
 }
-.pwadetail .lighthouseScore {
-  display: flex;
-  flex-direction: row;
-  height: 24px;
-  line-height: 24px;
-  font-size: 16px;
-}
-.pwadetail .lighthouseLogo {
-  padding-right: 5px;
-}
-.pwadetail .dates {
+.detail-general .dates {
   font-style: italic;
+  margin-top: 16px;
+  font-size: 12px;
+  text-align: center;  
 }
 .form-group {
   display: flex;
@@ -331,10 +359,10 @@ button[disabled=disabled], button:disabled {
 }
 /* Footer */
 .footer {
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: #0A84F5;
   color: white;
 }
@@ -454,15 +482,20 @@ pre {padding: 5px; margin: 5px; }
   font-weight: bold;
 }
 th {
-  padding: 5px;
+  font-size: 18px;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-top: 16px;
+  padding-bottom: 16px;
 }
 td {
-  padding: 10px 5px 3px 5px;
+  padding: 8px;
 }
 table {
   border-spacing: 0;
-  border-collapse: collapse;
+  border-collapse: collapse;  
 }
+thead,
 td {
   border: 1px solid black;
 }
@@ -470,8 +503,13 @@ td {
   width: 400px;
 }
 th {
-    background-color: #9E9E9E;
+  background-color: #1976D2;
+  color: #FFFFFF;
 }
 tr:nth-child(even) {
-  background-color: #BDBDBD
+  background-color: #2196F3;
+  color: #FFFFFF;
+}
+tr:nth-child(odd) {
+  background-color: #BBDEFB;
 }

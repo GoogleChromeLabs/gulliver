@@ -1,23 +1,14 @@
 <div class="detail-general lighthouse-detail">
-  <h3>Lighthouse Report</h3>
+  <div class="detail-header">
+    <h3>LIGHTHOUSE</h3>
+    <div>{{pwa.lighthouseScore}}%</div>
+  </div>
   <div>
     <div>
-      <div>
-        <span id="lighthouse-report-section">Total Score</span>: 
-         {{lighthouse.lighthouseInfo.totalScore}}
-      </div>
-      <div>
-        <span id="lighthouse-report-section">Date</span>
-        {{lighthouse.date}}
-      </div>
       <table class="lighthouse-report-table">
-        <colgroup>
-          <col class="desc"/>
-          <col class="score" align="right"/>
-        </colgroup>
         <thead>
           <tr>
-            <th scope="col" align="left">Aggregated Checks</th>
+            <th scope="col">Aggregated Checks</th>
             <th scope="col">Score</th>
           </tr>
         </thead>
@@ -29,13 +20,9 @@
       </table>
       <br>
       <table class="lighthouse-report-table">
-        <colgroup>
-          <col class="desc"/>
-          <col class="score" align="right"/>
-        </colgroup>
         <thead>
           <tr>
-            <th scope="col" align="left">Audits</th>
+            <th scope="col">Audits</th>
             <th scope="col">Score</th>
           </tr>
         </thead>
@@ -45,6 +32,9 @@
           {{/each}}
         </tbody>
       </table>      
+    </div>
+    <div class="dates">
+      Last updated on {{lighthouse.date}}
     </div>
   </div>
 </div>
