@@ -149,11 +149,11 @@ router.get('/:pwa', (req, res, next) => {
     .then(entity => {
       lighthouseLib.findByPwaId(req.params.pwa)
       .then(lighthouse => {
-          res.render('pwas/view.hbs', {
-            pwa: entity,
-            lighthouse: lighthouse
-          });
-        })
+        res.render('pwas/view.hbs', {
+          pwa: entity,
+          lighthouse: lighthouse
+        });
+      });
     })
     .catch(() => {
       return next();
