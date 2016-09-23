@@ -74,7 +74,10 @@ router.get('/add', (req, res) => {
  * Create a PWA.
  */
 router.post('/add', (req, res, next) => {
-  const manifestUrl = req.body.manifestUrl;
+  let manifestUrl = req.body.manifestUrl.trim();
+  if (manifestUrl.startsWith('http://')) {
+    manifestUrl = manifestUrl.replace('http://', 'https://');
+  }
   const idToken = req.body.idToken;
   let pwa = new Pwa(manifestUrl);
 
