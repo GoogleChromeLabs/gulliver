@@ -74,7 +74,6 @@ describe('models/pwa.js', () => {
     assert.equal(pwa.manifest, manifest);
     assert.equal(pwa.name, 'Example PWA', 'returns correct name');
     assert.equal(pwa.description, 'Example PWA', 'correct description');
-    console.log('aaa' + pwa.startUrl);
     assert.equal(pwa.startUrl, '/index.jsp', 'returns correct startUrl');
     assert.equal(pwa.absoluteStartUrl, 'http://www.example.com/index.jsp', 'returns empty absoluteStartUrl');
     assert.equal(pwa.backgroundColor, '#673AB7', 'backgroundColor is #ffffff');
