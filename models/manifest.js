@@ -17,7 +17,20 @@
 
 const DOMAIN_PATH_REGEXP = /(http[s]*:\/\/[a-z0-9A-Z-\.]+)(\/(.*?\/)*)*/;
 
+/**
+ * Class representing a Web App Manifest
+ */
 class Manifest {
+  constructor(manifestUrl, jsonManifest) {
+    this.url = manifestUrl;
+    this.raw = JSON.stringify(jsonManifest);
+    this.name = jsonManifest.name;
+    this.description = jsonManifest.description;
+    this.startUrl = jsonManifest.start_url;
+    this.backgroundColor = jsonManifest.background_color;
+    this.icons = jsonManifest.icons;
+  }
+
   getBestIcon() {
     function getIconSize(icon) {
       if (!icon.sizes) {
@@ -71,18 +84,6 @@ class Manifest {
       return domain + iconUrl;
     }
     return domain + path + iconUrl;
-  }
-
-  static fromJson(manifestUrl, json) {
-    const manifest = new Manifest();
-    manifest.url = manifestUrl;
-
-    // Copy JSON properties to Manifest.
-    Object.keys(json).forEach(key => {
-      manifest[key] = json[key];
-    });
-
-    return manifest;
   }
 }
 

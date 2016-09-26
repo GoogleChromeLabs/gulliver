@@ -163,6 +163,7 @@ router.get('/:pwa', (req, res, next) => {
         let arg = Object.assign(libMetadata.fromRequest(req), {
           pwa: pwa,
           lighthouse: lighthouse,
+          rawManifestJson: JSON.parse(pwa.manifest.raw),
           title: 'PWA Directory: ' + pwa.name,
           description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description
         });

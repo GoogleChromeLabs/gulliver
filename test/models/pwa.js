@@ -17,6 +17,7 @@
 'use strict';
 
 let assert = require('assert');
+let Manifest = require('../../models/manifest');
 let Pwa = require('../../models/pwa');
 
 describe('models/pwa.js', () => {
@@ -53,7 +54,7 @@ describe('models/pwa.js', () => {
   it('Create a PWA with a Full Manifest', () => {
     let manifestUrl = 'http://www.example.com';
     /* eslint-disable camelcase */
-    let manifest = {
+    let manifestJson = {
       name: 'Example PWA',
       description: 'Example PWA',
       icons: [{
@@ -67,6 +68,7 @@ describe('models/pwa.js', () => {
       theme_color: '#512DA8'
     };
     /* eslint-enable camelcase */
+    let manifest = new Manifest(manifestUrl, manifestJson);
     let pwa = new Pwa(manifestUrl, manifest);
     assert.equal(pwa.manifestUrl, manifestUrl);
     assert.equal(pwa.manifest, manifest);
