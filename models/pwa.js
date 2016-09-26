@@ -19,9 +19,9 @@ const crypto = require('crypto');
 const uri = require('urijs');
 
 class Pwa {
-  constructor(manifestUrl, manifest) {
+  constructor(manifestUrl, manifestModel) {
     this.manifestUrl = manifestUrl;
-    this.manifest = manifest;
+    this.manifest = manifestModel;
     this.lighthouseScore = 0;
     this.created = new Date();
     this.updated = this.created;
@@ -47,7 +47,7 @@ class Pwa {
     if (!this.manifest) {
       return '';
     }
-    return this.manifest.start_url || '';
+    return this.manifest.startUrl || '';
   }
 
   get absoluteStartUrl() {
@@ -64,7 +64,7 @@ class Pwa {
       return '#ffffff';
     }
 
-    return this.manifest.background_color || '#ffffff';
+    return this.manifest.backgroundColor || '#ffffff';
   }
 
   get manifestAsString() {

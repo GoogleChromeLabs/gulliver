@@ -46,7 +46,7 @@ describe('lib.pwa', () => {
   before(done => {
     dataFetcher.readFile(MANIFEST_DATA)
       .then(jsonString => {
-        manifest = Manifest.fromJson(MANIFEST_URL, JSON.parse(jsonString));
+        manifest = new Manifest(MANIFEST_URL, JSON.parse(jsonString));
         pwa = new Pwa(MANIFEST_URL, manifest);
         pwa.id = '123456789';
         dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
