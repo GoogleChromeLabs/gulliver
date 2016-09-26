@@ -1,8 +1,13 @@
 # Gulliver
 
-A PWA Directory example.
+This project provides a directoy of existing Progressive Web Apps (PWAs).
+[pwa-directory.appspot.com](https://pwa-directory.appspot.com/). 
+
+![Screenshot](img/pwa-directory-snapshot.png)
 
 ## Requirements
+
+The following componets are required to run the project:
 
 1. [NodeJS](https://nodejs.org). 
 1. [Google Cloud SDK](https://cloud.google.com/sdk/)
@@ -11,21 +16,22 @@ A PWA Directory example.
 
 ## Installation
 
-1. Clone the repository on your computer.
-1. Edit [`config/config.json`](config/config.json) as appropriate. (Or set environment variables.)
-    * Run `gcloud init` to setup your project if necessary.
-1. Run `npm i` to install dependencies.
-1. Start the project with `npm start`.
+1. Clone this GitHub repository on your computer.
 
-Summary:
-
-```shell
-$ git clone https://github.com/GoogleChrome/gulliver.git
-$ cd gulliver
-$ gcloud init
-$ npm i
-$ npm start
 ```
+$ git clone https://github.com/GoogleChrome/gulliver.git
+```
+
+2. ```cd gulliver```
+
+2. Edit the [`config/config.json`](config/config.json) file to contain the
+information appropriate to your project. Alternatively, you can set environment variables corresponding to those defined in this file.
+
+3. Run `gcloud init` to setup your project.
+4. Run `npm i` to install the dependencies declared in `package.json`
+5. Run `npm start` to start the project; the default port used is `8080` but
+   you can specify another port by running `PORT=<your-port> npm start`
+6. Hit the URL `localhost:8080` or `localhost:<your-port>`
 
 ## Running Tests
 
