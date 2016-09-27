@@ -19,11 +19,13 @@ const path = require('path');
 const express = require('express');
 const config = require('./config/config');
 const hbs = require('hbs');
+const helmet = require('helmet');
 const helpers = require('./views/helpers');
 const app = express();
 const bodyParser = require('body-parser');
 const serveStatic = require('serve-static');
 
+app.use(helmet());
 app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -66,9 +68,13 @@ app.use((req, res) => {
 // Basic error handler
 app.use((err, req, res) => {
   console.error(err);
-  // If our routes specified a specific response, then send that. Otherwise,
-  // send a generic message so as not to leak anything.
-  res.status(500).send(err.response || 'Something broke!');
+  if (err.status === 404) {
+    res.status(404).render('404.hbs');
+  } else {
+    // If our routes specified a specific response, then send that. Otherwise,
+    // send a generic message so as not to leak anything.
+    res.status(500).send(err.response || 'Something broke!');
+  }
 });
 
 if (module === require.main) {

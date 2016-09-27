@@ -15,10 +15,27 @@
 
 const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
+const crypto = require('crypto');
+const csp = require('helmet-csp');
 
 router.use((req, res, next) => {
   // The PWA controller only needs text/html, others may need json
   res.setHeader('Content-Type', 'text/html');
+
+  // Content Security Policy directives and two nonce for inline scripts
+  req.nonce1 = crypto.randomBytes(16).toString('hex');
+  req.nonce2 = crypto.randomBytes(16).toString('hex');
+  router.use(csp({
+    directives: {
+      defaultSrc: ['\'self\'', 'accounts.google.com', 'apis.google.com'],
+      scriptSrc: ['\'self\'', '\'unsafe-eval\'', 'apis.google.com', '*.google-analytics.com',
+        '\'nonce-' + req.nonce1 + '\'',
+        '\'nonce-' + req.nonce2 + '\''],
+      styleSrc: ['\'self\'', '\'unsafe-inline\'', 'cdnjs.cloudflare.com/ajax/libs/font-awesome/'],
+      fontSrc: ['\'self\'', 'cdnjs.cloudflare.com/ajax/libs/font-awesome/'],
+      imgSrc: ['\'self\'', 'storage.googleapis.com', '*.google-analytics.com']
+    }
+  }));
   next();
 });
 

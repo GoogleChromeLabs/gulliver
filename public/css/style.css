@@ -94,6 +94,8 @@ a:hover {
 }
 .navbar #github-logo {
   vertical-align:middle;
+  width: 24px;
+  height: 24px;
 }
 /* Flex NavBar */
 @media (max-width: 930px) {
@@ -542,6 +544,7 @@ button[disabled=disabled], button:disabled {
     max-width: calc(14.28571% - 10px);
   }
 }
+
 /* Styles for highlighted JSON */
 pre {padding: 5px; margin: 5px; }
 .string { color: #0288D1; }
