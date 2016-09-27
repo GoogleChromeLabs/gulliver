@@ -1,0 +1,7 @@
+indexes:
+- kind: Lighthouse
+  properties:
+  - name: pwaId
+    direction: asc
+  - name: date
+    direction: desc
