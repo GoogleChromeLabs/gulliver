@@ -1,12 +1,10 @@
 # Gulliver 
 
-Gulliver is a directory of example PWAs.
-
-Progressive Web App (PWA) is an umbrella term used to define web applications that use modern web development technologies to provide user experiences matching those of native mobile apps. Another way to express the definition is: “A PWA is a model for creating app-like experiences using the latest Web Technologies progressively”.  The progressive  aspect indicates that the apps will provide progressively-enhanced user experiences as new and more advanced features become available in the platforms they run on.
+**Progressive Web App (PWA)** is an umbrella term used to define web applications that use modern web development technologies to provide user experiences matching those of native mobile apps. Another way to express the definition is: “A PWA is a model for creating app-like experiences using the latest Web Technologies progressively”.  The progressive  aspect indicates that the apps will provide progressively-enhanced user experiences as new and more advanced features become available in the platforms they run on.
 
 PWAs seek to provide native-app-like behavior and characteristics in web apps, in order to improve user retention and performance, while at the same time eliminating the disadvantages of developing and maintaining a native app. By providing an app-like experience from a web development platform, PWAs are able to provide significant value on several dimensions
 
-The [Gulliver project](https://pwa-directory.appspot.com/), provides a directoy of existing Progressive Web Apps (PWAs).
+[Gulliver](https://pwa-directory.appspot.com/) is a directory of example PWAs.
 
 ## Contents
 
@@ -20,10 +18,6 @@ Details Page #1            |  Details Page #2
 :-------------------------:|:-------------------------:
 ![](img/gulliver-details-one.png)  |  ![](img/gulliver-details-two.png)
 
-## Lighthouse PWA Analyzer
-
-Gulliver reports an evaluation of the progressiveness of each registered PWA. This evaluation is done by Lighthouse, which is a tool that runs a set of checks vlaidating the existence of the features, capabilities, and performance that should characterize a PWA. You can learn more about Lighouse in the [GitHub repository](https://github.com/GoogleChrome/lighthouse), or in this [video](https://www.youtube.com/watch?v=KiV2p46rWjU).
-
 ## Requirements
 
 Gulliver's is built using the [ExpressJS](https://expressjs.com/) web framework for Node.js, and uses the [Google Cloud Platform](https://cloud.google.com/) (GCP) for computing and storage services. Therefore,the following components are required to run the project:
@@ -34,29 +28,30 @@ Gulliver's is built using the [ExpressJS](https://expressjs.com/) web framework 
 
 1. A [Google Cloud Console](https://console.cloud.google.com/) project. A GCC project forms the basis of accessing the GCP. 
 
-1. [Memcached](https://memcached.org/) installed and running on localhost:11211. Check these [installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data) for guidance.
+1. [Memcached](https://memcached.org/) : a distributed memory object caching system.
 
 ## Running Gulliver
 
 For running Gulliver locally the following steps must be followed:
 
-1. Create a Google Cloud Console project. You can check the Cloud Platform Console [documentation](https://support.google.com/cloud/answer/6251787) for instructions on how to do it.
+1. Create a **Google Cloud Console project**. You can check the Cloud Platform Console [documentation](https://support.google.com/cloud/answer/6251787) for instructions on how to do it.
 
-1. Create indexes for the [Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview): `gcloud preview datastore create-indexes index.yaml`
+1. Create indexes for the **[Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview)**: `gcloud preview datastore create-indexes index.yaml`
 
-1. Clone the GitHub repository: `$ git clone https://github.com/GoogleChrome/gulliver.git`
+1. Install **Memcached** and run it on `localhost:11211`. Check these [installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data) for guidance.
+
+1. **Clone** the GitHub repository: `$ git clone https://github.com/GoogleChrome/gulliver.git`
 
 1. Switch into the project directory: `cd gulliver`
 
 1. Edit the [`config/config.json`](config/config.json) file to contain the
 information associated with your Google Cloud Console project. Alternatively, you can set environment variables corresponding to those defined in the config file.
 
-1. Run `gcloud init` to setup your project.
+1. Run **`gcloud init`** to setup your project.
 
-1. Run `npm i` to install the dependencies declared in `package.json`
+1. Run **`npm i`** to install the dependencies declared in `package.json`
 
-1. Run `npm start` to start the project; the default port used is `8080` but
-   you can specify another port by running `PORT=<your-port> npm start`
+1. Run **`npm start`** to start the project; the default port used is `8080` but you can specify another port by running `PORT=<your-port> npm start`
 
 1. Access the URL `localhost:8080` or `localhost:<your-port>` from your browser.
 
@@ -67,6 +62,10 @@ To verify that everything is working properly you can run the project's tests:
 1. `npm test` to run lint + tests + coverage report.
 2. `npm run mocha` to run all the tests only.
 3. `npm run coverage` to run tests + coverage report.
+
+## Lighthouse PWA Analyzer
+
+Gulliver reports an evaluation of the "progressiveness" of each registered PWA. This evaluation is done by Lighthouse, which is a tool that runs a set of checks vlaidating the existence of the features, capabilities, and performance that should characterize a PWA. You can learn more about Lighouse in the [GitHub repository](https://github.com/GoogleChrome/lighthouse), or in this [video](https://www.youtube.com/watch?v=KiV2p46rWjU).
 
 ## References
 
@@ -79,9 +78,7 @@ Introductory article with historical perspective
 
 + [Getting Started with Progressive Web Apps](https://addyosmani.com/blog/getting-started-with-progressive-web-apps/): Sound introduction on the fundamental elements behind the development of PWAs
 
-+ [The Building Blocks of PWAs](https://www.smashingmagazine.com/2016/09/the-building-blocks-of-progressive-web-apps/): 
-Interesting overall view of what PWAs are 
-
++ [The Building Blocks of PWAs](https://www.smashingmagazine.com/2016/09/the-building-blocks-of-progressive-web-apps/): Interesting overall view of PWAs. 
 
 ## License
 
