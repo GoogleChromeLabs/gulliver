@@ -1,0 +1,20 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Julian Toledo -- @juliantoledo
+    Michael Stillwell -- @ithinkihaveacat
+    Andre Bandarra -- @andreban
+    Alberto Medina -- @amedina
+
+# THANKS
+
+    Ade Oshineye -- @ade_oshineye
+
+# TECHNOLOGY COLOPHON
+
+    CSS3, HTML5, GoogleChrome sw-toolbox
+    Node, Google App Engine, GoogleChrome Lighthouse
+
+    Source: https://github.com/GoogleChrome/gulliver
