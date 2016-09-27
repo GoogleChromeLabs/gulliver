@@ -1,5 +1,7 @@
 # Gulliver 
 
+Gulliver is a directory of example PWAs.
+
 Progressive Web App (PWA) is an umbrella term used to define web applications that use modern web development technologies to provide user experiences matching those of native mobile apps. Another way to express the definition is: “A PWA is a model for creating app-like experiences using the latest Web Technologies progressively”.  The progressive  aspect indicates that the apps will provide progressively-enhanced user experiences as new and more advanced features become available in the platforms they run on.
 
 PWAs seek to provide native-app-like behavior and characteristics in web apps, in order to improve user retention and performance, while at the same time eliminating the disadvantages of developing and maintaining a native app. By providing an app-like experience from a web development platform, PWAs are able to provide significant value on several dimensions
@@ -10,42 +12,57 @@ The [Gulliver project](https://pwa-directory.appspot.com/), provides a directoy 
 
 In Gulliver's landing page you can browse the set of currently registered PWAs as depicted in the following landing page snapshot:
 
-![Screenshot](img/pwa-directory-snapshot.png)
+![Screenshot](img/gulliver-landing-page.png)
 
-If you click on any particular PWA you want, Gulliver takes you to a detail page showing the results of an evaluation done on that specific PWA using the [Lighthouse PWA Analyzer](https://www.youtube.com/watch?v=KiV2p46rWjU) tool, and a view of the associated [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest) file for the application:
+If you click on any particular PWA you want, Gulliver takes you to a detail page showing the results of an evaluation done on that specific PWA using the  [Lighthouse PWA Analyzer](https://www.youtube.com/watch?v=KiV2p46rWjU) tool (Details page #1), and a view of the associated [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest) file  for the application (Details Page #2):
 
-![Screenshot](img/Gulliver-details-one.png)
-![Screenshot](img/Gulliver-details-two.png)
+Details Page #1            |  Details Page #2
+:-------------------------:|:-------------------------:
+![](img/gulliver-details-one.png)  |  ![](img/gulliver-details-two.png)
+
+## Lighthouse PWA Analyzer
+
+Gulliver reports an evaluation of the progressiveness of each registered PWA. This evaluation is done by Lighthouse, which is a tool that runs a set of checks vlaidating the existence of the features, capabilities, and performance that should characterize a PWA. You can learn more about Lighouse in the [GitHub repository](https://github.com/GoogleChrome/lighthouse), or in this [video](https://www.youtube.com/watch?v=KiV2p46rWjU).
 
 ## Requirements
 
-The following components are required to run the project:
+Gulliver's is built using the [ExpressJS](https://expressjs.com/) web framework for Node.js, and uses the [Google Cloud Platform](https://cloud.google.com/) (GCP) for computing and storage services. Therefore,the following components are required to run the project:
 
 1. [NodeJS](https://nodejs.org). 
-1. [Google Cloud SDK](https://cloud.google.com/sdk/)
-1. A [Google Cloud Console](https://console.cloud.google.com/) project.
-1. Memcached installed and running on localhost:11211. [Installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data).
 
-## Installation
+1. [Google Cloud SDK](https://cloud.google.com/sdk/). A set of tools for GCP that you can use to access the Google Compute Engine and the Google Cloud Storage, which are two components of GCP used by Gulliver.
 
-1. Clone this GitHub repository on your computer.
+1. A [Google Cloud Console](https://console.cloud.google.com/) project. A GCC project forms the basis of accessing the GCP. 
 
-```
-$ git clone https://github.com/GoogleChrome/gulliver.git
-```
+1. [Memcached](https://memcached.org/) installed and running on localhost:11211. Check these [installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data) for guidance.
 
-2. ```cd gulliver```
+## Running Gulliver
 
-2. Edit the [`config/config.json`](config/config.json) file to contain the
-information appropriate to your project. Alternatively, you can set environment variables corresponding to those defined in this file.
+For running Gulliver locally the following steps must be followed:
 
-3. Run `gcloud init` to setup your project.
-4. Run `npm i` to install the dependencies declared in `package.json`
-5. Run `npm start` to start the project; the default port used is `8080` but
+1. Create a Google Cloud Console project. You can check the Cloud Platform Console [documentation](https://support.google.com/cloud/answer/6251787) for instructions on how to do it.
+
+1. Create indexes for the [Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview): `gcloud preview datastore create-indexes index.yaml`
+
+1. Clone the GitHub repository: `$ git clone https://github.com/GoogleChrome/gulliver.git`
+
+1. Switch into the project directory: `cd gulliver`
+
+1. Edit the [`config/config.json`](config/config.json) file to contain the
+information associated with your Google Cloud Console project. Alternatively, you can set environment variables corresponding to those defined in the config file.
+
+1. Run `gcloud init` to setup your project.
+
+1. Run `npm i` to install the dependencies declared in `package.json`
+
+1. Run `npm start` to start the project; the default port used is `8080` but
    you can specify another port by running `PORT=<your-port> npm start`
-6. Hit the URL `localhost:8080` or `localhost:<your-port>`
+
+1. Access the URL `localhost:8080` or `localhost:<your-port>` from your browser.
 
 ## Running Tests
+
+To verify that everything is working properly you can run the project's tests:
 
 1. `npm test` to run lint + tests + coverage report.
 2. `npm run mocha` to run all the tests only.
@@ -53,7 +70,7 @@ information appropriate to your project. Alternatively, you can set environment 
 
 ## References
 
-If you are interested in finding out more about what PWAs are and how to go about incorporating the principles of PWAs into the development of your applications, check the following references which might be helpful:
+To find out more about what PWAs are and how to go about incorporating the principles of PWAs into the development of your applications, check the following references which provide introductory information and references:
 
 + [Progressive Web Apps](https://developers.google.com/web/#progressive-web-apps): Documentation entry point. Here you will find several resources to get started developing PWAs
 
