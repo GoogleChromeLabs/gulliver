@@ -1,5 +1,7 @@
 # Gulliver 
 
+Gulliver is a PWA directory.
+
 Progressive Web App (PWA) is an umbrella term used to define web applications that use modern web development technologies to provide user experiences matching those of native mobile apps. Another way to express the definition is: “A PWA is a model for creating app-like experiences using the latest Web Technologies progressively”.  The progressive  aspect indicates that the apps will provide progressively-enhanced user experiences as new and more advanced features become available in the platforms they run on.
 
 PWAs seek to provide native-app-like behavior and characteristics in web apps, in order to improve user retention and performance, while at the same time eliminating the disadvantages of developing and maintaining a native app. By providing an app-like experience from a web development platform, PWAs are able to provide significant value on several dimensions
@@ -14,8 +16,10 @@ In Gulliver's landing page you can browse the set of currently registered PWAs a
 
 If you click on any particular PWA you want, Gulliver takes you to a detail page showing the results of an evaluation done on that specific PWA using the [Lighthouse PWA Analyzer](https://www.youtube.com/watch?v=KiV2p46rWjU) tool, and a view of the associated [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest) file for the application:
 
-![Screenshot](img/Gulliver-details-one.png)
-![Screenshot](img/Gulliver-details-two.png)
+<p>
+<span>![Screenshot](img/Gulliver-details-one.png)</span>
+<span>![Screenshot](img/Gulliver-details-two.png)</span>
+</p>
 
 ## Requirements
 
