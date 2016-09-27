@@ -36,7 +36,7 @@ For running Gulliver locally the following steps must be followed:
 
 1. Create a **Google Cloud Console project**. You can check the Cloud Platform Console [documentation](https://support.google.com/cloud/answer/6251787) for instructions on how to do it.
 
-1. Create indexes for the **[Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview)**: `gcloud preview datastore create-indexes index.yaml`
+1. Create indexes for the [Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview): `gcloud preview datastore create-indexes index.yaml`
 
 1. Install **Memcached** and run it on `localhost:11211`. Check these [installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data) for guidance.
 
@@ -65,7 +65,7 @@ To verify that everything is working properly you can run the project's tests:
 
 ## Lighthouse PWA Analyzer
 
-Gulliver reports an evaluation of the "progressiveness" of each registered PWA. This evaluation is done by Lighthouse, which is a tool that runs a set of checks vlaidating the existence of the features, capabilities, and performance that should characterize a PWA. You can learn more about Lighouse in the [GitHub repository](https://github.com/GoogleChrome/lighthouse), or in this [video](https://www.youtube.com/watch?v=KiV2p46rWjU).
+Gulliver reports an evaluation of the "progressiveness" of each registered PWA. This evaluation is done by Lighthouse, which is a tool that runs a set of checks validating the existence of the features, capabilities, and performance that should characterize a PWA. You can learn more about Lighthouse in the [GitHub repository](https://github.com/GoogleChrome/lighthouse), or in this [video](https://www.youtube.com/watch?v=KiV2p46rWjU).
 
 ## References
 
