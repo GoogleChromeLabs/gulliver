@@ -62,14 +62,14 @@ app.use(require('./controllers'));
 
 // If no route has matched, return 404
 app.use((req, res) => {
-  res.status(404).render('404.hbs');
+  res.status(404).render('404.hbs', {nonce1: req.nonce1, nonce2: req.nonce2});
 });
 
 // Basic error handler
-app.use((err, req, res) => {
+app.use((err, req, res, _) => {
   console.error(err);
   if (err.status === 404) {
-    res.status(404).render('404.hbs');
+    res.status(404).render('404.hbs', {nonce1: req.nonce1, nonce2: req.nonce2});
   } else {
     // If our routes specified a specific response, then send that. Otherwise,
     // send a generic message so as not to leak anything.
