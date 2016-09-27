@@ -66,7 +66,7 @@ app.use((req, res) => {
 });
 
 // Basic error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err);
   if (err.status === 404) {
     res.status(404).render('404.hbs');
