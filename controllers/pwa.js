@@ -90,18 +90,20 @@ router.post('/add', (req, res, next) => {
   let pwa = new Pwa(manifestUrl);
 
   if (!manifestUrl) {
-    res.render('pwas/form.hbs', {
+    let arg = Object.assign(libMetadata.fromRequest(req), {
       pwa,
       error: 'no manifest provided'
     });
+    res.render('pwas/form.hbs', arg);
     return;
   }
 
   if (!idToken) {
-    res.render('pwas/form.hbs', {
+    let arg = Object.assign(libMetadata.fromRequest(req), {
       pwa,
       error: 'user not logged in'
     });
+    res.render('pwas/form.hbs', arg);
     return;
   }
 
@@ -142,10 +144,11 @@ router.post('/add', (req, res, next) => {
         }).join(', ');
         err = s;
       }
-      res.render('pwas/form.hbs', {
+      let arg = Object.assign(libMetadata.fromRequest(req), {
         pwa,
         error: err
       });
+      res.render('pwas/form.hbs', arg);
       return;
     });
 });
@@ -171,6 +174,7 @@ router.get('/:pwa', (req, res, next) => {
       });
     })
     .catch(err => {
+      err.status = 404;
       return next(err);
     });
 });

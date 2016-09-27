@@ -66,11 +66,15 @@ app.use((req, res) => {
 });
 
 // Basic error handler
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   console.error(err);
-  // If our routes specified a specific response, then send that. Otherwise,
-  // send a generic message so as not to leak anything.
-  res.status(500).send(err.response || 'Something broke!');
+  if (err.status === 404) {
+    res.status(404).render('404.hbs');
+  } else {
+    // If our routes specified a specific response, then send that. Otherwise,
+    // send a generic message so as not to leak anything.
+    res.status(500).send(err.response || 'Something broke!');
+  }
 });
 
 if (module === require.main) {
