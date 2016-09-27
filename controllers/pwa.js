@@ -168,7 +168,8 @@ router.get('/:pwa', (req, res, next) => {
           lighthouse: lighthouse,
           rawManifestJson: JSON.parse(pwa.manifest.raw),
           title: 'PWA Directory: ' + pwa.name,
-          description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description
+          description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description,
+          referer: req.headers.referer
         });
         res.render('pwas/view.hbs', arg);
       });
