@@ -19,10 +19,24 @@ const path = require('path');
 const express = require('express');
 const config = require('./config/config');
 const hbs = require('hbs');
+const helmet = require('helmet');
+const csp = require('helmet-csp');
 const helpers = require('./views/helpers');
 const app = express();
 const bodyParser = require('body-parser');
 const serveStatic = require('serve-static');
+
+app.use(helmet());
+app.use(csp({
+  directives: {
+    defaultSrc: ['\'self\'', 'accounts.google.com', 'apis.google.com'],
+    scriptSrc: ['\'self\'', '\'unsafe-inline\'', '\'unsafe-eval\'',
+      'apis.google.com', '*.google-analytics.com'],
+    styleSrc: ['\'self\'', '\'unsafe-inline\'', 'cdnjs.cloudflare.com/ajax/libs/font-awesome/'],
+    fontSrc: ['\'self\'', 'cdnjs.cloudflare.com/ajax/libs/font-awesome/'],
+    imgSrc: ['\'self\'', 'storage.googleapis.com', '*.google-analytics.com']
+  }
+}));
 
 app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));

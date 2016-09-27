@@ -48,6 +48,7 @@
     "google-cloud": "^0.39.0",
     "handlebars": "^4.0.5",
     "hbs": "^4.0.0",
+    "helmet": "^2.2.0",
     "jsdom": "^9.5.0",
     "memcached": "^2.2.2",
     "moment": "^2.14.1",
