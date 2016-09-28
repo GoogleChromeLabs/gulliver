@@ -18,15 +18,15 @@ Gulliver itself has been implemented as a PWA; therefore it is designed to work 
 
 ## Requirements
 
-Gulliver's is built using the [ExpressJS](https://expressjs.com/) web framework for Node.js, and uses the [Google Cloud Platform](https://cloud.google.com/) (GCP) for computing and storage services. Therefore,the following components are required to run the project:
+Gulliver was built using the [ExpressJS](https://expressjs.com/) web framework for Node.js, and uses the [Google Cloud Platform](https://cloud.google.com/) (GCP) for computing and storage services. Therefore, the following components are required to run the project:
 
-1. [NodeJS](https://nodejs.org). 
+1. [NodeJS](https://nodejs.org). A JavaScript runtime built on Chrome's V8 JavaScript engine.
 
 1. [Google Cloud SDK](https://cloud.google.com/sdk/). A set of tools for GCP that you can use to access the Google Compute Engine and the Google Cloud Storage, which are two components of GCP used by Gulliver.
 
 1. A [Google Cloud Console](https://console.cloud.google.com/) project. A GCC project forms the basis of accessing the GCP. 
 
-1. [Memcached](https://memcached.org/) : a distributed memory object caching system.
+1. [Memcached](https://memcached.org/). A distributed memory object caching system.
 
 ## Running Gulliver
 
