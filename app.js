@@ -19,13 +19,12 @@ const path = require('path');
 const express = require('express');
 const config = require('./config/config');
 const hbs = require('hbs');
-const helmet = require('helmet');
 const helpers = require('./views/helpers');
 const app = express();
 const bodyParser = require('body-parser');
 const serveStatic = require('serve-static');
 
-app.use(helmet());
+app.disable('x-powered-by');
 app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
