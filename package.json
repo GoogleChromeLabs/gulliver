@@ -6,8 +6,9 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
+    "prestart": "tsc --allowJs --removeComments --sourceMap --outFile public/js/gulliver.js public/js/gulliver.es6.js",
     "monitor": "nodemon app.js",
-    "deploy": "gcloud preview app deploy app.yaml",
+    "deploy": "npm run prestart && gcloud app deploy app.yaml",
     "mocha": "node_modules/.bin/mocha -R test/ -t 60000",
     "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -R  test/**/*",
     "lint": "node_modules/.bin/eslint .",
@@ -42,8 +43,8 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "cheerio": "^0.22.0",
-    "express": "^4.13.4",
     "dompurify": "^0.8.3",
+    "express": "^4.13.4",
     "google-auth-library": "^0.9.8",
     "google-cloud": "^0.41.2",
     "handlebars": "^4.0.5",
@@ -55,9 +56,10 @@
     "moment": "^2.14.1",
     "nconf": "^0.8.4",
     "node-fetch": "^1.5.3",
-    "serve-static": "^1.11.1",
     "parse-color": "^1.0.0",
+    "serve-static": "^1.11.1",
     "sw-toolbox": "^3.2.1",
+    "typescript": "^2.0.3",
     "urijs": "^1.18.1"
   },
   "devDependencies": {

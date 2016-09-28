@@ -28,12 +28,12 @@ router.use((req, res, next) => {
   router.use(csp({
     directives: {
       defaultSrc: ['\'self\'', 'accounts.google.com', 'apis.google.com'],
-      scriptSrc: ['\'self\'', '\'unsafe-eval\'', 'apis.google.com', '*.google-analytics.com',
+      scriptSrc: ['\'self\'', '\'unsafe-eval\'', 'https://apis.google.com', '*.google-analytics.com',
         '\'nonce-' + req.nonce1 + '\'',
         '\'nonce-' + req.nonce2 + '\''],
-      styleSrc: ['\'self\'', '\'unsafe-inline\'', 'cdnjs.cloudflare.com/ajax/libs/font-awesome/'],
-      fontSrc: ['\'self\'', 'cdnjs.cloudflare.com/ajax/libs/font-awesome/'],
-      imgSrc: ['\'self\'', 'storage.googleapis.com', '*.google-analytics.com']
+      styleSrc: ['\'self\'', '\'unsafe-inline\'', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/'],
+      fontSrc: ['\'self\'', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/'],
+      imgSrc: ['\'self\'', 'https://storage.googleapis.com', '*.google-analytics.com']
     }
   }));
   next();

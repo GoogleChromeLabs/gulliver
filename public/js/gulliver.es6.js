@@ -1,3 +1,8 @@
+/*
+ * Generate gulliver.js from this file via `npm prestart`. (`npm start` will run
+ * `prestart` automatically.)
+ */
+
 /* eslint-env browser */
 
 /**
