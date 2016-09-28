@@ -5,3 +5,5 @@ npm-debug.log
 .jshintrc
 .idea/
 key.json
+public/js/gulliver.js
+public/js/gulliver.js.map
