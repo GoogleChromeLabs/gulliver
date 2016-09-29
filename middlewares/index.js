@@ -24,11 +24,11 @@ router.use((req, res, next) => {
 
   /* eslint-disable quotes */
   res.setHeader('content-security-policy', [
-    `default-src 'self' accounts.google.com apis.google.com`,
-    `script-src 'self' 'unsafe-eval' https://apis.google.com *.google-analytics.com`,
+    `default-src 'self' https://accounts.google.com https://apis.google.com`,
+    `script-src 'self' 'unsafe-eval' https://apis.google.com https://www.google-analytics.com`,
     `style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/`,
     `font-src 'self' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/`,
-    `img-src 'self' https://storage.googleapis.com *.google-analytics.com`
+    `img-src 'self' https://storage.googleapis.com https://www.google-analytics.com`
   ].join('; '));
   /* eslint-enable quotes */
   res.setHeader('x-content-type-options', 'nosniff');
