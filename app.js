@@ -35,8 +35,10 @@ helpers.registerHelpers(hbs);
 // Make variables available to *all* templates
 hbs.localsAsTemplateData(app);
 app.locals.configstring = JSON.stringify({
-  client_id: config.get('CLIENT_ID'), // eslint-disable-line camelcase
-  ga_id: config.get('GOOGLE_ANALYTICS') // eslint-disable-line camelcase
+  /* eslint-disable camelcase */
+  client_id: config.get('CLIENT_ID'),
+  ga_id: config.get('GOOGLE_ANALYTICS')
+  /* eslint-enable camelcase */
 });
 
 app.use(bodyParser.urlencoded({extended: true}));
