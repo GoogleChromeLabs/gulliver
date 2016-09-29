@@ -294,9 +294,13 @@ function setupSignin() {
  * Register service worker.
  */
 function setupServiceWorker() {
-  navigator.serviceWorker.register('/sw.js').then(r => {
-    console.log('REGISTRATION', r);
-  });
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(r => {
+      console.log('REGISTRATION', r);
+    });
+  } else {
+    console.log('SW not registered; navigator.serviceWorker is not available');
+  }
 }
 
 function setupConfig() {
