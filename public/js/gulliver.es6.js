@@ -6,6 +6,20 @@
 /* eslint-env browser */
 
 /**
+ * The `gapiReady` global resolves to window.gapi.
+ */
+window.gapiReady = window.gapiReady || new Promise(resolve => {
+  // Adapted from GA embed code
+  const c = 'gapiResolve';
+  const s = document.createElement('script');
+  const p = document.getElementsByTagName('script')[0];
+  s.async = 1;
+  s.src = `https://apis.google.com/js/api.js?onload=${c}`;
+  p.parentNode.insertBefore(s, p);
+  window[c] = () => resolve(window.gapi);
+});
+
+/**
  * Note: window.gapiReady must be a promise that resolves to
  * window.gapi.
  *
@@ -280,11 +294,25 @@ function setupSignin() {
  * Register service worker.
  */
 function setupServiceWorker() {
-  navigator.serviceWorker.register('/sw.js').then(r => {
-    console.log('REGISTRATION', r);
-  });
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(r => {
+      console.log('REGISTRATION', r);
+    });
+  } else {
+    console.log('SW not registered; navigator.serviceWorker is not available');
+  }
 }
 
+function setupConfig() {
+  const config = document.getElementById('config');
+  if (config) {
+    window.__config = JSON.parse(config.innerHTML);
+  } else {
+    console.log('CONFIG NOT FOUND');
+  }
+}
+
+setupConfig();
 setupOnlineAware();
 setupSignedinAware();
 setupSignin();
@@ -294,3 +322,13 @@ setupServiceWorker();
 // Fire 'online' or 'offline' event on page load. (Without this, would only
 // fire on change.)
 window.dispatchEvent(new CustomEvent(navigator.onLine ? 'online' : 'offline'));
+
+// GA embed code
+/* eslint-disable */
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+ga('create', window.__config.ga_id, 'auto');
+ga('send', 'pageview');
+/* eslint-enable */

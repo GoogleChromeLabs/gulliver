@@ -30,19 +30,11 @@
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
-<script nonce={{nonce2}}>
-  window.gapiReady = new Promise(resolve => {
-    window.gapiResolve = () => {
-      resolve(window.gapi);
-    };
-  });
-  window.__config = {{{configstring}}};
+<script id="config" type="application/json">
+{{{configstring}}}
 </script>
-<script src="https://apis.google.com/js/api.js?onload=gapiResolve" async defer></script>
 <script src="/js/gulliver.js" async defer></script>
 
 {{> metadata}}
-
-{{> analytics}}
 
 <!-- End of head include. -->
