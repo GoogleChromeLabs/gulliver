@@ -1,5 +1,10 @@
 /* eslint-env serviceworker, browser */
 
+// sw-offline-google-analytics *must* be imported and initialized before
+// sw-toolbox, because its 'fetch' event handler needs to run first.
+importScripts('/sw-offline-google-analytics/offline-google-analytics-import.js');
+goog.offlineGoogleAnalytics.initialize();
+
 importScripts('/sw-toolbox/sw-toolbox.js'); /* global toolbox */
 
 // URL to return in place of the "offline dino" when client is
