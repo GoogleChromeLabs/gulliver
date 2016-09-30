@@ -48,7 +48,7 @@
     "google-auth-library": "^0.9.8",
     "google-cloud": "^0.41.2",
     "handlebars": "^4.0.5",
-    "hbs": "^4.0.0",    
+    "hbs": "^4.0.0",
     "jsdom": "^9.5.0",
     "memcached": "^2.2.2",
     "moment": "^2.14.1",
@@ -57,6 +57,7 @@
     "node-fetch": "^1.5.3",
     "parse-color": "^1.0.0",
     "serve-static": "^1.11.1",
+    "sw-offline-google-analytics": "^1.1.1",
     "sw-toolbox": "^3.2.1",
     "typescript": "^2.0.3",
     "urijs": "^1.18.1"
