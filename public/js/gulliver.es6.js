@@ -291,6 +291,19 @@ function setupSignin() {
 }
 
 /**
+ * Disable the save button after been clicked to avoid double submission.
+ */
+function setupSaveButton() {
+  const submitButton = document.getElementById('pwaSubmit');
+  if (submitButton) {
+    submitButton.addEventListener('click', _ => {
+      submitButton.disabled = true;
+      document.getElementById('pwaForm').submit();
+    });
+  }
+}
+
+/**
  * Register service worker.
  */
 function setupServiceWorker() {
@@ -316,6 +329,7 @@ setupConfig();
 setupOnlineAware();
 setupSignedinAware();
 setupSignin();
+setupSaveButton();
 setupEventHandlers();
 setupServiceWorker();
 
