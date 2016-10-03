@@ -510,6 +510,7 @@ button[disabled=disabled], button:disabled {
   box-sizing: border-box;
   background: #e0ddd5;
   color: #171e42;
+  padding: 10px;
   margin-left: 10px;
   margin-top: 10px;
 }
