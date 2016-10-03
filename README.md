@@ -16,6 +16,10 @@ Details Page #1            |  Details Page #2
 
 Gulliver itself has been implemented as a PWA; therefore it is designed to work well in any kind of device, including desktop web browsers (see landing page), and in mobile devices (see details page).
 
+## FAQ
+
+[Visit our FAQ Page](https://github.com/GoogleChrome/gulliver/blob/master/FAQ.md)
+
 ## Requirements
 
 Gulliver was built using the [ExpressJS](https://expressjs.com/) web framework for Node.js, and uses the [Google Cloud Platform](https://cloud.google.com/) (GCP) for computing and storage services. Therefore, the following components are required to run the project:
