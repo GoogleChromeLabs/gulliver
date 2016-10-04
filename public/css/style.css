@@ -77,8 +77,8 @@ a:hover {
   background-position: left center;
   background-repeat: no-repeat;
   background-image: -webkit-image-set( url(/favicons/android-chrome-48x48.png) 1x, url(/favicons/android-chrome-96x96.png) 2x );
-  -webkit-filter: drop-shadow( 1px 1px 1px #000 );
-          filter: drop-shadow( 1px 1px 1px #000 );
+  -webkit-filter: drop-shadow( 1px 1px 1px #333 );
+          filter: drop-shadow( 1px 1px 1px #333 );
 }
 .navbar-subtitle {
   height: 20px;
@@ -140,7 +140,7 @@ a:hover {
   margin-bottom: 15px;
   line-height: 45px;
   height: 45px;
-  border: 1px grey;
+  border: 1px lightgray;
   border-bottom-style: solid;
 }
 .section-title .back {
@@ -171,7 +171,7 @@ a:hover {
 }
 .section-title .activetab {
   background:#F5F5F5;
-  border: 1px grey;
+  border: 1px lightgray;
   border-top-style: solid;
   border-right-style: solid;
   border-left-style: solid;
@@ -239,7 +239,7 @@ button[disabled=disabled], button:disabled {
 
 /* PWA List Box */
 .pwabox {
-  border: 2px solid lightgray;
+  border: 1px solid lightgray;
   text-overflow: hidden;
 }
 .pwabox-body {
@@ -300,7 +300,7 @@ button[disabled=disabled], button:disabled {
   display: flex;
   -ms-flex-flow: column;
       flex-flow: column;
-  border: 2px solid lightgray;
+  border: 1px solid lightgray;
   text-overflow: hidden;
   display: flex;
   padding: 16px;
