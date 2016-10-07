@@ -24,7 +24,7 @@ const router = express.Router(); // eslint-disable-line new-cap
 const APP_ENGINE_CRON = 'X-Appengine-Cron';
 
 /**
- * GET /task/cron
+ * GET /tasks/cron
  *
  * We use a GET from the cron job to launch a PWA update process
  * for all PWAs.
@@ -49,7 +49,7 @@ router.get('/cron', (req, res, next) => {
 });
 
 /**
- * GET /task/execute
+ * GET /tasks/execute
  *
  * We use a GET from the cron job to execute each PWA update task
  */
