@@ -21,47 +21,61 @@ const tasksLib = require('../lib/tasks');
 const Task = require('../models/task');
 const router = express.Router(); // eslint-disable-line new-cap
 
+const APP_ENGINE_CRON = 'X-Appengine-Cron';
+
 /**
  * GET /task/cron
  *
- * We use a GET for the cron job to launch PWA update process.
+ * We use a GET from the cron job to launch a PWA update process
+ * for all PWAs.
  */
 router.get('/cron', (req, res, next) => {
-  pwaLib.list()
-    .then(result => {
-      console.log();
-      for (let i = 0; i < result.pwas.length; i++) {
-        tasksLib.push(new Task(result.pwas[i].id));
-      }
-      res.sendStatus(200);
-    })
-    .catch(err => {
-      next(err);
-    });
+  // Only requests from App Engine Cron are allowed
+  if (req.get(APP_ENGINE_CRON)) {
+    pwaLib.list()
+      .then(result => {
+        // Create one taks for each PWA
+        for (let i = 0; i < result.pwas.length; i++) {
+          tasksLib.push(new Task(result.pwas[i].id));
+        }
+        res.sendStatus(200);
+      })
+      .catch(err => {
+        next(err);
+      });
+  } else {
+    res.sendStatus(403);
+  }
 });
 
 /**
  * GET /task/execute
  *
- * We use a GET for the cron job to launch PWA update process.
+ * We use a GET from the cron job to execute each PWA update task
  */
 router.get('/execute', (req, res, next) => {
-  tasksLib.pop()
-    .then(taks => {
-      if (taks) {
-        pwaLib.find(taks.pwaId)
-          .then(pwa => {
-            pwaLib.save(pwa);
-          })
-          .catch(err => {
-            next(err);
-          });
-      }
-      res.sendStatus(200);
-    })
-    .catch(err => {
-      next(err);
-    });
+  // Only requests from App Engine Cron are allowed
+  if (req.get(APP_ENGINE_CRON)) {
+    tasksLib.pop()
+      .then(taks => {
+        if (taks) {
+          pwaLib.find(taks.pwaId)
+            .then(pwa => {
+              // Saving the PWA trigers the update process
+              pwaLib.save(pwa);
+            })
+            .catch(err => {
+              next(err);
+            });
+        }
+        res.sendStatus(200);
+      })
+      .catch(err => {
+        next(err);
+      });
+  } else {
+    res.sendStatus(403);
+  }
 });
 
 /**
