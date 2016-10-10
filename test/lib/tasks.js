@@ -13,12 +13,11 @@
  * limitations under the License.
  */
 
-/* global describe it before afterEach*/
+/* global describe it before afterEach */
 'use strict';
 
 let libTasks = require('../../lib/tasks');
 let db = require('../../lib/model-datastore');
-
 let Pwa = require('../../models/pwa');
 let Task = require('../../models/task');
 

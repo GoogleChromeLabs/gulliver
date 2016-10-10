@@ -1,7 +1,7 @@
 cron:
 - description: daily update job
   url: /tasks/cron
-  schedule: every monday 03:00
+  schedule: every day 03:00
 
 - description: execute tasks
   url: /tasks/execute
