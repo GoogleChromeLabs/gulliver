@@ -57,6 +57,7 @@
     "node-fetch": "^1.5.3",
     "parse-color": "^1.0.0",
     "serve-static": "^1.11.1",
+    "sharp": "^0.16.0",
     "sw-offline-google-analytics": "^1.1.1",
     "sw-toolbox": "^3.2.1",
     "typescript": "^2.0.3",
@@ -67,6 +68,7 @@
     "chai-as-promised": "^6.0.0",
     "eslint": "^3.0.1",
     "eslint-config-google": "^0.6.0",
+    "supertest": "^2.0.0",
     "istanbul": "^0.4.4",
     "mocha": "^3.0.1",
     "simple-mock": "^0.7.0"

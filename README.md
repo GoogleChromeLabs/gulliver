@@ -40,6 +40,8 @@ For running Gulliver locally the following steps must be followed:
 
 1. Create indexes for the [Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview): `gcloud preview datastore create-indexes index.yaml`
 
+1. (optional) Deploy cron jobs for scheduled PWA updates: `gcloud app deploy cron.yaml`
+
 1. Install **Memcached** and run it on `localhost:11211`. Check these [installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data) for guidance.
 
 1. **Clone** the GitHub repository: `$ git clone https://github.com/GoogleChrome/gulliver.git`

@@ -18,6 +18,9 @@
 const express = require('express');
 const router = express.Router(); // eslint-disable-line
 
+// Tasks
+router.use('/tasks', require('./tasks'));
+
 // PWAs
 router.use('/pwas', require('./pwa'));
 

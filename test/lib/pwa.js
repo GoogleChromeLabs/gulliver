@@ -64,7 +64,7 @@ describe('lib.pwa', () => {
     });
     it('sets iconUrl', () => {
       // Mock libImages and bd to avoid making real calls
-      simpleMock.mock(libImages, 'fetchAndSave').resolveWith(manifest.getBestIconUrl());
+      simpleMock.mock(libImages, 'fetchAndSave').resolveWith(['original', '128', '64']);
       simpleMock.mock(db, 'update').returnWith(pwa);
       simpleMock.mock(libPwa, 'libImages').returnWith(libImages);
       simpleMock.mock(libPwa, 'db').returnWith(db);
@@ -75,8 +75,9 @@ describe('lib.pwa', () => {
           'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
         assert.equal(libImages.fetchAndSave.lastCall.args[1], '123456789.png');
         assert.equal(db.update.callCount, 1);
-        assert.equal(updatedPwa.iconUrl,
-          'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
+        assert.equal(updatedPwa.iconUrl, 'original');
+        assert.equal(updatedPwa.iconUrl128, '128');
+        assert.equal(updatedPwa.iconUrl64, '64');
       });
     });
   });
