@@ -30,14 +30,15 @@ const APP_ENGINE_CRON = 'X-Appengine-Cron';
  * for all PWAs.
  */
 router.get('/cron', (req, res, next) => {
-  // Only requests from App Engine Cron are allowed
+  // Checks for the presence of the 'X-Appengine-Cron' header on the request.
+  // Only requests from the App Engine cron are allowed.
   if (req.get(APP_ENGINE_CRON)) {
     pwaLib.list()
       .then(result => {
-        // Create one taks for each PWA
-        for (let i = 0; i < result.pwas.length; i++) {
-          tasksLib.push(new Task(result.pwas[i].id));
-        }
+        // Create one task for each PWA
+        result.pwas.forEach(pwa => {
+          tasksLib.push(new Task(pwa.id));
+        });
         res.sendStatus(200);
       })
       .catch(err => {
@@ -54,12 +55,13 @@ router.get('/cron', (req, res, next) => {
  * We use a GET from the cron job to execute each PWA update task
  */
 router.get('/execute', (req, res, next) => {
-  // Only requests from App Engine Cron are allowed
+  // Checks for the presence of the 'X-Appengine-Cron' header on the request.
+  // Only requests from the App Engine cron are allowed.
   if (req.get(APP_ENGINE_CRON)) {
     tasksLib.pop()
-      .then(taks => {
-        if (taks) {
-          pwaLib.find(taks.pwaId)
+      .then(task => {
+        if (task) {
+          pwaLib.find(task.pwaId)
             .then(pwa => {
               // Saving the PWA trigers the update process
               pwaLib.save(pwa);
