@@ -14,8 +14,7 @@
  */
 
 'use strict';
-
-const DOMAIN_PATH_REGEXP = /(http[s]*:\/\/[a-z0-9A-Z-\.]+)(\/(.*?\/)*)*/;
+const url = require('url');
 
 /**
  * Class representing a Web App Manifest
@@ -65,25 +64,11 @@ class Manifest {
 
   /** Gets the Url for the largest icon in the Manifest */
   getBestIconUrl() {
-    const bestIcon = this.getBestIcon();
-
-    if (!bestIcon) {
+    let bestIcon = this.getBestIcon();
+    if (!bestIcon || !bestIcon.src) {
       return '';
     }
-
-    const iconUrl = bestIcon.src;
-    if (iconUrl.match(DOMAIN_PATH_REGEXP)) {
-      return iconUrl;
-    }
-
-    const match = DOMAIN_PATH_REGEXP.exec(this.url);
-    const domain = match[1];
-    const path = match[2] || '';
-
-    if (iconUrl[0] === '/') {
-      return domain + iconUrl;
-    }
-    return domain + path + iconUrl;
+    return url.resolve(this.url, bestIcon.src);
   }
 }
 
