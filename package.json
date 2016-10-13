@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "prestart": "tsc --allowJs --removeComments --sourceMap --outFile public/js/gulliver.js public/js/gulliver.es6.js",
+    "prestart": "rollup -c",
     "monitor": "nodemon app.js",
     "deploy": "npm run prestart && gcloud app deploy app.yaml",
     "mocha": "node_modules/.bin/mocha -R test/ -t 60000",
@@ -60,18 +60,21 @@
     "sharp": "^0.16.0",
     "sw-offline-google-analytics": "^1.1.1",
     "sw-toolbox": "^3.2.1",
-    "typescript": "^2.0.3",
     "urijs": "^1.18.1"
   },
   "devDependencies": {
+    "babel-preset-es2015-rollup": "^1.2.0",
     "chai": "^3.0.0",
     "chai-as-promised": "^6.0.0",
     "eslint": "^3.0.1",
     "eslint-config-google": "^0.6.0",
-    "supertest": "^2.0.0",
     "istanbul": "^0.4.4",
     "mocha": "^3.0.1",
-    "simple-mock": "^0.7.0"
+    "rollup": "^0.36.3",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-uglify": "^1.0.1",
+    "simple-mock": "^0.7.0",
+    "supertest": "^2.0.0"
   },
   "engines": {
     "node": ">=0.12.7"
