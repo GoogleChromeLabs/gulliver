@@ -41,6 +41,7 @@
     ]
   },
   "dependencies": {
+    "babel-preset-es2015-rollup": "^1.2.0",
     "body-parser": "^1.15.2",
     "cheerio": "^0.22.0",
     "dompurify": "^0.8.3",
@@ -56,6 +57,9 @@
     "nconf": "^0.8.4",
     "node-fetch": "^1.5.3",
     "parse-color": "^1.0.0",
+    "rollup": "^0.36.3",
+    "rollup-plugin-babel": "^2.6.1",
+    "rollup-plugin-uglify": "^1.0.1",
     "serve-static": "^1.11.1",
     "sharp": "^0.16.0",
     "sw-offline-google-analytics": "^1.1.1",
@@ -63,16 +67,12 @@
     "urijs": "^1.18.1"
   },
   "devDependencies": {
-    "babel-preset-es2015-rollup": "^1.2.0",
     "chai": "^3.0.0",
     "chai-as-promised": "^6.0.0",
     "eslint": "^3.0.1",
     "eslint-config-google": "^0.6.0",
     "istanbul": "^0.4.4",
     "mocha": "^3.0.1",
-    "rollup": "^0.36.3",
-    "rollup-plugin-babel": "^2.6.1",
-    "rollup-plugin-uglify": "^1.0.1",
     "simple-mock": "^0.7.0",
     "supertest": "^2.0.0"
   },
