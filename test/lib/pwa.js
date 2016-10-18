@@ -96,7 +96,7 @@ describe('lib.pwa', () => {
         assert.equal(libLighthouse.fetchAndSave.callCount, 1);
         assert.equal(libLighthouse.fetchAndSave.lastCall.args[0], '123456789');
         assert.equal(db.update.callCount, 1);
-        assert.equal(updatedPwa.lighthouseScore, 82);
+        assert.equal(updatedPwa.lighthouseScore, 83);
       });
     });
   });
