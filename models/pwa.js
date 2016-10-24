@@ -22,7 +22,7 @@ class Pwa {
   constructor(manifestUrl, manifestModel) {
     this.manifestUrl = manifestUrl;
     this.manifest = manifestModel;
-    this.lighthouseScore = 0;
+    this.lighthouseScore = undefined;
     this.created = new Date();
     this.updated = this.created;
     this.visible = true;

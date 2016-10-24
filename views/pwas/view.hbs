@@ -23,9 +23,7 @@
     </div>
     <div class="container">
       {{> pwadetails pwa=pwa}}
-      {{#if pwa.lighthouseScore}}
-        {{> lighthouse lighthouse=lighthouse}}
-      {{/if}}
+      {{> lighthouse lighthouse=lighthouse}}
       {{#if pwa.manifest}}
         {{> manifest pwa=pwa}}
       {{/if}}
