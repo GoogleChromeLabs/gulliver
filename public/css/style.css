@@ -372,6 +372,15 @@ button[disabled=disabled], button:disabled {
 .lighthouse-score {
   font-size: 18px;
 }
+#chart {
+  width: 100%;
+  min-height: 260px;
+  padding: 0;
+}
+#chart_AnnotationChart_borderDiv {
+  height: 242px !important;
+  border-color: black;
+}
 .pwadetail-logo {
  display:block;
 }
