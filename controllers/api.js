@@ -22,7 +22,9 @@ const router = express.Router(); // eslint-disable-line new-cap
 /**
  * GET /api/lighthouse-graph/:pwaId
  *
- * Display a PWA.
+ * Returns the Lighthouse Graph information for a PWA
+ * it uses the Google Charts JSON format:
+ *  https://developers.google.com/chart/interactive/docs/reference#dataparam
  */
 router.get('/lighthouse-graph/:pwaId', (req, res) => {
   lighthouseLib.getLighthouseGraphByPwaId(req.params.pwaId)
