@@ -136,12 +136,12 @@ function setupOnlineAware() {
       if (href) {
         fetch(href, {method: 'HEAD'}).then(r => {
           if (r.status === 200) {
-            // Offline, but available in cache
+            // Available in cache, allow click
             this.style.transition = 'opacity .5s ease-in-out';
             this.style.opacity = 1;
             this.onclick = null;
           } else {
-            // Offline, but not cached
+            // Not cached, prevent click
             this.style.transition = 'opacity .5s ease-in-out';
             this.style.opacity = 0.5;
             this.onclick = f => f.preventDefault();
