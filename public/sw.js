@@ -13,6 +13,10 @@ const OFFLINE_URL = '/.shell/offline';
 
 const OFFLINE = [
   OFFLINE_URL,
+  '/img/GitHub-Mark-Light-32px.png',
+  '/img/GitHub-Mark-Light-64px.png',
+  '/img/lighthouse.svg',
+  '/css/style.css',
   '/sw.js',
   '/js/gulliver.js'
 ];
