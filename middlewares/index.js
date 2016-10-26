@@ -17,15 +17,17 @@ const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.use((req, res, next) => {
-  // The PWA controller only needs text/html, others may need json
-  res.setHeader('Content-Type', 'text/html');
-
-  res.setHeader('Content-Type', 'text/html');
+  // Set content-type for the API requests
+  if (req.url.indexOf('/api/') > -1) {
+    res.setHeader('Content-Type', 'application/json');
+  } else {
+    res.setHeader('Content-Type', 'text/html');
+  }
 
   /* eslint-disable quotes */
   res.setHeader('content-security-policy', [
     `default-src 'self' https://accounts.google.com https://apis.google.com`,
-    `script-src 'self' 'unsafe-eval' https://apis.google.com https://www.google-analytics.com https://www.gstatic.com https://ajax.googleapis.com`,
+    `script-src 'self' 'unsafe-eval' https://apis.google.com https://www.google-analytics.com https://www.gstatic.com`,
     `style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/ https://www.gstatic.com`,
     `font-src 'self' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/`,
     `img-src 'self' https://storage.googleapis.com https://www.google-analytics.com`

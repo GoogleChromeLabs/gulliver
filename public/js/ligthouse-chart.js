@@ -1,4 +1,5 @@
-const chartElementId = 'chart';
+const CHART_ELEMENT_ID = 'chart';
+const CHART_BASE_URL = '/api/lighthouse-graph/';
 
 function makeRequest(method, url) {
   return new Promise((resolve, reject) => {
@@ -25,29 +26,33 @@ function makeRequest(method, url) {
 }
 
 function drawChart() {
-  makeRequest('GET', '/chart.json')
-  .then(jsonData => {
-    // Create our data table out of JSON data loaded from server.
-    let data = new google.visualization.DataTable(jsonData);
-    // Instantiate and draw our chart, passing in some options.
-    const chart = new google.visualization.AnnotationChart(document.getElementById(chartElementId));
-    const options = {
-      height: 242,
-      displayAnnotations: false,
-      displayRangeSelector: false,
-      legendPosition: 'newRow',
-      thickness: 2,
-      min: 0,
-      max: 100
-    };
-    chart.draw(data, options);
-  })
-  .catch(err => {
-    console.error('There was an error drawing the chart!', err);
-  });
+  const chartDiv = document.getElementById(CHART_ELEMENT_ID);
+  const pwaId = chartDiv.getAttribute("pwa");
+  console.log(pwaId);
+  if (pwaId) {
+    makeRequest('GET', CHART_BASE_URL + pwaId)
+    .then(jsonData => {
+      // Create our data table out of JSON data loaded from server.
+      const data = new google.visualization.DataTable(jsonData);
+      const chart = new google.visualization.AnnotationChart(document.getElementById(CHART_ELEMENT_ID));
+      const options = {
+        height: 242,
+        displayAnnotations: false,
+        displayRangeSelector: false,
+        legendPosition: 'newRow',
+        thickness: 2,
+        min: 0,
+        max: 100
+      };
+      chart.draw(data, options);
+    })
+    .catch(err => {
+      console.error('There was an error drawing the chart!', err);
+    });
+  }
 }
 
-if (document.getElementById(chartElementId)) {
+if (document.getElementById(CHART_ELEMENT_ID)) {
   google.charts.load('current', {packages: ['annotationchart']});
   google.charts.setOnLoadCallback(drawChart);
 }
