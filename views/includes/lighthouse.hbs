@@ -1,11 +1,16 @@
 <div class="detail-general lighthouse-detail">
   <div class="detail-header">
     <h3>LIGHTHOUSE</h3>    
-    <div> 
+    <div class="lighthouse-score"> 
         <img src="/img/lighthouse.svg" width="18" height="18" title="Lighthouse Score" alt="Lighthouse logo"/>
-        {{pwa.lighthouseScore}}
+        {{#if pwa.lighthouseScore}}
+          {{pwa.lighthouseScore}}
+        {{else}}
+          <i class="fa fa-hourglass-half" aria-hidden="true" title="Lighthouse in progress"></i>
+        {{/if}}
     </div>
   </div>
+  {{#if pwa.lighthouseScore}}
   <div>
     <div>
       <table class="lighthouse-report-table">
@@ -40,4 +45,5 @@
       Last updated on {{lighthouse.date}}
     </div>
   </div>
+  {{/if}}
 </div>

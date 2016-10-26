@@ -369,6 +369,9 @@ button[disabled=disabled], button:disabled {
   width: 60px;
   text-align: right;
 }
+.lighthouse-score {
+  font-size: 18px;
+}
 .pwadetail-logo {
  display:block;
 }
