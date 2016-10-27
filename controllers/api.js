@@ -18,6 +18,7 @@
 const express = require('express');
 const lighthouseLib = require('../lib/lighthouse');
 const router = express.Router(); // eslint-disable-line new-cap
+const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
 
 /**
  * GET /api/lighthouse-graph/:pwaId
@@ -30,6 +31,7 @@ router.get('/lighthouse-graph/:pwaId', (req, res) => {
   lighthouseLib.getLighthouseGraphByPwaId(req.params.pwaId)
     .then(lighthouseGraph => {
       if (lighthouseGraph) {
+        res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
         res.json(lighthouseGraph);
       } else {
         res.status(404);

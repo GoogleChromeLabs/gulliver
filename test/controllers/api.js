@@ -17,6 +17,7 @@
 'use strict';
 
 const controllerApi = require('../../controllers/api');
+const lighthouseLib = require('../../lib/lighthouse');
 
 const express = require('express');
 const app = express();
@@ -26,6 +27,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 chai.should();
+let assert = require('chai').assert;
 
 describe('controllers.api', () => {
   before(done => {
@@ -38,10 +40,32 @@ describe('controllers.api', () => {
       simpleMock.restore();
     });
 
-    it('respond with 404 if PWA does not exist', done => {
+    it('respond with 200 if PWA exist', done => {
+      simpleMock.mock(lighthouseLib, 'getLighthouseGraphByPwaId').resolveWith('mocked graph data');
+      // /api/ is part of the router, we need to start from /lighthouse-graph/
       request(app)
-        .get('/api/lighthouse-graph/123')
-        .expect(404, done);
+        .get('/lighthouse-graph/1234567')
+        .expect('Content-Type', /json/)
+        .expect(200).should.be.fulfilled.then(res => {
+          assert.equal(res.body, 'mocked graph data');
+          assert.equal(lighthouseLib.getLighthouseGraphByPwaId.callCount, 1);
+          assert.equal(lighthouseLib.getLighthouseGraphByPwaId.lastCall.arg, 1234567);
+          done();
+        });
+    });
+
+    it('respond with 404 if PWA does not exist', done => {
+      simpleMock.mock(lighthouseLib, 'getLighthouseGraphByPwaId').resolveWith(null);
+      // /api/ is part of the router, we need to start from /lighthouse-graph/
+      request(app)
+        .get('/lighthouse-graph/123')
+        .expect('Content-Type', /json/)
+        .expect(400).should.be.rejected.then(res => {
+          assert.equal(res.body, undefined);
+          assert.equal(lighthouseLib.getLighthouseGraphByPwaId.callCount, 1);
+          assert.equal(lighthouseLib.getLighthouseGraphByPwaId.lastCall.arg, '123');
+          done();
+        });
     });
   });
 });

@@ -24,6 +24,8 @@ const app = express();
 const bodyParser = require('body-parser');
 const serveStatic = require('serve-static');
 
+const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
+
 app.disable('x-powered-by');
 app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));
@@ -50,7 +52,7 @@ app.use(serveStatic(path.resolve('./public'), {
 function setCustomCacheControl(res, path) {
   let mime = serveStatic.mime.lookup(path);
   if (mime.match('image*')) {
-    res.setHeader('Cache-Control', 'public, max-age=1d');
+    res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
   }
 }
 
