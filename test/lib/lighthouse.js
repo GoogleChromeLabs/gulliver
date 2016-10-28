@@ -16,9 +16,15 @@
 /* global describe it */
 'use strict';
 
-const assert = require('assert');
 const lighthouseLib = require('../../lib/lighthouse');
 const dataFetcher = require('../../lib/data-fetcher');
+
+let simpleMock = require('simple-mock');
+let chai = require('chai');
+let chaiAsPromised = require('chai-as-promised');
+chai.use(chaiAsPromised);
+chai.should();
+let assert = require('chai').assert;
 
 const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
@@ -40,5 +46,38 @@ describe('processLighthouseJson', () => {
         assert.equal(lighthouseInfo.audits[0].description, 'Site is on HTTPS');
         assert.equal(lighthouseInfo.audits[0].score, false);
       });
+  });
+});
+
+describe('getLighthouseGraphByPwaId', () => {
+  it('getLighthouseGraphByPwaId should return null if theres not data for PWA', () => {
+    simpleMock.mock(lighthouseLib, 'getLighthouseByPwaId').resolveWith([]);
+    return lighthouseLib.getLighthouseGraphByPwaId(123).should.be.fulfilled.then(json => {
+      assert.equal(json, null);
+      assert.equal(lighthouseLib.getLighthouseByPwaId.callCount, 1);
+    });
+  });
+
+  let lighthouseData = {};
+  lighthouseData.data =
+    {date: '2016-10-27',
+     id: '5768151446847488-2016-10-27',
+     totalScore: 69,
+     lighthouseInfo: [],
+     lighthouseVersion: '1.1.6',
+     pwaId: 5768151446847488,
+     absoluteStartUrl: 'https://www.ampproject.org/'};
+
+  it('getLighthouseGraphByPwaId should crete graph formatted data', () => {
+    simpleMock.mock(lighthouseLib, 'getLighthouseByPwaId').resolveWith([lighthouseData]);
+    return lighthouseLib.getLighthouseGraphByPwaId(123).should.be.fulfilled.then(json => {
+      assert.equal(json.cols[0].label, 'Date');
+      assert.equal(json.cols[0].type, 'date');
+      assert.equal(json.cols[1].label, 'Score');
+      assert.equal(json.cols[1].type, 'number');
+      assert.equal(json.rows[0].c[0].v, 'Date(2016,9,27)');
+      assert.equal(json.rows[0].c[1].v, 69);
+      assert.equal(lighthouseLib.getLighthouseByPwaId.callCount, 1);
+    });
   });
 });

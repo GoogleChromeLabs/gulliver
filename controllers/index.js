@@ -18,6 +18,9 @@
 const express = require('express');
 const router = express.Router(); // eslint-disable-line
 
+// API
+router.use('/api', require('./api'));
+
 // Tasks
 router.use('/tasks', require('./tasks'));
 

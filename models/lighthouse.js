@@ -29,6 +29,8 @@ class Lighthouse {
     this.pwaId = pwaId;
     this.absoluteStartUrl = absoluteStartUrl;
     this.lighthouseInfo = lighthouseInfo;
+    this.totalScore = lighthouseInfo.totalScore;
+    this.lighthouseVersion = lighthouseInfo.lighthouseVersion;
     this.date = (new Date()).toISOString().slice(0, 10);
     this.id = this.pwaId + '-' + this.date;
   }
