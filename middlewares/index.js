@@ -17,12 +17,7 @@ const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
 
 router.use((req, res, next) => {
-  // Set content-type for the API requests
-  if (req.url.indexOf('/api/') > -1) {
-    res.setHeader('Content-Type', 'application/json');
-  } else {
-    res.setHeader('Content-Type', 'text/html');
-  }
+  res.setHeader('Content-Type', 'text/html');
 
   /* eslint-disable quotes */
   res.setHeader('content-security-policy', [

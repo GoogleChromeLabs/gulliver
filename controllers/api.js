@@ -28,6 +28,8 @@ const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
  *  https://developers.google.com/chart/interactive/docs/reference#dataparam
  */
 router.get('/lighthouse-graph/:pwaId', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+
   lighthouseLib.getLighthouseGraphByPwaId(req.params.pwaId)
     .then(lighthouseGraph => {
       if (lighthouseGraph) {
