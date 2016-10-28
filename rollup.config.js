@@ -7,6 +7,8 @@ export default {
     babel(),
     uglify()
   ],
+  // Quiet warning: https://github.com/rollup/rollup/wiki/Troubleshooting#this-is-undefined
+  context: 'window',
   targets: [
     {
       dest: './public/js/gulliver.js',

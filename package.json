@@ -64,7 +64,9 @@
     "sharp": "^0.16.0",
     "sw-offline-google-analytics": "^1.1.1",
     "sw-toolbox": "^3.2.1",
-    "urijs": "^1.18.1"
+    "urijs": "^1.18.1",
+    "whatwg-fetch": "^1.0.0",
+    "yaku": "^0.16.7"
   },
   "devDependencies": {
     "chai": "^3.0.0",
