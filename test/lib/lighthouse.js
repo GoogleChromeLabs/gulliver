@@ -59,14 +59,13 @@ describe('getLighthouseGraphByPwaId', () => {
   });
 
   let lighthouseData = {};
-  lighthouseData.data =
-    {date: '2016-10-27',
-     id: '5768151446847488-2016-10-27',
-     totalScore: 69,
-     lighthouseInfo: [],
-     lighthouseVersion: '1.1.6',
-     pwaId: 5768151446847488,
-     absoluteStartUrl: 'https://www.ampproject.org/'};
+  lighthouseData.data = {date: '2016-10-27',
+    id: '5768151446847488-2016-10-27',
+    totalScore: 69,
+    lighthouseInfo: [],
+    lighthouseVersion: '1.1.6',
+    pwaId: 5768151446847488,
+    absoluteStartUrl: 'https://www.ampproject.org/'};
 
   it('getLighthouseGraphByPwaId should crete graph formatted data', () => {
     simpleMock.mock(lighthouseLib, 'getLighthouseByPwaId').resolveWith([lighthouseData]);

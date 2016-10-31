@@ -36,6 +36,7 @@ chai.should();
 let assert = require('chai').assert;
 
 const MANIFEST_URL = 'https://www.terra.com.br/manifest-br.json';
+const START_URL = 'https://www.terra.com.br/?utm_source=homescreen';
 const MANIFEST_DATA = './test/manifests/icon-url-with-parameter.json';
 const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
@@ -157,27 +158,50 @@ describe('lib.pwa', () => {
     });
   });
 
+  describe('#fetchManifest', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+    it('Fetches manifest directly from MANIFEST_URL', () => {
+      // Mock libManifest
+      simpleMock.mock(libManifest, 'fetchManifest').resolveWith(manifest);
+      return libPwa.fetchManifest(pwa).should.be.fulfilled.then(fetchedManifest => {
+        assert.equal(fetchedManifest, manifest);
+        assert.equal(libManifest.fetchManifest.callCount, 1);
+      });
+    });
+    it('Fails directly and looks for manifest link on START_URL', () => {
+      // Mock libManifest
+      simpleMock.mock(libManifest, 'fetchManifest').rejectWith(new Error()).resolveWith(manifest);
+      simpleMock.mock(dataFetcher, 'fetchLinkRelManifestUrl').resolveWith(START_URL);
+      return libPwa.fetchManifest(new Pwa(START_URL, manifest))
+      .should.be.fulfilled.then(fetchedManifest => {
+        assert.equal(fetchedManifest, manifest);
+        assert.equal(libManifest.fetchManifest.callCount, 2);
+        assert.equal(dataFetcher.fetchLinkRelManifestUrl.callCount, 1);
+      });
+    });
+  });
+
   describe('#save (core logic)', () => {
     afterEach(() => {
       simpleMock.restore();
     });
     it('performs all the save steps', () => {
       // Mock findByManifestUrl and bd to avoid making real calls
+      simpleMock.mock(libPwa, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'findByManifestUrl').resolveWith(pwa);
-      simpleMock.mock(libManifest, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'fetchMetadataDescription').resolveWith('test-description');
       simpleMock.mock(db, 'update').returnWith(pwa);
       simpleMock.mock(libPwa, 'updateIcon').resolveWith(pwa);
       simpleMock.mock(libPwa, 'updateLighthouseInfo').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'libManifest').returnWith(libManifest);
       simpleMock.mock(libPwa, 'db').returnWith(db);
       simpleMock.mock(libPwa, 'addPwaToCache');
 
       return libPwa._save(pwa).should.be.fulfilled.then(updatedPwa => {
+        assert.equal(libPwa.fetchManifest.callCount, 1);
         assert.equal(libPwa.findByManifestUrl.callCount, 1);
         assert.equal(libPwa.findByManifestUrl.lastCall.args[0], MANIFEST_URL);
-        assert.equal(libManifest.fetchManifest.callCount, 1);
-        assert.equal(libManifest.fetchManifest.lastCall.args[0], MANIFEST_URL);
         assert.equal(updatedPwa.manifest, manifest);
         assert.equal(libPwa.fetchMetadataDescription.callCount, 1);
         assert.equal(libPwa.fetchMetadataDescription.lastCall.args[0], pwa);
@@ -190,6 +214,7 @@ describe('lib.pwa', () => {
     });
     it('handles E_MANIFEST_ERROR error', () => {
       // Mock findByManifestUrl to avoid making real calls
+      simpleMock.mock(libManifest, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'findByManifestUrl').rejectWith(new Error('Testing error'));
       return libPwa._save(pwa).should.be.rejectedWith(libPwa.E_MANIFEST_ERROR);
     });
