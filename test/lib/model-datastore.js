@@ -44,6 +44,7 @@ describe('lib.model-datastore', () => {
   const skipTests = process.env.TRAVIS;
   // Skip tests if Running in CI
   beforeEach(function() {
+    this.timeout(3000);
     if (skipTests) {
       this.skip();
       return;
@@ -60,6 +61,8 @@ describe('lib.model-datastore', () => {
           return entity.key;
         });
 
+        // Delete counts for 'test'.
+        keys[keys.length] = ds.key(['counts', ENTITY_NAME]);
         ds.delete(keys, err => {
           return reject(err);
         });
@@ -77,6 +80,25 @@ describe('lib.model-datastore', () => {
           assert.equal(saved.test, DB_OBJECT.test, 'The value of the "test" field is correct');
           assert.ok(Array.isArray(saved.testObject.array),
              'Check if datastore is not modifying arrays');
+        });
+    });
+  });
+
+  describe('#count', () => {
+    beforeEach(function() {
+      if (skipTests) {
+        this.skip();
+        return;
+      }
+    });
+
+    it('counts objects correctly', () => {
+      return db.update(ENTITY_NAME, null, DB_OBJECT)
+        .then(() => {
+          return db.count(ENTITY_NAME)
+            .then(result => {
+              assert.equal(result, 1, 'Counts 1 entities');
+            });
         });
     });
   });

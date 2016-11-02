@@ -30,8 +30,16 @@
       {{/if}}
     </div>
     <div class="container">
-      <div class="button add green gulliver-online-aware">
-        <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
+      <div class="toolbar">
+        <div>
+          <div class="button add green gulliver-online-aware">
+            <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
+          </div>
+        </div>
+
+        <div class="pwa-count">
+          {{pwaCount}} PWAs
+        </div>        
       </div>
 
       <div class="items">
@@ -90,7 +98,6 @@
         </a>
         {{/if}}
       </div>
-
     </div>
     {{> footer}}
   </body>

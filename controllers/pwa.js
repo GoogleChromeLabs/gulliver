@@ -38,8 +38,13 @@ router.get('/', (req, res, next) => {
   const pageNumber = parseInt(req.query.page, 10) || DEFAULT_PAGE_NUMBER;
   const sortOrder = req.query.sort || DEFAULT_SORT_ORDER;
   const start = (pageNumber - 1) * LIST_PAGE_SIZE;
-
-  pwaLib.list(start, LIST_PAGE_SIZE, sortOrder)
+  const end = pageNumber * LIST_PAGE_SIZE;
+  let pwaCount = 0;
+  pwaLib.count()
+    .then(count => {
+      pwaCount = count;
+      return pwaLib.list(start, LIST_PAGE_SIZE, sortOrder);
+    })
     .then(result => {
       let arg = Object.assign(libMetadata.fromRequest(req), {
         title: 'PWA Directory',
@@ -52,11 +57,13 @@ router.get('/', (req, res, next) => {
         currentPageNumber: pageNumber,
         sortOrder: sortOrder,
         showNewest: sortOrder !== 'newest',
-        showScore: sortOrder !== 'score'
+        showScore: sortOrder !== 'score',
+        pwaCount: pwaCount,
+        startPwa: start + 1,
+        endPwa: Math.min(pwaCount, end)
       });
       res.render('pwas/list.hbs', arg);
-    })
-    .catch(err => {
+    }).catch(err => {
       next(err);
     });
 });
