@@ -192,6 +192,7 @@ describe('lib.pwa', () => {
       simpleMock.mock(libPwa, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'findByManifestUrl').resolveWith(pwa);
       simpleMock.mock(libPwa, 'fetchMetadataDescription').resolveWith('test-description');
+      simpleMock.mock(libPwa, 'slugify').resolveWith(pwa);
       simpleMock.mock(db, 'update').returnWith(pwa);
       simpleMock.mock(libPwa, 'updateIcon').resolveWith(pwa);
       simpleMock.mock(libPwa, 'updateLighthouseInfo').resolveWith(pwa);
@@ -206,7 +207,7 @@ describe('lib.pwa', () => {
         assert.equal(libPwa.fetchMetadataDescription.callCount, 1);
         assert.equal(libPwa.fetchMetadataDescription.lastCall.args[0], pwa);
         assert.equal(updatedPwa.metaDescription, 'test-description');
-        assert.equal(updatedPwa.slugified, 'terra-brasil');
+        assert.equal(pwa.encodedStartUrl, 'www.terra.com.br%2F');
         assert.equal(db.update.callCount, 1);
         assert.equal(libPwa.updateIcon.callCount, 1);
         assert.equal(libPwa.updateLighthouseInfo.callCount, 1);
@@ -257,116 +258,6 @@ describe('lib.pwa', () => {
       const pwa = new Pwa('https://example.com/');
       pwa.user = {id: '7777'};
       return libPwa.save(pwa).should.eventually.equal(true);
-    });
-  });
-
-  describe('#slugify', () => {
-    afterEach(() => {
-      simpleMock.restore();
-    });
-    it('slugify for new PWA & name', () => {
-      // Mock libPwa
-      manifest.name = 'A NAME FOR A PWA $';
-      manifest.description = 'A DESCRIPTION for A PWA $';
-      const pwa = new Pwa(MANIFEST_URL, manifest);
-      pwa.id = 1234;
-      simpleMock.mock(libPwa, 'findBySlugified').resolveWith(null);
-      return libPwa.slugify(pwa).should.be.fulfilled.then(slugifiedPwa => {
-        assert.equal(slugifiedPwa.slugified, 'a-name-for-a-pwa-dollar');
-        assert.equal(libPwa.findBySlugified.callCount, 1);
-      });
-    });
-    it('slugify for new PWA & without name', () => {
-      // Mock libPwa
-      manifest.name = '';
-      manifest.description = 'A DESCRIPTION for A PWA $';
-      const pwa = new Pwa(MANIFEST_URL, manifest);
-      pwa.id = 1234;
-      simpleMock.mock(libPwa, 'findBySlugified').resolveWith(null);
-      return libPwa.slugify(pwa).should.be.fulfilled.then(slugifiedPwa => {
-        assert.equal(slugifiedPwa.slugified, 'a-description-for-a-pwa-dollar');
-        assert.equal(libPwa.findBySlugified.callCount, 2);
-      });
-    });
-    it('slugify for new PWA & without name nor description', () => {
-      // Mock libPwa
-      manifest.name = '';
-      manifest.description = '';
-      const pwa = new Pwa(MANIFEST_URL, manifest);
-      pwa.id = 1234;
-      simpleMock.mock(libPwa, 'findBySlugified').resolveWith(null);
-      return libPwa.slugify(pwa).should.be.fulfilled.then(slugifiedPwa => {
-        assert.equal(slugifiedPwa.slugified, '1234');
-        assert.equal(libPwa.findBySlugified.callCount, 2);
-      });
-    });
-    it('slugify for existing PWA & name', () => {
-      // Mock libPwa
-      manifest.name = 'A NAME FOR A PWA $';
-      manifest.description = 'A DESCRIPTION for A PWA $';
-      const pwa = new Pwa(MANIFEST_URL, manifest);
-      pwa.id = 1234;
-      simpleMock.mock(libPwa, 'findBySlugified').resolveWith(pwa);
-      return libPwa.slugify(pwa).should.be.fulfilled.then(slugifiedPwa => {
-        assert.equal(slugifiedPwa.slugified, 'a-name-for-a-pwa-dollar');
-        assert.equal(libPwa.findBySlugified.callCount, 1);
-      });
-    });
-    it('slugify for existing PWA & without name', () => {
-      // Mock libPwa
-      manifest.name = '';
-      manifest.description = 'A DESCRIPTION for A PWA $';
-      const pwa = new Pwa(MANIFEST_URL, manifest);
-      pwa.id = 1234;
-      simpleMock.mock(libPwa, 'findBySlugified').resolveWith(null);
-      return libPwa.slugify(pwa).should.be.fulfilled.then(slugifiedPwa => {
-        assert.equal(slugifiedPwa.slugified, 'a-description-for-a-pwa-dollar');
-        assert.equal(libPwa.findBySlugified.callCount, 2);
-      });
-    });
-    it('slugify for existing PWA & without name nor description', () => {
-      // Mock libPwa
-      manifest.name = '';
-      manifest.description = '';
-      const pwa = new Pwa(MANIFEST_URL, manifest);
-      pwa.id = 1234;
-      simpleMock.mock(libPwa, 'findBySlugified').resolveWith(null);
-      return libPwa.slugify(pwa).should.be.fulfilled.then(slugifiedPwa => {
-        assert.equal(slugifiedPwa.slugified, '1234');
-        assert.equal(libPwa.findBySlugified.callCount, 2);
-      });
-    });
-    it('slugify for collision with existing PWA & name', () => {
-      // Mock libPwa
-      manifest.name = 'A NAME FOR A PWA $';
-      manifest.description = 'A DESCRIPTION for A PWA $';
-      const pwa = new Pwa(MANIFEST_URL, manifest);
-      pwa.id = 1234;
-      const pwa2 = new Pwa(MANIFEST_URL, manifest);
-      pwa2.id = 8888;
-      // Existing PWA with same slugified name, then not existing for description
-      simpleMock.mock(libPwa, 'findBySlugified').resolveWith(pwa2).resolveWith(null);
-      return libPwa.slugify(pwa).should.be.fulfilled.then(slugifiedPwa => {
-        assert.equal(slugifiedPwa.slugified, 'a-description-for-a-pwa-dollar');
-        assert.equal(libPwa.findBySlugified.callCount, 2);
-      });
-    });
-    it('slugify for double collision with existing PWA & name & decription', () => {
-      // Mock libPwa
-      manifest.name = 'A NAME FOR A PWA $';
-      manifest.description = 'A DESCRIPTION for A PWA $';
-      const pwa = new Pwa(MANIFEST_URL, manifest);
-      pwa.id = 1234;
-      const pwa2 = new Pwa(MANIFEST_URL, manifest);
-      pwa2.id = 8888;
-      const pwa3 = new Pwa(MANIFEST_URL, manifest);
-      pwa3.id = 9999;
-      // Existing PWA with same slugified name, then not existing for description
-      simpleMock.mock(libPwa, 'findBySlugified').resolveWith(pwa2).resolveWith(pwa3);
-      return libPwa.slugify(pwa).should.be.fulfilled.then(slugifiedPwa => {
-        assert.equal(slugifiedPwa.slugified, '1234');
-        assert.equal(libPwa.findBySlugified.callCount, 2);
-      });
     });
   });
 });
