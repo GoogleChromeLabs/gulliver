@@ -70,11 +70,13 @@ describe('getLighthouseGraphByPwaId', () => {
   it('getLighthouseGraphByPwaId should crete graph formatted data', () => {
     simpleMock.mock(lighthouseLib, 'getLighthouseByPwaId').resolveWith([lighthouseData]);
     return lighthouseLib.getLighthouseGraphByPwaId(123).should.be.fulfilled.then(json => {
+      const date = new Date(Date.parse('2016-10-27'));
       assert.equal(json.cols[0].label, 'Date');
       assert.equal(json.cols[0].type, 'date');
       assert.equal(json.cols[1].label, 'Score');
       assert.equal(json.cols[1].type, 'number');
-      assert.equal(json.rows[0].c[0].v, 'Date(2016,9,27)');
+      assert.equal(json.rows[0].c[0].v,
+        'Date(' + date.getFullYear() + ',' + date.getMonth() + ',' + date.getDate() + ')');
       assert.equal(json.rows[0].c[1].v, 69);
       assert.equal(lighthouseLib.getLighthouseByPwaId.callCount, 1);
     });
