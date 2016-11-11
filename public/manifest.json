@@ -2,7 +2,7 @@
 	"name": "PWA Directory",
 	"short_name": "PwaDir",
 	"description": "A Directory of PWAs",
-	"start_url": "/",
+	"start_url": "/?utm_source=homescreen",
 	"icons": [
 		{
 			"src": "\/favicons\/android-chrome-192x192.png",
