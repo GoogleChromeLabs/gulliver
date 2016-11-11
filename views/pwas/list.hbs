@@ -30,8 +30,12 @@
       {{/if}}
     </div>
     <div class="container">
-      <div class="button add green gulliver-online-aware">
-        <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
+      <div class="toolbar">
+        <div>
+          <div class="button add green gulliver-online-aware">
+            <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
+          </div>
+        </div>   
       </div>
 
       <div class="items">
@@ -53,7 +57,7 @@
                 <div class="name">{{name}}</div>
                 <div class="lighthouseScore">
                   <div class="lighthouseLogo">
-                    <img src="/img/lighthouse.svg" width="18" height="18" title="Lighthouse Score" alt="Lighthouse logo"/>
+                    <img src="/img/lighthouse-18.png" width="18" height="18" title="Lighthouse Score" alt="Lighthouse logo"/>
                   </div>
                   <div>
                     {{#if lighthouseScore}}
@@ -90,7 +94,6 @@
         </a>
         {{/if}}
       </div>
-
     </div>
     {{> footer}}
   </body>

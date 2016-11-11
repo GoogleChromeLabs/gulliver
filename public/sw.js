@@ -55,6 +55,14 @@ toolbox.router.head(/^/, request => {
   return onlyIfCached(request.url);
 });
 
+toolbox.router.get('/', (request, values, options) => {
+  // Replace requests to start_url with the lastest version of the root page.
+  if (request.url.endsWith('/?utm_source=homescreen')) {
+    request = new Request('/');
+  }
+  return toolbox.router.default(request, values, options);
+});
+
 toolbox.router.default = (request, values, options) => {
   return toolbox.networkFirst(request, values, options)
     .catch(_ => {

@@ -604,3 +604,21 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
   background-color: #BBDEFB;
 }
+
+.toolbar {
+  width: 100%;
+  display: flex;
+}
+
+.toolbar > div {
+  width: 50%;
+}
+
+.pwa-count {
+  font-size: 16px;
+  font-weight: 600;
+  height: 50px;
+  line-height: 22px;  
+  text-align: end;
+  padding-right: 5px;
+}
