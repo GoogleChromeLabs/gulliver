@@ -67,15 +67,11 @@ describe('lib.pwa', () => {
       // Mock libImages and bd to avoid making real calls
       simpleMock.mock(libImages, 'fetchAndSave').resolveWith(['original', '128', '64']);
       simpleMock.mock(db, 'update').returnWith(pwa);
-      simpleMock.mock(libPwa, 'libImages').returnWith(libImages);
-      simpleMock.mock(libPwa, 'db').returnWith(db);
-
-      return libPwa.updateIcon(pwa, manifest).should.be.fulfilled.then(updatedPwa => {
+      return libPwa.updatePwaIcon(pwa, manifest).should.be.fulfilled.then(updatedPwa => {
         assert.equal(libImages.fetchAndSave.callCount, 1);
         assert.equal(libImages.fetchAndSave.lastCall.args[0],
           'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
         assert.equal(libImages.fetchAndSave.lastCall.args[1], '123456789.png');
-        assert.equal(db.update.callCount, 1);
         assert.equal(updatedPwa.iconUrl, 'original');
         assert.equal(updatedPwa.iconUrl128, '128');
         assert.equal(updatedPwa.iconUrl64, '64');
@@ -91,12 +87,9 @@ describe('lib.pwa', () => {
       // Mock libLighthouse and bd to avoid making real calls
       simpleMock.mock(libLighthouse, 'fetchAndSave').resolveWith(lighthouse);
       simpleMock.mock(db, 'update').returnWith(pwa);
-      simpleMock.mock(libPwa, 'libLighthouse').returnWith(libLighthouse);
-      simpleMock.mock(libPwa, 'db').returnWith(db);
-      return libPwa.updateLighthouseInfo(pwa).should.be.fulfilled.then(updatedPwa => {
+      return libPwa.updatePwaLighthouseInfo(pwa).should.be.fulfilled.then(updatedPwa => {
         assert.equal(libLighthouse.fetchAndSave.callCount, 1);
         assert.equal(libLighthouse.fetchAndSave.lastCall.args[0], '123456789');
-        assert.equal(db.update.callCount, 1);
         assert.equal(updatedPwa.lighthouseScore, 83);
       });
     });
@@ -158,7 +151,7 @@ describe('lib.pwa', () => {
     });
   });
 
-  describe('#fetchManifest', () => {
+  describe('#updateManifest', () => {
     afterEach(() => {
       simpleMock.restore();
     });
@@ -188,30 +181,19 @@ describe('lib.pwa', () => {
       simpleMock.restore();
     });
     it('performs all the save steps', () => {
-      // Mock findByManifestUrl and bd to avoid making real calls
       simpleMock.mock(libPwa, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'findByManifestUrl').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'fetchMetadataDescription').resolveWith('test-description');
-      simpleMock.mock(libPwa, 'slugify').resolveWith(pwa);
-      simpleMock.mock(db, 'update').returnWith(pwa);
-      simpleMock.mock(libPwa, 'updateIcon').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'updateLighthouseInfo').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'db').returnWith(db);
-      simpleMock.mock(libPwa, 'addPwaToCache');
-
-      return libPwa._save(pwa).should.be.fulfilled.then(updatedPwa => {
+      simpleMock.mock(libPwa, 'savePwa').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'updatePwaMetadataDescription').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'updatePwaIcon').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'updatePwaLighthouseInfo').resolveWith(pwa);
+      return libPwa._save(pwa).should.be.fulfilled.then(_ => {
         assert.equal(libPwa.fetchManifest.callCount, 1);
         assert.equal(libPwa.findByManifestUrl.callCount, 1);
-        assert.equal(libPwa.findByManifestUrl.lastCall.args[0], MANIFEST_URL);
-        assert.equal(updatedPwa.manifest, manifest);
-        assert.equal(libPwa.fetchMetadataDescription.callCount, 1);
-        assert.equal(libPwa.fetchMetadataDescription.lastCall.args[0], pwa);
-        assert.equal(updatedPwa.metaDescription, 'test-description');
-        assert.equal(pwa.encodedStartUrl, 'www.terra.com.br%2F');
-        assert.equal(db.update.callCount, 1);
-        assert.equal(libPwa.updateIcon.callCount, 1);
-        assert.equal(libPwa.updateLighthouseInfo.callCount, 1);
-        assert.equal(libPwa.addPwaToCache.callCount, 2);
+        assert.equal(libPwa.updatePwaMetadataDescription.callCount, 1);
+        assert.equal(libPwa.updatePwaIcon.callCount, 1);
+        assert.equal(libPwa.updatePwaLighthouseInfo.callCount, 1);
+        assert.equal(libPwa.savePwa.callCount, 2);
       });
     });
     it('handles E_MANIFEST_ERROR error', () => {
