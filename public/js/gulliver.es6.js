@@ -281,4 +281,11 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 ga('create', window.__config.ga_id, 'auto');
 ga('set', 'dimension1', navigator.onLine);
 ga('send', 'pageview');
+
+// Setup a listener to track Add to Homescreen events.
+window.addEventListener('beforeinstallprompt', e => {
+  e.userChoice.then(choiceResult => {
+    ga('send', 'event', 'A2H', choiceResult.outcome);      
+  });
+});
 /* eslint-enable */
