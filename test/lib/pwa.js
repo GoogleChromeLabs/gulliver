@@ -65,7 +65,7 @@ describe('lib.pwa', () => {
     it('sets iconUrl', () => {
       // Mock libImages and bd to avoid making real calls
       simpleMock.mock(libImages, 'fetchAndSave').resolveWith(['original', '128', '64']);
-      simpleMock.mock(db, 'update').returnWith(pwa);
+      simpleMock.mock(db, 'updateWithCounts').returnWith(pwa);
       simpleMock.mock(libPwa, 'libImages').returnWith(libImages);
       simpleMock.mock(libPwa, 'db').returnWith(db);
 
@@ -74,7 +74,7 @@ describe('lib.pwa', () => {
         assert.equal(libImages.fetchAndSave.lastCall.args[0],
           'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
         assert.equal(libImages.fetchAndSave.lastCall.args[1], '123456789.png');
-        assert.equal(db.update.callCount, 1);
+        assert.equal(db.updateWithCounts.callCount, 1);
         assert.equal(updatedPwa.iconUrl, 'original');
         assert.equal(updatedPwa.iconUrl128, '128');
         assert.equal(updatedPwa.iconUrl64, '64');
@@ -89,13 +89,13 @@ describe('lib.pwa', () => {
     it('sets lighthouseScore', () => {
       // Mock libLighthouse and bd to avoid making real calls
       simpleMock.mock(libLighthouse, 'fetchAndSave').resolveWith(lighthouse);
-      simpleMock.mock(db, 'update').returnWith(pwa);
+      simpleMock.mock(db, 'updateWithCounts').returnWith(pwa);
       simpleMock.mock(libPwa, 'libLighthouse').returnWith(libLighthouse);
       simpleMock.mock(libPwa, 'db').returnWith(db);
       return libPwa.updateLighthouseInfo(pwa).should.be.fulfilled.then(updatedPwa => {
         assert.equal(libLighthouse.fetchAndSave.callCount, 1);
         assert.equal(libLighthouse.fetchAndSave.lastCall.args[0], '123456789');
-        assert.equal(db.update.callCount, 1);
+        assert.equal(db.updateWithCounts.callCount, 1);
         assert.equal(updatedPwa.lighthouseScore, 83);
       });
     });
@@ -166,7 +166,7 @@ describe('lib.pwa', () => {
       simpleMock.mock(libPwa, 'findByManifestUrl').resolveWith(pwa);
       simpleMock.mock(libManifest, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'fetchMetadataDescription').resolveWith('test-description');
-      simpleMock.mock(db, 'update').returnWith(pwa);
+      simpleMock.mock(db, 'updateWithCounts').returnWith(pwa);
       simpleMock.mock(libPwa, 'updateIcon').resolveWith(pwa);
       simpleMock.mock(libPwa, 'updateLighthouseInfo').resolveWith(pwa);
       simpleMock.mock(libPwa, 'libManifest').returnWith(libManifest);
@@ -182,7 +182,7 @@ describe('lib.pwa', () => {
         assert.equal(libPwa.fetchMetadataDescription.callCount, 1);
         assert.equal(libPwa.fetchMetadataDescription.lastCall.args[0], pwa);
         assert.equal(updatedPwa.metaDescription, 'test-description');
-        assert.equal(db.update.callCount, 1);
+        assert.equal(db.updateWithCounts.callCount, 1);
         assert.equal(libPwa.updateIcon.callCount, 1);
         assert.equal(libPwa.updateLighthouseInfo.callCount, 1);
         assert.equal(libPwa.addPwaToCache.callCount, 2);
