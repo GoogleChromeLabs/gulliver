@@ -93,7 +93,7 @@ describe('lib.model-datastore', () => {
     });
 
     it('counts objects correctly', () => {
-      return db.update(ENTITY_NAME, null, DB_OBJECT)
+      return db.updateWithCounts(ENTITY_NAME, null, DB_OBJECT)
         .then(() => {
           return db.count(ENTITY_NAME)
             .then(result => {

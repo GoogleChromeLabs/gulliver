@@ -66,7 +66,7 @@ describe('lib.pwa', () => {
     it('sets iconUrl', () => {
       // Mock libImages and bd to avoid making real calls
       simpleMock.mock(libImages, 'fetchAndSave').resolveWith(['original', '128', '64']);
-      simpleMock.mock(db, 'update').returnWith(pwa);
+      simpleMock.mock(db, 'updateWithCounts').returnWith(pwa);
       return libPwa.updatePwaIcon(pwa, manifest).should.be.fulfilled.then(updatedPwa => {
         assert.equal(libImages.fetchAndSave.callCount, 1);
         assert.equal(libImages.fetchAndSave.lastCall.args[0],
