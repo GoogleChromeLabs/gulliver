@@ -59,15 +59,41 @@ describe('lib.pwa', () => {
       });
   });
 
-  describe('#updateIcon', () => {
+  describe('#updatePwaMetadataDescription', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+    it('sets Metadata Description', () => {
+      simpleMock.mock(dataFetcher, 'fetchMetadataDescription').resolveWith('a description');
+      return libPwa.updatePwaMetadataDescription(pwa).should.be.fulfilled.then(updatedPwa => {
+        assert.equal(dataFetcher.fetchMetadataDescription.callCount, 1);
+        assert.equal(updatedPwa.metaDescription, 'a description');
+      });
+    });
+    it('sets Metadata Description, works without metaDescription returned by dataFetcher', () => {
+      simpleMock.mock(dataFetcher, 'fetchMetadataDescription').resolveWith(null);
+      return libPwa.updatePwaMetadataDescription(pwa).should.be.fulfilled.then(updatedPwa => {
+        assert.equal(dataFetcher.fetchMetadataDescription.callCount, 1);
+        assert.equal(updatedPwa.metaDescription, undefined);
+      });
+    });
+    it('sets Metadata Description, works even if there is an error during at dataFetcher', () => {
+      simpleMock.mock(dataFetcher, 'fetchMetadataDescription').rejectWith(new Error());
+      return libPwa.updatePwaMetadataDescription(pwa).should.be.fulfilled.then(updatedPwa => {
+        assert.equal(dataFetcher.fetchMetadataDescription.callCount, 1);
+        assert.equal(updatedPwa.metaDescription, undefined);
+      });
+    });
+  });
+
+  describe('#updatePwaIcon', () => {
     afterEach(() => {
       simpleMock.restore();
     });
     it('sets iconUrl', () => {
-      // Mock libImages and bd to avoid making real calls
       simpleMock.mock(libImages, 'fetchAndSave').resolveWith(['original', '128', '64']);
       simpleMock.mock(db, 'updateWithCounts').returnWith(pwa);
-      return libPwa.updatePwaIcon(pwa, manifest).should.be.fulfilled.then(updatedPwa => {
+      return libPwa.updatePwaIcon(pwa).should.be.fulfilled.then(updatedPwa => {
         assert.equal(libImages.fetchAndSave.callCount, 1);
         assert.equal(libImages.fetchAndSave.lastCall.args[0],
           'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
@@ -79,12 +105,11 @@ describe('lib.pwa', () => {
     });
   });
 
-  describe('#updateLighthouseInfo', () => {
+  describe('#updatePwaLighthouseInfo', () => {
     afterEach(() => {
       simpleMock.restore();
     });
     it('sets lighthouseScore', () => {
-      // Mock libLighthouse and bd to avoid making real calls
       simpleMock.mock(libLighthouse, 'fetchAndSave').resolveWith(lighthouse);
       simpleMock.mock(db, 'update').returnWith(pwa);
       return libPwa.updatePwaLighthouseInfo(pwa).should.be.fulfilled.then(updatedPwa => {
@@ -151,12 +176,11 @@ describe('lib.pwa', () => {
     });
   });
 
-  describe('#updateManifest', () => {
+  describe('#fetchManifest', () => {
     afterEach(() => {
       simpleMock.restore();
     });
     it('Fetches manifest directly from MANIFEST_URL', () => {
-      // Mock libManifest
       simpleMock.mock(libManifest, 'fetchManifest').resolveWith(manifest);
       return libPwa.fetchManifest(pwa).should.be.fulfilled.then(fetchedManifest => {
         assert.equal(fetchedManifest, manifest);
@@ -164,13 +188,23 @@ describe('lib.pwa', () => {
       });
     });
     it('Fails directly and looks for manifest link on START_URL', () => {
-      // Mock libManifest
       simpleMock.mock(libManifest, 'fetchManifest').rejectWith(new Error()).resolveWith(manifest);
-      simpleMock.mock(dataFetcher, 'fetchLinkRelManifestUrl').resolveWith(START_URL);
-      return libPwa.fetchManifest(new Pwa(START_URL, manifest))
+      simpleMock.mock(dataFetcher, 'fetchLinkRelManifestUrl').resolveWith(MANIFEST_URL);
+      let PwaWithStartUrl = new Pwa(START_URL, manifest);
+      return libPwa.fetchManifest(PwaWithStartUrl)
       .should.be.fulfilled.then(fetchedManifest => {
         assert.equal(fetchedManifest, manifest);
+        assert.equal(PwaWithStartUrl.manifestUrl, MANIFEST_URL);
         assert.equal(libManifest.fetchManifest.callCount, 2);
+        assert.equal(dataFetcher.fetchLinkRelManifestUrl.callCount, 1);
+      });
+    });
+    it('Fails directly and fails for manifest link on START_URL', () => {
+      simpleMock.mock(libManifest, 'fetchManifest').rejectWith(new Error()).resolveWith(manifest);
+      simpleMock.mock(dataFetcher, 'fetchLinkRelManifestUrl').rejectWith(new Error());
+      return libPwa.fetchManifest(new Pwa(START_URL, manifest))
+      .should.be.rejected.then(_ => {
+        assert.equal(libManifest.fetchManifest.callCount, 1);
         assert.equal(dataFetcher.fetchLinkRelManifestUrl.callCount, 1);
       });
     });
@@ -197,7 +231,6 @@ describe('lib.pwa', () => {
       });
     });
     it('handles E_MANIFEST_ERROR error', () => {
-      // Mock findByManifestUrl to avoid making real calls
       simpleMock.mock(libManifest, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'findByManifestUrl').rejectWith(new Error('Testing error'));
       return libPwa._save(pwa).should.be.rejectedWith(libPwa.E_MANIFEST_ERROR);
