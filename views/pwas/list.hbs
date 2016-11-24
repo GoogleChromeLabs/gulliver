@@ -21,21 +21,19 @@
 
     <div class="section-title">
       {{#if showNewest}}
-      <a href="/?sort=newest"><div class="tab">Newest</div></a>
+      <a href="/?sort=newest"><div class="tab">New</div></a>
       <div class="tab activetab">Score</div>
       {{/if}}
       {{#if showScore}}
-      <div class="tab activetab">Newest</div>
+      <div class="tab activetab">New</div>
       <a href="/?sort=score"><div class="tab">Score</div></a>
       {{/if}}
     </div>
     <div class="container">
       <div class="toolbar">
-        <div>
-          <div class="button add green gulliver-online-aware">
-            <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
-          </div>
-        </div>   
+        <button id="pwaAdd" type="submit" class="button add accent-color gulliver-signedin-aware gulliver-online-aware" onlick="#">
+          <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
+        </button>
       </div>
 
       <div class="items">
@@ -45,7 +43,7 @@
             <div class="pwabox-body">
               <div class="pwabox-left">
                 {{#if iconUrl64}}
-                  <img src="{{iconUrl64}}" width="64" height="64" alt="logo for {{name}}"/>
+                  <img src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{name}}"/>
                 {{else}}
                 <svg width="64" height="64">
                   <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
@@ -57,7 +55,7 @@
                 <div class="name">{{name}}</div>
                 <div class="lighthouseScore">
                   <div class="lighthouseLogo">
-                    <img src="/img/lighthouse-18.png" width="18" height="18" title="Lighthouse Score" alt="Lighthouse logo"/>
+                    <img src="/img/lighthouse-18.png" srcset="/img/lighthouse-18.png 1x, /img/lighthouse-36.png 2x" title="Lighthouse Score" alt="Lighthouse logo"/>
                   </div>
                   <div>
                     {{#if lighthouseScore}}
