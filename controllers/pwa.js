@@ -25,7 +25,7 @@ const libMetadata = require('../lib/metadata');
 
 const CLIENT_ID = config.get('CLIENT_ID');
 const CLIENT_SECRET = config.get('CLIENT_SECRET');
-const LIST_PAGE_SIZE = 12;
+const LIST_PAGE_SIZE = 24;
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_SORT_ORDER = 'newest';
 
