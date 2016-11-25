@@ -57,6 +57,9 @@ toolbox.router.head(/^/, request => {
 
 toolbox.router.get('/', (request, values, options) => {
   // Replace requests to start_url with the lastest version of the root page.
+  // TODO Make more generic: strip utm_* parameters from *every* request.
+  // TODO Pass through credentials (e.g. cookies) and other request metadata, see
+  // https://github.com/ithinkihaveacat/sw-proxy/blob/master/http-proxy.ts#L249.
   if (request.url.endsWith('/?utm_source=homescreen')) {
     request = new Request('/');
   }
