@@ -93,7 +93,6 @@ describe('models/pwa.js', () => {
     pwa.metaDescription = 'metaDescription';
     assert.equal(pwa.description, 'metaDescription');
     pwa.manifest = new Manifest('http://www.example.com', {description: 'manifestDescription'});
-    console.log(pwa);
     assert.equal(pwa.description, 'manifestDescription');
   });
 });

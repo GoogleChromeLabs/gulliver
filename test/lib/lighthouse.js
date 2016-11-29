@@ -28,7 +28,7 @@ let assert = require('chai').assert;
 
 const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
-describe('processLighthouseJson', () => {
+describe('lib.lighthouse', () => {
   it('processLighthouseJson(lighthouse-example.json) should work', () => {
     return dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
       .then(data => {
@@ -47,9 +47,7 @@ describe('processLighthouseJson', () => {
         assert.equal(lighthouseInfo.audits[0].score, false);
       });
   });
-});
 
-describe('getLighthouseGraphByPwaId', () => {
   it('getLighthouseGraphByPwaId should return null if theres not data for PWA', () => {
     simpleMock.mock(lighthouseLib, 'getLighthouseByPwaId').resolveWith([]);
     return lighthouseLib.getLighthouseGraphByPwaId(123).should.be.fulfilled.then(json => {
