@@ -17,11 +17,12 @@
 
 const crypto = require('crypto');
 const uri = require('urijs');
+const Manifest = require('../models/manifest');
 
 class Pwa {
   constructor(manifestUrl, manifestModel) {
     this.manifestUrl = manifestUrl;
-    this.manifest = manifestModel;
+    this._manifest = stringifyManifestIfNeeded(manifestModel);
     this.created = new Date();
     this.updated = this.created;
     this.visible = true;
@@ -66,12 +67,23 @@ class Pwa {
     return this.manifest.backgroundColor || '#ffffff';
   }
 
-  get manifestAsString() {
-    if (!this.manifest) {
-      return '';
+  get manifest() {
+    if (!this._manifest) {
+      return null;
     }
+    return new Manifest(this.manifestUrl, JSON.parse(this._manifest));
+  }
 
-    return JSON.stringify(this.manifest);
+  set manifest(value) {
+    if (value && typeof value === 'object') {
+      this._manifest = value.raw;
+    } else {
+      this._manifest = value;
+    }
+  }
+
+  get manifestAsString() {
+    return this._manifest;
   }
 
   setUserId(user) {
@@ -79,6 +91,13 @@ class Pwa {
       id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')
     };
   }
+}
+
+function stringifyManifestIfNeeded(manifest) {
+  if (manifest && typeof manifest === 'object') {
+    return manifest.raw;
+  }
+  return manifest;
 }
 
 module.exports = Pwa;

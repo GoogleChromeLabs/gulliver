@@ -16,10 +16,12 @@
 /* global describe it before afterEach */
 'use strict';
 
+let dataFetcher = require('../../lib/data-fetcher');
 let libTasks = require('../../lib/tasks');
 let db = require('../../lib/model-datastore');
 let Pwa = require('../../models/pwa');
 let Task = require('../../models/task');
+let Manifest = require('../../models/manifest');
 
 let simpleMock = require('simple-mock');
 let chai = require('chai');
@@ -29,17 +31,23 @@ chai.should();
 let assert = require('chai').assert;
 
 const MANIFEST_URL = 'https://www.terra.com.br/manifest-br.json';
+const MANIFEST_DATA = './test/manifests/icon-url-with-parameter.json';
 
 describe('lib.tasks', () => {
+  let manifest;
   let pwa;
   let task;
   let dbListResult = {};
   before(done => {
-    pwa = new Pwa(MANIFEST_URL, null);
-    pwa.id = 123456789;
-    task = new Task(123456789);
-    dbListResult.entities = new Array(task);
-    done();
+    dataFetcher.readFile(MANIFEST_DATA)
+      .then(jsonString => {
+        manifest = new Manifest(MANIFEST_URL, JSON.parse(jsonString));
+        pwa = new Pwa(MANIFEST_URL, manifest);
+        pwa.id = 123456789;
+        task = new Task(123456789);
+        dbListResult.entities = new Array(task);
+        done();
+      });
   });
 
   describe('#push', () => {
