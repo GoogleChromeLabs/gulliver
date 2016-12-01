@@ -16,7 +16,7 @@
 'use strict';
 
 const express = require('express');
-const router = express.Router(); // eslint-disable-line
+const router = express.Router(); // eslint-disable-line new-cap
 
 // Includes APIs for Lighthouse (/api/lighthouse)
 router.use('/lighthouse', require('./lighthouse'));
