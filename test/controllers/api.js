@@ -44,7 +44,7 @@ describe('controllers.api', () => {
       simpleMock.mock(lighthouseLib, 'getLighthouseGraphByPwaId').resolveWith('mocked graph data');
       // /api/ is part of the router, we need to start from /lighthouse-graph/
       request(app)
-        .get('/lighthouse-graph/1234567')
+        .get('/lighthouse/graph/1234567')
         .expect('Content-Type', /json/)
         .expect(200).should.be.fulfilled.then(res => {
           assert.equal(res.body, 'mocked graph data');
@@ -58,7 +58,7 @@ describe('controllers.api', () => {
       simpleMock.mock(lighthouseLib, 'getLighthouseGraphByPwaId').resolveWith(null);
       // /api/ is part of the router, we need to start from /lighthouse-graph/
       request(app)
-        .get('/lighthouse-graph/123')
+        .get('/lighthouse/graph/123')
         .expect('Content-Type', /json/)
         .expect(400).should.be.rejected.then(res => {
           assert.equal(res.body, undefined);
