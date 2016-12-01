@@ -5,7 +5,7 @@
  * Use to make the API request to get the Lighthouse chart data for a PWA.
  */
 const CHART_ELEMENT_ID = 'chart';
-const CHART_BASE_URL = '/api/lighthouse-graph/';
+const CHART_BASE_URL = '/api/lighthouse/graph/';
 
 function drawChart() {
   const chartDiv = document.getElementById(CHART_ELEMENT_ID);
