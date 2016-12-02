@@ -8,6 +8,7 @@ const CHART_ELEMENT_ID = 'chart';
 const CHART_BASE_URL = '/api/lighthouse/graph/';
 
 function drawChart() {
+  const pagewith = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
   const chartDiv = document.getElementById(CHART_ELEMENT_ID);
   const pwaId = chartDiv.getAttribute('pwa');
   if (pwaId) {
@@ -22,8 +23,9 @@ function drawChart() {
           height: 242,
           displayAnnotations: false,
           displayRangeSelector: false,
+          displayZoomButtons: (pagewith > 420),
           legendPosition: 'newRow',
-          thickness: 2,
+          thickness: 4,
           min: 0,
           max: 100
         };
