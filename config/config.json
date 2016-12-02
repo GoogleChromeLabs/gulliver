@@ -5,5 +5,6 @@
   "CLIENT_ID": "605287872172-js6omne47i1k79hnfo7d4bdu9rlemslr.apps.googleusercontent.com",
   "CLIENT_SECRET": "your client secret here",
   "LIGHTHOUSE_SERVER": "your lighthouse server URL",
-  "GOOGLE_ANALYTICS": "your Google Analytics tracking code"
+  "GOOGLE_ANALYTICS": "your Google Analytics tracking code",
+  "FIREBASE_AUTH": "Your Firebase Notifications ID"  
 }
