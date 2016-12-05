@@ -19,12 +19,16 @@ html {
 *:before,
 *:after {
   box-sizing: inherit;
+  /* don't show Chrome's default blue tap highlight */
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
 
 body {
-  font-family: "Helvetica", "Arial", sans-serif;
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 16px;
+  font-weight: 300;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
   width: 100%;
   min-width: 310px;
   margin: 0;
@@ -33,9 +37,15 @@ body {
   min-height: 100%;
   padding-bottom: 10px;
 }
+
 h3 { 
+  font-size: 22px;
   font-weight: 400;
+  letter-spacing: -.018em;
+  text-overflow: ellipsis;
+  line-height: 38px;
 }
+
 a { 
   text-decoration: none;
   color: inherit;
@@ -43,6 +53,7 @@ a {
 a:hover { 
   text-decoration: underline; 
 }
+
 .container {
   padding-right: 8px;
   padding-left: 8px;
@@ -78,8 +89,6 @@ a:hover {
   background-position: left center;
   background-repeat: no-repeat;
   background-image: -webkit-image-set( url(/favicons/android-chrome-48x48.png) 1x, url(/favicons/android-chrome-96x96.png) 2x );
-  -webkit-filter: drop-shadow( 1px 1px 1px #333 );
-          filter: drop-shadow( 1px 1px 1px #333 );
 }
 .navbar-subtitle {
   height: 20px;
@@ -94,7 +103,6 @@ a:hover {
 }
 .navbar #github {
   position: absolute;
-  font-size: 16px;
   bottom: 28px;
   right: 15px;
 }
@@ -134,8 +142,6 @@ a:hover {
       -ms-flex-direction: row;
           flex-direction: row;
   color: white;
-  font-size: 16px;
-  font-weight: 400;
   background: #2196F3;
   padding-left: 16px;
   margin-bottom: 16px;
@@ -146,7 +152,7 @@ a:hover {
 .section-title .back {
   font-size: 24px;
   padding-right: 16px;
-  height: 48px;
+  height: 54px;
   line-height: 54px;
   width: 48px;
 }
@@ -157,6 +163,7 @@ a:hover {
   padding: 0 40px 0 40px;
   color: white;
   opacity: 0.7;
+  font-weight: 500;
 }
 .tab:hover {
   border-bottom-style: solid;
@@ -190,11 +197,12 @@ button {
 }
 .button {
   font-size: 14px;
+  font-weight: 500;
   color: white;
-  width: 100px;
+  min-width: 100px;
   height: 30px;
-  text-align: center;
   line-height: 30px;
+  text-align: center;
   margin-bottom: 5px;
   margin-right: 5px;
   display: inline-block;
@@ -211,7 +219,9 @@ button {
   border-radius: 2px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 }
-button[disabled=disabled], button:disabled {
+button:active,
+button[disabled=disabled], 
+button:disabled {
   opacity: 0.5;
   cursor: default;
 }
@@ -242,6 +252,9 @@ button[disabled=disabled], button:disabled {
   height: 100px;
   border-radius: 2px;
 }
+.pwabox-body:active {
+  opacity: 0.5;
+}
 .pwabox-body {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -269,10 +282,10 @@ button[disabled=disabled], button:disabled {
 }
 .pwabox-right .name {
   text-align: left;
-  font-size: 16px;
-  font-weight: 600;
   height: 50px;
   line-height: 22px;
+  font-weight: 500;
+  letter-spacing: .005em;
 }
 .pwabox-right .lighthouseScore {
   display: -webkit-box;
@@ -287,8 +300,7 @@ button[disabled=disabled], button:disabled {
           justify-content: flex-end;
   height: 18px;
   line-height: 18px;
-  font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
 }
 .pwabox-right .lighthouseLogo {
   padding-right: 5px;
@@ -306,7 +318,6 @@ button[disabled=disabled], button:disabled {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  font-size: 14px;
   font-weight: 400;
   max-width: 600px;
   margin: 0 auto 16px auto;
@@ -387,7 +398,6 @@ button[disabled=disabled], button:disabled {
  display:block;
 }
 .pwadetail .name {
-  font-size: 16px;
   font-weight: 600;
 }
 .detail-general .dates {
@@ -412,12 +422,10 @@ button[disabled=disabled], button:disabled {
 .form-input {
   height: 20px;
   width: 80%;
-  font-size: 16px;
 }
 .form-textbox {
   width: 80%;
   padding: 10px 16px;
-  font-size: 16px;
   background: #F5F5F5;
   overflow: scroll;
   border: 1px solid lightgray;
@@ -578,22 +586,32 @@ button[disabled=disabled], button:disabled {
 }
 
 /* Styles for highlighted JSON */
-pre {padding: 5px; margin: 5px; }
+pre {
+  font-size: 14px;
+  tab-size: 2;
+  font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
+  padding: 0; 
+  margin: 0; 
+}
 .string { color: #0288D1; }
 .number { color: red; }
 .boolean { color: #FF5252; }
 .null { color: magenta; }
 .key { color: #212121; }
+
 /* Styles for lighthouse report */
 #lighthouse-report-section {
   font-weight: bold;
 }
 th {
-  font-size: 18px;
+  font-weight: 500;
   padding-left: 8px;
   padding-right: 8px;
   padding-top: 16px;
   padding-bottom: 16px;
+  background-color: #1976D2;
+  color: #FFFFFF;
+  text-transform: uppercase;
 }
 td {
   padding: 8px;
@@ -608,10 +626,6 @@ td {
 }
 .desc {
   width: 400px;
-}
-th {
-  background-color: #1976D2;
-  color: #FFFFFF;
 }
 tr:nth-child(even) {
   background-color: #2196F3;
@@ -631,7 +645,6 @@ tr:nth-child(odd) {
 }
 
 .pwa-count {
-  font-size: 16px;
   font-weight: 600;
   height: 50px;
   line-height: 22px;  

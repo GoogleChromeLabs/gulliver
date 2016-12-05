@@ -20,14 +20,8 @@
     {{> header}}
 
     <div class="section-title">
-      {{#if showNewest}}
-      <a href="/?sort=newest"><div class="tab">New</div></a>
-      <div class="tab activetab">Score</div>
-      {{/if}}
-      {{#if showScore}}
-      <div class="tab activetab">New</div>
-      <a href="/?sort=score"><div class="tab">Score</div></a>
-      {{/if}}
+      <a href="/?sort=newest"><div class="tab {{#if showNewest}}activetab{{/if}}">New</div></a>
+      <a href="/?sort=score"><div class="tab {{#if showScore}}activetab{{/if}}">Score</div></a>
     </div>
     <div class="container">
       <div class="toolbar">
@@ -52,7 +46,7 @@
                 {{/if}}
               </div>
               <div class="pwabox-right">
-                <div class="name">{{name}}</div>
+                <div class="name title">{{name}}</div>
                 <div class="lighthouseScore">
                   <div class="lighthouseLogo">
                     <img src="/img/lighthouse-18.png" srcset="/img/lighthouse-18.png 1x, /img/lighthouse-36.png 2x" title="Lighthouse Score" alt="Lighthouse logo"/>

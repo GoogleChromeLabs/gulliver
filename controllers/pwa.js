@@ -56,8 +56,8 @@ router.get('/', (req, res, next) => {
         previousPageNumber: pageNumber - 1,
         currentPageNumber: pageNumber,
         sortOrder: sortOrder,
-        showNewest: sortOrder !== 'newest',
-        showScore: sortOrder !== 'score',
+        showNewest: sortOrder === 'newest',
+        showScore: sortOrder === 'score',
         pwaCount: pwaCount,
         startPwa: start + 1,
         endPwa: Math.min(pwaCount, end)
