@@ -127,7 +127,7 @@ function setupOnlineAware() {
       }
     });
   }
-  const l2 = document.querySelectorAll('div.pwabox.gulliver-online-aware');
+  const l2 = document.querySelectorAll('a.card-pwa.gulliver-online-aware');
   for (const e of l2) {
     e.addEventListener('change', function() {
       if (JSON.parse(this.dataset.online)) {
@@ -137,7 +137,7 @@ function setupOnlineAware() {
         this.onclick = null;
         return;
       }
-      const href = e.querySelector('a') && e.querySelector('a').getAttribute('href');
+      const href = e.getAttribute('href');
       if (href) {
         fetch(href, {method: 'HEAD'}).then(r => {
           if (r.status === 200) {
