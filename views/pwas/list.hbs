@@ -32,37 +32,24 @@
 
       <div class="items">
         {{#each pwas}}
-        <div class="pwabox item gulliver-online-aware" style="background-color: {{backgroundColor}}">
-          <a href="/pwas/{{id}}" style="color:{{contrastColor backgroundColor}}">
-            <div class="pwabox-body">
-              <div class="pwabox-left">
-                {{#if iconUrl64}}
-                  <img src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{name}}"/>
-                {{else}}
-                <svg width="64" height="64">
-                  <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
-                  <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
-                </svg>
-                {{/if}}
-              </div>
-              <div class="pwabox-right">
-                <div class="name title">{{name}}</div>
-                <div class="lighthouseScore">
-                  <div class="lighthouseLogo">
-                    <img src="/img/lighthouse-18.png" srcset="/img/lighthouse-18.png 1x, /img/lighthouse-36.png 2x" title="Lighthouse Score" alt="Lighthouse logo"/>
-                  </div>
-                  <div>
-                    {{#if lighthouseScore}}
-                      {{lighthouseScore}}
-                    {{else}}
-                      <i class="fa fa-hourglass-half" aria-hidden="true" title="Lighthouse in progress"></i>
-                    {{/if}}
-                  </div>
-                </div>
-              </div>
+          <a class="item card card-pwa gulliver-online-aware" href="/pwas/{{id}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
+            {{#if iconUrl64}}
+              <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{name}}"/>
+            {{else}}
+              <svg class="pwa-icon" width="64" height="64">
+                <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
+                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
+              </svg>
+            {{/if}}
+            <div class="pwa-name">{{name}}</div>
+            <div class="pwa-score">
+            {{#if lighthouseScore}}
+              {{lighthouseScore}}
+            {{else}}
+              <i class="fa fa-hourglass-half" aria-hidden="true" title="Lighthouse in progress"></i>
+            {{/if}}
             </div>
           </a>
-        </div>
         {{/each}}
       </div>
 
