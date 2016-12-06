@@ -18,12 +18,10 @@
   </head>
   <body>
     {{> header}}
-
-    {{#if pwa.manifestUrl}}
-    <div class="section-title">Edit a PWA</div>
-    {{else}}
-    <div class="section-title">Submit a PWA</div>
-    {{/if}}
+    <div class="section-title">
+      <a href="/" class="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+      <div id="subtitle">Submit a PWA</div>
+    </div>
 
     <main>
       <form id="pwaForm" method="POST">
