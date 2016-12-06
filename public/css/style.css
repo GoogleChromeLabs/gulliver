@@ -53,8 +53,7 @@ a {
 a:hover { 
   text-decoration: underline; 
 }
-
-.container {
+main {
   padding-right: 8px;
   padding-left: 8px;
   padding-bottom: 44px;
@@ -424,7 +423,7 @@ a.card:hover {
   pointer-events: none;
 }
 /* Footer */
-.footer {
+footer {
   position: absolute;
   width:100%;
   bottom: 0;
@@ -440,7 +439,7 @@ a.card:hover {
   background: #1976D2;
   color: white;
 }
-.footer ul {
+footer ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -451,15 +450,15 @@ a.card:hover {
           justify-content: center;
   padding: 0;
 }
-.footer ul li:first-child {
+footer ul li:first-child {
   border-left: none;
 }
-.footer li {
+footer li {
   display: block;
   padding: 0 1em;
   border-left: 1px solid #fff;
 }
-.footer ul li a {
+footer ul li a {
   -ms-flex-flow: row wrap;
       flex-flow: row wrap;
   -webkit-box-pack: center;
