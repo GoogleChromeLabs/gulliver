@@ -1,4 +1,4 @@
-# Gulliver 
+# Gulliver
 
 [Gulliver](https://pwa-directory.appspot.com/) is a directory of [Progressive Web Apps](https://infrequently.org/2016/09/what-exactly-makes-something-a-progressive-web-app/).
 
@@ -22,42 +22,41 @@ Gulliver itself has been implemented as a PWA; therefore it is designed to work 
 
 ## Requirements
 
-Gulliver was built using the [ExpressJS](https://expressjs.com/) web framework for Node.js, and uses the [Google Cloud Platform](https://cloud.google.com/) (GCP) for computing and storage services. Therefore, the following components are required to run the project:
+Gulliver was built using the [ExpressJS](https://expressjs.com/) web framework for Node.js, and uses the [Google Cloud Platform](https://cloud.google.com/) (GCP) for computing and storage services.
 
-1. [NodeJS](https://nodejs.org) (~6.0.0). A JavaScript runtime built on Chrome's V8 JavaScript engine.
+The following components are required to run the project:
 
-1. [Google Cloud SDK](https://cloud.google.com/sdk/). A set of tools for GCP that you can use to access the Google Compute Engine and the Google Cloud Storage, which are two components of GCP used by Gulliver.
+1. [NodeJS](https://nodejs.org/) (version ~6.0.0). A JavaScript runtime built on Chrome's V8 JavaScript engine. (How to verify? Run `node --version`.)
 
-1. A [Google Cloud Console](https://console.cloud.google.com/) project. A GCC project forms the basis of accessing the GCP. 
+1. [Google Cloud SDK](https://cloud.google.com/sdk/). A set of tools for the Google Cloud Platform (GCP) that you can use to access the Google Compute Engine and the Google Cloud Storage, which are two components of GCP used by Gulliver. (How to verify? Run `gcloud --version`.)
 
-1. [Memcached](https://memcached.org/). A distributed memory object caching system.
+1. [Memcached](https://memcached.org/). A distributed memory object caching system. (How to verify? Run `memcached` (the command should appear to hang), and then `telnet localhost 11211` in a separate terminal. In the `telnet` window, typing `version` it should report the `memcached` version. If you don't have it, see [these instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/using-redislabs-memcache#testing_memcached_locally) to install memcached.)
+
+In addition, you will need to set up a GCP project, and configure OAuth:
+
+1. A [Google Cloud Console](https://console.cloud.google.com/) project. A GCC project forms the basis of accessing the GCP. (How to verify? Run `gcloud info` and check that the `Account` and `Project` properties are what you expect. Use `gcloud init` to configure `gcloud` if you don't have one already.)
+
+1. A OAuth *client id* and *client secret* and  associated with your project. (How to verify? There's no automatic way, but see [Creating a Google API Console project and client ID](https://developers.google.com/identity/sign-in/web/devconsole-project) for how to create one. Make sure you list `http://localhost:8080` as one of the `Authorized JavaScript origins`.)
 
 ## Running Gulliver
 
-To run Gulliver locally the following steps must be followed:
-
-1. **Clone** the GitHub repository: `git clone https://github.com/GoogleChrome/gulliver.git`
+1. Clone the GitHub repository: `git clone https://github.com/GoogleChrome/gulliver.git`
 
 1. Switch into the project directory: `cd gulliver`
 
-1. Create a **Google Cloud Console project**. You can check the Cloud Platform Console [documentation](https://support.google.com/cloud/answer/6251787) for instructions on how to do it.
-
 1. Create indexes for the [Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview): `gcloud preview datastore create-indexes index.yaml`
 
-1. Deploy cron jobs for scheduled PWA updates (optional): `gcloud app deploy cron.yaml`
+1. (Optional) Deploy cron jobs for scheduled PWA updates: `gcloud app deploy cron.yaml`
 
 1. Install **Memcached** and run it on `localhost:11211`. Check these [installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data) for guidance.
 
-1. Edit the [`config/config.json`](config/config.json) file to contain the
-information associated with your Google Cloud Console project. Alternatively, you can set environment variables corresponding to those defined in the config file.
+1. Run **`npm install`** to install dependencies.
 
-1. Run **`gcloud init`** to setup your project.
+1. Configure your project either via [`config/config.json`](config/config.json) or environment variables (which override the corresponding keys in the config file).
 
-1. Run **`npm i`** to install the dependencies declared in `package.json`
+1. Start Gulliver via `npm start`.
 
-1. Run **`npm start`** to start the project; the default port used is `8080` but you can specify another port by running `PORT=<your-port> npm start`
-
-1. Access the URL `localhost:8080` or `localhost:<your-port>` from your browser.
+1. Gulliver should now be running at `http://localhost:8080`.
 
 ## Running Tests
 
@@ -77,12 +76,12 @@ To find out more about what PWAs are and how to go about incorporating the princ
 
 + [Progressive Web Apps](https://developers.google.com/web/#progressive-web-apps): Documentation entry point. Here you will find several resources to get started developing PWAs
 
-+ [Progressive Web Apps: Escaping Tabs without Losing our Soul](https://infrequently.org/2015/06/progressive-apps-escaping-tabs-without-losing-our-soul/): 
++ [Progressive Web Apps: Escaping Tabs without Losing our Soul](https://infrequently.org/2015/06/progressive-apps-escaping-tabs-without-losing-our-soul/):
 Introductory article with historical perspective
 
 + [Getting Started with Progressive Web Apps](https://addyosmani.com/blog/getting-started-with-progressive-web-apps/): Sound introduction on the fundamental elements behind the development of PWAs
 
-+ [The Building Blocks of PWAs](https://www.smashingmagazine.com/2016/09/the-building-blocks-of-progressive-web-apps/): Interesting overall view of PWAs. 
++ [The Building Blocks of PWAs](https://www.smashingmagazine.com/2016/09/the-building-blocks-of-progressive-web-apps/): Interesting overall view of PWAs.
 
 ## License
 
