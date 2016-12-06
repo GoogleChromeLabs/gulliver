@@ -25,7 +25,14 @@
       {{> pwadetails pwa=pwa}}
       {{> lighthouse lighthouse=lighthouse}}
       {{#if pwa.manifest}}
-        {{> manifest pwa=pwa}}
+      <div class="detail-general manifest-detail">
+        <div class="detail-header">
+          <h3><a href="{{pwa.manifestUrl}}" target="_blank">MANIFEST</a></h3>
+        </div>
+        <div>
+        <pre>{{{highlightedJson rawManifestJson}}}</pre>
+        </div>
+      </div>
       {{/if}}
     </div>
     {{> footer}}

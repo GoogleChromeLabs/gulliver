@@ -75,7 +75,7 @@ exports.prettyJson = function(object) {
 };
 
 exports.highlightedJson = function(object) {
-  return syntaxHighlight(JSON.stringify(object, null, 4));
+  return syntaxHighlight(JSON.stringify(object, null, 2));
 };
 
 exports.getAggregationTableRow = function(aggregation) {
