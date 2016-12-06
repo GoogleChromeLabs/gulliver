@@ -21,7 +21,7 @@
     <div class="section-title">
       <a href="{{backlink}}"><div class="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></div></a>
     </div>
-    <div class="container">
+    <main>
       {{> pwadetails pwa=pwa}}
       {{> lighthouse lighthouse=lighthouse}}
       {{#if pwa.manifest}}
@@ -34,7 +34,7 @@
         </div>
       </div>
       {{/if}}
-    </div>
+    </main>
     {{> footer}}
   </body>
 </html>

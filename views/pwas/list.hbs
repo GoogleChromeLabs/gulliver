@@ -23,7 +23,7 @@
       <a href="/?sort=newest"><div class="tab {{#if showNewest}}activetab{{/if}}">New</div></a>
       <a href="/?sort=score"><div class="tab {{#if showScore}}activetab{{/if}}">Score</div></a>
     </div>
-    <div class="container">
+    <main>
       <div class="toolbar">
         <button id="pwaAdd" type="submit" class="button add accent-color gulliver-signedin-aware gulliver-online-aware" onlick="#">
           <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
@@ -73,7 +73,7 @@
         </a>
         {{/if}}
       </div>
-    </div>
+    </main>
     {{> footer}}
   </body>
 </html>
