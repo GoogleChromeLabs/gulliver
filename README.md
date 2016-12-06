@@ -24,7 +24,7 @@ Gulliver itself has been implemented as a PWA; therefore it is designed to work 
 
 Gulliver was built using the [ExpressJS](https://expressjs.com/) web framework for Node.js, and uses the [Google Cloud Platform](https://cloud.google.com/) (GCP) for computing and storage services. Therefore, the following components are required to run the project:
 
-1. [NodeJS](https://nodejs.org). A JavaScript runtime built on Chrome's V8 JavaScript engine.
+1. [NodeJS](https://nodejs.org) (~6.0.0). A JavaScript runtime built on Chrome's V8 JavaScript engine.
 
 1. [Google Cloud SDK](https://cloud.google.com/sdk/). A set of tools for GCP that you can use to access the Google Compute Engine and the Google Cloud Storage, which are two components of GCP used by Gulliver.
 
@@ -34,19 +34,19 @@ Gulliver was built using the [ExpressJS](https://expressjs.com/) web framework f
 
 ## Running Gulliver
 
-For running Gulliver locally the following steps must be followed:
+To run Gulliver locally the following steps must be followed:
+
+1. **Clone** the GitHub repository: `git clone https://github.com/GoogleChrome/gulliver.git`
+
+1. Switch into the project directory: `cd gulliver`
 
 1. Create a **Google Cloud Console project**. You can check the Cloud Platform Console [documentation](https://support.google.com/cloud/answer/6251787) for instructions on how to do it.
 
 1. Create indexes for the [Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview): `gcloud preview datastore create-indexes index.yaml`
 
-1. (optional) Deploy cron jobs for scheduled PWA updates: `gcloud app deploy cron.yaml`
+1. Deploy cron jobs for scheduled PWA updates (optional): `gcloud app deploy cron.yaml`
 
 1. Install **Memcached** and run it on `localhost:11211`. Check these [installation instructions](https://cloud.google.com/appengine/docs/flexible/nodejs/caching-application-data) for guidance.
-
-1. **Clone** the GitHub repository: `$ git clone https://github.com/GoogleChrome/gulliver.git`
-
-1. Switch into the project directory: `cd gulliver`
 
 1. Edit the [`config/config.json`](config/config.json) file to contain the
 information associated with your Google Cloud Console project. Alternatively, you can set environment variables corresponding to those defined in the config file.
