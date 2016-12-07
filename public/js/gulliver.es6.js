@@ -218,10 +218,9 @@ function setupSignin() {
     });
 
     const authButton = document.getElementById('auth-button');
-    const authButtonLabel = document.getElementById('auth-button-label');
 
     function updateAuthButtonLabel() {
-      authButtonLabel.innerText = authButton.dataset.signedin === 'true' ?
+      authButton.innerText = authButton.dataset.signedin === 'true' ?
         'Log out' :
         'Log in';
     }
@@ -287,7 +286,10 @@ function setupMessaging() {
   if (checkbox) {
     checkbox.addEventListener('change', e => {
       if (e.target.checked) {
-        messaging.subscribe('new-apps');
+        messaging.subscribe('new-apps')
+          .catch(_ => {
+            e.target.checked = false;
+          });
         return;
       }
       messaging.unsubscribe('new-apps');

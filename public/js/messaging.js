@@ -103,6 +103,9 @@ export default class Messaging {
       })
       .then(json => {
         return json.subscriptions;
+      })
+      .catch(_ => {
+        return Promise.resolve([]);
       });
   }
 
