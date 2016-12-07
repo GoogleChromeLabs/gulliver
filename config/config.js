@@ -17,7 +17,7 @@
 
 // Hierarchical node.js configuration with command-line arguments, environment
 // variables, and files.
-const nconf = module.exports = require('nconf');
+const nconf = require('nconf');
 const path = require('path');
 
 nconf
@@ -41,15 +41,8 @@ nconf
   .file({file: path.join(__dirname, 'config.json')})
   // 4. Defaults
   .defaults({
-    // Typically you will create a bucket with the same name as your project ID.
-    CLOUD_BUCKET: '',
     DATA_BACKEND: 'datastore',
-
-    // This is the id of your project in the Google Cloud Developers Console.
-    GCLOUD_PROJECT: '',
-
-    // Port the HTTP server
-    PORT: 8080
+    PORT: 8080 // Port used by HTTP server
   });
 
 // Check for required settings
@@ -59,8 +52,14 @@ checkConfig('CLIENT_ID');
 checkConfig('CLIENT_SECRET');
 
 function checkConfig(setting) {
+  // If setting undefined, throw error
   if (!nconf.get(setting)) {
-    throw new Error('You must set the ' + setting + ' environment variable or' +
-      ' add it to config.json!');
+    throw new Error(`You must set the ${setting} environment variable or add it to config.json!`);
+  }
+  // If setting includes a space, emit warning
+  if (nconf.get(setting).match(/\s/)) {
+    console.warn(`The ${setting} environment variable is suspicious ("${nconf.get(setting)}")`);
   }
 }
+
+module.exports = nconf;
