@@ -247,7 +247,7 @@ button:disabled {
 .blue {
   background: #0D47A1;
 }
-.button  a {
+.button a {
   color: white;
   text-decoration: none;
   display: block;
@@ -297,56 +297,36 @@ a.card:hover {
 }
 
 .detail-general {
+  max-width: 600px;
   -webkit-display: flex;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -ms-flex-flow: column;
       flex-flow: column;
-  text-overflow: hidden;
-  display: flex;
-  padding: 16px;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
-          justify-content: space-between;
-  font-weight: 400;
-  max-width: 600px;
+  justify-content: space-between;
   margin: 0 auto 16px auto;
+  padding: 0;
+  text-overflow: hidden;
+  font-weight: 400;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
   background: white;
   border-radius: 2px;
 }
-.detail-general .dates {
-  font-style: italic;
-  margin-top: 16px;
-  font-size: 12px;
-  text-align: center;  
-}
 .detail-general h3 { 
-  margin: 0 0 16px 0;
+  color: #1976D2;
+  margin: 0;
+  padding: 16px;
 }
 .detail-general h3 > .score {
   float: right;
 }
-.detail-header {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  margin-bottom: 8px;
-}
-.detail-header > * {
-  font-size: 24px;
-  margin: 0;
-  padding: 0;
-}
+
+/* PWA Overview */
 #pwa {
+  padding: 16px;
   display: flex; 
   flex-direction: column;
   align-items: center;
@@ -360,61 +340,77 @@ a.card:hover {
   opacity: 0.5;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 }
+
 #pwa code {
   text-align: center;
   text-decoration: underline;
   margin-top: 24px;
 }
-#pwa > div,
-#pwa > h3 {
+#pwa > div {
   margin-top: 16px;
 }
-/* Manifest detail box */
-.manifest-detail {
-  margin-top: 1px;
-  overflow-x: scroll;
+#pwa .dates {
+  font-style: italic;
+  font-size: 12px;
 }
-/* Lighthouse report box */
-.lighthouse-detail {
-  margin-top: 1px;
-}
-.lighthouse-report-table {
-  width: 100%;
-}
-.lighthouse-report-table th:nth-child(1),
-.lighthouse-report-table td:nth-child(1) { 
-  text-align: left;
-}
-.lighthouse-report-table th:nth-child(2),
-.lighthouse-report-table td:nth-child(2) { 
-  width: 60px;
-  text-align: right;
-}
-.lighthouse-score {
-  font-size: 18px;
-}
+
+/* Lighthouse graph */
 #chart {
   width: 100%;
-  min-height: 244px;
-  padding: 0;
-  margin-bottom: 16px;
-  border-style: solid;
+  min-height: 276px;
+  padding: 16px;
+  border-top-style: solid;
   border-width: 1px;
   border-color: #ccc;
   position: relative;
 }
 #chart_AnnotationChart_borderDiv {
-  height: 242px !important;
+  height: 244px !important;
   border-style: none;
   animation: 0.25s ease-in fadeIn;
   animation-fill-mode: forwards;
 }
-.pwadetail-logo {
- display:block;
+/* Lighthouse report table */
+table {
+  margin: 0;
+  font-size: 14px;
+  width: 100%;
+  padding: 0 16px;
+  border-spacing: 0;
+  border-collapse: collapse;
+  border-style: hidden;
 }
-.pwadetail .name {
-  font-weight: 600;
+th {
+  color: #1976D2;
+  height: 64px;
+  line-height: 64px;
+  font-weight: 500;
+  text-transform: uppercase;
 }
+th:nth-child(1),
+td:nth-child(1) { 
+  text-align: left;
+  padding-left: 16px;
+}
+th:nth-child(2),
+td:nth-child(2) { 
+  width: 60px;
+  text-align: right;
+  padding-right: 16px;
+}
+tr {
+  height: 48px;
+  color: #333;
+  border-width: 1px;
+  border-color: #eee;
+  border-top-style: solid;
+}
+tr:last-child td {
+  height: 56px;
+  padding-bottom: 8px;
+}
+
+/* Add PWA */
 .form-group {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -589,7 +585,7 @@ pre {
   font-size: 14px;
   tab-size: 2;
   font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
-  padding: 0; 
+  padding: 16px; 
   margin: 0; 
 }
 .string { color: #0288D1; }
@@ -597,42 +593,6 @@ pre {
 .boolean { color: #FF5252; }
 .null { color: magenta; }
 .key { color: #212121; }
-
-/* Styles for lighthouse report */
-#lighthouse-report-section {
-  font-weight: bold;
-}
-th {
-  font-weight: 500;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 16px;
-  padding-bottom: 16px;
-  background-color: #1976D2;
-  color: #FFFFFF;
-  text-transform: uppercase;
-}
-td {
-  padding: 8px;
-}
-table {
-  border-spacing: 0;
-  border-collapse: collapse;  
-}
-thead,
-td {
-  border: 1px solid black;
-}
-.desc {
-  width: 400px;
-}
-tr:nth-child(even) {
-  background-color: #2196F3;
-  color: #FFFFFF;
-}
-tr:nth-child(odd) {
-  background-color: #BBDEFB;
-}
 
 .toolbar {
   width: 100%;
