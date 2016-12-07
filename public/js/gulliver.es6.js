@@ -279,24 +279,25 @@ function setupConfig() {
 }
 
 function setupMessaging() {
+  const NEW_APPS_TOPIC = 'new-apps';
   const messaging = new Messaging();
-  messaging.init();
+  messaging.init(window.__config.firebase_msg_sender_id);
 
   const checkbox = document.getElementById('notifications');
   if (checkbox) {
     checkbox.addEventListener('change', e => {
       if (e.target.checked) {
-        messaging.subscribe('new-apps')
+        messaging.subscribe(NEW_APPS_TOPIC)
           .catch(_ => {
             e.target.checked = false;
           });
         return;
       }
-      messaging.unsubscribe('new-apps');
+      messaging.unsubscribe(NEW_APPS_TOPIC);
     });
   }
 
-  messaging.isSubscribed('new-apps')
+  messaging.isSubscribed(NEW_APPS_TOPIC)
     .then(subscribed => {
       checkbox.checked = subscribed;
     });

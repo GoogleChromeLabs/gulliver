@@ -41,7 +41,8 @@ hbs.localsAsTemplateData(app);
 app.locals.configstring = JSON.stringify({
   /* eslint-disable camelcase */
   client_id: config.get('CLIENT_ID'),
-  ga_id: config.get('GOOGLE_ANALYTICS')
+  ga_id: config.get('GOOGLE_ANALYTICS'),
+  firebase_msg_sender_id: config.get('FIREBASE_MSG_SENDER_ID')
   /* eslint-enable camelcase */
 });
 

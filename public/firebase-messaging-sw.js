@@ -18,12 +18,17 @@
 importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
 
-firebase.initializeApp({
-  messagingSenderId: '653391209629'
-});
+fetch('/messaging-config.json')
+  .then(response => {
+    return response.json();
+  })
+  .then(config => {
+    firebase.initializeApp({
+      messagingSenderId: config.firebase_msg_sender_id
+    });
+    const messaging = firebase.messaging();
+    messaging.setBackgroundMessageHandler(_ => {
+      return self.registration.showNotification();
+    });
+  });
 
-const messaging = firebase.messaging();
-messaging.setBackgroundMessageHandler(payload => {
-  console.log(payload);
-  return self.registration.showNotification('New App');
-});

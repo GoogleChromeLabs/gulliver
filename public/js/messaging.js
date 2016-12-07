@@ -24,9 +24,9 @@ const UNSUBSCRIBE_ENDPOINT = '/api/notifications/unsubscribe';
 const TOPICS_ENDPOINT = '/api/notifications/topics';
 
 export default class Messaging {
-  init() {
+  init(messagingSenderId) {
     const config = {
-      messagingSenderId: '653391209629'
+      messagingSenderId: messagingSenderId
     };
     firebase.initializeApp(config);
   }
