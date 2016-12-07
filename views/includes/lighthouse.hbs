@@ -1,15 +1,5 @@
-<div class="detail-general lighthouse-detail">
-  <div class="detail-header">
-    <h3>LIGHTHOUSE</h3>    
-    <div class="lighthouse-score"> 
-        <img src="/img/lighthouse-18.png"  srcset="/img/lighthouse-18.png 1x, /img/lighthouse-36.png 2x" title="Lighthouse Score" alt="Lighthouse logo"/>
-        {{#if pwa.lighthouseScore}}
-          {{pwa.lighthouseScore}}
-        {{else}}
-          <i class="fa fa-hourglass-half" aria-hidden="true" title="Lighthouse in progress"></i>
-        {{/if}}
-    </div>
-  </div>
+<section class="detail-general lighthouse-detail">
+  <h3>LIGHTHOUSE  {{> score pwa}} </h3>    
   {{#if pwa.lighthouseScore}}
   <div id="chart" pwa={{pwa.id}}></div>
   <div>
@@ -47,4 +37,4 @@
     </div>
   </div>
   {{/if}}
-</div>
+</section>

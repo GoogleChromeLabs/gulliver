@@ -1,26 +1,19 @@
-<div class="detail-general pwadetail"
-     style="background-color: {{pwa.backgroundColor}};
-             color: {{contrastColor pwa.backgroundColor}};">
-    <div class="pwadetail-header">             
-      <div class="pwadetail-logo">
-      <a href="{{pwa.absoluteStartUrl}}" target="_blank">
-        {{#if pwa.iconUrl128}}
-        <div style="background-color: {{pwa.backgroundColor}}">
-          <img src="{{pwa.iconUrl128}}" width="128" height="128"/>
-        </div>
-        {{else}}
-        <svg width="128" height="128">
-          <rect width="100%" height="100%" stroke-width="4" fill="{{pwa.backgroundColor}}" />
-          <text x="50%" y="50%" fill="{{contrastColor pwa.backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="128px">{{firstLetter pwa.name}}</text>
-        </svg>
-        {{/if}}
-        </a>
-      </div>
-      <h3><a href="{{pwa.absoluteStartUrl}}" style="color: {{contrastColor pwa.backgroundColor}}" target="_blank">{{pwa.name}}</a></h3>
-      <div class="detail-description"><a href="{{pwa.absoluteStartUrl}}" style="color: {{contrastColor pwa.backgroundColor}}" target="_blank">{{pwa.absoluteStartUrl}}</a></div>
-    </div>
-    {{#if pwa.description}}
-      <div class="detail-description">{{pwa.description}}</div>
+<a href="{{pwa.absoluteStartUrl}}"  id="pwa" class="detail-general" style="background-color: {{pwa.backgroundColor}}; color: {{contrastColor pwa.backgroundColor}};">
+
+  <div id="pwa-logo-container" style="background-color: {{pwa.backgroundColor}}">
+    {{#if pwa.iconUrl128}}
+      <img src="{{pwa.iconUrl128}}" width="128" height="128"/>
+    {{else}}
+    <svg class="fadeIn" width="128" height="128">
+      <rect width="100%" height="100%" stroke-width="4" fill="{{pwa.backgroundColor}}" />
+      <text x="50%" y="50%" fill="{{contrastColor pwa.backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="128px">{{firstLetter pwa.name}}</text>
+    </svg>
     {{/if}}
-    <div class="dates">Added {{moment pwa.created}}, Updated {{moment pwa.updated}}</div>
-</div>
+  </div>
+  <h3 id="pwa-name">{{pwa.name}}</h3>
+  <code>{{pwa.absoluteStartUrl}}</code>
+  {{#if pwa.description}}
+    <div id="pwa-description">{{pwa.description}}</div>
+  {{/if}}
+  <div class="dates">Added {{moment pwa.created}}, Updated {{moment pwa.updated}}</div>
+</a>

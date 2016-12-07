@@ -42,13 +42,7 @@
               </svg>
             {{/if}}
             <div class="pwa-name">{{name}}</div>
-            <div class="pwa-score">
-            {{#if lighthouseScore}}
-              {{lighthouseScore}}
-            {{else}}
-              <i class="fa fa-hourglass-half" aria-hidden="true" title="Lighthouse in progress"></i>
-            {{/if}}
-            </div>
+            {{> score }}
           </a>
         {{/each}}
       </div>
