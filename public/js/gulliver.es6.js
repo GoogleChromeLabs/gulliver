@@ -5,9 +5,11 @@
 
 /* eslint-env browser */
 
-// As used by https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/Promise/config.json
+// A Promise polyfill, as used by
+// https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/Promise/config.json
 import 'yaku/dist/yaku.browser.global.min.js';
-// As used by https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
+// A fetch polyfill, as used by
+// https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
 import 'whatwg-fetch/fetch';
 
 import {authInit} from './gapi.es6.js';
