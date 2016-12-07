@@ -29,6 +29,7 @@ import 'whatwg-fetch/fetch';
 
 import {authInit} from './gapi.es6.js';
 import './loader.js';
+import Messaging from './messaging';
 
 /**
  * Translate generic "system" event like 'online', 'offline' and 'userchange'
@@ -278,6 +279,27 @@ function setupConfig() {
   }
 }
 
+function setupMessaging() {
+  const messaging = new Messaging();
+  messaging.init();
+
+  const checkbox = document.getElementById('notifications');
+  if (checkbox) {
+    checkbox.addEventListener('change', e => {
+      if (e.target.checked) {
+        messaging.subscribe('new-apps');
+        return;
+      }
+      messaging.unsubscribe('new-apps');
+    });
+  }
+
+  messaging.isSubscribed('new-apps')
+    .then(subscribed => {
+      checkbox.checked = subscribed;
+    });
+}
+
 setupConfig();
 setupOnlineAware();
 setupSignedinAware();
@@ -285,6 +307,7 @@ setupSignin();
 setupSaveButton();
 setupEventHandlers();
 setupServiceWorker();
+setupMessaging();
 
 // Fire 'online' or 'offline' event on page load. (Without this, would only
 // fire on change.)

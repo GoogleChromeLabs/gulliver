@@ -13,15 +13,17 @@
  * limitations under the License.
  */
 
-'use strict';
+/* eslint-env serviceworker, browser */
+/* global firebase */
+importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
 
-const express = require('express');
-const router = express.Router(); // eslint-disable-line new-cap
+firebase.initializeApp({
+  messagingSenderId: '653391209629'
+});
 
-// Includes APIs for Lighthouse (/api/lighthouse)
-router.use('/lighthouse', require('./lighthouse'));
-
-// Includes APIs for Notifications (/api/notifications)
-router.use('/notifications', require('./notifications'));
-
-module.exports = router;
+const messaging = firebase.messaging();
+messaging.setBackgroundMessageHandler(payload => {
+  console.log(payload);
+  return self.registration.showNotification('New App');
+});
