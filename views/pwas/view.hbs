@@ -19,7 +19,9 @@
   <body>
     {{> header}}    
     <div class="section-title">
-      <a href="{{backlink}}" class="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+      <a href="{{backlink}}" class="back">
+        {{> chevron_left }}
+      </a>
     </div>
     <main>
       {{> pwadetails pwa=pwa}}
