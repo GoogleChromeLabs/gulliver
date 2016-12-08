@@ -15,28 +15,23 @@
 
 /* eslint-env browser */
 
-import Messaging from './messaging';
-
 export default class NotificationCheckbox {
-  init(firebaseMsgSenderId, checkbox, topic) {
+  constructor(messaging, checkbox, topic) {
     if (!checkbox) {
       return;
     }
-    this.messaging = new Messaging();
-    this.messaging.init(firebaseMsgSenderId);
-    if (checkbox) {
-      checkbox.addEventListener('change', e => {
-        if (e.target.checked) {
-          this.messaging.subscribe(topic)
-            .catch(e => {
-              console.error('Error subscribing to topic: ', e);
-              e.target.checked = false;
-            });
-          return;
-        }
-        this.messaging.unsubscribe(topic);
-      });
-    }
+    this.messaging = messaging;
+    checkbox.addEventListener('change', e => {
+      if (e.target.checked) {
+        this.messaging.subscribe(topic)
+          .catch(e => {
+            console.error('Error subscribing to topic: ', e);
+            e.target.checked = false;
+          });
+        return;
+      }
+      this.messaging.unsubscribe(topic);
+    });
 
     this.messaging.isSubscribed(topic)
       .then(subscribed => {

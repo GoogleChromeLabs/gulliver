@@ -24,11 +24,29 @@ const UNSUBSCRIBE_ENDPOINT = '/api/notifications/unsubscribe';
 const TOPICS_ENDPOINT = '/api/notifications/topics';
 
 export default class Messaging {
-  init(messagingSenderId) {
+  constructor(messagingSenderId) {
     const config = {
       messagingSenderId: messagingSenderId
     };
     firebase.initializeApp(config);
+  }
+
+  /**
+   * Fetches from url, adding token to the request body
+   * as a JSON
+   *
+   * @param url - the url to fetch from
+   * @param token - the token to be sent to the server
+   */
+  _postWithToken(url, token) {
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({token: token})
+    });
   }
 
   /**
@@ -49,14 +67,7 @@ export default class Messaging {
       .then(token => {
         console.log(token);
         const url = SUBSCRIBE_ENDPOINT + '/' + topic;
-        return fetch(url, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({token: token})
-        });
+        return this._postWithToken(url, token);
       });
   }
 
@@ -72,14 +83,7 @@ export default class Messaging {
     return messaging.getToken()
       .then(token => {
         const url = UNSUBSCRIBE_ENDPOINT + '/' + topic;
-        return fetch(url, {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({token: token})
-        });
+        return this._postWithToken(url, token);
       });
   }
 
@@ -96,7 +100,11 @@ export default class Messaging {
           return Promise.resolve([]);
         }
         const url = TOPICS_ENDPOINT + '?token=' + token;
-        return fetch(url);
+        return fetch(url, {
+          headers: {
+            Accept: 'application/json'
+          }
+        });
       })
       .then(response => {
         return response.json();

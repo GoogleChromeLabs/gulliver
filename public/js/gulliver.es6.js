@@ -29,6 +29,7 @@ import 'whatwg-fetch/fetch';
 
 import {authInit} from './gapi.es6.js';
 import './loader.js';
+import Messaging from './messaging';
 import NotificationCheckbox from './notification-checkbox';
 
 /**
@@ -282,8 +283,9 @@ function setupMessaging() {
   const NEW_APPS_TOPIC = 'new-apps';
   const firebaseMsgSenderId = window.__config.firebase_msg_sender_id;
   const checkbox = document.getElementById('notifications');
-  const notificationCheckbox = new NotificationCheckbox();
-  notificationCheckbox.init(firebaseMsgSenderId, checkbox, NEW_APPS_TOPIC);
+  const messaging = new Messaging(firebaseMsgSenderId);
+  // eslint-disable-next-line no-unused-vars
+  const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
 }
 
 setupConfig();

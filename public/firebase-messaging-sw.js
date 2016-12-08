@@ -21,10 +21,7 @@ importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
 const configUrl = '/messaging-config.json';
 caches.match(configUrl)
   .then(response => {
-    if (response) {
-      return response;
-    }
-    return fetch(configUrl);
+    return response || fetch(configUrl);
   })
   .then(response => {
     return response.json();
