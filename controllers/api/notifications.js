@@ -36,7 +36,6 @@ router.get('/topics/', (req, res) => {
 });
 
 router.post('/subscribe/:topic/', jsonParser, (req, res) => {
-  console.log(req.body);
   const token = req.body.token;
   const topic = req.params.topic;
   notificationsLib.subscribe(token, topic)

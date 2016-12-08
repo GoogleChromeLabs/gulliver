@@ -104,7 +104,8 @@ export default class Messaging {
       .then(json => {
         return json.subscriptions;
       })
-      .catch(_ => {
+      .catch(err => {
+        console.error('Error fetching subscriptions: ', err);
         return Promise.resolve([]);
       });
   }

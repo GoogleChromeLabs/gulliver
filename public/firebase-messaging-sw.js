@@ -18,7 +18,14 @@
 importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
 
-fetch('/messaging-config.json')
+const configUrl = '/messaging-config.json';
+caches.match(configUrl)
+  .then(response => {
+    if (response) {
+      return response;
+    }
+    return fetch(configUrl);
+  })
   .then(response => {
     return response.json();
   })
@@ -31,4 +38,3 @@ fetch('/messaging-config.json')
       return self.registration.showNotification();
     });
   });
-

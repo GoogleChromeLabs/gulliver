@@ -29,7 +29,7 @@ import 'whatwg-fetch/fetch';
 
 import {authInit} from './gapi.es6.js';
 import './loader.js';
-import Messaging from './messaging';
+import NotificationCheckbox from './notification-checkbox';
 
 /**
  * Translate generic "system" event like 'online', 'offline' and 'userchange'
@@ -280,27 +280,10 @@ function setupConfig() {
 
 function setupMessaging() {
   const NEW_APPS_TOPIC = 'new-apps';
-  const messaging = new Messaging();
-  messaging.init(window.__config.firebase_msg_sender_id);
-
+  const firebaseMsgSenderId = window.__config.firebase_msg_sender_id;
   const checkbox = document.getElementById('notifications');
-  if (checkbox) {
-    checkbox.addEventListener('change', e => {
-      if (e.target.checked) {
-        messaging.subscribe(NEW_APPS_TOPIC)
-          .catch(_ => {
-            e.target.checked = false;
-          });
-        return;
-      }
-      messaging.unsubscribe(NEW_APPS_TOPIC);
-    });
-  }
-
-  messaging.isSubscribed(NEW_APPS_TOPIC)
-    .then(subscribed => {
-      checkbox.checked = subscribed;
-    });
+  const notificationCheckbox = new NotificationCheckbox();
+  notificationCheckbox.init(firebaseMsgSenderId, checkbox, NEW_APPS_TOPIC);
 }
 
 setupConfig();

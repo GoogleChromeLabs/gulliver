@@ -18,7 +18,8 @@ const OFFLINE = [
   '/img/lighthouse.svg',
   '/css/style.css',
   '/sw.js',
-  '/js/gulliver.js'
+  '/js/gulliver.js',
+  '/messaging-config.json'
 ];
 
 toolbox.precache(OFFLINE);
