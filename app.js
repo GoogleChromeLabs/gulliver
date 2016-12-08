@@ -23,6 +23,7 @@ const helpers = require('./views/helpers');
 const app = express();
 const bodyParser = require('body-parser');
 const serveStatic = require('serve-static');
+const minifyHTML = require('express-minify-html');
 
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
 
@@ -44,6 +45,19 @@ app.locals.configstring = JSON.stringify({
 });
 
 app.use(bodyParser.urlencoded({extended: true}));
+
+app.use(minifyHTML({
+  override: true,
+  exception_url: false, // eslint-disable-line camelcase
+  htmlMinifier: {
+    removeComments: true,
+    collapseWhitespace: true,
+    collapseBooleanAttributes: true,
+    removeAttributeQuotes: true,
+    removeEmptyAttributes: true,
+    minifyJS: true
+  }
+}));
 
 // Static files
 app.use(serveStatic(path.resolve('./public'), {
