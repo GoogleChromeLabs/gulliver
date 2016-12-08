@@ -20,12 +20,8 @@ importScripts('https://www.gstatic.com/firebasejs/3.5.2/firebase-messaging.js');
 
 const configUrl = '/messaging-config.json';
 caches.match(configUrl)
-  .then(response => {
-    return response || fetch(configUrl);
-  })
-  .then(response => {
-    return response.json();
-  })
+  .then(response => response || fetch(configUrl))
+  .then(response => response.json())
   .then(config => {
     firebase.initializeApp({
       messagingSenderId: config.firebase_msg_sender_id

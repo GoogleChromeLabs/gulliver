@@ -23,6 +23,10 @@ const SUBSCRIBE_ENDPOINT = '/api/notifications/subscribe';
 const UNSUBSCRIBE_ENDPOINT = '/api/notifications/unsubscribe';
 const TOPICS_ENDPOINT = '/api/notifications/topics';
 
+const ERROR_PERMISSION_BLOCKED = 'messaging/permission-blocked';
+const ERROR_NOTIFICATIONS_BLOCKED = 'messaging/notifications-blocked';
+// const ERROR_PERMISSION_DEFAULT = 'messaging/permission-default';
+
 export default class Messaging {
   constructor(messagingSenderId) {
     const config = {
@@ -49,6 +53,10 @@ export default class Messaging {
     });
   }
 
+  _checkBlockedNotification(err) {
+    return err.code === ERROR_PERMISSION_BLOCKED ||
+            err.code === ERROR_NOTIFICATIONS_BLOCKED;
+  }
   /**
    * Enables Notifications to a topic.
    * Will ask user permission, if needed and then subscribe
@@ -68,6 +76,12 @@ export default class Messaging {
         console.log(token);
         const url = SUBSCRIBE_ENDPOINT + '/' + topic;
         return this._postWithToken(url, token);
+      })
+      .catch(err => {
+        if (this._checkBlockedNotification(err)) {
+          err.blocked = true;
+        }
+        return Promise.reject(err);
       });
   }
 
@@ -84,6 +98,11 @@ export default class Messaging {
       .then(token => {
         const url = UNSUBSCRIBE_ENDPOINT + '/' + topic;
         return this._postWithToken(url, token);
+      }).catch(err => {
+        if (this._checkBlockedNotification(err)) {
+          err.blocked = true;
+        }
+        return Promise.reject(err);
       });
   }
 
@@ -127,6 +146,20 @@ export default class Messaging {
     return this.getSubscriptions()
       .then(subscriptions => {
         return subscriptions.indexOf(topic) >= 0;
+      });
+  }
+
+  isNotificationBlocked() {
+    const messaging = firebase.messaging();
+    return messaging.getToken()
+      .then(_ => {
+        return false;
+      })
+      .catch(err => {
+        if (err.code === ERROR_NOTIFICATIONS_BLOCKED) {
+          return true;
+        }
+        return Promise.reject(err);
       });
   }
 }

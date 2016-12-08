@@ -18,24 +18,53 @@
 export default class NotificationCheckbox {
   constructor(messaging, checkbox, topic) {
     if (!checkbox) {
+      console.error('checkbox parameter cannot be null');
       return;
     }
     this.messaging = messaging;
-    checkbox.addEventListener('change', e => {
+    this.checkbox = checkbox;
+    this.topic = topic;
+    this._setupEventListener();
+
+    // Initilize checkbox state.
+    this.messaging.isNotificationBlocked()
+      .then(blocked => {
+        if (blocked) {
+          checkbox.disabled = true;
+          return;
+        }
+
+        this.messaging.isSubscribed(topic)
+          .then(subscribed => {
+            checkbox.checked = subscribed;
+          });
+      });
+  }
+
+  _setupEventListener() {
+    this.checkbox.addEventListener('change', e => {
       if (e.target.checked) {
-        this.messaging.subscribe(topic)
+        this.messaging.subscribe(this.topic)
           .catch(e => {
             console.error('Error subscribing to topic: ', e);
-            e.target.checked = false;
+            this.checkbox.checked = false;
+            if (e.blocked) {
+              this.checkbox.disabled = true;
+            }
           });
         return;
       }
-      this.messaging.unsubscribe(topic);
+      this.messaging.unsubscribe(this.topic)
+        .catch(err => {
+          console.error('Error unsubscribing from topic: ', err);
+          if (err.blocked) {
+            this.checkbox.disabled = true;
+            this.checkbox.checked = false;
+            return;
+          }
+          this.checkbox.checked = true;
+          return;
+        });
     });
-
-    this.messaging.isSubscribed(topic)
-      .then(subscribed => {
-        checkbox.checked = subscribed;
-      });
   }
 }
