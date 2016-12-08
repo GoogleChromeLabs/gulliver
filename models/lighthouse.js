@@ -15,24 +15,33 @@
 
 'use strict';
 
+const libLighthouse = require('../lib/lighthouse');
+
 /**
  * Class representing a Lighthouse report for a PWA
  *
- * lighthouseInfo is a JSON with:
- *   lighthouseInfo.name {string}
- *   lighthouseInfo.description {string}
- *	 lighthouseInfo.totalScore {number}
- *	 lighthouseInfo.scores {array}
+ * absoluteStartUrl is the absoluteStartUrl of the PWA
+ * lighthouseJson is the Lighthouse's report as JSON object
  */
 class Lighthouse {
-  constructor(pwaId, absoluteStartUrl, lighthouseInfo) {
+  constructor(pwaId, absoluteStartUrl, lighthouseJson) {
     this.pwaId = pwaId;
     this.absoluteStartUrl = absoluteStartUrl;
-    this.lighthouseInfo = lighthouseInfo;
-    this.totalScore = lighthouseInfo.totalScore;
-    this.lighthouseVersion = lighthouseInfo.lighthouseVersion;
+    this.lighthouseInfo = libLighthouse.processLighthouseJson(lighthouseJson);
+    // We store the lighthouseJson as a string to be able to store 1500+ bytes.
+    this._lighthouseJson = JSON.stringify(lighthouseJson);
+    this.totalScore = this.lighthouseInfo.totalScore;
+    this.lighthouseVersion = this.lighthouseInfo.lighthouseVersion;
     this.date = (new Date()).toISOString().slice(0, 10);
     this.id = this.pwaId + '-' + this.date;
+  }
+
+  get lighthouseJson() {
+    return JSON.parse(this._lighthouseJson);
+  }
+
+  set lighthouseJson(value) {
+    this._lighthouseJson = JSON.stringify(value);
   }
 }
 
