@@ -26,6 +26,7 @@ const serveStatic = require('serve-static');
 const minifyHTML = require('express-minify-html');
 
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
+const ENVIRONMENT_PRODUCTION = 'production';
 
 app.disable('x-powered-by');
 app.disable('etag');
@@ -46,18 +47,20 @@ app.locals.configstring = JSON.stringify({
 
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(minifyHTML({
-  override: true,
-  exception_url: false, // eslint-disable-line camelcase
-  htmlMinifier: {
-    removeComments: true,
-    collapseWhitespace: true,
-    collapseBooleanAttributes: true,
-    removeAttributeQuotes: true,
-    removeEmptyAttributes: true,
-    minifyJS: true
-  }
-}));
+if (app.get('env') === ENVIRONMENT_PRODUCTION) {
+  app.use(minifyHTML({
+    override: true,
+    exception_url: false, // eslint-disable-line camelcase
+    htmlMinifier: {
+      removeComments: true,
+      collapseWhitespace: true,
+      collapseBooleanAttributes: true,
+      removeAttributeQuotes: true,
+      removeEmptyAttributes: true,
+      minifyJS: true
+    }
+  }));
+}
 
 // Static files
 app.use(serveStatic(path.resolve('./public'), {
