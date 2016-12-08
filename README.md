@@ -8,13 +8,13 @@ In Gulliver's landing page you can browse the set of currently registered PWAs a
 
 ![Screenshot](img/gulliver-landing-page.png)
 
-If you click on any particular PWA you want, Gulliver takes you to a detail page showing the results of an evaluation done on that specific PWA using the  [Lighthouse PWA Analyzer](https://www.youtube.com/watch?v=KiV2p46rWjU) tool (Details page #1), and a view of the associated [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest) file  for the application (Details Page #2):
+If you click on a particular PWA, Gulliver takes you to a detail page showing the results of an evaluation done on that specific PWA using the  [Lighthouse PWA Analyzer](https://www.youtube.com/watch?v=KiV2p46rWjU) tool (Details page #1), and a view of the associated [web app manifest](https://developer.mozilla.org/en-US/docs/Web/Manifest) file  for the application (Details Page #2):
 
 Details Page #1            |  Details Page #2
 :-------------------------:|:-------------------------:
 ![](img/gulliver-details-one.png)  |  ![](img/gulliver-details-two.png)
 
-Gulliver itself has been implemented as a PWA; therefore it is designed to work well in any kind of device, including desktop web browsers (see landing page), and in mobile devices (see details page).
+Gulliver itself has been implemented as a PWA; therefore it is designed to work well on any kind of device, including desktop web browsers (see landing page), and on mobile devices (see details page).
 
 ## FAQ
 
