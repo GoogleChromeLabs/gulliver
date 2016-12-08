@@ -14,12 +14,15 @@
  */
 
 'use strict';
+const DEFAULT_LIGHT = '#ffffff';
+const DEFAULT_DARK = '#000000';
+
 const moment = require('moment');
 const parseColor = require('parse-color');
 
-exports.contrastColor = function(hexcolor) {
+function contrastColor(hexcolor) {
   if (!hexcolor) {
-    return 'white';
+    return DEFAULT_LIGHT;
   }
 
   // Assume that a 6 digit string is a color.
@@ -33,8 +36,10 @@ exports.contrastColor = function(hexcolor) {
   const b = parsedColor.rgb[2];
 
   const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-  return (yiq >= 128) ? 'black' : 'white';
+  return (yiq >= 128) ? DEFAULT_DARK : DEFAULT_LIGHT;
 };
+
+exports.contrastColor = contrastColor;
 
 exports.firstLetter = function(text) {
   return (text ? text[0] : '').toUpperCase();
@@ -42,6 +47,12 @@ exports.firstLetter = function(text) {
 
 exports.moment = function(date) {
   return moment(date).fromNow();
+};
+
+exports.themeFragment = function(pwa) {
+  return 't=' + encodeURIComponent(pwa.name) +
+    '&bg=' + encodeURIComponent(pwa.backgroundColor) + 
+    '&c=' + encodeURIComponent(contrastColor(pwa.backgroundColor));
 };
 
 /*
@@ -95,6 +106,7 @@ exports.getAuditTableRow = function(audit) {
 exports.registerHelpers = function(hbs) {
   hbs.registerHelper('firstLetter', exports.firstLetter);
   hbs.registerHelper('contrastColor', exports.contrastColor);
+  hbs.registerHelper('themeFragment', exports.themeFragment);
   hbs.registerHelper('moment', exports.moment);
   hbs.registerHelper('prettyJson', exports.prettyJson);
   hbs.registerHelper('highlightedJson', exports.highlightedJson);

@@ -5,11 +5,14 @@
 importScripts('/sw-offline-google-analytics/offline-google-analytics-import.js');
 goog.offlineGoogleAnalytics.initialize();
 
-importScripts('/sw-toolbox/sw-toolbox.js'); /* global toolbox */
+
 
 // URL to return in place of the "offline dino" when client is
 // offline and requests a URL that's not in the cache.
 const OFFLINE_URL = '/.shell/offline';
+
+const TRANSITION_PWA_LIST = '/transitions/pwas';
+const TRANSITION_PWA_VIEW = '/transitions/pwas/view';
 
 const OFFLINE = [
   OFFLINE_URL,
@@ -20,7 +23,13 @@ const OFFLINE = [
   '/sw.js',
   '/js/gulliver.js',
   '/messaging-config.json'
+  '/js/pwas-list-transition.js',
+  TRANSITION_PWA_LIST,
+  TRANSITION_PWA_VIEW
 ];
+
+// configure page transitions
+importScripts('/sw-toolbox/sw-toolbox.js'); /* global toolbox */
 
 toolbox.precache(OFFLINE);
 
@@ -33,7 +42,12 @@ toolbox.precache(
   })
 );
 
-toolbox.options.debug = true;
+importScripts('/js/sw-page-transition.js');
+const transitionController = new PageTransitionController(toolbox.options.cache.name);
+transitionController.registerPageTransition(/\/pwas\/.*/, TRANSITION_PWA_VIEW);
+transitionController.registerPageTransition(/\/.*/, TRANSITION_PWA_LIST);
+
+toolbox.options.debug = false;
 
 // Provide an API for the front end to determine which resources are available in the
 // cache. We could have also established a new endpoint, or implemented support
@@ -68,18 +82,22 @@ toolbox.router.get('/', (request, values, options) => {
 });
 
 toolbox.router.default = (request, values, options) => {
-  return toolbox.networkFirst(request, values, options)
-    .catch(_ => {
-      // networkFirst failed (no network and not in cache)
-      return caches.open(toolbox.options.cache.name).then(cache => {
-        return cache.match(OFFLINE_URL).then(response => {
-          return response || new Response('', {
-            status: 500,
-            statusText: 'Offline Page Missing'
+  return transitionController.fetchWithPageTransition(request).then((response) => {
+    // Return page transition or network first if not available
+    return response || toolbox
+      .networkFirst(request, values, options)
+      .catch(_ => {
+        // networkFirst failed (no network and not in cache)
+        return caches.open(toolbox.options.cache.name).then(cache => {
+          return cache.match(OFFLINE_URL).then(response => {
+            return response || new Response('', {
+              status: 500,
+              statusText: 'Offline Page Missing'
+            });
           });
         });
       });
-    });
+  })
 };
 
 // Claim clients so that the very first page load is controlled by a service

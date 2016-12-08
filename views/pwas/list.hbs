@@ -16,12 +16,12 @@
   <head>
     {{> head}}
   </head>
-  <body>
+  <body {{#if transition}}class="transition"{{/if}}>
     {{> header}}
 
     <div class="section-title">
-      <a class="tab {{#if showNewest}}activetab{{/if}}" href="/?sort=newest">New</a>
-      <a class="tab {{#if showScore}}activetab{{/if}}" href="/?sort=score">Score</a>
+      <a id="newest" class="tab {{#if showNewest}}activetab{{/if}}" href="/?sort=newest">New</a>
+      <a id="score" class="tab {{#if showScore}}activetab{{/if}}" href="/?sort=score">Score</a>
     </div>
     <main>
       <div class="toolbar">
@@ -32,7 +32,7 @@
 
       <div class="items">
         {{#each pwas}}
-          <a class="item card card-pwa gulliver-online-aware" href="/pwas/{{id}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
+          <a class="item card card-pwa gulliver-online-aware" href="/pwas/{{id}}#{{themeFragment this}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
             {{#if iconUrl64}}
               <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{name}}"/>
             {{else}}
@@ -44,12 +44,10 @@
             <div class="pwa-name">{{name}}</div>
             {{> score }}
           </a>
+        {{else}}
+          <p>No PWAs found.</p>
         {{/each}}
       </div>
-
-      {{#unless pwas}}
-      <p>No PWAs found.</p>
-      {{/unless}}
 
       <div class="pager">
         {{#if hasPreviousPage}}
@@ -65,5 +63,8 @@
       </div>
     </main>
     {{> footer}}
+    {{#if transition}}
+    <script src="/js/pwas-list-transition.js" defer></script>
+    {{/if}}
   </body>
 </html>

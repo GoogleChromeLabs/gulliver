@@ -38,6 +38,11 @@ body {
   padding-bottom: 10px;
 }
 
+pre, code {
+  font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
+  font-size: 14px;
+}
+
 h3 { 
   font-size: 22px;
   font-weight: 400;
@@ -326,26 +331,39 @@ a.card:hover {
   align-items: center;
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
+.transition #pwa {
+  opacity: 0;
+}
 #pwa:hover {
   text-decoration: none;
+}
+not(.transition) #pwa:hover {
   box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+#pwa #pwa-logo-container {
+  height: 128px;
+  width: 128px;
 }
 #pwa:active {
   opacity: 0.5;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 }
-
-#pwa code {
+#pwa code  {
+  display: block;
   text-align: center;
   text-decoration: underline;
   margin-top: 24px;
+  min-height: 18px;
+  word-break: break-all;
 }
 #pwa > div {
   margin-top: 16px;
+  min-height: 18px;
 }
 #pwa .dates {
   font-style: italic;
   font-size: 12px;
+  line-height: 16px;
 }
 
 /* Lighthouse graph */
@@ -532,6 +550,9 @@ footer #github-logo {
   -webkit-flex-wrap: wrap;
   flex-wrap: wrap;
 }
+.transition .items {
+  opacity: 0;
+}
 .item a {
   text-decoration: none;
   display: block;
@@ -587,9 +608,7 @@ footer #github-logo {
 
 /* Styles for highlighted JSON */
 pre {
-  font-size: 14px;
   tab-size: 2;
-  font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,sans-serif;
   padding: 16px; 
   margin: 0; 
   overflow-x: auto;
@@ -725,7 +744,8 @@ pre {
   width: 10px;
   margin: 2px;
   border-radius: 100%;
-  background-color: rgba(0, 0, 0, .3);
+  background-color: #000;
+  opacity: 0.6;
 
   box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, .2);
   will-change: transform;
@@ -747,11 +767,11 @@ pre {
 @keyframes loader-dots {
   0%, 100% {
     transform: scale(.7);
-    background-color: rgba(0, 0, 0, .2);
+    opacity: 0.5;
   }
 
   50% {
     transform: scale(.8);
-    background-color: rgba(0, 0, 0, .5);
+    opacity: 0.9;
   }
 }

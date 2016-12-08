@@ -25,7 +25,8 @@ class Loader {
    *
    * @param container {HTMLElement} the element containing the loader.
    */
-  constructor(container) {
+  constructor(container, color) {
+    this.color = color || 'black';
     this.container = container;
   }
 
@@ -41,6 +42,7 @@ class Loader {
     for (let i = 0; i < 3; i++) {
       const dot = document.createElement('div');
       dot.classList.add('loader-dot');
+      dot.style['background-color'] = this.color;
       loader.appendChild(dot);
     }
     this.container.appendChild(loader);
@@ -58,6 +60,7 @@ class Loader {
       setTimeout(() => loader.remove(), 500);
     }
   }
+
 }
 
 // HACK: attach loader class to window object so that chart.js (which is not

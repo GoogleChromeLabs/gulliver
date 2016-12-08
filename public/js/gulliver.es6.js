@@ -222,8 +222,8 @@ function setupSignin() {
 
     function updateAuthButtonLabel() {
       authButton.innerText = authButton.dataset.signedin === 'true' ?
-        'Log out' :
-        'Log in';
+        'Logout' :
+        'Login';
     }
 
     authButton.addEventListener('change', updateAuthButtonLabel);
