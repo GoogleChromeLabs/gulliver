@@ -36,6 +36,9 @@ function updateColors() {
   const pwaDetails = document.getElementById('pwa');
   pwaDetails.style['background-color'] = background;
 
+  const pwaName = document.getElementById('pwa-name');
+  pwaName.style.color = color;
+
   pwaDetails.classList.add('fadeIn');
 }
 
