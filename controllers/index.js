@@ -16,7 +16,8 @@
 'use strict';
 
 const express = require('express');
-const router = express.Router(); // eslint-disable-line
+const router = express.Router(); // eslint-disable-line new-cap
+const config = require('../config/config');
 
 // API
 router.use('/api', require('./api'));
@@ -42,5 +43,13 @@ router.use(
   '/sw-offline-google-analytics',
   express.static('node_modules/sw-offline-google-analytics')
 );
+
+/**
+ * This route is used to send config.json to firebase-messaging-sw.js
+ */
+router.get('/messaging-config.json', (req, res) => {
+  // eslint-disable-next-line camelcase
+  res.json({firebase_msg_sender_id: config.get('FIREBASE_MSG_SENDER_ID')});
+});
 
 module.exports = router;

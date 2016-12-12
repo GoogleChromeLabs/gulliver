@@ -6,5 +6,6 @@
   "LIGHTHOUSE_SERVER": "your lighthouse server URL (optional)",
   "GOOGLE_ANALYTICS": "your Google Analytics tracking code (optional)",
   "FIREBASE_AUTH": "Your Firebase Notifications ID (optional)",
+  "FIREBASE_MSG_SENDER_ID": "Your Firebase Messaging Sender ID (optional)",
   "DATA_BACKEND": "datastore"
 }
