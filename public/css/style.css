@@ -73,7 +73,7 @@ main {
 .navbar-title {
   height: 55px;
   color: white;
-  font-size: 36px;
+  font-size: 30px;
   text-align: center;
   line-height: 55px;
 }
@@ -98,33 +98,31 @@ main {
   color: white;
   text-decoration: none;
 }
-.navbar #github {
-  position: absolute;
-  bottom: 28px;
-  right: 15px;
-}
-.navbar #github-logo {
-  vertical-align:middle;
-  width: 24px;
-  height: 24px;
-}
+
 /* Flex NavBar */
-@media (max-width: 930px) {
+@media (max-width: 903px) {
   .navbar {
     height: 55px;
-    padding-left: 15px;
+    padding-left: 16px;
   }
   .navbar-title {
-    font-size: 30px;
-    text-align: left;
+    font-size: 24px;
+    text-align: left; 
+  }
+  .navbar-title #title {
+    padding-left: 40px;
+    background-image: -webkit-image-set( url(/favicons/android-chrome-36x36.png) 1x, url(/favicons/android-chrome-72x72.png) 2x );
   }
   .navbar-subtitle {
     height: 0px;
   }
-  .navbar #github {
-    text-align: right;
+  .navbar .notifications {
+    bottom: 16px;
+    right: 16px;
+  }
+  .navbar .notification-bell {    
     bottom: 13px;
-    right: 15px;
+    right: 66px;
   }
   .hide-on-mobile {
     display: none;
@@ -439,18 +437,21 @@ tr:last-child td {
   margin-left: 8px;
   color: #f07;
 }
+
+/* Footer */
 .offline-status {
   position: fixed;
   bottom: 0;
   width: 100%;
   background-color: #dc322f;
   color: #ffffff;
-  height: 24px;
-  line-height: 24px;
-  padding: 10px 20px 34px 20px;
+  height: 52px;
+  line-height: 52px;
+  padding-left: 20px;
   display: none;
   pointer-events: none;
 }
+
 /* Footer */
 footer {
   position: absolute;
@@ -486,6 +487,8 @@ footer li {
   display: block;
   padding: 0 1em;
   border-left: 1px solid #fff;
+  line-height: 24px; 
+  height: 24px;
 }
 footer ul li a {
   -ms-flex-flow: row wrap;
@@ -498,8 +501,14 @@ footer ul li a {
   font-weight: 400;
   color: #fff;
   padding: 0;
-  cursor: pointer;  
+  cursor: pointer;
 }
+footer #github-logo {
+  vertical-align: top;
+  width: 24px;
+  height: 24px;
+}
+
 /* Pager */
 .pager {
   height: 48px;
@@ -612,6 +621,63 @@ pre {
   padding-right: 5px;
 }
 
+/* Notifications */
+.notifications {
+  position: absolute;
+  font-size: 16px;
+  bottom: 28px;
+  right: 16px;
+}
+.notification-bell {
+  position: absolute;
+  font-size: 20px;
+  bottom: 25px;
+  right: 68px;
+  color: #FFFFFF;
+}
+.switch-label {
+  position: relative;
+  display: block;
+  height: 20px;
+  width: 44px;
+  background: #898989;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.switch-label:after {
+  position: absolute;
+  left: -2px;
+  top: -3px;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 100px;
+  background: #fff;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.05);
+  content: '';
+  transition: all 0.3s ease;
+}
+
+.switch-label:active:after { transform: scale(1.15, 0.85); }
+
+.switch:checked ~ label { background: #FFAB91; }
+
+.switch:checked ~ label:after {
+  left: 20px;
+  background: #FF5722;
+}
+
+.switch:disabled ~ label {
+  background: #d5d5d5;
+  pointer-events: none;
+}
+
+.switch:disabled ~ label:after { background: #bcbdbc; }
+
+.hidden { display: none; }
+
 .fadeIn {
   animation: 0.25s ease-in fadeIn;
   animation-fill-mode: forwards;
@@ -684,4 +750,3 @@ pre {
     background-color: rgba(0, 0, 0, .5);
   }
 }
-

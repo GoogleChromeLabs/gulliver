@@ -17,15 +17,13 @@
   <div class="navbar-subtitle hide-on-mobile">
     <a id="subtitle" href="/">A Directory of Progressive Web Apps</a>
   </div>
-  <a id="github" href="https://github.com/GoogleChrome/gulliver" target="_blank">
-    <img id="github-logo" class="github-logo" srcset="/img/GitHub-Mark-Light-32px.png 1x, /img/GitHub-Mark-Light-64px.png 2x" width="24" height="24" alt="Github" attribution="github">
-    <span class="hide-on-mobile">View on Github</span>
-  </a>
-  {{!--
-  <label>Notifications
-    <input type="checkbox" id="notifications"/>
-  </label>
-  --}}
+  
+  <div class="notification-bell"><i class="fa fa-bell-o" aria-hidden="true"></i></div>
+  <div class="notifications">
+    <input type="checkbox" id="notifications" class="switch hidden"/>
+    <label for="notifications" class="switch-label"></label>
+  </div>
+
   <button
     id="auth-button"
     class="button blue gulliver-online-aware gulliver-signedin-aware">Login</button>
