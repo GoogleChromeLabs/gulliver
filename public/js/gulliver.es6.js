@@ -29,6 +29,8 @@ import 'whatwg-fetch/fetch';
 
 import {authInit} from './gapi.es6.js';
 import './loader.js';
+import Messaging from './messaging';
+import NotificationCheckbox from './notification-checkbox';
 
 /**
  * Translate generic "system" event like 'online', 'offline' and 'userchange'
@@ -217,10 +219,9 @@ function setupSignin() {
     });
 
     const authButton = document.getElementById('auth-button');
-    const authButtonLabel = document.getElementById('auth-button-label');
 
     function updateAuthButtonLabel() {
-      authButtonLabel.innerText = authButton.dataset.signedin === 'true' ?
+      authButton.innerText = authButton.dataset.signedin === 'true' ?
         'Log out' :
         'Log in';
     }
@@ -278,6 +279,15 @@ function setupConfig() {
   }
 }
 
+function setupMessaging() {
+  const NEW_APPS_TOPIC = 'new-apps';
+  const firebaseMsgSenderId = window.__config.firebase_msg_sender_id;
+  const checkbox = document.getElementById('notifications');
+  const messaging = new Messaging(firebaseMsgSenderId);
+  // eslint-disable-next-line no-unused-vars
+  const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
+}
+
 setupConfig();
 setupOnlineAware();
 setupSignedinAware();
@@ -285,6 +295,7 @@ setupSignin();
 setupSaveButton();
 setupEventHandlers();
 setupServiceWorker();
+setupMessaging();
 
 // Fire 'online' or 'offline' event on page load. (Without this, would only
 // fire on change.)
