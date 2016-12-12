@@ -17,10 +17,11 @@
   <div class="navbar-subtitle hide-on-mobile">
     <a id="subtitle" href="/">A Directory of Progressive Web Apps</a>
   </div>
-  
-  <div class="notification-bell"><i class="fa fa-bell-o" aria-hidden="true"></i></div>
+
   <div class="notifications">
     <input type="checkbox" id="notifications" class="switch hidden"/>
+    {{> notifications_active }}
+    {{> notifications_off }}
     <label for="notifications" class="switch-label"></label>
   </div>
 
