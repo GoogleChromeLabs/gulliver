@@ -120,10 +120,6 @@ main {
     bottom: 16px;
     right: 16px;
   }
-  .navbar .notification-bell {    
-    bottom: 13px;
-    right: 66px;
-  }
   .hide-on-mobile {
     display: none;
   }
@@ -625,15 +621,14 @@ pre {
 .notifications {
   position: absolute;
   font-size: 16px;
-  bottom: 28px;
+  bottom: 24px;
   right: 16px;
 }
-.notification-bell {
+.notifications svg {
   position: absolute;
-  font-size: 20px;
-  bottom: 25px;
-  right: 68px;
-  color: #FFFFFF;
+  top: -6px;
+  right: 48px;
+  fill: #FFFFFF;
 }
 .switch-label {
   position: relative;
@@ -675,6 +670,16 @@ pre {
 }
 
 .switch:disabled ~ label:after { background: #bcbdbc; }
+
+#notifications_active {
+  visibility: hidden;
+}
+.switch:checked ~ #notifications_active {
+  visibility: visible;
+}
+.switch:checked ~ #notifications_off {
+  visibility: hidden;
+}
 
 .hidden { display: none; }
 
