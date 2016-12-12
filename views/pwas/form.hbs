@@ -18,14 +18,12 @@
   </head>
   <body>
     {{> header}}
+    <div class="section-title">
+      <a href="/" class="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+      <div id="subtitle">Submit a PWA</div>
+    </div>
 
-    {{#if pwa.manifestUrl}}
-    <div class="section-title">Edit a PWA</div>
-    {{else}}
-    <div class="section-title">Submit a PWA</div>
-    {{/if}}
-
-    <div class="container">
+    <main>
       <form id="pwaForm" method="POST">
         <div class="form-group">
           <label for="manifestUrl">Manifest URL</label>
@@ -38,7 +36,7 @@
         <input id="idToken" type="hidden" name="idToken" />
       </form>
       </div>            
-    </div>
+    </main>
     {{> footer}}
   </body>
 </html>

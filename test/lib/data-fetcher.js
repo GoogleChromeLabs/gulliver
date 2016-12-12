@@ -13,13 +13,14 @@
  * limitations under the License.
  */
 
-/* global describe it */
+/* global describe it afterEach*/
 'use strict';
 
 let dataFetcher = require('../../lib/data-fetcher');
-
+const simpleMock = require('simple-mock');
 let chai = require('chai');
 let chaiAsPromised = require('chai-as-promised');
+const assert = require('chai').assert;
 chai.use(chaiAsPromised);
 chai.should();
 
@@ -36,5 +37,48 @@ describe('lib.data-fetcher', () => {
 
   it('readfile(LIGHTHOUSE_JSON_EXAMPLE) should work', () => {
     return dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE).should.be.fulfilled;
+  });
+
+  describe('#_firebaseOptions', () => {
+    it('should call with GET method', () => {
+      const options = dataFetcher._firebaseOptions();
+      assert.equal(options.method, 'GET');
+      assert(options.headers.Authorization, 'Should contain Authorization header');
+    });
+
+    it('should call with POST method when payload exists', () => {
+      const options = dataFetcher._firebaseOptions({});
+      assert.equal(options.method, 'POST');
+      assert(options.headers.Authorization, 'Should contain Authorization header');
+      assert.equal(options.headers['content-type'], 'application/json', 'Correct content-type');
+    });
+  });
+
+  describe('#_handleFirebaseResponse', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+
+    it('should succeed when code is 200', () => {
+      const response = {};
+      simpleMock.mock(response, 'status', 200);
+      simpleMock.mock(response, 'json').resolveWith({});
+
+      return dataFetcher._handleFirebaseResponse(response).should.be.fulfilled
+        .then(() => {
+          assert(response.json.called);
+        });
+    });
+
+    it('should reject when code is not 200', () => {
+      const response = {};
+      simpleMock.mock(response, 'status', 402);
+      simpleMock.mock(response, 'text').resolveWith({});
+
+      return dataFetcher._handleFirebaseResponse(response).should.be.rejected
+        .then(() => {
+          assert(response.text.called);
+        });
+    });
   });
 });

@@ -63,10 +63,11 @@ describe('lib.images', () => {
   });
 
   it('fetchAndSave works with http url', () => {
+    const headers = {};
+    simpleMock.mock(headers, 'get').returnWith('image/jpeg');
     const response = httpMocks.createResponse();
+    response.headers = headers;
     response.status = 200;
-    response.headers = [];
-    response.headers['Content-Type'] = 'image/jpeg';
     response.body = '';
     simpleMock.mock(dataFetcher, 'fetchWithUA').resolveWith(response);
     simpleMock.mock(libImages, 'saveImage').resolveWith('http://url.for.newimage.in.bucket.com');
@@ -77,9 +78,10 @@ describe('lib.images', () => {
 
   it('fetchAndSave works with https url', () => {
     const response = httpMocks.createResponse();
+    const headers = {};
+    simpleMock.mock(headers, 'get').returnWith('image/jpeg');
+    response.headers = headers;
     response.status = 200;
-    response.headers = [];
-    response.headers['Content-Type'] = 'image/jpeg';
     response.body = '';
     simpleMock.mock(dataFetcher, 'fetchWithUA').resolveWith(response);
     simpleMock.mock(libImages, 'saveImage').resolveWith('http://url.for.newimage.in.bucket.com');

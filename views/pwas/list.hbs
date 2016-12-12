@@ -20,55 +20,30 @@
     {{> header}}
 
     <div class="section-title">
-      {{#if showNewest}}
-      <a href="/?sort=newest"><div class="tab">New</div></a>
-      <div class="tab activetab">Score</div>
-      {{/if}}
-      {{#if showScore}}
-      <div class="tab activetab">New</div>
-      <a href="/?sort=score"><div class="tab">Score</div></a>
-      {{/if}}
+      <a class="tab {{#if showNewest}}activetab{{/if}}" href="/?sort=newest">New</a>
+      <a class="tab {{#if showScore}}activetab{{/if}}" href="/?sort=score">Score</a>
     </div>
-    <div class="container">
+    <main>
       <div class="toolbar">
         <button id="pwaAdd" type="submit" class="button add accent-color gulliver-signedin-aware gulliver-online-aware" onlick="#">
-          <a href="/pwas/add"><i class="fa fa-plus-square" aria-hidden="true"></i> Add PWA</a>
+          <a href="/pwas/add">Add PWA</a>
         </button>
       </div>
 
       <div class="items">
         {{#each pwas}}
-        <div class="pwabox item gulliver-online-aware" style="background-color: {{backgroundColor}}">
-          <a href="/pwas/{{id}}" style="color:{{contrastColor backgroundColor}}">
-            <div class="pwabox-body">
-              <div class="pwabox-left">
-                {{#if iconUrl64}}
-                  <img src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{name}}"/>
-                {{else}}
-                <svg width="64" height="64">
-                  <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
-                  <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
-                </svg>
-                {{/if}}
-              </div>
-              <div class="pwabox-right">
-                <div class="name">{{name}}</div>
-                <div class="lighthouseScore">
-                  <div class="lighthouseLogo">
-                    <img src="/img/lighthouse-18.png" srcset="/img/lighthouse-18.png 1x, /img/lighthouse-36.png 2x" title="Lighthouse Score" alt="Lighthouse logo"/>
-                  </div>
-                  <div>
-                    {{#if lighthouseScore}}
-                      {{lighthouseScore}}
-                    {{else}}
-                      <i class="fa fa-hourglass-half" aria-hidden="true" title="Lighthouse in progress"></i>
-                    {{/if}}
-                  </div>
-                </div>
-              </div>
-            </div>
+          <a class="item card card-pwa gulliver-online-aware" href="/pwas/{{id}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
+            {{#if iconUrl64}}
+              <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{name}}"/>
+            {{else}}
+              <svg class="pwa-icon" width="64" height="64">
+                <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
+                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
+              </svg>
+            {{/if}}
+            <div class="pwa-name">{{name}}</div>
+            {{> score }}
           </a>
-        </div>
         {{/each}}
       </div>
 
@@ -78,21 +53,17 @@
 
       <div class="pager">
         {{#if hasPreviousPage}}
-        <a href="?sort={{sortOrder}}&page={{previousPageNumber}}">
-          <div class="previous">
-            <i class="fa fa-chevron-left" aria-hidden="true"></i>
-          </div>
+        <a class="previous" href="?sort={{sortOrder}}&page={{previousPageNumber}}">
+          {{> chevron_left }}
         </a>
         {{/if}}
         {{#if hasNextPage}}
-        <a href="?sort={{sortOrder}}&page={{nextPageNumber}}">
-          <div class="next">
-            <i class="fa fa-chevron-right" aria-hidden="true"></i>
-          </div>
+        <a class="next" href="?sort={{sortOrder}}&page={{nextPageNumber}}">
+          {{> chevron_right }}
         </a>
         {{/if}}
       </div>
-    </div>
+    </main>
     {{> footer}}
   </body>
 </html>

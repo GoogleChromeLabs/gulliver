@@ -16,7 +16,7 @@
 'use strict';
 
 const express = require('express');
-const lighthouseLib = require('../lib/lighthouse');
+const lighthouseLib = require('../../lib/lighthouse');
 const router = express.Router(); // eslint-disable-line new-cap
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
 
@@ -27,7 +27,7 @@ const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
  * it uses the Google Charts JSON format:
  *  https://developers.google.com/chart/interactive/docs/reference#dataparam
  */
-router.get('/lighthouse-graph/:pwaId', (req, res) => {
+router.get('/graph/:pwaId', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
 
   lighthouseLib.getLighthouseGraphByPwaId(req.params.pwaId)

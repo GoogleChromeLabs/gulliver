@@ -1,3 +1,18 @@
+/**
+ * Copyright 2015-2016, Google, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /*
  * Generate gulliver.js from this file via `npm prestart`. (`npm start` will run
  * `prestart` automatically.)
@@ -5,12 +20,15 @@
 
 /* eslint-env browser */
 
-// As used by https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/Promise/config.json
-import '../../node_modules/yaku/dist/yaku.browser.global.min.js';
-// As used by https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
-import '../../node_modules/whatwg-fetch/fetch.js';
+// A Promise polyfill, as used by
+// https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/Promise/config.json
+import 'yaku/dist/yaku.browser.global.min.js';
+// A fetch polyfill, as used by
+// https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
+import 'whatwg-fetch/fetch';
 
 import {authInit} from './gapi.es6.js';
+import './loader.js';
 
 /**
  * Translate generic "system" event like 'online', 'offline' and 'userchange'
@@ -127,7 +145,7 @@ function setupOnlineAware() {
       }
     });
   }
-  const l2 = document.querySelectorAll('div.pwabox.gulliver-online-aware');
+  const l2 = document.querySelectorAll('a.card-pwa.gulliver-online-aware');
   for (const e of l2) {
     e.addEventListener('change', function() {
       if (JSON.parse(this.dataset.online)) {
@@ -137,7 +155,7 @@ function setupOnlineAware() {
         this.onclick = null;
         return;
       }
-      const href = e.querySelector('a') && e.querySelector('a').getAttribute('href');
+      const href = e.getAttribute('href');
       if (href) {
         fetch(href, {method: 'HEAD'}).then(r => {
           if (r.status === 200) {

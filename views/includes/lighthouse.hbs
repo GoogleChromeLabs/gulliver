@@ -1,50 +1,38 @@
-<div class="detail-general lighthouse-detail">
-  <div class="detail-header">
-    <h3>LIGHTHOUSE</h3>    
-    <div class="lighthouse-score"> 
-        <img src="/img/lighthouse-18.png"  srcset="/img/lighthouse-18.png 1x, /img/lighthouse-36.png 2x" title="Lighthouse Score" alt="Lighthouse logo"/>
-        {{#if pwa.lighthouseScore}}
-          {{pwa.lighthouseScore}}
-        {{else}}
-          <i class="fa fa-hourglass-half" aria-hidden="true" title="Lighthouse in progress"></i>
-        {{/if}}
-    </div>
-  </div>
-  {{#if pwa.lighthouseScore}}
-  <div id="chart" pwa={{pwa.id}}></div>
-  <div>
-    <div>
-      <table class="lighthouse-report-table">
-        <thead>
-          <tr>
-            <th scope="col">Aggregated Checks</th>
-            <th scope="col">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each lighthouse.lighthouseInfo.aggregation.scores}} 
-            {{{getAggregationTableRow this}}}
-          {{/each}}
-        </tbody>
-      </table>
-      <br>
-      <table class="lighthouse-report-table">
-        <thead>
-          <tr>
-            <th scope="col">Audits</th>
-            <th scope="col">Score</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{#each lighthouse.lighthouseInfo.audits }} 
-            {{{getAuditTableRow this}}}
-          {{/each}}
-        </tbody>
-      </table>      
-    </div>
-    <div class="dates">
-      Last updated on {{lighthouse.date}}
-    </div>
-  </div>
-  {{/if}}
-</div>
+<section class="detail-general">
+  <h3>LIGHTHOUSE  {{> score pwa}} </h3>    
+  <div id="chart" {{#if pwa.id }} pwa={{pwa.id}} {{/if}}></div>
+</section>
+{{#if lighthouse.lighthouseInfo.aggregation.scores}}
+<section class="detail-general">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Aggregated Checks</th>
+        <th scope="col">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lighthouse.lighthouseInfo.aggregation.scores}} 
+        {{{getAggregationTableRow this}}}
+      {{/each}}
+    </tbody>
+  </table>
+</section>
+{{/if}}
+{{#if lighthouse.lighthouseInfo.audits}}
+<section class="detail-general">
+  <table>
+    <thead>
+      <tr>
+        <th scope="col">Audits</th>
+        <th scope="col">Score</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each lighthouse.lighthouseInfo.audits }} 
+        {{{getAuditTableRow this}}}
+      {{/each}}
+    </tbody>
+  </table>      
+</section>
+{{/if}}
