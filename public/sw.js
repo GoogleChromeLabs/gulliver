@@ -5,12 +5,18 @@
 importScripts('/sw-offline-google-analytics/offline-google-analytics-import.js');
 goog.offlineGoogleAnalytics.initialize();
 
+// Use sw-toolbox
+importScripts('/sw-toolbox/sw-toolbox.js'); /* global toolbox */
+toolbox.options.debug = false;
 
+// Use page transitions
+importScripts('/js/sw-page-transition.js'); /* global transition */
 
 // URL to return in place of the "offline dino" when client is
 // offline and requests a URL that's not in the cache.
 const OFFLINE_URL = '/.shell/offline';
 
+// Page transitions
 const TRANSITION_PWA_LIST = '/transitions/pwas';
 const TRANSITION_PWA_VIEW = '/transitions/pwas/view';
 
@@ -28,9 +34,6 @@ const OFFLINE = [
   TRANSITION_PWA_VIEW
 ];
 
-// configure page transitions
-importScripts('/sw-toolbox/sw-toolbox.js'); /* global toolbox */
-
 toolbox.precache(OFFLINE);
 
 // Cache the page registering the service worker. Without this, the
@@ -42,12 +45,9 @@ toolbox.precache(
   })
 );
 
-importScripts('/js/sw-page-transition.js');
-const transitionController = new PageTransitionController(toolbox.options.cache.name);
-transitionController.registerPageTransition(/\/pwas\/.*/, TRANSITION_PWA_VIEW);
-transitionController.registerPageTransition(/\/.*/, TRANSITION_PWA_LIST);
-
-toolbox.options.debug = false;
+transition.cacheName(toolbox.options.cache.name)
+  .registerPageTransition(/\/pwas\/.*/, TRANSITION_PWA_VIEW)
+  .registerPageTransition(/\/.*/, TRANSITION_PWA_LIST);
 
 // Provide an API for the front end to determine which resources are available in the
 // cache. We could have also established a new endpoint, or implemented support
@@ -82,7 +82,7 @@ toolbox.router.get('/', (request, values, options) => {
 });
 
 toolbox.router.default = (request, values, options) => {
-  return transitionController.fetchWithPageTransition(request).then((response) => {
+  return transition.fetchWithPageTransition(request).then(response => {
     // Return page transition or network first if not available
     return response || toolbox
       .networkFirst(request, values, options)
@@ -97,7 +97,7 @@ toolbox.router.default = (request, values, options) => {
           });
         });
       });
-  })
+  });
 };
 
 // Claim clients so that the very first page load is controlled by a service

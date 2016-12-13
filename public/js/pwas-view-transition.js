@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+/* eslint-env browser */
+
 function updateColors() {
   const url = new URL(window.location);
   const params = new URLSearchParams(url.hash.substring(1));

@@ -16,29 +16,27 @@
 'use strict';
 
 const express = require('express');
-const Pwa = require('../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
-const config = require('../config/config');
 
 /**
  * GET /transitions/pwas/
  *
- * Shows a pwa list loading page 
+ * Shows a pwa list loading page
  */
-router.get('/pwas', (req, res, next) => {
+router.get('/pwas', (req, res) => {
   res.render('pwas/list.hbs', {
-    transition: true,
+    transition: true
   });
 });
 
 /**
  * GET /transitions/pwas/view
  *
- * Shows a pwa details loading page 
+ * Shows a pwa details loading page
  */
-router.get('/pwas/view', (req, res, next) => {
+router.get('/pwas/view', (req, res) => {
   res.render('pwas/view.hbs', {
-    transition: true,
+    transition: true
   });
 });
 

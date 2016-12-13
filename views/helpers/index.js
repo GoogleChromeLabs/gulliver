@@ -37,7 +37,7 @@ function contrastColor(hexcolor) {
 
   const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
   return (yiq >= 128) ? DEFAULT_DARK : DEFAULT_LIGHT;
-};
+}
 
 exports.contrastColor = contrastColor;
 
@@ -51,7 +51,7 @@ exports.moment = function(date) {
 
 exports.themeFragment = function(pwa) {
   return 't=' + encodeURIComponent(pwa.name) +
-    '&bg=' + encodeURIComponent(pwa.backgroundColor) + 
+    '&bg=' + encodeURIComponent(pwa.backgroundColor) +
     '&c=' + encodeURIComponent(contrastColor(pwa.backgroundColor));
 };
 

@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+/* eslint-env browser */
+
 class PageTransitionClient {
 
   constructor(url, serviceWorker) {
@@ -33,7 +35,7 @@ class PageTransitionClient {
     // for a fetch result
     if (this.serviceWorker && this.serviceWorker.controller) {
       this.registerLoadingPage();
-      this.serviceWorker.addEventListener('controllerchange', (evt) => {
+      this.serviceWorker.addEventListener('controllerchange', () => {
         // re-register in case a new serviceworker gets installed and claims the page
         this.registerLoadingPage();
       });
@@ -52,8 +54,8 @@ class PageTransitionClient {
   registerLoadingPage() {
     this.serviceWorker.addEventListener('message', this.handleMessage.bind(this));
     this.serviceWorker.controller.postMessage({
-      'type': 'waiting',
-      'url': this.urlWithoutFragment,
+      type: 'waiting',
+      url: this.urlWithoutFragment
     });
   }
 
@@ -90,13 +92,13 @@ class PageTransitionClient {
    * Removes '#' and anything that comes after.
    *
    * @param {String} url an URL
-   * @return {String}  
+   * @return {String}
    *
    * @private
    */
   removeHash(url) {
     const indexOfHash = url.indexOf('#');
-    if (indexOfHash == -1) {
+    if (indexOfHash === -1) {
       return url;
     }
     return url.substring(0, indexOfHash);
@@ -111,5 +113,6 @@ class PageTransitionClient {
 }
 
 // register page transition client
-const pageTransitionClient = new PageTransitionClient(window.location.href, navigator.serviceWorker);
+const pageTransitionClient = new PageTransitionClient(
+  window.location.href, navigator.serviceWorker);
 pageTransitionClient.register();

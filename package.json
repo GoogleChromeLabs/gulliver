@@ -12,6 +12,7 @@
     "mocha": "node_modules/.bin/mocha -R test/ -t 60000",
     "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -R  test/**/*",
     "lint": "node_modules/.bin/eslint .",
+    "lint-fix": "node_modules/.bin/eslint --fix .",
     "test": "npm run lint && npm run coverage"
   },
   "author": "Google Inc.",

@@ -13,6 +13,8 @@
  * limitations under the License.
  */
 
+/* eslint-env browser */
+
 const url = new URL(window.location);
 const pageId = url.searchParams.get('sort') || 'newest';
 
@@ -20,17 +22,15 @@ const pageId = url.searchParams.get('sort') || 'newest';
 const element = document.getElementById(pageId);
 if (element) {
   console.log('updating active class ' + pageId + ' ' + element.className);
-  element.className += " activetab";
+  element.className += ' activetab';
 }
-
 
 // show loader
 const items = document.getElementsByClassName('items');
-for (item of items) {
+for (let item of items) {
   item.innerHTML = '';
   item.style.height = '50vh';
   new window.Loader(item, '#1976D2').show();
   item.classList.add('fadeIn');
 }
-
 
