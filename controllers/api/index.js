@@ -21,4 +21,7 @@ const router = express.Router(); // eslint-disable-line new-cap
 // Includes APIs for Lighthouse (/api/lighthouse)
 router.use('/lighthouse', require('./lighthouse'));
 
+// Includes APIs for Notifications (/api/notifications)
+router.use('/notifications', require('./notifications'));
+
 module.exports = router;

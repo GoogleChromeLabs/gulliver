@@ -6,7 +6,7 @@ import commonsjs from 'rollup-plugin-commonjs';
 export default {
   entry: './public/js/gulliver.es6.js',
   plugins: [
-    babel(),
+    babel({exclude: 'node_modules/**'}),
     uglify(),
     nodeResolve(),
     commonsjs()
@@ -16,6 +16,9 @@ export default {
   targets: [
     {
       dest: './public/js/gulliver.js',
+      // Fixes 'navigator' not defined when using Firebase and strict mode:
+      // http://stackoverflow.com/questions/31221357/webpack-firebase-disable-parsing-of-firebase
+      useStrict: false,
       format: 'iife',
       sourceMap: true
     }
