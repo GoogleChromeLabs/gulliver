@@ -27,9 +27,8 @@ class Lighthouse {
   constructor(pwaId, absoluteStartUrl, lighthouseJson) {
     this.pwaId = pwaId;
     this.absoluteStartUrl = absoluteStartUrl;
-    this.lighthouseInfo = libLighthouse.processLighthouseJson(lighthouseJson);
-    // We store the lighthouseJson as a string to be able to store 1500+ bytes.
-    this._lighthouseJson = JSON.stringify(lighthouseJson);
+    this._lighthouseJson = parseToJson(lighthouseJson);
+    this.lighthouseInfo = libLighthouse.processLighthouseJson(this._lighthouseJson);
     this.totalScore = this.lighthouseInfo.totalScore;
     this.lighthouseVersion = this.lighthouseInfo.lighthouseVersion;
     this.date = (new Date()).toISOString().slice(0, 10);
@@ -37,12 +36,20 @@ class Lighthouse {
   }
 
   get lighthouseJson() {
-    return JSON.parse(this._lighthouseJson);
+    return this._lighthouseJson;
   }
 
   set lighthouseJson(value) {
-    this._lighthouseJson = JSON.stringify(value);
+    // lighthouseJson is stored as a string in the datastore
+    this._lighthouseJson = parseToJson(value);
   }
+}
+
+function parseToJson(value) {
+  if (value && Object.prototype.toString.call(value) === '[object String]') {
+    return JSON.parse(value);
+  }
+  return value;
 }
 
 module.exports = Lighthouse;
