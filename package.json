@@ -6,13 +6,14 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "prestart": "rollup -c",
+    "prestart": "rollup -c && npm run msgsw",
     "monitor": "nodemon app.js",
     "deploy": "npm run prestart && gcloud app deploy app.yaml",
     "mocha": "node_modules/.bin/mocha -R test/ -t 60000",
     "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -R  test/**/*",
     "lint": "node_modules/.bin/eslint .",
-    "test": "npm run lint && npm run coverage"
+    "test": "npm run lint && npm run coverage",
+    "msgsw": "node firebaseMsgSwGenerator.js"
   },
   "author": "Google Inc.",
   "contributors": [
@@ -78,6 +79,7 @@
     "eslint": "^3.0.1",
     "eslint-config-google": "^0.6.0",
     "istanbul": "^0.4.4",
+    "lodash.template": "^4.4.0",
     "mocha": "^3.0.1",
     "node-mocks-http": "^1.5.4",
     "simple-mock": "^0.7.0",
