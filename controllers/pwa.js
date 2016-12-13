@@ -30,7 +30,7 @@ const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_SORT_ORDER = 'newest';
 
 /**
- * GET /pwas/add
+ * GET /
  *
  * Display a page of PWAs (up to ten at a time).
  */

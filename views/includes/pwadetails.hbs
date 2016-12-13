@@ -1,6 +1,6 @@
 <a href="{{pwa.absoluteStartUrl}}"  id="pwa" class="detail-general" style="background-color: {{pwa.backgroundColor}}; color: {{contrastColor pwa.backgroundColor}};">
 
-  <div id="pwa-logo-container" style="background-color: {{pwa.backgroundColor}}">
+  <div id="pwa-logo-container">
     {{#if pwa.iconUrl128}}
       <img src="{{pwa.iconUrl128}}" width="128" height="128"/>
     {{else}}
@@ -11,9 +11,7 @@
     {{/if}}
   </div>
   <h3 id="pwa-name" style="color: {{contrastColor pwa.backgroundColor}};">{{pwa.name}}</h3>
-  <code>{{pwa.absoluteStartUrl}}</code>
-  {{#if pwa.description}}
-    <div id="pwa-description">{{pwa.description}}</div>
-  {{/if}}
-  <div class="dates">Added {{moment pwa.created}}, Updated {{moment pwa.updated}}</div>
+  <code id="pwa-url">{{pwa.absoluteStartUrl}}</code>
+  <div id="pwa-description">{{pwa.description}}</div>
+  <div class="dates">{{#if pwa.created}}Added {{moment pwa.created}}, Updated {{moment pwa.updated}}{{/if}}</div>
 </a>

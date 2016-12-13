@@ -12,14 +12,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{
-  "presets": [
-    [
-      "es2015",
-      {
-        "modules": false
-      }
-    ]
-  ],
-  "plugins": ["external-helpers"]
-}
+
+'use strict';
+
+const express = require('express');
+const router = express.Router(); // eslint-disable-line new-cap
+
+/**
+ * GET /transitions/pwas/
+ *
+ * Shows a pwa list loading page
+ */
+router.get('/pwas', (req, res) => {
+  res.render('pwas/list.hbs', {
+    transition: true
+  });
+});
+
+/**
+ * GET /transitions/pwas/view
+ *
+ * Shows a pwa details loading page
+ */
+router.get('/pwas/view', (req, res) => {
+  res.render('pwas/view.hbs', {
+    transition: true
+  });
+});
+
+module.exports = router;
