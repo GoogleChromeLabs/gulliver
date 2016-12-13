@@ -33,7 +33,8 @@ nconf
     'CLIENT_SECRET',
     'LIGHTHOUSE_SERVER',
     'GOOGLE_ANALYTICS',
-    'FIREBASE_AUTH'
+    'FIREBASE_AUTH',
+    'NOTIFICATION_DOMAIN'
   ])
   // 3. Config file
   .file({file: path.join(__dirname, 'config.json')})
