@@ -7,3 +7,5 @@ npm-debug.log
 key.json
 public/js/gulliver.js
 public/js/gulliver.js.map
+public/firebase-messaging-sw.js
+
