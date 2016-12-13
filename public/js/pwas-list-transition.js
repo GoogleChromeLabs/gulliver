@@ -12,14 +12,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-{
-  "presets": [
-    [
-      "es2015",
-      {
-        "modules": false
-      }
-    ]
-  ],
-  "plugins": ["external-helpers"]
+
+/* eslint-env browser */
+
+const url = new URL(window.location);
+const pageId = url.searchParams.get('sort') || 'newest';
+
+// update active tab
+const element = document.getElementById(pageId);
+if (element) {
+  console.log('updating active class ' + pageId + ' ' + element.className);
+  element.className += ' activetab';
 }
+
+// show loader
+const items = document.getElementsByClassName('items');
+for (let item of items) {
+  item.innerHTML = '';
+  item.style.height = '50vh';
+  new window.Loader(item, 'dark-primary-background').show();
+  item.classList.add('fadeIn');
+}
+

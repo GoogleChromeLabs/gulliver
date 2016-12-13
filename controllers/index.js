@@ -28,6 +28,9 @@ router.use('/tasks', require('./tasks'));
 // PWAs
 router.use('/pwas', require('./pwa'));
 
+// Transitions
+router.use('/transitions', require('./transition'));
+
 router.get('/', (req, res) => {
   req.url = '/pwas';
   router.handle(req, res);

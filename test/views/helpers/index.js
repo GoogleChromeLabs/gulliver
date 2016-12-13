@@ -22,22 +22,8 @@ let helpers = require('../../../views/helpers');
 describe('views.helpers', () => {
   describe('#contrastColor', () => {
     it('should return "white" when the value is not present', () => {
-      assert.equal('white', helpers.contrastColor(null));
-      assert.equal('white', helpers.contrastColor(''));
-    });
-
-    it('should return "black" when value is "#FFFFFFF"', () => {
-      assert.equal('black', helpers.contrastColor('FFFFFF'));
-      assert.equal('black', helpers.contrastColor('#FFFFFF'));
-    });
-
-    it('should return "black" when value is "#fff"', () => {
-      assert.equal('black', helpers.contrastColor('#fff'));
-    });
-
-    it('should return "white" when value is "#000000"', () => {
-      assert.equal('white', helpers.contrastColor('000000'));
-      assert.equal('white', helpers.contrastColor('#000000'));
+      assert.equal('#ffffff', helpers.contrastColor(null));
+      assert.equal('#ffffff', helpers.contrastColor(''));
     });
   });
 

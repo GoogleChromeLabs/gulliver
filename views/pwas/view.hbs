@@ -16,7 +16,7 @@
   <head>
     {{> head}}
   </head>
-  <body>
+  <body {{#if transition}}class="transition"{{/if}}>
     {{> header}}    
     <div class="section-title">
       <a href="{{backlink}}" class="back">
@@ -34,7 +34,11 @@
       {{/if}}
     </main>
     {{> footer}}
+    {{#if transition}}
+    <script src="/js/pwas-view-transition.js" defer></script>
+    {{else}}
     <script src="https://www.gstatic.com/charts/loader.js" defer></script>
     <script src="/js/lighthouse-chart.js" defer></script>
+    {{/if}}
   </body>
 </html>
