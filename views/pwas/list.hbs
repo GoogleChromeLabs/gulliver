@@ -36,14 +36,14 @@
         {{#each pwas}}
           <a class="item card card-pwa gulliver-online-aware" href="/pwas/{{id}}#{{themeFragment this}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
             {{#if iconUrl64}}
-              <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{name}}"/>
+              <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{displayName}}"/>
             {{else}}
               <svg class="pwa-icon" width="64" height="64">
                 <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
-                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
+                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter displayName}}</text>
               </svg>
             {{/if}}
-            <div class="pwa-name">{{name}}</div>
+            <div class="pwa-name">{{displayName}}</div>
             {{> score }}
           </a>
         {{else}}

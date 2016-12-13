@@ -20,6 +20,7 @@ const assert = require('assert');
 const Manifest = require('../../models/manifest');
 const Pwa = require('../../models/pwa');
 
+/* eslint-disable camelcase */
 describe('models/pwa.js', () => {
   it('Create a PWA with no Manifest', () => {
     const pwa = new Pwa();
@@ -53,7 +54,6 @@ describe('models/pwa.js', () => {
 
   it('Create a PWA with a Full Manifest', () => {
     const manifestUrl = 'http://www.example.com';
-    /* eslint-disable camelcase */
     const manifestJson = {
       name: 'Example PWA',
       description: 'Example PWA',
@@ -67,7 +67,6 @@ describe('models/pwa.js', () => {
       background_color: '#673AB7',
       theme_color: '#512DA8'
     };
-    /* eslint-enable camelcase */
     const manifest = new Manifest(manifestUrl, manifestJson);
     const pwa = new Pwa(manifestUrl, manifest);
     assert.equal(pwa.manifestUrl, manifestUrl);
@@ -95,4 +94,40 @@ describe('models/pwa.js', () => {
     pwa.manifest = new Manifest('http://www.example.com', {description: 'manifestDescription'});
     assert.equal(pwa.description, 'manifestDescription');
   });
+
+  describe('displayName', () => {
+    it('is name', () => {
+      const pwa = createPwa('www.manifesturl.com', {
+        name: 'Example PWA',
+        short_name: 'PWA'
+      });
+      assert.equal(pwa.displayName, 'Example PWA');
+    });
+    it('is short name', () => {
+      const pwa = createPwa('www.manifesturl.com', {
+        short_name: 'PWA'
+      });
+      assert.equal(pwa.displayName, 'PWA');
+    });
+    it('is url', () => {
+      const pwa = createPwa('www.manifesturl.com', {
+      });
+      assert.equal(pwa.displayName, 'www.manifesturl.com');
+    });
+    it('is url without file name', () => {
+      const pwa = createPwa('www.manifesturl.com/manifest.json', {
+      });
+      assert.equal(pwa.displayName, 'www.manifesturl.com');
+    });
+    it('is url without scheme', () => {
+      const pwa = createPwa('https://www.manifesturl.com/manifest.json', {
+      });
+      assert.equal(pwa.displayName, 'www.manifesturl.com');
+    });
+  });
+
+  function createPwa(manifestUrl, manifestData) {
+    const manifest = new Manifest(manifestUrl, manifestData);
+    return new Pwa(manifestUrl, manifest);
+  }
 });
