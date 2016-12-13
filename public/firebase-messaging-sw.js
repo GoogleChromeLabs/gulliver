@@ -27,7 +27,7 @@ caches.match(configUrl)
       messagingSenderId: config.firebase_msg_sender_id
     });
     const messaging = firebase.messaging();
-    messaging.setBackgroundMessageHandler(payload => {
-      return self.registration.showNotification(payload.title);
+    messaging.setBackgroundMessageHandler(_ => {
+      return self.registration.showNotification();
     });
   });
