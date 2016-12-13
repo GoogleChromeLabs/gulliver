@@ -54,9 +54,9 @@ function checkConfig(setting) {
   if (!nconf.get(setting)) {
     throw new Error(`You must set the ${setting} environment variable or add it to config.json!`);
   }
-  // If setting includes a space, emit warning
+  // If setting includes a space, throw error
   if (nconf.get(setting).match(/\s/)) {
-    console.warn(`The ${setting} environment variable is suspicious ("${nconf.get(setting)}")`);
+    throw new Error(`The ${setting} environment variable is suspicious ("${nconf.get(setting)}")`);
   }
 }
 
