@@ -26,7 +26,6 @@ nconf
   // 2. Environment variables
   .env([
     'CLOUD_BUCKET',
-    'DATA_BACKEND',
     'GCLOUD_PROJECT',
     'PORT',
     'CLIENT_ID',
@@ -41,7 +40,6 @@ nconf
   .file({file: path.join(__dirname, 'config.json')})
   // 4. Defaults
   .defaults({
-    DATA_BACKEND: 'datastore',
     PORT: 8080 // Port used by HTTP server
   });
 
