@@ -63,10 +63,10 @@ main {
   padding-left: 8px;
   padding-bottom: 44px;
 }
+/* Navbar */
 .navbar {
   position: relative;
   height: 82px;
-  background: #1976D2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -143,7 +143,6 @@ main {
   color: white;
   font-size: 16px;
   font-weight: 400;
-  background: #2196F3;
   padding: 0;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 }
@@ -164,11 +163,12 @@ main {
   padding: 0 40px 0 40px;
   opacity: 0.7;
   font-weight: 500;
+  text-transform: uppercase;
+
 }
 .section-title .activetab {
   color: white;
   border-bottom-style: solid;
-  border-color: #FF5722;
   opacity: 1;
 }
 .section-title a, .section-title a:visited {
@@ -201,13 +201,18 @@ main {
 #auth-button {
   position: absolute;
   bottom: -44px;
-  right: 8px;
+  right: 16px;
+  min-width: 0;
 }
-button {
-  padding: 0 5px 5px 5px;
+.button-primary {
+  border: 1px solid transparent;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 }
 .button {
-  font-size: 14px;
+  background: none;
+  font-size: 16px;
+  line-height: 16px;
   font-weight: 500;
   color: white;
   min-width: 100px;
@@ -217,7 +222,6 @@ button {
   margin-bottom: 5px;
   margin-right: 5px;
   display: inline-block;
-  border:none;
   -ms-touch-action: manipulation;
   touch-action: manipulation;
   cursor: pointer;
@@ -226,11 +230,10 @@ button {
   -ms-user-select: none;
   user-select: none;
   background-image: none;
-  border: 1px solid transparent;
-  border-radius: 2px;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+  border: none;
   text-transform: uppercase;
 }
+
 button:active,
 button[disabled=disabled], 
 button:disabled {
@@ -240,12 +243,6 @@ button:disabled {
 .button:not([disabled]):hover {
   opacity: 0.5;
 }
-.accent-color {
-  background: #FF5722;
-}
-.blue {
-  background: #0D47A1;
-}
 .button a {
   color: white;
   text-decoration: none;
@@ -253,10 +250,6 @@ button:disabled {
   width: 100%;
   height: 100%;
 }
-.add {
-  margin-left: 8px;
-}
-
 /* PWA List Box */
 .card {
   text-overflow: hidden;
@@ -480,7 +473,6 @@ footer {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background: #1976D2;
   color: white;
 }
 footer ul {
@@ -622,6 +614,7 @@ pre {
 .toolbar {
   width: 100%;
   display: flex;
+  margin: 0 8px;
 }
 
 .toolbar > div {
@@ -675,8 +668,6 @@ pre {
 }
 
 .switch-label:active:after { transform: scale(1.15, 0.85); }
-
-.switch:checked ~ label { background: #FFAB91; }
 
 .switch:checked ~ label:after {
   left: 20px;
@@ -775,3 +766,33 @@ pre {
     opacity: 0.9;
   }
 }
+/* Theme */
+.primary-color {
+  color: #2196F3;
+}
+.primary-background,
+.section-title {
+  background: #2196F3;
+}
+.dark-primary-color {
+  color: #1976D2;
+}
+.dark-primary-background,
+.navbar,
+footer {
+  background: #1976D2;
+}
+.accent-color {
+  color: #FF5722;
+}
+
+.section-title .activetab,
+.accent-border {
+  border-color: #FF5722;
+}
+.switch:checked ~ label,
+.button-primary,
+.accent-background {
+  background: #FF5722;
+}
+

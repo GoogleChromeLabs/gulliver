@@ -1,19 +1,21 @@
 /**
- * copyright 2015-2016, google, inc.
- * licensed under the apache license, version 2.0 (the "license");
- * you may not use this file except in compliance with the license.
- * you may obtain a copy of the license at
+ * Copyright 2015-2016, Google, Inc.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *    http://www.apache.org/licenses/license-2.0
+ *    http://www.apache.org/licenses/LICENSE-2.0
  *
- * unless required by applicable law or agreed to in writing, software
- * distributed under the license is distributed on an "as is" basis,
- * without warranties or conditions of any kind, either express or implied.
- * see the license for the specific language governing permissions and
- * limitations under the license.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 /* eslint-env browser */
+
+const FADE_OUT_ANIMATION_LENGTH = 500;
 
 /**
  * A CSS only loader showing three dots.
@@ -23,10 +25,11 @@ class Loader {
   /**
    * Create a new loader.
    *
-   * @param container {HTMLElement} the element containing the loader.
+   * @param container {HTMLElement} the element containing the loader
+   * @param style {String} optional hex color or css class for styling the loader
    */
-  constructor(container, color) {
-    this.color = color || 'black';
+  constructor(container, style) {
+    this.style = style || '';
     this.container = container;
   }
 
@@ -42,7 +45,11 @@ class Loader {
     for (let i = 0; i < 3; i++) {
       const dot = document.createElement('div');
       dot.classList.add('loader-dot');
-      dot.style['background-color'] = this.color;
+      if (this.style.startsWith('#')) {
+        dot.style['background-color'] = this.style;
+      } else {
+        dot.classList.add(this.style);
+      }
       loader.appendChild(dot);
     }
     this.container.appendChild(loader);
@@ -57,7 +64,7 @@ class Loader {
     const loaders = this.container.getElementsByClassName('loader');
     for (let loader of loaders) {
       loader.classList.add('fadeOut');
-      setTimeout(() => loader.remove(), 500);
+      window.requestIdleCallback(() => loader.remove(), FADE_OUT_ANIMATION_LENGTH);
     }
   }
 

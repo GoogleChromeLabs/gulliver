@@ -30,7 +30,7 @@ const items = document.getElementsByClassName('items');
 for (let item of items) {
   item.innerHTML = '';
   item.style.height = '50vh';
-  new window.Loader(item, '#1976D2').show();
+  new window.Loader(item, 'dark-primary-background').show();
   item.classList.add('fadeIn');
 }
 

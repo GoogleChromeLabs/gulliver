@@ -25,7 +25,7 @@ class LighthouseChart {
 
   constructor() {
     this.chartElement = document.getElementById('chart');
-    this.loader = new window.Loader(this.chartElement, '#1976D2');
+    this.loader = new window.Loader(this.chartElement, 'dark-primary-background');
   }
 
   load() {

@@ -37,9 +37,12 @@ function updateColors() {
   // update color theme
   const pwaDetails = document.getElementById('pwa');
   pwaDetails.style['background-color'] = background;
-
   const pwaName = document.getElementById('pwa-name');
   pwaName.style.color = color;
+
+  // show lighthouse loader
+  const chartElement = document.getElementById('chart');
+  new window.Loader(chartElement, 'dark-primary-background').show();
 
   pwaDetails.classList.add('fadeIn');
 }

@@ -22,14 +22,15 @@ const TRANSITION_PWA_VIEW = '/transitions/pwas/view';
 
 const OFFLINE = [
   OFFLINE_URL,
-  '/img/GitHub-Mark-Light-32px.png',
-  '/img/GitHub-Mark-Light-64px.png',
+  '/img/GitHub-Mark-Light-24px.png',
+  '/img/GitHub-Mark-Light-48px.png',
   '/img/lighthouse.svg',
   '/css/style.css',
   '/sw.js',
   '/js/gulliver.js',
-  '/messaging-config.json'
+  '/messaging-config.json',
   '/js/pwas-list-transition.js',
+  '/js/pwas-view-transition.js',
   TRANSITION_PWA_LIST,
   TRANSITION_PWA_VIEW
 ];
