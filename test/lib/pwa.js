@@ -52,8 +52,7 @@ describe('lib.pwa', () => {
         pwa.id = '123456789';
         dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
           .then(data => {
-            lighthouse = new Lighthouse('123456789', 'www.domain.com',
-              libLighthouse.processLighthouseJson(JSON.parse(data)));
+            lighthouse = new Lighthouse('123456789', 'www.domain.com', JSON.parse(data));
             done();
           });
       });
