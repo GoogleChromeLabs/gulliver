@@ -5,7 +5,7 @@
   "CLIENT_SECRET": "your client secret",
   "LIGHTHOUSE_SERVER": "your lighthouse server URL (optional)",
   "GOOGLE_ANALYTICS": "your Google Analytics tracking code (optional)",
-  "FIREBASE_AUTH": "Your Firebase Notifications ID (optional)",
-  "FIREBASE_MSG_SENDER_ID": "Your Firebase Messaging Sender ID (optional)",
+  "FIREBASE_AUTH": "the 'Server key' (optional); see https://console.firebase.google.com/project/$FIREBASE_PROJECT/settings/cloudmessaging",
+  "FIREBASE_MSG_SENDER_ID": "the 'Sender ID' (optional); see https://console.firebase.google.com/project/$FIREBASE_PROJECT/settings/cloudmessaging",
   "DATA_BACKEND": "datastore"
 }
