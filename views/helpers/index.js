@@ -50,7 +50,7 @@ exports.moment = function(date) {
 };
 
 exports.themeFragment = function(pwa) {
-  return 't=' + encodeURIComponent(pwa.name) +
+  return 't=' + encodeURIComponent(pwa.displayName) +
     '&bg=' + encodeURIComponent(pwa.backgroundColor) +
     '&c=' + encodeURIComponent(contrastColor(pwa.backgroundColor));
 };

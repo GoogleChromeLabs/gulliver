@@ -60,6 +60,9 @@ class LighthouseChart {
         this.loader.hide();
       })
       .catch(err => {
+        this.loader.hide();
+        const missingChart = document.getElementById('chart-missing');
+        missingChart.classList.add('fadeIn');
         console.error('There was an error drawing the chart!', err);
       });
   }

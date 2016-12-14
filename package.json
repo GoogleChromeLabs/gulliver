@@ -9,7 +9,7 @@
     "prestart": "rollup -c && npm run generate-msg-sw",
     "monitor": "nodemon app.js",
     "deploy": "npm run prestart && gcloud app deploy app.yaml",
-    "mocha": "node_modules/.bin/mocha -R test/ -t 60000",
+    "mocha": "node_modules/.bin/_mocha -R  test/**/*",
     "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -R  test/**/*",
     "lint": "node_modules/.bin/eslint .",
     "test": "npm run lint && npm run coverage",

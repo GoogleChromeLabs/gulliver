@@ -34,9 +34,15 @@ The following components are required to run the project (tested on macOS):
 
 In addition, you will need to set up a GCP project, and configure OAuth:
 
-1. A [Google Cloud Console](https://console.cloud.google.com/) project. A GCP project forms the basis of accessing the GCP. (How to verify? Run `gcloud info` and check that the `Account` and `Project` properties are what you expect. Use `gcloud init` to configure `gcloud` if you don't have one already.)
+1. Create a [Google Cloud Platform](https://console.cloud.google.com/) project. A GCP project forms the basis of accessing the GCP. (How to verify? Run `gcloud info` and check that the `Account` and `Project` properties are what you expect. Use `gcloud init` to configure `gcloud` if you don't have one already.)
 
-1. A OAuth *client id* and *client secret* and  associated with your project. (How to verify? There's no automatic way, but see [Creating a Google API Console project and client ID](https://developers.google.com/identity/sign-in/web/devconsole-project) for how to create one. Make sure you list `http://localhost:8080` as one of the `Authorized JavaScript origins`.)
+1. Get the OAuth *client id* and *client secret* associated with this project. (How to verify? There's no automatic way, but see [Creating a Google API Console project and client ID](https://developers.google.com/identity/sign-in/web/devconsole-project) for how to create one. Make sure you list `http://localhost:8080` as one of the `Authorized JavaScript origins`.)
+
+Finally (and optionally), you need a Firebase project, and the Firebase Cloud Messaging "Server key" and "Sender ID":
+
+1. Create a [Firebase](https://console.firebase.google.com/) project.
+
+1. Get Firebase Cloud Messaging "Server key" and "Sender ID" associated with this project. Select "Project settings" and then "Cloud Messaging". The URL should be of the form <https://console.firebase.google.com/project/$FIREBASE_PROJECT/settings/cloudmessaging>. (How to verify? There's no automatic way, but the "Server key" should be a long string of >100 characters, and the "Sender ID" a >10 digit number.)
 
 ## Running Gulliver
 

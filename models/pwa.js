@@ -28,11 +28,24 @@ class Pwa {
     this.visible = true;
   }
 
+  get shortName() {
+    if (!this.manifest) {
+      return '';
+    }
+    return this.manifest.shortName || '';
+  }
+
   get name() {
     if (!this.manifest) {
       return '';
     }
     return this.manifest.name || '';
+  }
+
+  get displayName() {
+    return this.name ||
+      this.shortName ||
+      trimManifestFile(this.manifestUrl);
   }
 
   get description() {
@@ -91,6 +104,20 @@ class Pwa {
       id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')
     };
   }
+}
+
+function trimManifestFile(url) {
+  let startIndex = url.indexOf('//');
+  if (startIndex === -1) {
+    startIndex = 0;
+  } else {
+    startIndex += 2;
+  }
+  let endIndex = url.lastIndexOf('/');
+  if (endIndex === -1) {
+    endIndex = url.length;
+  }
+  return url.substring(startIndex, endIndex);
 }
 
 function stringifyManifestIfNeeded(manifest) {
