@@ -372,6 +372,15 @@ body:not(.transition) #pwa:hover {
   border-color: #ccc;
   position: relative;
 }
+#chart #chart-missing {
+  position: absolute;
+  text-align: center;
+  top: 45%;
+  width: 100%;
+}
+#chart #chart-missing.fadeIn {
+  display: block;
+}
 #chart_AnnotationChart_borderDiv {
   height: 244px !important;
   border-style: none;
@@ -694,7 +703,9 @@ pre {
   visibility: hidden;
 }
 
-.hidden { display: none; }
+.hidden { 
+  display: none; 
+}
 
 .fadeIn {
   animation: 0.25s ease-in fadeIn;
