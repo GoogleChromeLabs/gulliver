@@ -34,7 +34,7 @@ nconf
     'LIGHTHOUSE_SERVER',
     'GOOGLE_ANALYTICS',
     'FIREBASE_AUTH',
-    'NOTIFICATION_DOMAIN'
+    'CANONICAL_ROOT'
   ])
   // 3. Config file
   .file({file: path.join(__dirname, 'config.json')})

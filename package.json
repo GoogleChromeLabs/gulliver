@@ -13,7 +13,7 @@
     "coverage": "node_modules/.bin/istanbul cover node_modules/.bin/_mocha -R  test/**/*",
     "lint": "node_modules/.bin/eslint .",
     "test": "npm run lint && npm run coverage",
-    "generate-msg-sw": "node firebaseMsgSwGenerator.js",
+    "generate-msg-sw": "node firebase-messaging-sw-generator.js",
     "lint-fix": "node_modules/.bin/eslint --fix .",
     "test": "npm run lint && npm run coverage"
   },

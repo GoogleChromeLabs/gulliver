@@ -8,5 +8,5 @@
   "FIREBASE_AUTH": "Your Firebase Notifications ID (optional)",
   "FIREBASE_MSG_SENDER_ID": "Your Firebase Messaging Sender ID (optional)",
   "DATA_BACKEND": "datastore",
-  "NOTIFICATION_DOMAIN": "http://localhost:8080/"
+  "CANONICAL_ROOT": "Your website root address. Can be http://localhost:8080 in development"
 }
