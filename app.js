@@ -15,6 +15,10 @@
 
 'use strict';
 
+// http-parser-js addresses issues such as corrupt HTTP headers
+// http://stackoverflow.com/questions/36628420/nodejs-request-hpe-invalid-header-token
+process.binding('http_parser').HTTPParser = require('http-parser-js').HTTPParser;
+
 const path = require('path');
 const express = require('express');
 const config = require('./config/config');
