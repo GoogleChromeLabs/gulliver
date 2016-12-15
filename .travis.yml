@@ -8,5 +8,5 @@ before_script:
 script:
   - npm test
 env:
-  - CLIENT_ID=dummy CLIENT_SECRET=dummy
-
+  # evade checks in config.js
+  - CLIENT_ID=dummy CLIENT_SECRET=dummy GCLOUD_PROJECT=dummy CLOUD_BUCKET=dummy
