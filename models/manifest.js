@@ -24,6 +24,7 @@ class Manifest {
     this.url = manifestUrl;
     this.raw = JSON.stringify(jsonManifest);
     this.name = jsonManifest.name;
+    this.shortName = jsonManifest.short_name;
     this.description = jsonManifest.description;
     this.startUrl = jsonManifest.start_url;
     this.backgroundColor = jsonManifest.background_color;

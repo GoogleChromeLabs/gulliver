@@ -20,28 +20,30 @@
     {{> header}}
 
     <div class="section-title">
-      <a id="newest" class="tab {{#if showNewest}}activetab{{/if}}" href="/?sort=newest">New</a>
+      <a id="newest" class="tab {{#if showNewest}}activetab{{/if}}" href="/">New</a>
       <a id="score" class="tab {{#if showScore}}activetab{{/if}}" href="/?sort=score">Score</a>
     </div>
     <main>
       <div class="toolbar">
-        <button id="pwaAdd" type="submit" class="button-primary button gulliver-signedin-aware gulliver-online-aware" onlick="#">
-          <a href="/pwas/add">Add PWA</a>
-        </button>
+        <a href="/pwas/add">
+          <button id="pwaAdd" type="submit" class="button-primary button gulliver-signedin-aware gulliver-online-aware">
+          Add PWA
+          </button>
+        </a>
       </div>
 
       <div class="items">
         {{#each pwas}}
           <a class="item card card-pwa gulliver-online-aware" href="/pwas/{{id}}#{{themeFragment this}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
             {{#if iconUrl64}}
-              <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{name}}"/>
+              <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{displayName}}"/>
             {{else}}
               <svg class="pwa-icon" width="64" height="64">
                 <rect width="64" height="64" stroke-width="4" fill="{{backgroundColor}}" />
-                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter name}}</text>
+                <text x="32" y="32" fill="{{contrastColor backgroundColor}}" alignment-baseline="middle" text-anchor="middle" font-size="32px">{{firstLetter displayName}}</text>
               </svg>
             {{/if}}
-            <div class="pwa-name">{{name}}</div>
+            <div class="pwa-name">{{displayName}}</div>
             {{> score }}
           </a>
         {{else}}

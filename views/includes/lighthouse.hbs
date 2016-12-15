@@ -1,6 +1,8 @@
 <section class="detail-general">
   <h3>LIGHTHOUSE  {{> score pwa}} </h3>    
-  <div id="chart" {{#if pwa.id }} pwa={{pwa.id}} {{/if}}></div>
+  <div id="chart" {{#if pwa.id }} pwa={{pwa.id}} {{/if}}>
+    <div id="chart-missing" class="hidden">No lighthouse data available</div>
+  </div>
 </section>
 {{#if lighthouse.lighthouseInfo.aggregation.scores}}
 <section class="detail-general">

@@ -10,7 +10,7 @@
     </svg>
     {{/if}}
   </div>
-  <h3 id="pwa-name" style="color: {{contrastColor pwa.backgroundColor}};">{{pwa.name}}</h3>
+  <h3 id="pwa-name" style="color: {{contrastColor pwa.backgroundColor}};">{{pwa.displayName}}</h3>
   <code id="pwa-url">{{pwa.absoluteStartUrl}}</code>
   <div id="pwa-description">{{pwa.description}}</div>
   <div class="dates">{{#if pwa.created}}Added {{moment pwa.created}}, Updated {{moment pwa.updated}}{{/if}}</div>

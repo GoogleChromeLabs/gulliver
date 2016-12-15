@@ -64,7 +64,9 @@ class Loader {
     const loaders = this.container.getElementsByClassName('loader');
     for (let loader of loaders) {
       loader.classList.add('fadeOut');
-      window.requestIdleCallback(() => loader.remove(), FADE_OUT_ANIMATION_LENGTH);
+      window.requestIdleCallback(() => loader.remove(), {
+        timeout: FADE_OUT_ANIMATION_LENGTH
+      });
     }
   }
 

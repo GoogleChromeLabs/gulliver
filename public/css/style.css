@@ -160,7 +160,7 @@ main {
 }
 .section-title .tab {
   height: 48px;
-  line-height: 54px;
+  line-height: 48px;
   margin: 0;
   padding: 0 40px 0 40px;
   opacity: 0.7;
@@ -202,9 +202,12 @@ main {
 }
 #auth-button {
   position: absolute;
-  bottom: -44px;
-  right: 16px;
+  bottom: -48px;
+  right: 8px;
   min-width: 0;
+  height: 48px;
+  line-height: 48px;
+  padding: 0 16px;
 }
 .button-primary {
   border: 1px solid transparent;
@@ -214,15 +217,11 @@ main {
 .button {
   background: none;
   font-size: 16px;
-  line-height: 16px;
   font-weight: 500;
   color: white;
   min-width: 100px;
   height: 30px;
-  line-height: 30px;
   text-align: center;
-  margin-bottom: 5px;
-  margin-right: 5px;
   display: inline-block;
   -ms-touch-action: manipulation;
   touch-action: manipulation;
@@ -234,6 +233,7 @@ main {
   background-image: none;
   border: none;
   text-transform: uppercase;
+  margin: 0;
 }
 
 button:active,
@@ -371,6 +371,15 @@ body:not(.transition) #pwa:hover {
   border-width: 1px;
   border-color: #ccc;
   position: relative;
+}
+#chart #chart-missing {
+  position: absolute;
+  text-align: center;
+  top: 45%;
+  width: 100%;
+}
+#chart #chart-missing.fadeIn {
+  display: block;
 }
 #chart_AnnotationChart_borderDiv {
   height: 244px !important;
@@ -694,7 +703,9 @@ pre {
   visibility: hidden;
 }
 
-.hidden { display: none; }
+.hidden { 
+  display: none; 
+}
 
 .fadeIn {
   animation: 0.25s ease-in fadeIn;
