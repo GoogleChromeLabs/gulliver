@@ -21,9 +21,9 @@ index 5ac9d72..b9e7ead 100644
  const url = require('url');
 -const validateColor = require('./web-inspector').Color.parse;
 +
-+global.WebInspector = {}; // the global is unfortunate, but necessary
++global.Common = {}; // the global is unfortunate, but necessary
 +require('./Color.js');
-+const validateColor = global.WebInspector.Color.parse;
++const validateColor = global.Common.Color.parse;
 
  const ALLOWED_DISPLAY_VALUES = [
    'fullscreen',
