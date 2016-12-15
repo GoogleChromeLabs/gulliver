@@ -34,6 +34,7 @@ nconf
     'LIGHTHOUSE_SERVER',
     'GOOGLE_ANALYTICS',
     'FIREBASE_AUTH',
+    'CANONICAL_ROOT',
     'FIREBASE_MSG_SENDER_ID'
   ])
   // 3. Config file
