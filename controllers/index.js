@@ -39,14 +39,6 @@ router.get('/', (req, res) => {
 // /.shell hosts app shell dependencies
 router.use('/.shell', require('./shell'));
 
-// Make node_modules/sw-toolbox available at /sw-toolbox
-router.use('/sw-toolbox', express.static('node_modules/sw-toolbox'));
-// Make node_modules/sw-offline-google-analytics available at /sw-offline-google-analytics
-router.use(
-  '/sw-offline-google-analytics',
-  express.static('node_modules/sw-offline-google-analytics')
-);
-
 /**
  * This route is used to send config.json to firebase-messaging-sw.js
  */
