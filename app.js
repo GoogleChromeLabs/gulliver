@@ -78,6 +78,14 @@ function setCustomCacheControl(res, path) {
   }
 }
 
+// Make node_modules/{{module}} available at /{{module}}
+['sw-toolbox', 'sw-offline-google-analytics'].forEach(module => {
+  app.use(
+   '/' + module,
+   express.static('node_modules/' + module)
+ );
+});
+
 // Middlewares
 app.use(require('./middlewares'));
 
