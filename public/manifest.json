@@ -1,6 +1,6 @@
 {
 	"name": "PWA Directory",
-	"short_name": "PwaDir",
+	"short_name": "PWA Directory",
 	"description": "A Directory of PWAs",
 	"start_url": "/?utm_source=homescreen",
 	"icons": [
