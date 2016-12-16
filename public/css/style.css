@@ -686,6 +686,10 @@ pre {
   background: #FF5722;
 }
 
+.switch:checked ~ label {
+  background: #FFCCBC;
+}
+
 .switch:disabled ~ label {
   background: #d5d5d5;
   pointer-events: none;
@@ -804,7 +808,6 @@ footer {
 .accent-border {
   border-color: #FF5722;
 }
-.switch:checked ~ label,
 .button-primary,
 .accent-background {
   background: #FF5722;
