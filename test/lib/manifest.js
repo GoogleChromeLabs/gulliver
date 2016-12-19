@@ -33,7 +33,7 @@ describe('lib.manifest', () => {
     it('returns empty array if manifest ok', () => {
       const manifest = fs.readFileSync('./test/manifests/icon-url-with-parameter.json');
       const manifestUrl = 'https://example.com/';
-      const documentUrl = 'https://www.terra.com.br/';
+      const documentUrl = 'https://www.example.com/';
       const actual = libManifest.validateManifest(manifest, manifestUrl, documentUrl);
       assert.deepEqual(actual, []);
     });
