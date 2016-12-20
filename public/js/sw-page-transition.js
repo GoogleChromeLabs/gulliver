@@ -20,6 +20,7 @@
 const DEFAULT_CACHE_NAME = 'sw-page-transitions-cache';
 
 /* eslint-disable no-unused-vars */
+
 const transition = (function() {
 /* eslint-enable no-unused-vars */
 
@@ -32,7 +33,7 @@ const transition = (function() {
       this._cacheName = cacheName;
       this._transitionPageMatchers = [];
       self.addEventListener('message', this.onMessageReceived.bind(this));
-      this._debug = true;
+      this._debug = false;
     }
 
     /**
@@ -41,8 +42,8 @@ const transition = (function() {
      * @param {String} cacheName cache name for page transitions
      * @return {SwPageTransitionController} return controller
      */
-    cacheName(cacheName) {
-      this._cacheName = cacheName;
+    cacheName(name) {
+      this._cacheName = name;
       return this;
     }
 
@@ -72,19 +73,22 @@ const transition = (function() {
       if (request.mode !== 'navigate') {
         return Promise.resolve(null);
       }
-      this.log('fetchWithPageTransition(' + request.url + ')');
+      this.log('fetchWithPageTransition: fetch ' + request.url);
+      const url = new URL(request.url);
+      if (url.searchParams.get('cache') === '1') {
+        url.searchParams.delete('cache');
+        this.log('fetchWithPageTransition: returning cached page ' + url);
+        return caches.match(new Request(url.toString()));
+      }
       const transitionPage = this.findTransitionPage(request);
       // Return null if there is no transition page registered for this request.
       if (!transitionPage) {
+        this.log('fetchWithPageTransition: no transition page found');
         return Promise.resolve(null);
       }
-      // Returned requested page if in cache otherwise the transition page
-      return caches.match(request).then(response => {
-        if (response) {
-          this.log('fetchWithPageTransition: returning cached page');
-        }
-        return response || this.fetchTransitionPage(request, transitionPage);
-      });
+      // Returned the transition page
+      this.log('fetchWithPageTransition: return transition page');
+      return this.fetchTransitionPage(request, transitionPage);
     }
 
     /**

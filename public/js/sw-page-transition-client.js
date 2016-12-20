@@ -30,7 +30,7 @@ class PageTransitionClient {
    * @private
    */
   register() {
-    this.log('page transition client registered for ' + this.urlWithoutFragment);
+    this.log('registered for ' + this.urlWithoutFragment);
     // Register our serviceworker and let it know that we're waiting
     // for a fetch result
     if (this.serviceWorker && this.serviceWorker.controller) {
@@ -66,10 +66,14 @@ class PageTransitionClient {
    */
   loadTargetPage() {
     if (this.debug) {
+      // stay on the loading page
       return;
     }
-    window.location.href = this.originalUrl;
-    location.reload();
+    const url = new URL(this.originalUrl);
+    // force loading cached result
+    url.searchParams.append('cache', 1);
+    this.log('reloading ' + url);
+    window.location.href = url.toString();
   }
 
   /**
@@ -82,7 +86,7 @@ class PageTransitionClient {
   handleMessage(evt) {
     const message = evt.data;
     if (message.type === 'fetch' && message.url === this.urlWithoutFragment) {
-      this.log('page transition client: received fetch signal for ' + message.url);
+      this.log('received fetch signal for ' + message.url);
       this.serviceWorker.removeEventListener('message', this.handleMessage);
       this.loadTargetPage();
     }
@@ -106,7 +110,7 @@ class PageTransitionClient {
 
   log(string) {
     if (this.debug) {
-      console.log(string);
+      console.log('[sw-page-transition-client] ' + string);
     }
   }
 
