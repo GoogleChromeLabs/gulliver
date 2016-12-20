@@ -58,7 +58,12 @@ Finally (and optionally), you need a Firebase project, and the Firebase Cloud Me
 
 1. Run **`npm install`** to install dependencies.
 
-1. Configure your project either via [`config/config.json`](config/config.json) or environment variables (which override the corresponding keys in the config file).
+1. Configure your project either via a config file or environment variables (which override the corresponding keys in the config file). To create a config file, copy the [sample config](config/config.sample.json) and adjust the values accordingly:
+
+```
+$ cp config/config.example.json config.json
+$ vim config/config.json
+```
 
 1. Start Gulliver via `npm start`.
 
