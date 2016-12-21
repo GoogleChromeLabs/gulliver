@@ -9,4 +9,4 @@ script:
   - npm test
 env:
   # evade checks in config.js
-  - CLIENT_ID=dummy CLIENT_SECRET=dummy GCLOUD_PROJECT=dummy CLOUD_BUCKET=dummy
+  - CLIENT_ID=dummy CLIENT_SECRET=dummy GCLOUD_PROJECT=dummy CLOUD_BUCKET=dummy FIREBASE_AUTH=dummy
