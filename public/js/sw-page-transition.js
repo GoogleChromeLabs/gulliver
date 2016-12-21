@@ -87,7 +87,6 @@ const transition = (function() {
         return Promise.resolve(null);
       }
       // Returned the transition page
-      this.log('fetchWithPageTransition: return transition page');
       return this.fetchTransitionPage(request, transitionPage);
     }
 
@@ -105,13 +104,20 @@ const transition = (function() {
       return caches.match(new Request(transitionPage))
         .then(response => {
           if (!response) {
-            this.log('fetchWithPageTransition: loading page not found in cache');
+            this.log('fetchTransitionPage: loading page not found in cache');
             return Promise.resolve(null);
           }
+          this.log('fetchTransitionPage: return transition page');
           // Fetch the actual page and notify transition page when it's ready
-          this.openCache().then(cache =>
-            cache.add(request).then(() => this.notifyListeners(request.url))
-          );
+          this.openCache()
+            .then(cache => cache.add(request)
+              .then(() => this.notifyListeners(request.url))
+              .catch(() => {
+                // offline
+                console.log('handling offline case');
+                this.notifyListeners(request.url);
+              })
+            );
           return Promise.resolve(response);
         });
     }
