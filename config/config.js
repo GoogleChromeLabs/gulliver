@@ -52,7 +52,8 @@ checkConfig('CLIENT_SECRET');
 function checkConfig(setting) {
   // If setting undefined, throw error
   if (!nconf.get(setting)) {
-    throw new Error(`You must set the ${setting} environment variable or add it to config.json!`);
+    throw new Error(`You must set the ${setting} environment variable or add it to ` +
+      'config/config.json!');
   }
   // If setting includes a space, throw error
   if (nconf.get(setting).match(/\s/)) {
