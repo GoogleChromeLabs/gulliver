@@ -12,6 +12,10 @@ toolbox.options.debug = false;
 // Use page transitions
 importScripts('/js/sw-page-transition.js'); /* global transition */
 
+const VERSION = '2';
+const PREFIX = 'gulliver';
+const CACHE_NAME = `${PREFIX}-v${VERSION}`;
+
 // URL to return in place of the "offline dino" when client is
 // offline and requests a URL that's not in the cache.
 const OFFLINE_URL = '/.shell/offline';
@@ -36,6 +40,7 @@ const OFFLINE = [
 ];
 
 toolbox.precache(OFFLINE);
+toolbox.options.cache.name = CACHE_NAME;
 
 // Cache the page registering the service worker. Without this, the
 // "first" page the user visits is only cached on the second visit,
@@ -46,6 +51,7 @@ toolbox.precache(
   })
 );
 
+// Register and cache page transitions for list and detail page
 transition.cacheName(toolbox.options.cache.name)
   .registerPageTransition(/\/pwas\/.*/, TRANSITION_PWA_VIEW)
   .registerPageTransition(/\/.*/, TRANSITION_PWA_LIST);
@@ -59,7 +65,7 @@ toolbox.router.head(/^/, request => {
   // strategy, except that we cache.match(url) rather than cache.match(request) so
   // that the HEAD method is ignored on cache.match().
   function onlyIfCached(url) {
-    return caches.open(toolbox.options.cache.name).then(cache => {
+    return caches.open(CACHE_NAME).then(cache => {
       return cache.match(url).then(response => {
         return (response && response.status === 200) ? response : new Response('', {
           status: 504,
@@ -101,9 +107,18 @@ toolbox.router.default = (request, values, options) => {
   });
 };
 
-// Claim clients so that the very first page load is controlled by a service
-// worker. (Important for responding correctly in offline state.)
 self.addEventListener('activate', () => self.clients.claim());
+
+// Delete old caches and claim clients so that the very first page load is controlled by a service
+// worker. (Important for responding correctly in offline state.)
+self.addEventListener('activate', () =>
+  caches.keys().then(cacheNames =>
+    Promise.all(
+      cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
+        .map(cacheName => caches.delete(cacheName))
+    ).then(self.clients.claim())
+  )
+);
 
 // Make sure the SW the page we register() is the service we use.
 self.addEventListener('install', () => self.skipWaiting());
