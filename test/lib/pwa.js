@@ -13,50 +13,58 @@
  * limitations under the License.
  */
 
-/* global describe it before beforeEach afterEach*/
+/* global describe it beforeEach afterEach*/
 'use strict';
 
-let dataFetcher = require('../../lib/data-fetcher');
-let libPwa = require('../../lib/pwa');
-let libImages = require('../../lib/images');
-let libManifest = require('../../lib/manifest');
-let libLighthouse = require('../../lib/lighthouse');
-let db = require('../../lib/model-datastore');
-let cache = require('../../lib/data-cache');
+const fs = require('fs');
+const dataFetcher = require('../../lib/data-fetcher');
+const libPwa = require('../../lib/pwa');
+const libImages = require('../../lib/images');
+const libManifest = require('../../lib/manifest');
+const libLighthouse = require('../../lib/lighthouse');
+const db = require('../../lib/model-datastore');
+const cache = require('../../lib/data-cache');
 
-let Lighthouse = require('../../models/lighthouse');
-let Manifest = require('../../models/manifest');
-let Pwa = require('../../models/pwa');
+const Lighthouse = require('../../models/lighthouse');
+const Pwa = require('../../models/pwa');
 
-let simpleMock = require('simple-mock');
-let chai = require('chai');
-let chaiAsPromised = require('chai-as-promised');
+const testPwa = require('../models/pwa');
+const simpleMock = require('simple-mock');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 chai.should();
-let assert = require('chai').assert;
+const assert = require('chai').assert;
 
-const MANIFEST_URL = 'https://www.terra.com.br/manifest-br.json';
-const START_URL = 'https://www.terra.com.br/?utm_source=homescreen';
-const MANIFEST_DATA = './test/manifests/icon-url-with-parameter.json';
+const MANIFEST_URL = 'https://www.domain.com/manifest-br.json';
+const START_URL = 'https://www.domain.com/?utm_source=homescreen';
 const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
 
+/* eslint-disable camelcase */
+const MANIFEST_DATA = {
+  name: 'Test',
+  icons: [
+    {
+      src: 'img/launcher-icon.png?v2',
+      sizes: '192x192',
+      type: 'image/png'
+    }
+  ],
+  start_url: 'https://www.example.com/?utm_source=homescreen'
+};
+const MANIFEST_NO_ICON = {name: 'Test', description: 'Manifest without icons', start_url: '/'};
+const MANIFEST_INVALID_THEME_COLOR = {
+  description: 'Manifest with an invalid theme_color', theme_color: ''};
+/* eslint-enable camelcase */
+
 describe('lib.pwa', () => {
-  let manifest;
-  let pwa;
-  let lighthouse;
-  before(done => {
-    dataFetcher.readFile(MANIFEST_DATA)
-      .then(jsonString => {
-        manifest = new Manifest(MANIFEST_URL, JSON.parse(jsonString));
-        pwa = new Pwa(MANIFEST_URL, manifest);
-        pwa.id = '123456789';
-        dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
-          .then(data => {
-            lighthouse = new Lighthouse('123456789', 'www.domain.com', JSON.parse(data));
-            done();
-          });
-      });
-  });
+  const pwa = testPwa.createPwa(MANIFEST_URL, MANIFEST_DATA);
+  pwa.id = '123456789';
+  const manifest = pwa.manifest;
+  const pwaNoIcon = testPwa.createPwa(MANIFEST_URL, MANIFEST_NO_ICON);
+  const pwaInvalidThemeColor = testPwa.createPwa(MANIFEST_URL, MANIFEST_INVALID_THEME_COLOR);
+  const lighthouse = new Lighthouse(
+    '123456789', 'www.domain.com', JSON.parse(fs.readFileSync(LIGHTHOUSE_JSON_EXAMPLE)));
 
   describe('#updatePwaMetadataDescription', () => {
     afterEach(() => {
@@ -95,11 +103,16 @@ describe('lib.pwa', () => {
       return libPwa.updatePwaIcon(pwa).should.be.fulfilled.then(updatedPwa => {
         assert.equal(libImages.fetchAndSave.callCount, 1);
         assert.equal(libImages.fetchAndSave.lastCall.args[0],
-          'https://s1.trrsf.com/fe/zaz-morph/_img/launcher-icon.png?v2');
+          'https://www.domain.com/img/launcher-icon.png?v2');
         assert.equal(libImages.fetchAndSave.lastCall.args[1], '123456789.png');
         assert.equal(updatedPwa.iconUrl, 'original');
         assert.equal(updatedPwa.iconUrl128, '128');
         assert.equal(updatedPwa.iconUrl64, '64');
+      });
+    });
+    it('allows PWAs without icon', () => {
+      return libPwa.updatePwaIcon(pwaNoIcon).should.be.fulfilled.then(updatedPwa => {
+        assert.equal(updatedPwa.iconUrl, null);
       });
     });
   });
@@ -230,9 +243,16 @@ describe('lib.pwa', () => {
       });
     });
     it('handles E_MANIFEST_ERROR error', () => {
-      simpleMock.mock(libManifest, 'fetchManifest').resolveWith(manifest);
+      simpleMock.mock(libPwa, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'findByManifestUrl').rejectWith(new Error('Testing error'));
       return libPwa._save(pwa).should.be.rejectedWith(libPwa.E_MANIFEST_ERROR);
+    });
+    it('rejects invalid Manifest', () => {
+      simpleMock.mock(libPwa, 'fetchManifest').resolveWith(pwaInvalidThemeColor.manifest);
+      simpleMock.mock(libPwa, 'findByManifestUrl').resolveWith(pwaInvalidThemeColor);
+      return libPwa._save(pwaInvalidThemeColor).should.be.rejected.then(error => {
+        assert.equal(error, 'Error while validating the manifest: ERROR: color parsing failed.');
+      });
     });
   });
 

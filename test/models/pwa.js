@@ -97,37 +97,44 @@ describe('models/pwa.js', () => {
 
   describe('displayName', () => {
     it('is name', () => {
-      const pwa = createPwa('www.manifesturl.com', {
+      const pwa = this.createPwa('www.manifesturl.com', {
         name: 'Example PWA',
         short_name: 'PWA'
       });
       assert.equal(pwa.displayName, 'Example PWA');
     });
     it('is short name', () => {
-      const pwa = createPwa('www.manifesturl.com', {
+      const pwa = this.createPwa('www.manifesturl.com', {
         short_name: 'PWA'
       });
       assert.equal(pwa.displayName, 'PWA');
     });
     it('is url', () => {
-      const pwa = createPwa('www.manifesturl.com', {
+      const pwa = this.createPwa('www.manifesturl.com', {
       });
       assert.equal(pwa.displayName, 'www.manifesturl.com');
     });
     it('is url without file name', () => {
-      const pwa = createPwa('www.manifesturl.com/manifest.json', {
+      const pwa = this.createPwa('www.manifesturl.com/manifest.json', {
       });
       assert.equal(pwa.displayName, 'www.manifesturl.com');
     });
     it('is url without scheme', () => {
-      const pwa = createPwa('https://www.manifesturl.com/manifest.json', {
+      const pwa = this.createPwa('https://www.manifesturl.com/manifest.json', {
       });
       assert.equal(pwa.displayName, 'www.manifesturl.com');
     });
   });
-
-  function createPwa(manifestUrl, manifestData) {
-    const manifest = new Manifest(manifestUrl, manifestData);
-    return new Pwa(manifestUrl, manifest);
-  }
 });
+
+/**
+ * Creates a PWA object from a Manifest URL and Json Data for testing.
+ *
+ * @param {string} manifestUrl the URL for the Manifest
+ * @param {Json} manifestData the Json object with the Manifest data
+ * @return {Pwa}
+ */
+exports.createPwa = function(manifestUrl, manifestData) {
+  const manifest = new Manifest(manifestUrl, manifestData);
+  return new Pwa(manifestUrl, manifest);
+};
