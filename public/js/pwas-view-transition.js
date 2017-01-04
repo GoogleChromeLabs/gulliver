@@ -44,7 +44,11 @@ function updateColors() {
   const chartElement = document.getElementById('chart');
   new window.Loader(chartElement, 'dark-primary-background').show();
 
-  pwaDetails.classList.add('fadeIn');
+  // fade in cards
+  const cards = document.getElementsByClassName('detail-general');
+  for (let card of cards) {
+    card.classList.add('fadeIn');
+  }
 }
 
 updateColors();

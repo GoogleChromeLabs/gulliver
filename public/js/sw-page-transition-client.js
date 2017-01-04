@@ -69,11 +69,7 @@ class PageTransitionClient {
       // stay on the loading page
       return;
     }
-    const url = new URL(this.originalUrl);
-    // force loading cached result
-    url.searchParams.append('cache', 1);
-    this.log('reloading ' + url);
-    window.location.href = url.toString();
+    window.location.reload();
   }
 
   /**

@@ -29,10 +29,11 @@ const transition = (function() {
    */
   class SwPageTransitionController {
 
-    constructor(cacheName) {
-      this._cacheName = cacheName;
+    constructor() {
+      this._cacheName = DEFAULT_CACHE_NAME;
       this._transitionPageMatchers = [];
       self.addEventListener('message', this.onMessageReceived.bind(this));
+      this._pagesBeingLoaded = [];
       this._debug = false;
     }
 
@@ -67,19 +68,21 @@ const transition = (function() {
      * @return {Promise<Response>} null if there is no transition page or the
      * request is not a navigation request. Otherwise the transition page or
      * the cached response.
-     *
      */
     fetchWithPageTransition(request) {
       if (request.mode !== 'navigate') {
         return Promise.resolve(null);
       }
       this.log('fetchWithPageTransition: fetch ' + request.url);
-      const url = new URL(request.url);
-      if (url.searchParams.get('cache') === '1') {
-        url.searchParams.delete('cache');
-        this.log('fetchWithPageTransition: returning cached page ' + url);
-        return caches.match(new Request(url.toString()));
+      if (this._pagesBeingLoaded.includes(request.url)) {
+        this.log('fetchWithPageTransition: returning cached page ' + request.url);
+        return caches.match(request).then(response => {
+          const index = this._pagesBeingLoaded.indexOf(request.url);
+          this._pagesBeingLoaded.splice(index, 1);
+          return response;
+        });
       }
+      this._pagesBeingLoaded.push(request.url);
       const transitionPage = this.findTransitionPage(request);
       // Return null if there is no transition page registered for this request.
       if (!transitionPage) {
@@ -218,6 +221,6 @@ const transition = (function() {
     }
   }
 
-  return new SwPageTransitionController(DEFAULT_CACHE_NAME);
+  return new SwPageTransitionController();
 })();
 
