@@ -117,7 +117,7 @@ router.post('/add', (req, res, next) => {
   verifyIdToken(CLIENT_ID, CLIENT_SECRET, idToken)
     .then(user => {
       pwa.setUserId(user);
-      return pwaLib.process(pwa);
+      return pwaLib.createOrUpdatePwa(pwa);
     })
     .then(savedData => {
       res.redirect(req.baseUrl + '/' + savedData.id);

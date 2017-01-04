@@ -17,11 +17,13 @@
 
 const crypto = require('crypto');
 const uri = require('urijs');
+const URL = require('url');
 const Manifest = require('../models/manifest');
 
 class Pwa {
   constructor(manifestUrl, manifestModel) {
-    this.manifestUrl = manifestUrl;
+    // remove hash from url
+    manifestUrl && (this.manifestUrl = removeHash(manifestUrl));
     this._manifest = stringifyManifestIfNeeded(manifestModel);
     this.created = new Date();
     this.updated = this.created;
@@ -104,6 +106,10 @@ class Pwa {
       id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')
     };
   }
+
+  isNew() {
+    return this.created === this.updated;
+  }
 }
 
 function trimManifestFile(url) {
@@ -125,6 +131,12 @@ function stringifyManifestIfNeeded(manifest) {
     return manifest.raw;
   }
   return manifest;
+}
+
+function removeHash(urlString) {
+  const url = URL.parse(urlString);
+  url.hash = '';
+  return url.format();
 }
 
 module.exports = Pwa;

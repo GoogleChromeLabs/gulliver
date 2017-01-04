@@ -20,6 +20,8 @@ const assert = require('assert');
 const Manifest = require('../../models/manifest');
 const Pwa = require('../../models/pwa');
 
+const MANIFEST_URL = 'http://www.example.com/';
+
 /* eslint-disable camelcase */
 describe('models/pwa.js', () => {
   it('Create a PWA with no Manifest', () => {
@@ -39,21 +41,19 @@ describe('models/pwa.js', () => {
   });
 
   it('Create a PWA with Empty Manifest', () => {
-    const manifestUrl = 'http://www.example.com';
-    const manifest = new Manifest(manifestUrl, {});
-    const pwa = new Pwa(manifestUrl, manifest);
-    assert.equal(pwa.manifestUrl, manifestUrl);
+    const manifest = new Manifest(MANIFEST_URL, {});
+    const pwa = new Pwa(MANIFEST_URL, manifest);
+    assert.equal(pwa.manifestUrl, MANIFEST_URL);
     assert.equal(pwa.manifest.raw, '{}');
     assert.equal(pwa.name, '', 'returns empty name');
     assert.equal(pwa.description, '', 'returns empty description');
     assert.equal(pwa.startUrl, '', 'returns empty startUrl');
-    assert.equal(pwa.absoluteStartUrl, 'http://www.example.com/', 'returns empty absoluteStartUrl');
+    assert.equal(pwa.absoluteStartUrl, 'http://www.example.com/', 'returns absoluteStartUrl');
     assert.equal(pwa.backgroundColor, '#ffffff', 'backgroundColor is #ffffff');
     assert.equal(pwa.manifestAsString, '{}', 'manifestAsString is {}');
   });
 
   it('Create a PWA with a Full Manifest', () => {
-    const manifestUrl = 'http://www.example.com';
     const manifestJson = {
       name: 'Example PWA',
       description: 'Example PWA',
@@ -67,9 +67,9 @@ describe('models/pwa.js', () => {
       background_color: '#673AB7',
       theme_color: '#512DA8'
     };
-    const manifest = new Manifest(manifestUrl, manifestJson);
-    const pwa = new Pwa(manifestUrl, manifest);
-    assert.equal(pwa.manifestUrl, manifestUrl);
+    const manifest = new Manifest(MANIFEST_URL, manifestJson);
+    const pwa = new Pwa(MANIFEST_URL, manifest);
+    assert.equal(pwa.manifestUrl, MANIFEST_URL);
     assert.equal(pwa.manifest.raw, manifest.raw);
     assert.equal(pwa.name, 'Example PWA', 'returns correct name');
     assert.equal(pwa.description, 'Example PWA', 'correct description');
@@ -97,30 +97,30 @@ describe('models/pwa.js', () => {
 
   describe('displayName', () => {
     it('is name', () => {
-      const pwa = this.createPwa('www.manifesturl.com', {
+      const pwa = this.newPwa('www.manifesturl.com', {
         name: 'Example PWA',
         short_name: 'PWA'
       });
       assert.equal(pwa.displayName, 'Example PWA');
     });
     it('is short name', () => {
-      const pwa = this.createPwa('www.manifesturl.com', {
+      const pwa = this.newPwa('www.manifesturl.com', {
         short_name: 'PWA'
       });
       assert.equal(pwa.displayName, 'PWA');
     });
     it('is url', () => {
-      const pwa = this.createPwa('www.manifesturl.com', {
+      const pwa = this.newPwa('www.manifesturl.com', {
       });
       assert.equal(pwa.displayName, 'www.manifesturl.com');
     });
     it('is url without file name', () => {
-      const pwa = this.createPwa('www.manifesturl.com/manifest.json', {
+      const pwa = this.newPwa('www.manifesturl.com/manifest.json', {
       });
       assert.equal(pwa.displayName, 'www.manifesturl.com');
     });
     it('is url without scheme', () => {
-      const pwa = this.createPwa('https://www.manifesturl.com/manifest.json', {
+      const pwa = this.newPwa('https://www.manifesturl.com/manifest.json', {
       });
       assert.equal(pwa.displayName, 'www.manifesturl.com');
     });
@@ -134,7 +134,7 @@ describe('models/pwa.js', () => {
  * @param {Json} manifestData the Json object with the Manifest data
  * @return {Pwa}
  */
-exports.createPwa = function(manifestUrl, manifestData) {
+exports.newPwa = function(manifestUrl, manifestData) {
   const manifest = new Manifest(manifestUrl, manifestData);
   return new Pwa(manifestUrl, manifest);
 };

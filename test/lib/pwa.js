@@ -23,6 +23,7 @@ const libImages = require('../../lib/images');
 const libManifest = require('../../lib/manifest');
 const libLighthouse = require('../../lib/lighthouse');
 const cache = require('../../lib/data-cache');
+const promiseSequential = require('../../lib/promise-sequential');
 
 const Lighthouse = require('../../models/lighthouse');
 const Pwa = require('../../models/pwa');
@@ -57,11 +58,11 @@ const MANIFEST_INVALID_THEME_COLOR = {
 /* eslint-enable camelcase */
 
 describe('lib.pwa', () => {
-  const pwa = testPwa.createPwa(MANIFEST_URL, MANIFEST_DATA);
+  const pwa = testPwa.newPwa(MANIFEST_URL, MANIFEST_DATA);
   pwa.id = '123456789';
   const manifest = pwa.manifest;
-  const pwaNoIcon = testPwa.createPwa(MANIFEST_URL, MANIFEST_NO_ICON);
-  const pwaInvalidThemeColor = testPwa.createPwa(MANIFEST_URL, MANIFEST_INVALID_THEME_COLOR);
+  const pwaNoIcon = testPwa.newPwa(MANIFEST_URL, MANIFEST_NO_ICON);
+  const pwaInvalidThemeColor = testPwa.newPwa(MANIFEST_URL, MANIFEST_INVALID_THEME_COLOR);
   const lighthouse = new Lighthouse(
     '123456789', 'www.domain.com', JSON.parse(fs.readFileSync(LIGHTHOUSE_JSON_EXAMPLE)));
 
@@ -121,12 +122,10 @@ describe('lib.pwa', () => {
     });
     it('sets lighthouseScore', () => {
       simpleMock.mock(libLighthouse, 'fetchAndSave').resolveWith(lighthouse);
-      simpleMock.mock(libPwa, 'savePwa').resolveWith(pwa);
       return libPwa.updatePwaLighthouseInfo(pwa).should.be.fulfilled.then(updatedPwa => {
         assert.equal(libLighthouse.fetchAndSave.callCount, 1);
         assert.equal(libLighthouse.fetchAndSave.lastCall.args[0], '123456789');
         assert.equal(updatedPwa.lighthouseScore, 83);
-        assert.equal(libPwa.savePwa.callCount, 1);
       });
     });
   });
@@ -228,11 +227,9 @@ describe('lib.pwa', () => {
     it('performs all the save steps', () => {
       simpleMock.mock(libPwa, 'fetchManifest').resolveWith(manifest);
       simpleMock.mock(libPwa, 'findByManifestUrl').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'savePwa').resolveWith(pwa);
       return libPwa.updatePwaManifest(pwa).should.be.fulfilled.then(_ => {
         assert.equal(libPwa.fetchManifest.callCount, 1);
         assert.equal(libPwa.findByManifestUrl.callCount, 1);
-        assert.equal(libPwa.savePwa.callCount, 1);
       });
     });
     it('handles E_MANIFEST_ERROR error', () => {
@@ -249,35 +246,42 @@ describe('lib.pwa', () => {
     });
   });
 
-  describe('#process', () => {
+  describe('#createOrUpdatePwa', () => {
     afterEach(() => {
       simpleMock.restore();
     });
-    it('performs all the process steps', () => {
-      let result = {
-        pwa: pwa,
-        created: true
-      };
-      simpleMock.mock(libPwa, 'updatePwaManifest').resolveWith(result);
+    /* eslint max-nested-callbacks: ["error", 5] */
+    it('performs all the createOrUpdatePwa steps', () => {
+      simpleMock.mock(libPwa, 'validatePwa').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'updatePwaManifest').resolveWith(pwa);
       simpleMock.mock(libPwa, 'updatePwaMetadataDescription').resolveWith(pwa);
       simpleMock.mock(libPwa, 'updatePwaIcon').resolveWith(pwa);
       simpleMock.mock(libPwa, 'updatePwaLighthouseInfo').resolveWith(pwa);
       simpleMock.mock(libPwa, 'sendNewAppNotification').resolveWith(pwa);
       simpleMock.mock(libPwa, 'savePwa').resolveWith(pwa);
-      return libPwa.process(pwa).should.be.fulfilled.then(_ => {
+      simpleMock.mock(promiseSequential, 'all');
+      return libPwa.createOrUpdatePwa(pwa).should.be.fulfilled.then(result => {
         assert.equal(libPwa.updatePwaManifest.callCount, 1);
         assert.equal(libPwa.updatePwaMetadataDescription.callCount, 1);
         assert.equal(libPwa.updatePwaIcon.callCount, 1);
-        assert.equal(libPwa.updatePwaLighthouseInfo.callCount, 1);
-        assert.equal(libPwa.sendNewAppNotification.callCount, 1);
-        assert.equal(libPwa.savePwa.callCount, 1);
+        assert.equal(libPwa.savePwa.callCount, 2);
+        assert.equal(promiseSequential.all.callCount, 2);
+        assert.equal(result, pwa);
+        // capture the background promise
+        return promiseSequential.all.calls[1].returned.should.be.fulfilled.then(_ => {
+          assert.equal(libPwa.updatePwaLighthouseInfo.callCount, 1);
+          assert.equal(libPwa.sendNewAppNotification.callCount, 1);
+          assert.equal(libPwa.savePwa.callCount, 3);
+        });
       });
     });
   });
 
-  describe('#validate', () => {
+  describe('#validatePwa', () => {
     it('rejects on null pwa', () => {
-      assert.equal(libPwa.validate(null), libPwa.E_NOT_A_PWA);
+      return libPwa.validatePwa(null).should.be.rejected.then(error => {
+        assert.equal(error, libPwa.E_NOT_A_PWA);
+      });
     });
     it('rejects if not passed a Pwa object', () => {
       // The right "shape", but not actually a Pwa object
@@ -287,24 +291,34 @@ describe('lib.pwa', () => {
           id: 'bar'
         }
       };
-      assert.equal(libPwa.validate(obj), libPwa.E_NOT_A_PWA);
+      return libPwa.validatePwa(obj).should.be.rejected.then(error => {
+        assert.equal(error, libPwa.E_NOT_A_PWA);
+      });
     });
     it('rejects if passed a Pwa object without a manifestUrl', () => {
       const pwa = new Pwa();
-      assert.equal(libPwa.validate(pwa), libPwa.E_MANIFEST_URL_MISSING);
+      return libPwa.validatePwa(pwa).should.be.rejected.then(error => {
+        assert.equal(error, libPwa.E_MANIFEST_URL_MISSING);
+      });
     });
     it('rejects if passed a Pwa object with an invalid manifestUrl', () => {
       const pwa = new Pwa('not a manifest URL');
-      assert.equal(libPwa.validate(pwa), libPwa.E_MANIFEST_INVALID_URL);
+      return libPwa.validatePwa(pwa).should.be.rejected.then(error => {
+        assert.equal(error, libPwa.E_MANIFEST_INVALID_URL);
+      });
     });
     it('rejects if passed a Pwa object with an invalid user.id', () => {
       const pwa = new Pwa('https://example.com/', {user: null});
-      assert.equal(libPwa.validate(pwa), libPwa.E_MISING_USER_INFORMATION);
+      return libPwa.validatePwa(pwa).should.be.rejected.then(error => {
+        assert.equal(error, libPwa.E_MISSING_USER_INFORMATION);
+      });
     });
     it('fulfills if passed a valid Pwa objectid', () => {
       const pwa = new Pwa('https://example.com/');
       pwa.user = {id: '7777'};
-      assert.equal(libPwa.validate(pwa), true);
+      return libPwa.validatePwa(pwa).should.be.fulfilled.then(result => {
+        assert.equal(result, pwa);
+      });
     });
   });
 });
