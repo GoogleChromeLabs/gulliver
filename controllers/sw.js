@@ -17,37 +17,23 @@
 
 const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
-const config = require('../config/config');
+const asset = require('../lib/asset-hashing').asset;
 
-// API
-router.use('/api', require('./api'));
+const ASSETS = JSON.stringify([
+  '/img/GitHub-Mark-Light-24px.png',
+  '/img/GitHub-Mark-Light-48px.png',
+  '/img/lighthouse-18.png',
+  '/img/lighthouse-36.png',
+  '/css/style.css',
+  '/js/gulliver.js',
+  '/js/pwas-list-transition.js',
+  '/js/pwas-view-transition.js'
+].map(assetPath => asset.encode(assetPath)));
 
-// Tasks
-router.use('/tasks', require('./tasks'));
+const ASSETS_JS = `const ASSETS = ${ASSETS};`;
 
-// PWAs
-router.use('/pwas', require('./pwa'));
-
-// Transitions
-router.use('/transitions', require('./transition'));
-
-// ServiceWorker
-router.use('/js', require('./sw'));
-
-router.get('/', (req, res) => {
-  req.url = '/pwas';
-  router.handle(req, res);
-});
-
-// /.shell hosts app shell dependencies
-router.use('/.shell', require('./shell'));
-
-/**
- * This route is used to send config.json to firebase-messaging-sw.js
- */
-router.get('/messaging-config.json', (req, res) => {
-  // eslint-disable-next-line camelcase
-  res.json({firebase_msg_sender_id: config.get('FIREBASE_MSG_SENDER_ID')});
+router.get('/sw-assets-precache.js', (req, res) => {
+  res.send(ASSETS_JS);
 });
 
 module.exports = router;

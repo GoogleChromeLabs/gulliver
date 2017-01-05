@@ -22,6 +22,7 @@ process.binding('http_parser').HTTPParser = require('http-parser-js').HTTPParser
 const path = require('path');
 const express = require('express');
 const config = require('./config/config');
+const asset = require('./lib/asset-hashing').asset;
 const hbs = require('hbs');
 const helpers = require('./views/helpers');
 const app = express();
@@ -30,6 +31,7 @@ const serveStatic = require('serve-static');
 const minifyHTML = require('express-minify-html');
 
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
+const CACHE_CONTROL_NEVER_EXPIRE = 31536000;
 const ENVIRONMENT_PRODUCTION = 'production';
 
 app.disable('x-powered-by');
@@ -68,13 +70,20 @@ if (app.get('env') === ENVIRONMENT_PRODUCTION) {
 }
 
 // Static files
-app.use(serveStatic(path.resolve('./public'), {
+const staticFilesMiddleware = serveStatic(path.resolve('./public'), {
   setHeaders: setCustomCacheControl
-}));
+});
+app.use((req, res, next) => {
+  req.url = asset.decode(req.url);
+  staticFilesMiddleware(req, res, next);
+});
 function setCustomCacheControl(res, path) {
   let mime = serveStatic.mime.lookup(path);
   if (mime.match('image*')) {
     res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
+  }
+  if (mime.match('text/css') || path.endsWith('.js')) {
+    res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_NEVER_EXPIRE);
   }
 }
 
