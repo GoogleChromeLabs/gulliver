@@ -12,7 +12,7 @@ toolbox.options.debug = false;
 // Use page transitions
 importScripts('/js/sw-page-transition.js'); /* global transition */
 
-const VERSION = '2';
+const VERSION = '3';
 const PREFIX = 'gulliver';
 const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 
