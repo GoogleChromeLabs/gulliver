@@ -90,7 +90,7 @@ toolbox.router.get('/', (request, values, options) => {
   return toolbox.router.default(request, values, options);
 });
 
-toolbox.router.get(/.*\.[js|png|svg|css]/, (request, values, options) => {
+toolbox.router.get(/.*\.(js|png|svg|jpg|css)$/, (request, values, options) => {
   return toolbox.cacheFirst(request, values, options);
 });
 
