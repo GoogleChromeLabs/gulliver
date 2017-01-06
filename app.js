@@ -70,22 +70,21 @@ if (app.get('env') === ENVIRONMENT_PRODUCTION) {
 }
 
 // Static files
-const staticFilesMiddleware = serveStatic(path.resolve('./public'), {
-  setHeaders: setCustomCacheControl
-});
+const staticFilesMiddleware = serveStatic(path.resolve('./public'));
 app.use((req, res, next) => {
-  req.url = asset.decode(req.url);
-  staticFilesMiddleware(req, res, next);
-});
-function setCustomCacheControl(res, path) {
-  let mime = serveStatic.mime.lookup(path);
+  const path = req.url;
+  req.url = asset.decode(path);
+  let mime = serveStatic.mime.lookup(req.url);
   if (mime.match('image*')) {
     res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
-  }
-  if (mime.match('text/css') || path.endsWith('.js')) {
+  } else if (req.url === path) {
+    res.setHeader('Cache-Control', 'no-cache, max-age=0');
+  } else {
+    // versioned assets don't expire
     res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_NEVER_EXPIRE);
   }
-}
+  staticFilesMiddleware(req, res, next);
+});
 
 // Make node_modules/{{module}} available at /{{module}}
 ['sw-toolbox', 'sw-offline-google-analytics'].forEach(module => {

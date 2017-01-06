@@ -20,10 +20,6 @@ const router = express.Router(); // eslint-disable-line new-cap
 const asset = require('../lib/asset-hashing').asset;
 
 const ASSETS = JSON.stringify([
-  '/img/GitHub-Mark-Light-24px.png',
-  '/img/GitHub-Mark-Light-48px.png',
-  '/img/lighthouse-18.png',
-  '/img/lighthouse-36.png',
   '/css/style.css',
   '/js/gulliver.js',
   '/js/pwas-list-transition.js',
@@ -33,6 +29,8 @@ const ASSETS = JSON.stringify([
 const ASSETS_JS = `const ASSETS = ${ASSETS};`;
 
 router.get('/sw-assets-precache.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript');
+  res.setHeader('Cache-Control', 'no-cache, max-age=0');
   res.send(ASSETS_JS);
 });
 

@@ -34,7 +34,7 @@ const transition = (function() {
       this._transitionPageMatchers = [];
       self.addEventListener('message', this.onMessageReceived.bind(this));
       this._pagesBeingLoaded = [];
-      this._debug = false;
+      this._debug = true;
     }
 
     /**
