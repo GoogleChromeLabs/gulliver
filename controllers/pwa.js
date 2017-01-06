@@ -166,11 +166,6 @@ router.post('/add', (req, res, next) => {
  * Display a PWA.
  */
 router.get('/:pwa', (req, res, next) => {
-  const host = req.get('host');
-  const homeUrl = req.protocol + '://' + host;
-  const backlink = req.headers.referer &&
-    req.headers.referer.includes(host) ? req.headers.referer : homeUrl;
-
   pwaLib.find(req.params.pwa)
     .then(pwa => {
       lighthouseLib.findByPwaId(req.params.pwa)
@@ -181,7 +176,7 @@ router.get('/:pwa', (req, res, next) => {
           rawManifestJson: JSON.parse(pwa.manifest.raw),
           title: 'PWA Directory: ' + pwa.name,
           description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description,
-          backlink: backlink
+          backlink: '/'
         });
         res.render('pwas/view.hbs', arg);
       });

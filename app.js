@@ -77,10 +77,11 @@ app.use((req, res, next) => {
   let mime = serveStatic.mime.lookup(req.url);
   if (mime.match('image*')) {
     res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
-  } else if (req.url !== path) {
-    res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_NEVER_EXPIRE);
-  } else {
+  } else if (req.url === path) {
     res.setHeader('Cache-Control', 'no-cache, max-age=0');
+  } else {
+    // versioned assets don't expire
+    res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_NEVER_EXPIRE);
   }
   staticFilesMiddleware(req, res, next);
 });
