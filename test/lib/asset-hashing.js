@@ -44,6 +44,12 @@ describe('AssetChecksum', () => {
     it('ignores dirs', () => {
       assert.equal(asset.encode('public/style'), 'public/style');
     });
+    it('ignores empty string', () => {
+      assert.equal(asset.encode(''), '');
+    });
+    it('ignores null', () => {
+      assert.equal(asset.encode(null), null);
+    });
     it('caches results', () => {
       asset.encode('public/style.css');
       asset.encode('public/style.css');
@@ -54,6 +60,12 @@ describe('AssetChecksum', () => {
   describe('decode', () => {
     it('ignores dirs', () => {
       assert.equal(asset.decode('public/style'), 'public/style');
+    });
+    it('ignores empty string', () => {
+      assert.equal(asset.decode(''), '');
+    });
+    it('ignores null', () => {
+      assert.equal(asset.decode(null), null);
     });
     it('removes checksum from file name', () => {
       assert.equal(asset.decode('public/style.1234567890.css'), 'public/style.css');
