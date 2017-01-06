@@ -67,11 +67,15 @@ describe('AssetChecksum', () => {
     it('ignores null', () => {
       assert.equal(asset.decode(null), null);
     });
+    it('ignores non checksums', () => {
+      assert.equal(asset.decode('style.12345/7890.css'), 'style.12345/7890.css');
+    });
     it('removes checksum from file name', () => {
       assert.equal(asset.decode('public/style.1234567890.css'), 'public/style.css');
     });
     it('only checksums with length of 10', () => {
       assert.equal(asset.decode('public/style.123456789.css'), 'public/style.123456789.css');
+      assert.equal(asset.decode('public/style.12345678900.css'), 'public/style.12345678900.css');
     });
   });
 

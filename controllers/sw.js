@@ -30,6 +30,7 @@ const ASSETS_JS = `const ASSETS = ${ASSETS};`;
 
 router.get('/sw-assets-precache.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
+  res.setHeader('Cache-Control', 'no-cache, max-age=0');
   res.send(ASSETS_JS);
 });
 
