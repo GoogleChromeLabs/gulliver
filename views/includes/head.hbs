@@ -27,7 +27,7 @@
 <meta name="msapplication-config" content="/favicons/browserconfig.xml">
 <meta name="theme-color" content="#7cc0ff">
 
-<link rel="stylesheet" type="text/css" href="/css/style.css">
+<link rel="stylesheet" type="text/css" href="{{asset '/css/style.css'}}">
 
 <!-- Origin Trial Token, feature = Web Share, origin = https://pwa-directory.appspot.com, expires = 2016-12-06 -->
 <meta http-equiv="origin-trial" data-feature="Web Share" data-expires="2016-12-06" content="AuNW4MmMk4aT1N9HPDpSlUPkBywNReGpXpbTC+9nOE/rv6W6mToe7J1ZSmz35g+6BbPzjmE9gpBTZOrb2aXf6gwAAABgeyJvcmlnaW4iOiAiaHR0cHM6Ly9wd2EtZGlyZWN0b3J5LmFwcHNwb3QuY29tOjQ0MyIsICJmZWF0dXJlIjogIldlYlNoYXJlIiwgImV4cGlyeSI6IDE0ODEwNDQyMDJ9">
@@ -35,9 +35,9 @@
 <script id="config" type="application/json">
 {{{configstring}}}
 </script>
-<script src="/js/gulliver.js" defer></script>
+<script src="{{asset '/js/gulliver.js'}}" defer></script>
 {{#if transition}}
-<script src="/js/sw-page-transition-client.js" defer></script>
+<script src="{{asset '/js/sw-page-transition-client.js'}}" defer></script>
 {{/if}}
 
 {{> metadata}}

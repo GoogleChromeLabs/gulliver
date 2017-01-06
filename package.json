@@ -62,6 +62,7 @@
     "nconf": "^0.8.4",
     "node-fetch": "^1.5.3",
     "parse-color": "^1.0.0",
+    "rev-hash": "^1.0.0",
     "rollup": "^0.39.2",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^7.0.0",

@@ -11,6 +11,7 @@ toolbox.options.debug = false;
 
 // Use page transitions
 importScripts('/js/sw-page-transition.js'); /* global transition */
+importScripts('/js/sw-assets-precache.js'); /* global ASSETS */
 
 const VERSION = '3';
 const PREFIX = 'gulliver';
@@ -24,23 +25,17 @@ const OFFLINE_URL = '/.shell/offline';
 const TRANSITION_PWA_LIST = '/transitions/pwas';
 const TRANSITION_PWA_VIEW = '/transitions/pwas/view';
 
-const OFFLINE = [
-  OFFLINE_URL,
-  '/img/GitHub-Mark-Light-24px.png',
-  '/img/GitHub-Mark-Light-48px.png',
-  '/img/lighthouse-18.png',
-  '/img/lighthouse-36.png',
-  '/css/style.css',
-  '/sw.js',
-  '/js/gulliver.js',
-  '/messaging-config.json',
-  '/js/pwas-list-transition.js',
-  '/js/pwas-view-transition.js',
+const TRANSITION_PAGES = [
   TRANSITION_PWA_LIST,
   TRANSITION_PWA_VIEW
 ];
 
-toolbox.precache(OFFLINE);
+const OFFLINE = [
+  OFFLINE_URL,
+  '/messaging-config.json'
+];
+
+toolbox.precache(OFFLINE.concat(ASSETS).concat(TRANSITION_PAGES));
 toolbox.options.cache.name = CACHE_NAME;
 
 // Cache the page registering the service worker. Without this, the
@@ -87,6 +82,10 @@ toolbox.router.get('/', (request, values, options) => {
     request = new Request('/');
   }
   return toolbox.router.default(request, values, options);
+});
+
+toolbox.router.get(/.*\.[js|png|svg|css]/, (request, values, options) => {
+  return toolbox.cacheFirst(request, values, options);
 });
 
 toolbox.router.default = (request, values, options) => {

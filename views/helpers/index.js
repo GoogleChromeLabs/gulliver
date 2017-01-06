@@ -19,6 +19,7 @@ const DEFAULT_DARK = '#000000';
 
 const moment = require('moment');
 const parseColor = require('parse-color');
+const assetHashing = require('../../lib/asset-hashing').asset;
 
 function contrastColor(hexcolor) {
   if (!hexcolor) {
@@ -112,4 +113,5 @@ exports.registerHelpers = function(hbs) {
   hbs.registerHelper('highlightedJson', exports.highlightedJson);
   hbs.registerHelper('getAggregationTableRow', exports.getAggregationTableRow);
   hbs.registerHelper('getAuditTableRow', exports.getAuditTableRow);
+  hbs.registerHelper('asset', assetPath => assetHashing.encode(assetPath));
 };
