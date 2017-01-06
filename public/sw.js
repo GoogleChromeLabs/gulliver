@@ -13,7 +13,7 @@ toolbox.options.debug = false;
 importScripts('/js/sw-page-transition.js'); /* global transition */
 importScripts('/js/sw-assets-precache.js'); /* global ASSETS */
 
-const VERSION = '3';
+const VERSION = '4';
 const PREFIX = 'gulliver';
 const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 
@@ -32,6 +32,12 @@ const TRANSITION_PAGES = [
 
 const OFFLINE = [
   OFFLINE_URL,
+  '/favicons/android-chrome-72x72.png',
+  '/manifest.json',
+  '/img/GitHub-Mark-Light-24px.png',
+  '/img/GitHub-Mark-Light-48px.png',
+  '/img/lighthouse-18.png',
+  '/img/lighthouse-36.png',
   '/messaging-config.json'
 ];
 
@@ -106,8 +112,6 @@ toolbox.router.default = (request, values, options) => {
       });
   });
 };
-
-self.addEventListener('activate', () => self.clients.claim());
 
 // Delete old caches and claim clients so that the very first page load is controlled by a service
 // worker. (Important for responding correctly in offline state.)
