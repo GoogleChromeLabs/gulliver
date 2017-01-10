@@ -113,18 +113,18 @@ toolbox.router.default = (request, values, options) => {
   });
 };
 
-// Delete old caches and claim clients so that the very first page load is controlled by a service
-// worker. (Important for responding correctly in offline state.)
-self.addEventListener('activate', event =>
+// Claim all clients and delete old caches that are no longer needed.
+self.addEventListener('activate', event => {
+  self.clients.claim();
   event.waitUntil(
     caches.keys().then(cacheNames =>
       Promise.all(
         cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
           .map(cacheName => caches.delete(cacheName))
-      ).then(self.clients.claim())
+      )
     )
-  )
-);
+  );
+});
 
 // Make sure the SW the page we register() is the service we use.
 self.addEventListener('install', () => self.skipWaiting());
