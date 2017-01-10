@@ -13,7 +13,7 @@ toolbox.options.debug = false;
 importScripts('/js/sw-page-transition.js'); /* global transition */
 importScripts('/js/sw-assets-precache.js'); /* global ASSETS */
 
-const VERSION = '4';
+const VERSION = '5';
 const PREFIX = 'gulliver';
 const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 
@@ -115,12 +115,14 @@ toolbox.router.default = (request, values, options) => {
 
 // Delete old caches and claim clients so that the very first page load is controlled by a service
 // worker. (Important for responding correctly in offline state.)
-self.addEventListener('activate', () =>
-  caches.keys().then(cacheNames =>
-    Promise.all(
-      cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
-        .map(cacheName => caches.delete(cacheName))
-    ).then(self.clients.claim())
+self.addEventListener('activate', event =>
+  event.waitUntil(
+    caches.keys().then(cacheNames =>
+      Promise.all(
+        cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
+          .map(cacheName => caches.delete(cacheName))
+      ).then(self.clients.claim())
+    )
   )
 );
 

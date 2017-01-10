@@ -76,11 +76,13 @@ const transition = (function() {
       this.log('fetchWithPageTransition: fetch ' + request.url);
       if (this._pagesBeingLoaded.includes(request.url)) {
         this.log('fetchWithPageTransition: returning cached page ' + request.url);
-        return caches.match(request).then(response => {
-          const index = this._pagesBeingLoaded.indexOf(request.url);
-          this._pagesBeingLoaded.splice(index, 1);
-          return response;
-        });
+        return this.openCache()
+          .then(cache => cache.match(request))
+          .then(response => {
+            const index = this._pagesBeingLoaded.indexOf(request.url);
+            this._pagesBeingLoaded.splice(index, 1);
+            return response;
+          });
       }
       this._pagesBeingLoaded.push(request.url);
       const transitionPage = this.findTransitionPage(request);
@@ -113,14 +115,13 @@ const transition = (function() {
           this.log('fetchTransitionPage: return transition page');
           // Fetch the actual page and notify transition page when it's ready
           this.openCache()
-            .then(cache => cache.add(request)
-              .then(() => this.notifyListeners(request.url))
-              .catch(() => {
-                // offline
-                console.log('handling offline case');
-                this.notifyListeners(request.url);
-              })
-            );
+            .then(cache => cache.add(request))
+            .then(() => this.notifyListeners(request.url))
+            .catch(() => {
+              // offline
+              console.log('handling offline case');
+              this.notifyListeners(request.url);
+            });
           return Promise.resolve(response);
         });
     }
