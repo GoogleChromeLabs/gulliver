@@ -16,8 +16,8 @@
 /* global describe it before afterEach */
 'use strict';
 
-const controllerApi = require('../../controllers/api');
-const lighthouseLib = require('../../lib/lighthouse');
+const controllerApi = require('../../../controllers/api');
+const lighthouseLib = require('../../../lib/lighthouse');
 
 const express = require('express');
 const app = express();
@@ -29,7 +29,7 @@ chai.use(chaiAsPromised);
 chai.should();
 let assert = require('chai').assert;
 
-describe('controllers.api', () => {
+describe('controllers.api.lighthouse', () => {
   before(done => {
     app.use(controllerApi);
     done();

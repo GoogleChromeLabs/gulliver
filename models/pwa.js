@@ -15,10 +15,10 @@
 
 'use strict';
 
-const crypto = require('crypto');
 const uri = require('urijs');
 const URL = require('url');
 const Manifest = require('../models/manifest');
+const User = require('../models/user');
 
 class Pwa {
   constructor(manifestUrl, manifestModel) {
@@ -101,10 +101,8 @@ class Pwa {
     return this._manifest;
   }
 
-  setUserId(user) {
-    this.user = {
-      id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')
-    };
+  setUser(user) {
+    this.user = new User(user);
   }
 
   isNew() {

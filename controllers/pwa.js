@@ -17,14 +17,12 @@
 
 const express = require('express');
 const pwaLib = require('../lib/pwa');
+const verifyIdToken = require('../lib/verify-id-token');
 const lighthouseLib = require('../lib/lighthouse');
 const Pwa = require('../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
-const config = require('../config/config');
 const libMetadata = require('../lib/metadata');
 
-const CLIENT_ID = config.get('CLIENT_ID');
-const CLIENT_SECRET = config.get('CLIENT_SECRET');
 const LIST_PAGE_SIZE = 32;
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_SORT_ORDER = 'newest';
@@ -114,9 +112,9 @@ router.post('/add', (req, res, next) => {
     return;
   }
 
-  verifyIdToken(CLIENT_ID, CLIENT_SECRET, idToken)
+  verifyIdToken.verifyIdToken(idToken)
     .then(user => {
-      pwa.setUserId(user);
+      pwa.setUser(user);
       return pwaLib.createOrUpdatePwa(pwa);
     })
     .then(savedData => {
@@ -196,24 +194,5 @@ router.use((err, req, res, next) => {
   err.response = err.message;
   next(err);
 });
-
-/**
- * @param {string} clientId
- * @param {string} clientSecret
- * @param {string} idToken
- * @return {Promise<GoogleLogin>}
- */
-function verifyIdToken(clientId, clientSecret, idToken) {
-  const authFactory = new (require('google-auth-library'))();
-  const client = new authFactory.OAuth2(clientId, clientSecret);
-  return new Promise((resolve, reject) => {
-    client.verifyIdToken(idToken, clientId, (err, user) => {
-      if (err) {
-        reject(err);
-      }
-      resolve(user);
-    });
-  });
-}
 
 module.exports = router;
