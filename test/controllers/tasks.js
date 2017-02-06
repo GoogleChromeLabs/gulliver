@@ -89,14 +89,14 @@ describe('controllers.tasks', () => {
       // Mock lib to avoid making real calls
       simpleMock.mock(tasksLib, 'pop').resolveWith(task);
       simpleMock.mock(pwaLib, 'find').resolveWith(pwa);
-      simpleMock.mock(pwaLib, 'save').resolveWith(pwa);
+      simpleMock.mock(pwaLib, 'createOrUpdatePwa').resolveWith(pwa);
       request(app)
         .get('/execute')
         .set(APP_ENGINE_CRON, true)
         .expect(200).should.be.fulfilled.then(_ => {
           assert.equal(tasksLib.pop.callCount, 1);
           assert.equal(pwaLib.find.callCount, 1);
-          assert.equal(pwaLib.save.callCount, 1);
+          assert.equal(pwaLib.createOrUpdatePwa.callCount, 1);
           done();
         });
     });
