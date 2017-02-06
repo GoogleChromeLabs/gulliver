@@ -63,8 +63,8 @@ router.get('/execute', (req, res, next) => {
         if (task) {
           pwaLib.find(task.pwaId)
             .then(pwa => {
-              // Saving the PWA trigers the update process
-              pwaLib.save(pwa);
+              // createOrUpdatePwa trigers the update process
+              pwaLib.createOrUpdatePwa(pwa);
             })
             .catch(err => {
               next(err);
