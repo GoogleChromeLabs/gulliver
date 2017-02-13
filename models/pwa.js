@@ -101,6 +101,12 @@ class Pwa {
     return this._manifest;
   }
 
+  generateEncodedStartUrl() {
+    const parsedUrl = URL.parse(this.absoluteStartUrl);
+    this.encodedStartUrl = encodeURIComponent(parsedUrl.hostname + parsedUrl.pathname);
+    return this.encodedStartUrl;
+  }
+
   setUserId(user) {
     this.user = {
       id: crypto.createHash('sha1').update(user.getPayload().sub).digest('hex')

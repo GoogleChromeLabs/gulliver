@@ -35,9 +35,10 @@ router.get('/cron', (req, res, next) => {
   if (req.get(APP_ENGINE_CRON)) {
     pwaLib.list()
       .then(result => {
-        // Create one task for each PWA
+        // Create one update task for each PWA
         result.pwas.forEach(pwa => {
-          tasksLib.push(new Task(pwa.id));
+          const modulePath = require.resolve('../lib/pwa');
+          tasksLib.push(new Task(pwa.id, modulePath, 'createOrUpdatePwa', 0));
         });
         res.sendStatus(200);
       })
@@ -61,14 +62,7 @@ router.get('/execute', (req, res, next) => {
     tasksLib.pop()
       .then(task => {
         if (task) {
-          pwaLib.find(task.pwaId)
-            .then(pwa => {
-              // createOrUpdatePwa trigers the update process
-              pwaLib.createOrUpdatePwa(pwa);
-            })
-            .catch(err => {
-              next(err);
-            });
+          tasksLib.executePwaTask(task);
         }
         res.sendStatus(200);
       })

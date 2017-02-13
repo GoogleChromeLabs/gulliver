@@ -16,8 +16,11 @@
 'use strict';
 
 class Task {
-  constructor(pwaId) {
+  constructor(pwaId, modulePath, functionName, retries) {
     this.pwaId = pwaId;
+    this.modulePath = modulePath;
+    this.functionName = functionName;
+    this.retries = retries;
     this.created = new Date();
   }
 }
