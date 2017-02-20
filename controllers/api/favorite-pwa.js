@@ -30,15 +30,14 @@ const User = require('../../models/user');
  */
 router.get('/', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
-
-  const idToken = req.query.idToken;
+  const idToken = req.get('Authorization');
   if (!idToken) {
-    res.status(403);
-    res.json('403 Forbidden, missing user idToken');
+    res.status(401);
+    res.json('401 Unauthorized');
     return;
   }
 
-  verifyIdToken.verifyIdToken(idToken)
+  return verifyIdToken.verifyIdToken(idToken)
     .then(googleLogin => {
       const user = new User(googleLogin);
       return libFavoritePwa.findByUserId(user.id);
@@ -52,30 +51,31 @@ router.get('/', (req, res) => {
       }
     })
     .catch(err => {
+      console.error(err);
       res.status(500);
-      res.json(err);
+      res.json('Server error while loading Favorite PWAs');
     });
 });
 
 /**
  * GET /favorite-pwa/:pwaId
  *
- * Returns a Favorite PWA for a user
+ * Returns a Favorite PWA for a pwaId and user
  */
 router.get('/:pwaId', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   const pwaId = req.params.pwaId;
-  const idToken = req.query.idToken;
+  const idToken = req.get('Authorization');
   if (!idToken) {
-    res.status(403);
-    res.json('403 Forbidden, missing user idToken');
+    res.status(401);
+    res.json('401 Unauthorized');
     return;
   }
 
-  verifyIdToken.verifyIdToken(idToken)
+  return verifyIdToken.verifyIdToken(idToken)
     .then(googleLogin => {
       const user = new User(googleLogin);
-      return libFavoritePwa.isFavorite(pwaId, user.id);
+      return libFavoritePwa.findFavoritePwa(pwaId, user.id);
     })
     .then(favoritePwas => {
       if (favoritePwas) {
@@ -86,26 +86,26 @@ router.get('/:pwaId', (req, res) => {
       }
     })
     .catch(err => {
+      console.error(err);
       res.status(500);
-      res.json(err);
+      res.json('Server error while loading Favorite PWAs');
     });
 });
 
 /**
- * POST /favorite-pwa/add
+ * POST /favorite-pwa/
  *
  * Create a Favorite PWA.
  */
-router.post('/add', (req, res) => {
+router.post('/', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
   const idToken = req.body.idToken;
-  const isFavorite = req.body.isFavorite;
   const pwaId = req.body.pwaId;
 
-  verifyIdToken.verifyIdToken(idToken)
+  return verifyIdToken.verifyIdToken(idToken)
     .then(googleLogin => {
       const user = new User(googleLogin);
-      return libFavoritePwa.save(new FavoritePwa(pwaId, user.id, isFavorite));
+      return libFavoritePwa.save(new FavoritePwa(pwaId, user.id));
     })
     .then(favoritePwa => {
       if (favoritePwa) {
@@ -116,8 +116,48 @@ router.post('/add', (req, res) => {
       }
     })
     .catch(err => {
+      console.error(err);
       res.status(500);
-      res.json(err);
+      res.json('Error creating Favorite PWA');
+    });
+});
+
+/**
+ * DELETE /favorite-pwa/
+ *
+ * Delete a Favorite PWA.
+ */
+router.delete('/', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  const idToken = req.body.idToken;
+  const pwaId = req.body.pwaId;
+
+  return verifyIdToken.verifyIdToken(idToken)
+    .then(googleLogin => {
+      const user = new User(googleLogin);
+      return libFavoritePwa.findFavoritePwa(pwaId, user.id);
+    })
+    .then(favoritePwa => {
+      if (favoritePwa) {
+        libFavoritePwa.delete(favoritePwa.id)
+          .then(_ => {
+            res.status(200);
+            res.json(favoritePwa);
+          })
+          .catch(err => {
+            console.error(err);
+            res.status(500);
+            res.json('Error deleting favorite PWA');
+          });
+      } else {
+        res.status(404);
+        res.json('not found');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500);
+      res.json('Error deleting favorite PWA');
     });
 });
 

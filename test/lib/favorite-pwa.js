@@ -27,7 +27,7 @@ const FavoritePwa = require('../../models/favorite-pwa');
 const libFavoritePwa = require('../../lib/favorite-pwa');
 
 const ENTITY_NAME = 'FAVORITE-PWA';
-const TEST_FAV_PWA = new FavoritePwa(123456789, 987654321, true);
+const TEST_FAV_PWA = new FavoritePwa(123456789, 987654321);
 
 describe('lib.favorite-pwa', () => {
   const skipTests = process.env.TRAVIS;
@@ -82,23 +82,23 @@ describe('lib.favorite-pwa', () => {
     });
 
     it('save', () => {
-      assert.ok(savedFavoritePwa.id, 'An ID has been created');
       assert.equal(savedFavoritePwa.pwaId, TEST_FAV_PWA.pwaId);
       assert.equal(savedFavoritePwa.userId, TEST_FAV_PWA.userId);
-      assert.equal(savedFavoritePwa.isFavorite, TEST_FAV_PWA.isFavorite);
     });
 
     it('findByUserId', () => {
       return libFavoritePwa.findByUserId(TEST_FAV_PWA.userId)
-        .then(foundFavoritePwa => {
-          assert.equal(savedFavoritePwa.id, foundFavoritePwa[0].id);
+        .then(foundFavoritePwas => {
+          assert.equal(foundFavoritePwas[0].pwaId, TEST_FAV_PWA.pwaId);
+          assert.equal(foundFavoritePwas[0].userId, TEST_FAV_PWA.userId);
         });
     });
 
-    it('isFavorite', () => {
-      return libFavoritePwa.isFavorite(TEST_FAV_PWA.pwaId, TEST_FAV_PWA.userId)
+    it('findFavoritePwa', () => {
+      return libFavoritePwa.findFavoritePwa(TEST_FAV_PWA.pwaId, TEST_FAV_PWA.userId)
         .then(foundFavoritePwa => {
-          assert.equal(savedFavoritePwa.id, foundFavoritePwa[0].id);
+          assert.equal(foundFavoritePwa.pwaId, TEST_FAV_PWA.pwaId);
+          assert.equal(foundFavoritePwa.userId, TEST_FAV_PWA.userId);
         });
     });
   });

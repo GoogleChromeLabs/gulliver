@@ -19,10 +19,10 @@
  * Favorite Pwa for a user
  */
 class FavoritePwa {
-  constructor(pwaId, userId, isFavorite) {
+  constructor(pwaId, userId) {
+    this.id = pwaId + '-' + userId;
     this.pwaId = pwaId;
     this.userId = userId;
-    this.isFavorite = isFavorite;
   }
 }
 
