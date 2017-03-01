@@ -261,7 +261,7 @@ describe('lib.pwa', () => {
       simpleMock.mock(libPwa, 'updatePwaWebPageTestInformation').resolveWith(pwa);
       simpleMock.mock(libPwa, 'sendNewAppNotification').resolveWith(pwa);
       simpleMock.mock(libPwa, 'savePwa').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'submitWebPageUrlForPageSpeedInformation').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'submitWebPageUrlForWebPerformanceInformation').resolveWith(pwa);
       simpleMock.mock(promiseSequential, 'all');
       return libPwa.createOrUpdatePwa(pwa).should.be.fulfilled.then(result => {
         assert.equal(libPwa.updatePwaManifest.callCount, 1);
@@ -270,7 +270,7 @@ describe('lib.pwa', () => {
         assert.equal(libPwa.savePwa.callCount, 2);
         assert.equal(promiseSequential.all.callCount, 2);
         assert.equal(result, pwa);
-        assert.equal(libPwa.submitWebPageUrlForPageSpeedInformation.callCount, 1);
+        assert.equal(libPwa.submitWebPageUrlForWebPerformanceInformation.callCount, 1);
       });
     });
   });
