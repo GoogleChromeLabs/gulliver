@@ -105,6 +105,12 @@ class Pwa {
     this.user = new User(user);
   }
 
+  generateEncodedStartUrl() {
+    const parsedUrl = URL.parse(this.absoluteStartUrl);
+    this.encodedStartUrl = encodeURIComponent(parsedUrl.hostname + parsedUrl.pathname);
+    return this.encodedStartUrl;
+  }
+
   isNew() {
     return this.created === this.updated;
   }

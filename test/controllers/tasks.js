@@ -88,15 +88,13 @@ describe('controllers.tasks', () => {
     it('respond with 200 when X-Appengine-Cron is present', done => {
       // Mock lib to avoid making real calls
       simpleMock.mock(tasksLib, 'pop').resolveWith(task);
-      simpleMock.mock(pwaLib, 'find').resolveWith(pwa);
-      simpleMock.mock(pwaLib, 'save').resolveWith(pwa);
+      simpleMock.mock(tasksLib, 'executePwaTask').resolveWith(null);
       request(app)
         .get('/execute')
         .set(APP_ENGINE_CRON, true)
         .expect(200).should.be.fulfilled.then(_ => {
           assert.equal(tasksLib.pop.callCount, 1);
-          assert.equal(pwaLib.find.callCount, 1);
-          assert.equal(pwaLib.save.callCount, 1);
+          assert.equal(tasksLib.executePwaTask.callCount, 1);
           done();
         });
     });

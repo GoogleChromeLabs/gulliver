@@ -18,6 +18,7 @@
 
 let dataFetcher = require('../../lib/data-fetcher');
 let libTasks = require('../../lib/tasks');
+let libPwa = require('../../lib/pwa');
 let db = require('../../lib/model-datastore');
 let Pwa = require('../../models/pwa');
 let Task = require('../../models/task');
@@ -78,6 +79,40 @@ describe('lib.tasks', () => {
         assert.equal(savedTask.pwaId, 123456789);
         assert.equal(db.list.callCount, 1);
         assert.equal(db.delete.callCount, 1);
+      });
+    });
+  });
+
+  describe('#execute', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+    it('execute a task', () => {
+      const modulePath = require.resolve('../../lib/pwa');
+      const task = new Task(987654321, modulePath, 'createOrUpdatePwa', 1);
+      simpleMock.mock(libPwa, 'find').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'createOrUpdatePwa').resolveWith(pwa);
+      simpleMock.mock(libTasks, 'push').resolveWith(task);
+      return libTasks.executePwaTask(task).should.be.fulfilled.then(executedTask => {
+        assert.equal(libPwa.find.callCount, 1);
+        assert.equal(libPwa.createOrUpdatePwa.callCount, 1);
+        assert.equal(executedTask.pwaId, 987654321);
+        assert.equal(libTasks.push.callCount, 0);
+        assert.equal(executedTask.retries, 1);
+      });
+    });
+    it('retry a task', () => {
+      const modulePath = require.resolve('../../lib/pwa');
+      const task = new Task(987654321, modulePath, 'createOrUpdatePwa', 1);
+      simpleMock.mock(libPwa, 'find').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'createOrUpdatePwa').rejectWith(new Error('Retry task'));
+      simpleMock.mock(libTasks, 'push').resolveWith(task);
+      return libTasks.executePwaTask(task).should.be.fulfilled.then(executedTask => {
+        assert.equal(libPwa.find.callCount, 1);
+        assert.equal(libPwa.createOrUpdatePwa.callCount, 1);
+        assert.equal(executedTask.pwaId, 987654321);
+        assert.equal(libTasks.push.callCount, 1);
+        assert.equal(executedTask.retries, 0);
       });
     });
   });
