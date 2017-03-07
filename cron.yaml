@@ -1,8 +1,13 @@
 cron:
-- description: daily update job
+- description: daily PWA update job
   url: /tasks/cron
-  schedule: every day 03:00
+  schedule: every day 05:00
 
-- description: execute tasks
+- description: execute PWA update tasks
   url: /tasks/execute
   schedule: every 1 minutes
+
+- description: daily Web Performance Service job
+  url: /taskcreator
+  schedule: every day 00:00
+  target: web-performance

@@ -29,6 +29,7 @@ class Manifest {
     this.startUrl = jsonManifest.start_url;
     this.backgroundColor = jsonManifest.background_color;
     this.icons = jsonManifest.icons;
+    this.scope = jsonManifest.scope;
   }
 
   getBestIcon() {

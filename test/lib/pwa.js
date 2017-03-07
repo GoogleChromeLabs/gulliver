@@ -257,8 +257,11 @@ describe('lib.pwa', () => {
       simpleMock.mock(libPwa, 'updatePwaMetadataDescription').resolveWith(pwa);
       simpleMock.mock(libPwa, 'updatePwaIcon').resolveWith(pwa);
       simpleMock.mock(libPwa, 'updatePwaLighthouseInfo').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'updatePwaPageSpeedInformation').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'updatePwaWebPageTestInformation').resolveWith(pwa);
       simpleMock.mock(libPwa, 'sendNewAppNotification').resolveWith(pwa);
       simpleMock.mock(libPwa, 'savePwa').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'submitWebPageUrlForWebPerformanceInformation').resolveWith(pwa);
       simpleMock.mock(promiseSequential, 'all');
       return libPwa.createOrUpdatePwa(pwa).should.be.fulfilled.then(result => {
         assert.equal(libPwa.updatePwaManifest.callCount, 1);
@@ -267,12 +270,7 @@ describe('lib.pwa', () => {
         assert.equal(libPwa.savePwa.callCount, 2);
         assert.equal(promiseSequential.all.callCount, 2);
         assert.equal(result, pwa);
-        // capture the background promise
-        return promiseSequential.all.calls[1].returned.should.be.fulfilled.then(_ => {
-          assert.equal(libPwa.updatePwaLighthouseInfo.callCount, 1);
-          assert.equal(libPwa.sendNewAppNotification.callCount, 1);
-          assert.equal(libPwa.savePwa.callCount, 3);
-        });
+        assert.equal(libPwa.submitWebPageUrlForWebPerformanceInformation.callCount, 1);
       });
     });
   });
