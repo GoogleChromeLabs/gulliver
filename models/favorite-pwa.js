@@ -15,16 +15,15 @@
 
 'use strict';
 
-const express = require('express');
-const router = express.Router(); // eslint-disable-line new-cap
+/**
+ * Favorite Pwa for a user
+ */
+class FavoritePwa {
+  constructor(pwaId, userId) {
+    this.id = pwaId + '-' + userId;
+    this.pwaId = pwaId;
+    this.userId = userId;
+  }
+}
 
-// Includes APIs for Lighthouse (/api/lighthouse)
-router.use('/lighthouse', require('./lighthouse'));
-
-// Includes APIs for Notifications (/api/notifications)
-router.use('/notifications', require('./notifications'));
-
-// Includes APIs for FavoritePwas (/api/favoritepwa)
-router.use('/favorite-pwa', require('./favorite-pwa'));
-
-module.exports = router;
+module.exports = FavoritePwa;

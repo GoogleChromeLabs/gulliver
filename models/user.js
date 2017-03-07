@@ -15,16 +15,15 @@
 
 'use strict';
 
-const express = require('express');
-const router = express.Router(); // eslint-disable-line new-cap
+const crypto = require('crypto');
 
-// Includes APIs for Lighthouse (/api/lighthouse)
-router.use('/lighthouse', require('./lighthouse'));
+/**
+ * User from google-auth-library-nodejs client
+ */
+class User {
+  constructor(googleLogin) {
+    this.id = crypto.createHash('sha1').update(googleLogin.getPayload().sub).digest('hex');
+  }
+}
 
-// Includes APIs for Notifications (/api/notifications)
-router.use('/notifications', require('./notifications'));
-
-// Includes APIs for FavoritePwas (/api/favoritepwa)
-router.use('/favorite-pwa', require('./favorite-pwa'));
-
-module.exports = router;
+module.exports = User;
