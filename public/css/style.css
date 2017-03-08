@@ -257,31 +257,31 @@ button:disabled {
   text-overflow: hidden;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
   border-radius: 2px;
-  padding: 16px;
+  padding: 8px;
 }
 a.card:hover {
   text-decoration: none;
 }
 .card-pwa {
   display: flex;
-  justify-content: flex-start;
   align-items: center;
+  height: 152px;
+  flex-direction: column;
 }
 
 .card-pwa .pwa-name {
-  margin: 0 0 0 16px;
-  font-size: 16px;
+  padding-top: 8px;
+  font-size: 18px;
   font-weight: 600;
   width: auto;
+  height: 56px;
+  text-align: center;
   letter-spacing: .005em;
 }
 
-.card-pwa .score {
-  align-self: flex-end;
-  margin-left: auto;
-  line-height: 18px;
-}
 .score {
+  align-self: flex-end;
+  height: 16px;
   font-weight: 600;
   background: no-repeat center left url(/img/lighthouse-18.png);
   background: no-repeat center left -webkit-image-set(
