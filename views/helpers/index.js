@@ -26,12 +26,10 @@ function contrastColor(hexcolor) {
     return DEFAULT_LIGHT;
   }
 
-  // Assume that a 6 digit string is a color.
-  if (hexcolor.length === 6 && hexcolor[0] !== '#') {
-    hexcolor = '#' + hexcolor;
-  }
-
   const parsedColor = parseColor(hexcolor);
+  if (!parsedColor) {
+    return DEFAULT_LIGHT; 
+  }
   const r = parsedColor.rgb[0];
   const g = parsedColor.rgb[1];
   const b = parsedColor.rgb[2];
