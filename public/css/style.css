@@ -265,7 +265,7 @@ a.card:hover {
 .card-pwa {
   display: flex;
   align-items: center;
-  height: 152px;
+  height: 132px;
   flex-direction: column;
 }
 
@@ -274,7 +274,7 @@ a.card:hover {
   font-size: 18px;
   font-weight: 600;
   width: auto;
-  height: 56px;
+  height: 36px;
   text-align: center;
   letter-spacing: .005em;
 }

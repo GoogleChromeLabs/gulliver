@@ -28,7 +28,7 @@ function contrastColor(hexcolor) {
 
   const parsedColor = parseColor(hexcolor);
   if (!parsedColor) {
-    return DEFAULT_LIGHT; 
+    return DEFAULT_LIGHT;
   }
   const r = parsedColor.rgb[0];
   const g = parsedColor.rgb[1];
