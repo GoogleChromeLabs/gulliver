@@ -28,7 +28,7 @@ function contrastColor(hexcolor) {
 
   const parsedColor = parseColor(hexcolor);
   if (!parsedColor) {
-    return DEFAULT_LIGHT; 
+    return DEFAULT_LIGHT;
   }
   const r = parsedColor.rgb[0];
   const g = parsedColor.rgb[1];
@@ -102,6 +102,17 @@ exports.getAuditTableRow = function(audit) {
     '</tr>';
 };
 
+exports.truncate = function(str, len) {
+  if (str.length > len && str.length > 0) {
+    let newStr = str + ' ';
+    newStr = str.substr(0, len);
+    newStr = str.substr(0, newStr.lastIndexOf(' '));
+    newStr = (newStr.length > 0) ? newStr : str.substr(0, len);
+    return newStr + '...';
+  }
+  return str;
+};
+
 exports.registerHelpers = function(hbs) {
   hbs.registerHelper('firstLetter', exports.firstLetter);
   hbs.registerHelper('contrastColor', exports.contrastColor);
@@ -112,4 +123,5 @@ exports.registerHelpers = function(hbs) {
   hbs.registerHelper('getAggregationTableRow', exports.getAggregationTableRow);
   hbs.registerHelper('getAuditTableRow', exports.getAuditTableRow);
   hbs.registerHelper('asset', assetPath => assetHashing.encode(assetPath));
+  hbs.registerHelper('truncate', exports.truncate);
 };
