@@ -112,7 +112,6 @@ router.post('/add', (req, res, next) => {
     return;
   }
 
-  console.log(idToken);
   verifyIdToken.verifyIdToken(idToken)
     .then(user => {
       pwa.setUser(user);
