@@ -24,10 +24,16 @@
     {{> notifications_off }}
     <label for="notifications" class="switch-label"></label>
   </div>
-
   <button
     id="auth-button"
     class="button blue gulliver-online-aware gulliver-signedin-aware">Login</button>
 </div>
-
+<div class="section-title">
+  <a id="newest" class="tab {{#if showNewest}}activetab{{/if}} {{#unless mainPage}}hidden{{/unless}}" href="/">New</a>
+  <a id="backlink" class="back {{#unless backlink}}hidden{{/unless}}">
+    {{> chevron_left }}
+  </a>
+  <div id="subtitle" class="{{#unless submit}}hidden{{/unless}}">Submit a PWA</div>
+  <a id="score" class="tab {{#if showScore}}activetab{{/if}} {{#unless mainPage}}hidden{{/unless}}" href="/?sort=score">Score</a>
+</div>
 <!-- End of header include. -->

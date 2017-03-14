@@ -129,6 +129,104 @@ function setupSignedinAware() {
   }
 }
 
+function fetchInnerContent(element, newUrl) {
+  element.style.transition = 'opacity 0.3s ease-out';
+  element.style.opacity = 0;
+  uiTransitionChanges(newUrl);
+  return fetch(newUrl)
+    .then(response => {
+      return response.text();
+    }).then(body => {
+      window.scrollTo(0, 0);
+      element.innerHTML = body;
+      element.style.transition = 'opacity 0.3s ease-out';
+      element.style.opacity = 1;
+    });
+}
+
+function rewriteOnClick(element) {
+  if (element !== null) {
+    element.addEventListener('click', newOnClickEvent);
+  }
+}
+
+function newOnClickEvent(event) {
+  event.preventDefault();
+  const main = document.getElementsByTagName('main')[0];
+  const url = event.target.href;
+  const contentOnlyUrl = url +
+    (url.indexOf('?') > 0 ? '&' : '?') + 'contentOnly=true';
+  fetchInnerContent(main, contentOnlyUrl)
+    .then(_ => {
+      window.history.pushState(window.location.href, 'PWA Directory', url);
+      rewriteListViewOnClicks();
+    });
+}
+
+function uiTransitionChanges(newUrl) {
+  if (newUrl.indexOf('/pwas/add') > 0) {
+    // show Submitd PWA subtitle
+    document.querySelector('div#subtitle').classList.remove('hidden');
+  } else {
+    document.querySelector('div#subtitle').classList.add('hidden');
+  }
+  if (newUrl.indexOf('/pwas/') > 0) {
+    // show backlink
+    document.querySelector('a#newest').classList.add('hidden');
+    document.querySelector('a#score').classList.add('hidden');
+    document.querySelector('a#backlink').classList.remove('hidden');
+  } else {
+    // set active tab
+    if (newUrl.indexOf('score') > 0) {
+      document.querySelector('a#score').classList.add('activetab');
+      document.querySelector('a#newest').classList.remove('activetab');
+    } else {
+      document.querySelector('a#score').classList.remove('activetab');
+      document.querySelector('a#newest').classList.add('activetab');
+    }
+    // show tabs
+    document.querySelector('a#newest').classList.remove('hidden');
+    document.querySelector('a#score').classList.remove('hidden');
+    document.querySelector('a#backlink').classList.add('hidden');
+  }
+}
+
+// needs to be called everytime the body changes
+function rewriteListViewOnClicks() {
+  const cardPwas = document.querySelectorAll('a.card-pwa');
+  for (const cardPwa of cardPwas) {
+    rewriteOnClick(cardPwa);
+  }
+  rewriteOnClick(document.querySelector('a.next'));
+  rewriteOnClick(document.querySelector('a.previous'));
+  rewriteOnClick(document.querySelector('a#add'));
+  setupOnlineAware();
+}
+
+// needs to be called once
+function setupOnClickRewrites() {
+  rewriteOnClick(document.querySelector('a#title'));
+  rewriteOnClick(document.querySelector('a#newest'));
+  rewriteOnClick(document.querySelector('a#score'));
+  rewriteListViewOnClicks();
+
+  window.onpopstate = function() {
+    let main = document.getElementsByTagName('main')[0];
+    let contentOnlyUrl = window.location.href +
+      (window.location.href.indexOf('?') > 0 ? '&' : '?') + 'contentOnly=true';
+    fetchInnerContent(main, contentOnlyUrl, window.location.href)
+      .then(_ => {
+        rewriteListViewOnClicks();
+      });
+  };
+}
+
+function setupBacklink() {
+  document.querySelector('a#backlink').addEventListener('click', _ => {
+    window.history.back();
+  });
+}
+
 /**
  * Configures elements with class `gulliver-online-aware` to respond to 'change'
  * events.
@@ -143,6 +241,7 @@ function setupOnlineAware() {
         this.onclick = null;
       } else {
         this.style.opacity = 0.5;
+        this.removeEventListener('click', newOnClickEvent);
         this.onclick = f => f.preventDefault();
       }
     });
@@ -159,7 +258,10 @@ function setupOnlineAware() {
       }
       const href = e.getAttribute('href');
       if (href) {
-        fetch(href, {method: 'HEAD'}).then(r => {
+        // TODO: temp test
+        const contentOnlyUrl = href +
+        (href.indexOf('?') > 0 ? '&' : '?') + 'contentOnly=true';
+        fetch(contentOnlyUrl, {method: 'HEAD'}).then(r => {
           if (r.status === 200) {
             // Available in cache, allow click
             this.style.transition = 'opacity .5s ease-in-out';
@@ -169,6 +271,7 @@ function setupOnlineAware() {
             // Not cached, prevent click
             this.style.transition = 'opacity .5s ease-in-out';
             this.style.opacity = 0.5;
+            this.removeEventListener('click', newOnClickEvent);
             this.onclick = f => f.preventDefault();
           }
         });
@@ -288,6 +391,7 @@ function setupMessaging() {
   const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
 }
 
+setupOnClickRewrites();
 setupConfig();
 setupOnlineAware();
 setupSignedinAware();
@@ -296,6 +400,7 @@ setupSaveButton();
 setupEventHandlers();
 setupServiceWorker();
 setupMessaging();
+setupBacklink();
 
 // Fire 'online' or 'offline' event on page load. (Without this, would only
 // fire on change.)
