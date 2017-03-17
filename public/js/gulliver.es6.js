@@ -27,15 +27,23 @@ import 'yaku/dist/yaku.browser.global.min.js';
 // https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
 import 'whatwg-fetch/fetch';
 
-import {authInit} from './gapi.es6.js';
 import './loader.js';
 import Messaging from './messaging';
 import NotificationCheckbox from './notification-checkbox';
 import Config from './gulliver-config';
+import SignIn from './signin';
+import SignInButton from './signin-button';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
+    this.setupOnlineAware();
+    this.setupSignedinAware();
+    this._setupSignin();
+    this.setupSaveButton();
+    this.setupEventHandlers();
+    this.setupServiceWorker();
+    this.setupMessaging();
   }
   /**
    * Translate generic "system" event like 'online', 'offline' and 'userchange'
@@ -201,52 +209,11 @@ class Gulliver {
    * Setup/configure Google signin itself. This translates GSI events into 'userchange'
    * events on the window object.
    */
-  setupSignin() {
-    /* eslint-disable camelcase */
-    const params = {
-      scope: 'profile',
-      client_id: this.config.client_id,
-      fetch_basic_profile: false
-    };
-    /* eslint-enable camelcase */
-
-    return authInit(params).then(auth => {
-      // Fire 'userchange' event on page load (not just when status changes)
-      window.dispatchEvent(new CustomEvent('userchange', {
-        detail: auth.currentUser.get()
-      }));
-
-      // Fire 'userchange' event when status changes
-      auth.currentUser.listen(user => {
-        window.dispatchEvent(new CustomEvent('userchange', {
-          detail: user
-        }));
-      });
-
-      const authButton = document.getElementById('auth-button');
-
-      function updateAuthButtonLabel() {
-        authButton.innerText = authButton.dataset.signedin === 'true' ?
-          'Logout' :
-          'Login';
-      }
-
-      authButton.addEventListener('change', updateAuthButtonLabel);
-      updateAuthButtonLabel();
-
-      authButton.addEventListener(
-        'click',
-        () => {
-          if (authButton.dataset.signedin === 'true') {
-            auth.signOut();
-          } else {
-            auth.signIn();
-          }
-        }
-      );
-
-      return auth;
-    });
+  _setupSignin() {
+    this.signIn = new SignIn();
+    const authButton = document.getElementById('auth-button');
+    this.signInButton = new SignInButton(this.signIn, authButton);
+    this.signIn.init(this.config);
   }
 
   /**
@@ -286,13 +253,6 @@ class Gulliver {
 }
 
 const gulliver = new Gulliver();
-gulliver.setupOnlineAware();
-gulliver.setupSignedinAware();
-gulliver.setupSignin();
-gulliver.setupSaveButton();
-gulliver.setupEventHandlers();
-gulliver.setupServiceWorker();
-gulliver.setupMessaging();
 
 // Fire 'online' or 'offline' event on page load. (Without this, would only
 // fire on change.)
