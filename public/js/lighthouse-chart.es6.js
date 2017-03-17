@@ -15,6 +15,7 @@
 
 /* global google */
 /* eslint-env browser */
+import Loader from './loader';
 
 /**
  * Use to make the API request to get the Lighthouse chart data for a PWA.
@@ -25,7 +26,7 @@ class LighthouseChart {
 
   constructor() {
     this.chartElement = document.getElementById('chart');
-    this.loader = new window.Loader(this.chartElement, 'dark-primary-background');
+    this.loader = new Loader(this.chartElement, 'dark-primary-background');
   }
 
   load() {
@@ -66,7 +67,5 @@ class LighthouseChart {
         console.error('There was an error drawing the chart!', err);
       });
   }
-
 }
-
 new LighthouseChart().load();
