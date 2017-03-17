@@ -31,8 +31,12 @@ import {authInit} from './gapi.es6.js';
 import './loader.js';
 import Messaging from './messaging';
 import NotificationCheckbox from './notification-checkbox';
+import Config from './gulliver-config';
 
 class Gulliver {
+  constructor() {
+    this.config = Config.from(document.querySelector('#config'));
+  }
   /**
    * Translate generic "system" event like 'online', 'offline' and 'userchange'
    * into Gulliver-specific events. (e.g. as indicated by classes.)
@@ -201,7 +205,7 @@ class Gulliver {
     /* eslint-disable camelcase */
     const params = {
       scope: 'profile',
-      client_id: window.__config.client_id,
+      client_id: this.config.client_id,
       fetch_basic_profile: false
     };
     /* eslint-enable camelcase */
@@ -271,18 +275,9 @@ class Gulliver {
     }
   }
 
-  setupConfig() {
-    const config = document.getElementById('config');
-    if (config) {
-      window.__config = JSON.parse(config.innerHTML);
-    } else {
-      console.log('CONFIG NOT FOUND');
-    }
-  }
-
   setupMessaging() {
     const NEW_APPS_TOPIC = 'new-apps';
-    const firebaseMsgSenderId = window.__config.firebase_msg_sender_id;
+    const firebaseMsgSenderId = this.config.firebase_msg_sender_id;
     const checkbox = document.getElementById('notifications');
     const messaging = new Messaging(firebaseMsgSenderId);
     // eslint-disable-next-line no-unused-vars
@@ -291,7 +286,6 @@ class Gulliver {
 }
 
 const gulliver = new Gulliver();
-gulliver.setupConfig();
 gulliver.setupOnlineAware();
 gulliver.setupSignedinAware();
 gulliver.setupSignin();
@@ -310,7 +304,7 @@ window.dispatchEvent(new CustomEvent(navigator.onLine ? 'online' : 'offline'));
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create', window.__config.ga_id, 'auto');
+ga('create', gulliver.config.ga_id, 'auto');
 ga('set', 'dimension1', navigator.onLine);
 ga('send', 'pageview');
 
