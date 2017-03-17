@@ -290,8 +290,8 @@ class Gulliver {
   }
 
   fetchInnerContent(element, newUrl) {
-    element.style.transition = 'all 1s ease-out';
-    //element.style.opacity = 0;
+    element.style.transition = 'all 0.6s ease-out';
+    element.style.opacity = 0;
     this.uiTransitionChanges(newUrl);
     return fetch(newUrl)
       .then(response => {
@@ -299,7 +299,7 @@ class Gulliver {
       }).then(body => {
         window.scrollTo(0, 0);
         element.innerHTML = body;
-        element.style.transition = 'all 0.5s ease-out';
+        element.style.transition = 'all 0.6s ease-out';
         element.style.opacity = 1;
       });
   }
@@ -310,43 +310,46 @@ class Gulliver {
         event.preventDefault();
         const main = document.getElementsByTagName('main')[0];
         const url = event.target.getAttribute('href');
-        const contentOnlyUrl = url +
-          (url.indexOf('?') > 0 ? '&' : '?') + 'contentOnly=true';
 
-        if (event.target.classList.contains('card-pwa')) {
-          const cardPwas = document.querySelectorAll('.card-pwa');
-          for (const card of cardPwas) {
-            if (card.href !== event.target.href) {
-              card.style.transition = 'opacity 0.1s ease-out';
-              card.style.opacity = 0;
+        // only fetch if click is to a different location
+        if (!window.location.href.endsWith(url)) {
+          const contentOnlyUrl = url +
+            (url.indexOf('?') > 0 ? '&' : '?') + 'contentOnly=true';
+
+          if (event.target.classList.contains('card-pwa')) {
+            const cardPwas = document.querySelectorAll('.card-pwa');
+            for (const card of cardPwas) {
+              if (card.href !== event.target.href) {
+                card.style.transition = 'all 0.1s';
+                card.style.opacity = 0;
+              }
             }
           }
+          this.fetchInnerContent(main, contentOnlyUrl)
+            .then(_ => {
+              window.history.pushState(window.location.href, 'PWA Directory', url);
+              this.rewriteListViewOnClicks();
+            });
         }
-        this.fetchInnerContent(main, contentOnlyUrl)
-          .then(_ => {
-            window.history.pushState(window.location.href, 'PWA Directory', url);
-            this.rewriteListViewOnClicks();
-          });
       });
     }
   }
 
   uiTransitionChanges(newUrl) {
-    console.log(newUrl);
-    if (newUrl.indexOf('/pwas/add') > 0) {
+    if (newUrl.includes('/pwas/add')) {
       // show Submitd PWA subtitle
       document.querySelector('div#subtitle').classList.remove('hidden');
     } else {
       document.querySelector('div#subtitle').classList.add('hidden');
     }
-    if (newUrl.indexOf('/pwas/') > 0) {
+    if (newUrl.includes('/pwas/')) {
       // show backlink
       document.querySelector('a#newest').classList.add('hidden');
       document.querySelector('a#score').classList.add('hidden');
       document.querySelector('a#backlink').classList.remove('hidden');
     } else {
       // set active tab
-      if (newUrl.indexOf('score') > 0) {
+      if (newUrl.includes('score')) {
         document.querySelector('a#score').classList.add('activetab');
         document.querySelector('a#newest').classList.remove('activetab');
       } else {
