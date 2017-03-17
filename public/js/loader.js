@@ -71,8 +71,4 @@ class Loader {
   }
 
 }
-
-// HACK: attach loader class to window object so that chart.js (which is not
-// managed by rollup) can use the loader.
-window.Loader = Loader;
 export default Loader;
