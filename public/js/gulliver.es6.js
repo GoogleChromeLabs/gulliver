@@ -40,7 +40,6 @@ class Gulliver {
     this.setupOnlineAware();
     this.setupSignedinAware();
     this._setupSignin();
-    this.setupSaveButton();
     this.setupEventHandlers();
     this.setupServiceWorker();
     this.setupMessaging();
@@ -58,9 +57,6 @@ class Gulliver {
    *   * all elements with class .gulliver-signedin-aware will:
    *     * have a 'signedin' dataset property that reflects the current signed in state.
    *     * receive a 'change' event whenever the state changes.
-   *
-   *   * the element #pwaForm also gets some special behaviour--see code. (This probably
-   *     shouldn't happen here.)
    */
   setupEventHandlers() {
     window.addEventListener('online', () => {
@@ -83,24 +79,10 @@ class Gulliver {
 
     window.addEventListener('userchange', e => {
       const user = e.detail;
-      if (user.isSignedIn()) {
-        console.log('id_token', user.getAuthResponse().id_token);
-        const pwaForm = document.getElementById('pwaForm');
-        if (pwaForm) {
-          const idTokenInput = document.getElementById('idToken');
-          idTokenInput.setAttribute('value', user.getAuthResponse().id_token);
-        }
-      } else {
-        console.log('user signed out/never signed in');
-        const pwaForm = document.getElementById('pwaForm');
-        if (pwaForm) {
-          const idTokenInput = document.getElementById('idToken');
-          idTokenInput.setAttribute('value', '');
-        }
-      }
       const signedinAware = document.querySelectorAll('.gulliver-signedin-aware');
       for (const e of signedinAware) {
         e.dataset.signedin = JSON.stringify(user.isSignedIn());
+        e.dataset.idToken = user.isSignedIn() ? user.getAuthResponse().id_token : '';
         e.dispatchEvent(new CustomEvent('change'));
       }
     });
@@ -214,19 +196,6 @@ class Gulliver {
     const authButton = document.getElementById('auth-button');
     this.signInButton = new SignInButton(this.signIn, authButton);
     this.signIn.init(this.config);
-  }
-
-  /**
-   * Disable the save button after been clicked to avoid double submission.
-   */
-  setupSaveButton() {
-    const submitButton = document.getElementById('pwaSubmit');
-    if (submitButton) {
-      submitButton.addEventListener('click', _ => {
-        submitButton.disabled = true;
-        document.getElementById('pwaForm').submit();
-      });
-    }
   }
 
   /**

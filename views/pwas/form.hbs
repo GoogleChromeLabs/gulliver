@@ -15,6 +15,7 @@
 <html lang="en">
   <head>
     {{> head}}
+    <script typ="text/javascript" src="/js/pwa-form.js" defer></script>
   </head>
   <body>
     {{> header}}
@@ -24,7 +25,7 @@
     </div>
 
     <main>
-      <form id="pwaForm" method="POST">
+      <form id="pwaForm" class="gulliver-signedin-aware" method="POST">
         <div class="form-group">
           <label for="manifestUrl">Manifest URL</label>
           <input type="text" name="manifestUrl" id="manifestUrl" class="form-input" value="{{pwa.manifestUrl}}" autofocus>
