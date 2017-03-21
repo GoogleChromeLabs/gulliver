@@ -28,177 +28,21 @@ import 'yaku/dist/yaku.browser.global.min.js';
 import 'whatwg-fetch/fetch';
 
 import './loader.js';
+import ClientEvents from './client-events';
+import Config from './gulliver-config';
 import Messaging from './messaging';
 import NotificationCheckbox from './notification-checkbox';
-import Config from './gulliver-config';
 import SignIn from './signin';
 import SignInButton from './signin-button';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
-    this.setupOnClickRewrites();
-    this.setupOnlineAware();
-    this.setupSignedinAware();
     this._setupSignin();
-    this.setupEventHandlers();
     this.setupServiceWorker();
     this.setupMessaging();
     this.setupBacklink();
-  }
-
-  /**
-   * Translate generic "system" event like 'online', 'offline' and 'userchange'
-   * into Gulliver-specific events. (e.g. as indicated by classes.)
-   *
-   * What this function does:
-   *
-   *   * all elements with class .gulliver-online-aware will:
-   *     * have an 'online' dataset property that reflects the current online state.
-   *     * receive a 'change' event whenever the state changes.
-   *
-   *   * all elements with class .gulliver-signedin-aware will:
-   *     * have a 'signedin' dataset property that reflects the current signed in state.
-   *     * receive a 'change' event whenever the state changes.
-   */
-  setupEventHandlers() {
-    window.addEventListener('online', () => {
-      console.log('ONLINE');
-      const onlineAware = document.querySelectorAll('.gulliver-online-aware');
-      for (const e of onlineAware) {
-        e.dataset.online = JSON.stringify(true);
-        e.dispatchEvent(new CustomEvent('change'));
-      }
-    });
-
-    window.addEventListener('offline', () => {
-      console.log('OFFLINE');
-      const onlineAware = document.querySelectorAll('.gulliver-online-aware');
-      for (const e of onlineAware) {
-        e.dataset.online = JSON.stringify(false);
-        e.dispatchEvent(new CustomEvent('change'));
-      }
-    });
-
-    window.addEventListener('userchange', e => {
-      const user = e.detail;
-      const signedinAware = document.querySelectorAll('.gulliver-signedin-aware');
-      for (const e of signedinAware) {
-        e.dataset.signedin = JSON.stringify(user.isSignedIn());
-        e.dataset.idToken = user.isSignedIn() ? user.getAuthResponse().id_token : '';
-        e.dispatchEvent(new CustomEvent('change'));
-      }
-    });
-  }
-
-  /**
-   * Configures elements with class `gulliver-signed-aware` and
-   * `gulliver-online-aware` to respond to 'change' events.
-   */
-  setupSignedinAware() {
-    const list = document.querySelectorAll('.gulliver-signedin-aware.gulliver-online-aware');
-    for (const e of list) {
-      e.dataset.online = JSON.stringify(false);
-      e.dataset.signedin = JSON.stringify(false);
-      e.addEventListener('change', function() {
-        const online = JSON.parse(this.dataset.online);
-        const signedin = JSON.parse(this.dataset.signedin);
-        switch (e.tagName.toLowerCase()) {
-          case 'button':
-            if (e.id === 'auth-button') {
-              // auth-button state depends only on online state
-              this.disabled = !online;
-            } else {
-              this.disabled = !online || !signedin;
-            }
-            break;
-          case 'div':
-            if (online && signedin) {
-              this.style.opacity = 1;
-              this.onclick = null;
-            } else {
-              this.style.opacity = 0.5;
-              this.onclick = f => f.preventDefault();
-            }
-            break;
-          default:
-        }
-      });
-    }
-  }
-
-  /**
-   * Configures elements with class `gulliver-online-aware` to respond to 'change'
-   * events.
-   */
-  setupOnlineAware() {
-    const l1 = document.querySelectorAll('div.button.gulliver-online-aware');
-    for (const e of l1) {
-      e.addEventListener('change', function() {
-        if (JSON.parse(this.dataset.online)) {
-          this.style.transition = 'opacity .5s ease-in-out';
-          this.style.opacity = 1;
-          this.onclick = null;
-        } else {
-          this.style.opacity = 0.5;
-          this.onclick = f => f.preventDefault();
-        }
-      });
-    }
-    const l2 = document.querySelectorAll('a.card-pwa.gulliver-online-aware');
-    for (const e of l2) {
-      e.addEventListener('change', function() {
-        if (JSON.parse(this.dataset.online)) {
-          // Online, make element active
-          this.style.transition = 'opacity .5s ease-in-out';
-          this.style.opacity = 1;
-          this.onclick = null;
-          return;
-        }
-        const href = e.getAttribute('href');
-        if (href) {
-          fetch(href, {method: 'HEAD'}).then(r => {
-            if (r.status === 200) {
-              // Available in cache, allow click
-              this.style.transition = 'opacity .5s ease-in-out';
-              this.style.opacity = 1;
-              this.onclick = null;
-            } else {
-              // Not cached, prevent click
-              this.style.transition = 'opacity .5s ease-in-out';
-              this.style.opacity = 0.5;
-              this.onclick = f => f.preventDefault();
-            }
-          });
-        }
-      });
-    }
-    const l3 = document.querySelectorAll('div.offline-status.gulliver-online-aware');
-    for (const e of l3) {
-      e.innerHTML = 'Offline';
-      e.addEventListener('change', function() {
-        this.style.opacity = 1;
-        this.style.display = 'block';
-        if (JSON.parse(this.dataset.online)) {
-          this.style.transition = 'opacity .5s ease-in-out';
-          this.style.opacity = 0;
-        } else {
-          this.style.transition = 'opacity .5s ease-in-out';
-          this.style.opacity = 1;
-        }
-      });
-    }
-  }
-
-  /**
-   * Setup/configure Google signin itself. This translates GSI events into 'userchange'
-   * events on the window object.
-   */
-  _setupSignin() {
-    this.signIn = new SignIn();
-    const authButton = document.getElementById('auth-button');
-    this.signInButton = new SignInButton(this.signIn, authButton);
-    this.signIn.init(this.config);
+    this.clientEvents = new ClientEvents();
   }
 
   /**
@@ -214,6 +58,9 @@ class Gulliver {
     }
   }
 
+  /**
+   * Setup/configure Firebase Cloud Messaging.
+   */
   setupMessaging() {
     const NEW_APPS_TOPIC = 'new-apps';
     const firebaseMsgSenderId = this.config.firebase_msg_sender_id;
@@ -223,110 +70,20 @@ class Gulliver {
     const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
   }
 
-  fetchInnerContent(element, newUrl) {
-    element.style.transition = 'all 0.6s ease-out';
-    element.style.opacity = 0;
-    this.uiTransitionChanges(newUrl);
-    return fetch(newUrl)
-      .then(response => {
-        return response.text();
-      }).then(body => {
-        window.scrollTo(0, 0);
-        element.innerHTML = body;
-        element.style.transition = 'all 0.6s ease-out';
-        element.style.opacity = 1;
-      });
+  /**
+   * Setup/configure Google signin itself. This translates GSI events into 'userchange'
+   * events on the window object.
+   */
+  _setupSignin() {
+    this.signIn = new SignIn();
+    const authButton = document.getElementById('auth-button');
+    this.signInButton = new SignInButton(this.signIn, authButton);
+    this.signIn.init(this.config);
   }
 
-  rewriteOnClick(element) {
-    if (element !== null) {
-      element.addEventListener('click', event => {
-        event.preventDefault();
-        const main = document.getElementsByTagName('main')[0];
-        const url = event.target.getAttribute('href');
-
-        // only fetch if click is to a different location
-        if (!window.location.href.endsWith(url)) {
-          const contentOnlyUrl = url +
-            (url.indexOf('?') > 0 ? '&' : '?') + 'contentOnly=true';
-
-          if (event.target.classList.contains('card-pwa')) {
-            const cardPwas = document.querySelectorAll('.card-pwa');
-            for (const card of cardPwas) {
-              if (card.href !== event.target.href) {
-                card.style.transition = 'all 0.1s';
-                card.style.opacity = 0;
-              }
-            }
-          }
-          this.fetchInnerContent(main, contentOnlyUrl)
-            .then(_ => {
-              window.history.pushState(window.location.href, 'PWA Directory', url);
-              this.rewriteListViewOnClicks();
-            });
-        }
-      });
-    }
-  }
-
-  uiTransitionChanges(newUrl) {
-    if (newUrl.includes('/pwas/add')) {
-      // show Submitd PWA subtitle
-      document.querySelector('div#subtitle').classList.remove('hidden');
-    } else {
-      document.querySelector('div#subtitle').classList.add('hidden');
-    }
-    if (newUrl.includes('/pwas/')) {
-      // show backlink
-      document.querySelector('a#newest').classList.add('hidden');
-      document.querySelector('a#score').classList.add('hidden');
-      document.querySelector('a#backlink').classList.remove('hidden');
-    } else {
-      // set active tab
-      if (newUrl.includes('score')) {
-        document.querySelector('a#score').classList.add('activetab');
-        document.querySelector('a#newest').classList.remove('activetab');
-      } else {
-        document.querySelector('a#score').classList.remove('activetab');
-        document.querySelector('a#newest').classList.add('activetab');
-      }
-      // show tabs
-      document.querySelector('a#newest').classList.remove('hidden');
-      document.querySelector('a#score').classList.remove('hidden');
-      document.querySelector('a#backlink').classList.add('hidden');
-    }
-  }
-
-  // needs to be called everytime the body changes
-  rewriteListViewOnClicks() {
-    const cardPwas = document.querySelectorAll('a.card-pwa');
-    for (const cardPwa of cardPwas) {
-      this.rewriteOnClick(cardPwa);
-    }
-    this.rewriteOnClick(document.querySelector('a.next'));
-    this.rewriteOnClick(document.querySelector('a.previous'));
-    this.rewriteOnClick(document.querySelector('a#add'));
-    this.setupOnlineAware();
-  }
-
-  // needs to be called once
-  setupOnClickRewrites() {
-    this.rewriteOnClick(document.querySelector('a#title'));
-    this.rewriteOnClick(document.querySelector('a#newest'));
-    this.rewriteOnClick(document.querySelector('a#score'));
-    this.rewriteListViewOnClicks();
-
-    window.onpopstate = _ => {
-      let main = document.getElementsByTagName('main')[0];
-      let contentOnlyUrl = window.location.href +
-        (window.location.href.indexOf('?') > 0 ? '&' : '?') + 'contentOnly=true';
-      this.fetchInnerContent(main, contentOnlyUrl)
-        .then(_ => {
-          this.rewriteListViewOnClicks();
-        });
-    };
-  }
-
+  /**
+   * Setup/configure header section-title's backlink chevron
+   */
   setupBacklink() {
     document.querySelector('a#backlink').addEventListener('click', _ => {
       window.history.back();
@@ -335,10 +92,6 @@ class Gulliver {
 }
 
 const gulliver = new Gulliver();
-
-// Fire 'online' or 'offline' event on page load. (Without this, would only
-// fire on change.)
-window.dispatchEvent(new CustomEvent(navigator.onLine ? 'online' : 'offline'));
 
 // GA embed code
 /* eslint-disable */

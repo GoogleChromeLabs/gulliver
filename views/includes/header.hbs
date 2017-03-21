@@ -13,9 +13,9 @@
 
 <!-- Start of header include. -->
 <div class="navbar">
-  <div class="navbar-title"><a id="title" href="/">PWA Directory</a></div>
+  <div class="navbar-title"><a id="title" class="gulliver-content-only gulliver-online-aware" href="/">PWA Directory</a></div>
   <div class="navbar-subtitle hide-on-mobile">
-    <a id="subtitle" href="/">A Directory of Progressive Web Apps</a>
+    <a id="subtitle" href="/" class="gulliver-content-only gulliver-online-aware">A Directory of Progressive Web Apps</a>
   </div>
 
   <div class="notifications">
@@ -29,11 +29,11 @@
     class="button blue gulliver-online-aware gulliver-signedin-aware">Login</button>
 </div>
 <div class="section-title">
-  <a id="newest" class="tab {{#if showNewest}}activetab{{/if}} {{#unless mainPage}}hidden{{/unless}}" href="/">New</a>
+  <a id="newest" class="tab{{#if showNewest}} activetab{{/if}}{{#unless mainPage}} hidden{{/unless}} gulliver-content-only gulliver-online-aware" href="/">New</a>
   <a id="backlink" class="back {{#unless backlink}}hidden{{/unless}}">
     {{> chevron_left }}
   </a>
-  <div id="subtitle" class="{{#unless submit}}hidden{{/unless}}">Submit a PWA</div>
-  <a id="score" class="tab {{#if showScore}}activetab{{/if}} {{#unless mainPage}}hidden{{/unless}}" href="/?sort=score">Score</a>
+  <div id="subtitle" class="{{#unless submit}}hidden{{/unless}} gulliver-content-only">Submit a PWA</div>
+  <a id="score" class="tab{{#if showScore}} activetab{{/if}}{{#unless mainPage}} hidden{{/unless}} gulliver-content-only gulliver-online-aware" href="/?sort=score">Score</a>
 </div>
 <!-- End of header include. -->

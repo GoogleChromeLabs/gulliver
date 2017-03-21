@@ -53,7 +53,7 @@ router.get('/', (req, res, next) => {
         hasNextPage: result.hasMore,
         hasPreviousPage: pageNumber > 1,
         nextPageNumber: pageNumber + 1,
-        previousPageNumber: pageNumber - 1,
+        previousPageNumber: (pageNumber - 1 === 1) ? false : pageNumber - 1,
         currentPageNumber: pageNumber,
         sortOrder: sortOrder,
         showNewest: sortOrder === 'newest',
@@ -61,13 +61,10 @@ router.get('/', (req, res, next) => {
         pwaCount: pwaCount,
         startPwa: start + 1,
         endPwa: Math.min(pwaCount, end),
-        mainPage: true
+        mainPage: true,
+        contentOnly: contentOnly
       });
-      if (contentOnly) {
-        res.render('includes/list_content', arg);
-      } else {
-        res.render('pwas/list.hbs', arg);
-      }
+      res.render('pwas/list.hbs', arg);
     }).catch(err => {
       next(err);
     });
@@ -86,13 +83,10 @@ router.get('/add', (req, res) => {
     pwa: {},
     action: 'Add',
     backlink: true,
-    submit: true
+    submit: true,
+    contentOnly: contentOnly
   });
-  if (contentOnly) {
-    res.render('includes/form_content', arg);
-  } else {
-    res.render('pwas/form.hbs', arg);
-  }
+  res.render('pwas/form.hbs', arg);
 });
 
 /**
@@ -101,7 +95,6 @@ router.get('/add', (req, res) => {
  * Create a PWA.
  */
 router.post('/add', (req, res, next) => {
-  const contentOnly = false || req.query.contentOnly;
   let manifestUrl = req.body.manifestUrl.trim();
   if (manifestUrl.startsWith('http://')) {
     manifestUrl = manifestUrl.replace('http://', 'https://');
@@ -112,13 +105,10 @@ router.post('/add', (req, res, next) => {
   if (!manifestUrl || !idToken) {
     let arg = Object.assign(libMetadata.fromRequest(req), {
       pwa,
+      backlink: true,
       error: (manifestUrl) ? 'user not logged in' : 'no manifest provided'
     });
-    if (contentOnly) {
-      res.render('includes/form_content', arg);
-    } else {
-      res.render('pwas/form.hbs', arg);
-    }
+    res.render('pwas/form.hbs', arg);
     return;
   }
 
@@ -161,13 +151,10 @@ router.post('/add', (req, res, next) => {
       }
       let arg = Object.assign(libMetadata.fromRequest(req), {
         pwa,
+        backlink: true,
         error: err
       });
-      if (contentOnly) {
-        res.render('includes/form_content', arg);
-      } else {
-        res.render('pwas/form.hbs', arg);
-      }
+      res.render('pwas/form.hbs', arg);
       return;
     });
 });
@@ -189,13 +176,10 @@ router.get('/:pwa', (req, res, next) => {
           rawManifestJson: JSON.parse(pwa.manifest.raw),
           title: 'PWA Directory: ' + pwa.name,
           description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description,
-          backlink: true
+          backlink: true,
+          contentOnly: contentOnly
         });
-        if (contentOnly) {
-          res.render('includes/view_content', arg);
-        } else {
-          res.render('pwas/view.hbs', arg);
-        }
+        res.render('pwas/view.hbs', arg);
       });
     })
     .catch(err => {
