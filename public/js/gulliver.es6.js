@@ -27,12 +27,26 @@ import 'yaku/dist/yaku.browser.global.min.js';
 // https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
 import 'whatwg-fetch/fetch';
 
-import {authInit} from './gapi.es6.js';
 import './loader.js';
 import Messaging from './messaging';
 import NotificationCheckbox from './notification-checkbox';
+import Config from './gulliver-config';
+import SignIn from './signin';
+import SignInButton from './signin-button';
 
 class Gulliver {
+  constructor() {
+    this.config = Config.from(document.querySelector('#config'));
+    this.setupOnClickRewrites();
+    this.setupOnlineAware();
+    this.setupSignedinAware();
+    this._setupSignin();
+    this.setupEventHandlers();
+    this.setupServiceWorker();
+    this.setupMessaging();
+    this.setupBacklink();
+  }
+
   /**
    * Translate generic "system" event like 'online', 'offline' and 'userchange'
    * into Gulliver-specific events. (e.g. as indicated by classes.)
@@ -46,9 +60,6 @@ class Gulliver {
    *   * all elements with class .gulliver-signedin-aware will:
    *     * have a 'signedin' dataset property that reflects the current signed in state.
    *     * receive a 'change' event whenever the state changes.
-   *
-   *   * the element #pwaForm also gets some special behaviour--see code. (This probably
-   *     shouldn't happen here.)
    */
   setupEventHandlers() {
     window.addEventListener('online', () => {
@@ -71,24 +82,10 @@ class Gulliver {
 
     window.addEventListener('userchange', e => {
       const user = e.detail;
-      if (user.isSignedIn()) {
-        console.log('id_token', user.getAuthResponse().id_token);
-        const pwaForm = document.getElementById('pwaForm');
-        if (pwaForm) {
-          const idTokenInput = document.getElementById('idToken');
-          idTokenInput.setAttribute('value', user.getAuthResponse().id_token);
-        }
-      } else {
-        console.log('user signed out/never signed in');
-        const pwaForm = document.getElementById('pwaForm');
-        if (pwaForm) {
-          const idTokenInput = document.getElementById('idToken');
-          idTokenInput.setAttribute('value', '');
-        }
-      }
       const signedinAware = document.querySelectorAll('.gulliver-signedin-aware');
       for (const e of signedinAware) {
         e.dataset.signedin = JSON.stringify(user.isSignedIn());
+        e.dataset.idToken = user.isSignedIn() ? user.getAuthResponse().id_token : '';
         e.dispatchEvent(new CustomEvent('change'));
       }
     });
@@ -197,65 +194,11 @@ class Gulliver {
    * Setup/configure Google signin itself. This translates GSI events into 'userchange'
    * events on the window object.
    */
-  setupSignin() {
-    /* eslint-disable camelcase */
-    const params = {
-      scope: 'profile',
-      client_id: window.__config.client_id,
-      fetch_basic_profile: false
-    };
-    /* eslint-enable camelcase */
-
-    return authInit(params).then(auth => {
-      // Fire 'userchange' event on page load (not just when status changes)
-      window.dispatchEvent(new CustomEvent('userchange', {
-        detail: auth.currentUser.get()
-      }));
-
-      // Fire 'userchange' event when status changes
-      auth.currentUser.listen(user => {
-        window.dispatchEvent(new CustomEvent('userchange', {
-          detail: user
-        }));
-      });
-
-      const authButton = document.getElementById('auth-button');
-
-      function updateAuthButtonLabel() {
-        authButton.innerText = authButton.dataset.signedin === 'true' ?
-          'Logout' :
-          'Login';
-      }
-
-      authButton.addEventListener('change', updateAuthButtonLabel);
-      updateAuthButtonLabel();
-
-      authButton.addEventListener(
-        'click',
-        () => {
-          if (authButton.dataset.signedin === 'true') {
-            auth.signOut();
-          } else {
-            auth.signIn();
-          }
-        }
-      );
-
-      return auth;
-    });
-  }
-
-  /**
-   * Disable the save button after been clicked to avoid double submission.
-   */
-  setupSaveButton() {
-    const submitButton = document.getElementById('pwaSubmit');
-    if (submitButton) {
-      submitButton.addEventListener('click', _ => {
-        submitButton.disabled = true;
-        document.getElementById('pwaForm').submit();
-      });
-    }
+  _setupSignin() {
+    this.signIn = new SignIn();
+    const authButton = document.getElementById('auth-button');
+    this.signInButton = new SignInButton(this.signIn, authButton);
+    this.signIn.init(this.config);
   }
 
   /**
@@ -271,18 +214,9 @@ class Gulliver {
     }
   }
 
-  setupConfig() {
-    const config = document.getElementById('config');
-    if (config) {
-      window.__config = JSON.parse(config.innerHTML);
-    } else {
-      console.log('CONFIG NOT FOUND');
-    }
-  }
-
   setupMessaging() {
     const NEW_APPS_TOPIC = 'new-apps';
-    const firebaseMsgSenderId = window.__config.firebase_msg_sender_id;
+    const firebaseMsgSenderId = this.config.firebase_msg_sender_id;
     const checkbox = document.getElementById('notifications');
     const messaging = new Messaging(firebaseMsgSenderId);
     // eslint-disable-next-line no-unused-vars
@@ -401,16 +335,6 @@ class Gulliver {
 }
 
 const gulliver = new Gulliver();
-gulliver.setupOnClickRewrites();
-gulliver.setupConfig();
-gulliver.setupOnlineAware();
-gulliver.setupSignedinAware();
-gulliver.setupSignin();
-gulliver.setupSaveButton();
-gulliver.setupEventHandlers();
-gulliver.setupServiceWorker();
-gulliver.setupMessaging();
-gulliver.setupBacklink();
 
 // Fire 'online' or 'offline' event on page load. (Without this, would only
 // fire on change.)
@@ -422,7 +346,7 @@ window.dispatchEvent(new CustomEvent(navigator.onLine ? 'online' : 'offline'));
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create', window.__config.ga_id, 'auto');
+ga('create', gulliver.config.ga_id, 'auto');
 ga('set', 'dimension1', navigator.onLine);
 ga('send', 'pageview');
 
