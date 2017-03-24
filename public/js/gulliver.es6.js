@@ -28,21 +28,81 @@ import 'yaku/dist/yaku.browser.global.min.js';
 import 'whatwg-fetch/fetch';
 
 import './loader.js';
-import ClientEvents from './client-events';
-import Config from './gulliver-config';
 import Messaging from './messaging';
-import NotificationCheckbox from './notification-checkbox';
+import NotificationCheckbox from './ui/notification-checkbox';
+import Config from './gulliver-config';
 import SignIn from './signin';
-import SignInButton from './signin-button';
+import SignInButton from './ui/signin-button';
+import OfflineBanner from './ui/offline-banner';
+import ClientTransition from './ui/client-transition';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
+    this._setupUIComponents();
     this._setupSignin();
+    this.setupEventHandlers();
     this.setupServiceWorker();
     this.setupMessaging();
+  }
+  /**
+   * Translate generic "system" event like 'online', 'offline' and 'userchange'
+   * into Gulliver-specific events. (e.g. as indicated by classes.)
+   *
+   * What this function does:
+   *
+   *   * all elements with class .gulliver-online-aware will:
+   *     * have an 'online' dataset property that reflects the current online state.
+   *     * receive a 'change' event whenever the state changes.
+   *
+   *   * all elements with class .gulliver-signedin-aware will:
+   *     * have a 'signedin' dataset property that reflects the current signed in state.
+   *     * receive a 'change' event whenever the state changes.
+   */
+  setupEventHandlers() {
+    window.addEventListener('online', () => {
+      console.log('ONLINE');
+      const onlineAware = document.querySelectorAll('.gulliver-online-aware');
+      for (const e of onlineAware) {
+        e.dataset.online = JSON.stringify(true);
+        e.dispatchEvent(new CustomEvent('change'));
+      }
+    });
+
+    window.addEventListener('offline', () => {
+      console.log('OFFLINE');
+      const onlineAware = document.querySelectorAll('.gulliver-online-aware');
+      for (const e of onlineAware) {
+        e.dataset.online = JSON.stringify(false);
+        e.dispatchEvent(new CustomEvent('change'));
+      }
+    });
+
+    window.addEventListener('userchange', e => {
+      const user = e.detail;
+      const signedinAware = document.querySelectorAll('.gulliver-signedin-aware');
+      for (const e of signedinAware) {
+        e.dataset.signedin = JSON.stringify(user.isSignedIn());
+        e.dataset.idToken = user.isSignedIn() ? user.getAuthResponse().id_token : '';
+        e.dispatchEvent(new CustomEvent('change'));
+      }
+    });
+  }
+
+  _setupUIComponents() {
+    ClientTransition.setup();
+    OfflineBanner.setup('div.offline-status');
     this.setupBacklink();
-    this.clientEvents = new ClientEvents();
+  }
+
+  /**
+   * Setup/configure Google signin itself. This translates GSI events into 'userchange'
+   * events on the window object.
+   */
+  _setupSignin() {
+    this.signIn = new SignIn();
+    SignInButton.setup(this.signIn, '#auth-button');
+    this.signIn.init(this.config);
   }
 
   /**
@@ -70,20 +130,9 @@ class Gulliver {
     const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
   }
 
-  /**
-   * Setup/configure Google signin itself. This translates GSI events into 'userchange'
-   * events on the window object.
-   */
-  _setupSignin() {
-    this.signIn = new SignIn();
-    const authButton = document.getElementById('auth-button');
-    this.signInButton = new SignInButton(this.signIn, authButton);
-    this.signIn.init(this.config);
-  }
-
-  /**
-   * Setup/configure header section-title's backlink chevron
-   */
+ /**
+  * Setup/configure header section-title's backlink chevron
+  */
   setupBacklink() {
     document.querySelector('a#backlink').addEventListener('click', _ => {
       window.history.back();
@@ -92,6 +141,10 @@ class Gulliver {
 }
 
 const gulliver = new Gulliver();
+
+// Fire 'online' or 'offline' event on page load. (Without this, would only
+// fire on change.)
+window.dispatchEvent(new CustomEvent(navigator.onLine ? 'online' : 'offline'));
 
 // GA embed code
 /* eslint-disable */
