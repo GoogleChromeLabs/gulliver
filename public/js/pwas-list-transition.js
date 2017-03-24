@@ -16,7 +16,7 @@
 /* eslint-env browser */
 
 const url = new URL(window.location);
-const pageId = url.searchParams.get('sort') || 'newest';
+const pageId = url.searchParams.get('sort') || 'score';
 
 // update active tab
 const element = document.getElementById(pageId);

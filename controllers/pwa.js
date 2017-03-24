@@ -25,12 +25,12 @@ const libMetadata = require('../lib/metadata');
 
 const LIST_PAGE_SIZE = 32;
 const DEFAULT_PAGE_NUMBER = 1;
-const DEFAULT_SORT_ORDER = 'newest';
+const DEFAULT_SORT_ORDER = 'score';
 
 /**
  * GET /
  *
- * Display a page of PWAs (up to ten at a time).
+ * Display a page of PWAs (up to LIST_PAGE_SIZE at a time).
  */
 router.get('/', (req, res, next) => {
   const pageNumber = parseInt(req.query.page, 10) || DEFAULT_PAGE_NUMBER;
