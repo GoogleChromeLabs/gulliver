@@ -93,7 +93,7 @@ class Gulliver {
   _setupUIComponents() {
     SignInOnlineAwareButton.setup('#pwaSubmit, #pwaAdd');
     PwaCard.setup('a.card-pwa');
-    OfflineBanner.setup('div.offline-status');    
+    OfflineBanner.setup('div.offline-status');
   }
 
   /**
