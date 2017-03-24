@@ -29,16 +29,18 @@ import 'whatwg-fetch/fetch';
 
 import './loader.js';
 import Messaging from './messaging';
-import NotificationCheckbox from './notification-checkbox';
+import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
 import SignIn from './signin';
-import SignInButton from './signin-button';
+import SignInButton from './ui/signin-button';
+import PwaCard from './ui/pwa-card';
+import OfflineBanner from './ui/offline-banner';
+import SignInOnlineAwareButton from './ui/signin-online-aware-btn';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
-    this.setupOnlineAware();
-    this.setupSignedinAware();
+    this._setupUIComponents();
     this._setupSignin();
     this.setupEventHandlers();
     this.setupServiceWorker();
@@ -88,103 +90,10 @@ class Gulliver {
     });
   }
 
-  /**
-   * Configures elements with class `gulliver-signed-aware` and
-   * `gulliver-online-aware` to respond to 'change' events.
-   */
-  setupSignedinAware() {
-    const list = document.querySelectorAll('.gulliver-signedin-aware.gulliver-online-aware');
-    for (const e of list) {
-      e.dataset.online = JSON.stringify(false);
-      e.dataset.signedin = JSON.stringify(false);
-      e.addEventListener('change', function() {
-        const online = JSON.parse(this.dataset.online);
-        const signedin = JSON.parse(this.dataset.signedin);
-        switch (e.tagName.toLowerCase()) {
-          case 'button':
-            if (e.id === 'auth-button') {
-              // auth-button state depends only on online state
-              this.disabled = !online;
-            } else {
-              this.disabled = !online || !signedin;
-            }
-            break;
-          case 'div':
-            if (online && signedin) {
-              this.style.opacity = 1;
-              this.onclick = null;
-            } else {
-              this.style.opacity = 0.5;
-              this.onclick = f => f.preventDefault();
-            }
-            break;
-          default:
-        }
-      });
-    }
-  }
-
-  /**
-   * Configures elements with class `gulliver-online-aware` to respond to 'change'
-   * events.
-   */
-  setupOnlineAware() {
-    const l1 = document.querySelectorAll('div.button.gulliver-online-aware');
-    for (const e of l1) {
-      e.addEventListener('change', function() {
-        if (JSON.parse(this.dataset.online)) {
-          this.style.transition = 'opacity .5s ease-in-out';
-          this.style.opacity = 1;
-          this.onclick = null;
-        } else {
-          this.style.opacity = 0.5;
-          this.onclick = f => f.preventDefault();
-        }
-      });
-    }
-    const l2 = document.querySelectorAll('a.card-pwa.gulliver-online-aware');
-    for (const e of l2) {
-      e.addEventListener('change', function() {
-        if (JSON.parse(this.dataset.online)) {
-          // Online, make element active
-          this.style.transition = 'opacity .5s ease-in-out';
-          this.style.opacity = 1;
-          this.onclick = null;
-          return;
-        }
-        const href = e.getAttribute('href');
-        if (href) {
-          fetch(href, {method: 'HEAD'}).then(r => {
-            if (r.status === 200) {
-              // Available in cache, allow click
-              this.style.transition = 'opacity .5s ease-in-out';
-              this.style.opacity = 1;
-              this.onclick = null;
-            } else {
-              // Not cached, prevent click
-              this.style.transition = 'opacity .5s ease-in-out';
-              this.style.opacity = 0.5;
-              this.onclick = f => f.preventDefault();
-            }
-          });
-        }
-      });
-    }
-    const l3 = document.querySelectorAll('div.offline-status.gulliver-online-aware');
-    for (const e of l3) {
-      e.innerHTML = 'Offline';
-      e.addEventListener('change', function() {
-        this.style.opacity = 1;
-        this.style.display = 'block';
-        if (JSON.parse(this.dataset.online)) {
-          this.style.transition = 'opacity .5s ease-in-out';
-          this.style.opacity = 0;
-        } else {
-          this.style.transition = 'opacity .5s ease-in-out';
-          this.style.opacity = 1;
-        }
-      });
-    }
+  _setupUIComponents() {
+    SignInOnlineAwareButton.setup('#pwaSubmit, #pwaAdd');
+    PwaCard.setup('a.card-pwa');
+    OfflineBanner.setup('div.offline-status');
   }
 
   /**
@@ -193,8 +102,7 @@ class Gulliver {
    */
   _setupSignin() {
     this.signIn = new SignIn();
-    const authButton = document.getElementById('auth-button');
-    this.signInButton = new SignInButton(this.signIn, authButton);
+    SignInButton.setup(this.signIn, '#auth-button');
     this.signIn.init(this.config);
   }
 
