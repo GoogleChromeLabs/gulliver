@@ -33,9 +33,8 @@ import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
 import SignIn from './signin';
 import SignInButton from './ui/signin-button';
-import PwaCard from './ui/pwa-card';
 import OfflineBanner from './ui/offline-banner';
-import SignInOnlineAwareButton from './ui/signin-online-aware-btn';
+import ClientTransition from './ui/client-transition';
 
 class Gulliver {
   constructor() {
@@ -91,9 +90,9 @@ class Gulliver {
   }
 
   _setupUIComponents() {
-    SignInOnlineAwareButton.setup('#pwaSubmit, #pwaAdd');
-    PwaCard.setup('a.card-pwa');
+    ClientTransition.setup();
     OfflineBanner.setup('div.offline-status');
+    this.setupBacklink();
   }
 
   /**
@@ -119,6 +118,9 @@ class Gulliver {
     }
   }
 
+  /**
+   * Setup/configure Firebase Cloud Messaging.
+   */
   setupMessaging() {
     const NEW_APPS_TOPIC = 'new-apps';
     const firebaseMsgSenderId = this.config.firebase_msg_sender_id;
@@ -126,6 +128,15 @@ class Gulliver {
     const messaging = new Messaging(firebaseMsgSenderId);
     // eslint-disable-next-line no-unused-vars
     const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
+  }
+
+ /**
+  * Setup/configure header section-title's backlink chevron
+  */
+  setupBacklink() {
+    document.querySelector('a#backlink').addEventListener('click', _ => {
+      window.history.back();
+    });
   }
 }
 

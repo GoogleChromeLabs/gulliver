@@ -35,13 +35,15 @@ const DEFAULT_SORT_ORDER = 'newest';
 router.get('/', (req, res, next) => {
   const pageNumber = parseInt(req.query.page, 10) || DEFAULT_PAGE_NUMBER;
   const sortOrder = req.query.sort || DEFAULT_SORT_ORDER;
-  const start = (pageNumber - 1) * LIST_PAGE_SIZE;
+  const start = parseInt(req.query.start, 10) || (pageNumber - 1) * LIST_PAGE_SIZE;
+  const limit = parseInt(req.query.limit, 10) || LIST_PAGE_SIZE;
   const end = pageNumber * LIST_PAGE_SIZE;
+  const contentOnly = false || req.query.contentOnly;
   let pwaCount = 0;
   pwaLib.count()
     .then(count => {
       pwaCount = count;
-      return pwaLib.list(start, LIST_PAGE_SIZE, sortOrder);
+      return pwaLib.list(start, limit, sortOrder);
     })
     .then(result => {
       let arg = Object.assign(libMetadata.fromRequest(req), {
@@ -51,14 +53,16 @@ router.get('/', (req, res, next) => {
         hasNextPage: result.hasMore,
         hasPreviousPage: pageNumber > 1,
         nextPageNumber: pageNumber + 1,
-        previousPageNumber: pageNumber - 1,
+        previousPageNumber: (pageNumber - 1 === 1) ? false : pageNumber - 1,
         currentPageNumber: pageNumber,
         sortOrder: sortOrder,
         showNewest: sortOrder === 'newest',
         showScore: sortOrder === 'score',
         pwaCount: pwaCount,
         startPwa: start + 1,
-        endPwa: Math.min(pwaCount, end)
+        endPwa: Math.min(pwaCount, end),
+        mainPage: true,
+        contentOnly: contentOnly
       });
       res.render('pwas/list.hbs', arg);
     }).catch(err => {
@@ -72,11 +76,15 @@ router.get('/', (req, res, next) => {
  * Display a form for creating a PWA.
  */
 router.get('/add', (req, res) => {
+  const contentOnly = false || req.query.contentOnly;
   let arg = Object.assign(libMetadata.fromRequest(req), {
     title: 'PWA Directory - Submit a PWA',
     description: 'PWA Directory: Submit a Progressive Web Apps',
     pwa: {},
-    action: 'Add'
+    action: 'Add',
+    backlink: true,
+    submit: true,
+    contentOnly: contentOnly
   });
   res.render('pwas/form.hbs', arg);
 });
@@ -94,19 +102,11 @@ router.post('/add', (req, res, next) => {
   const idToken = req.body.idToken;
   let pwa = new Pwa(manifestUrl);
 
-  if (!manifestUrl) {
+  if (!manifestUrl || !idToken) {
     let arg = Object.assign(libMetadata.fromRequest(req), {
       pwa,
-      error: 'no manifest provided'
-    });
-    res.render('pwas/form.hbs', arg);
-    return;
-  }
-
-  if (!idToken) {
-    let arg = Object.assign(libMetadata.fromRequest(req), {
-      pwa,
-      error: 'user not logged in'
+      backlink: true,
+      error: (manifestUrl) ? 'user not logged in' : 'no manifest provided'
     });
     res.render('pwas/form.hbs', arg);
     return;
@@ -151,6 +151,7 @@ router.post('/add', (req, res, next) => {
       }
       let arg = Object.assign(libMetadata.fromRequest(req), {
         pwa,
+        backlink: true,
         error: err
       });
       res.render('pwas/form.hbs', arg);
@@ -164,6 +165,7 @@ router.post('/add', (req, res, next) => {
  * Display a PWA.
  */
 router.get('/:pwa', (req, res, next) => {
+  const contentOnly = false || req.query.contentOnly;
   pwaLib.find(req.params.pwa)
     .then(pwa => {
       lighthouseLib.findByPwaId(req.params.pwa)
@@ -174,7 +176,8 @@ router.get('/:pwa', (req, res, next) => {
           rawManifestJson: JSON.parse(pwa.manifest.raw),
           title: 'PWA Directory: ' + pwa.name,
           description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description,
-          backlink: '/'
+          backlink: true,
+          contentOnly: contentOnly
         });
         res.render('pwas/view.hbs', arg);
       });
