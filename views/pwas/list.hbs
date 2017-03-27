@@ -48,14 +48,26 @@
 
       <div class="pager">
       {{#if hasPreviousPage}}
-      <a class="previous gulliver-content-only gulliver-online-aware" href="?sort={{sortOrder}}{{#if previousPageNumber}}&page={{previousPageNumber}}{{/if}}">
+        {{#if sortOrder}}
+          <a class="previous gulliver-content-only gulliver-online-aware" href="?sort={{sortOrder}}{{#if previousPageNumber}}&page={{previousPageNumber}}{{/if}}">
+        {{else}}
+            {{#if previousPageNumber}}
+              <a class="previous gulliver-content-only gulliver-online-aware" href="?page={{previousPageNumber}}">
+            {{else}}
+              <a class="previous gulliver-content-only gulliver-online-aware" href="/">
+            {{/if}}  
+        {{/if}}
           {{> chevron_left }}
-      </a>
+          </a>
       {{/if}}
       {{#if hasNextPage}}
-      <a class="next gulliver-content-only gulliver-online-aware" href="?sort={{sortOrder}}&page={{nextPageNumber}}">
+        {{#if sortOrder}}
+          <a class="next gulliver-content-only gulliver-online-aware" href="?sort={{sortOrder}}&page={{nextPageNumber}}">
+        {{else}}
+          <a class="next gulliver-content-only gulliver-online-aware" href="?page={{nextPageNumber}}">
+        {{/if}}
           {{> chevron_right }}
-      </a>
+          </a>
       {{/if}}
       </div>
 {{#unless contentOnly}}
