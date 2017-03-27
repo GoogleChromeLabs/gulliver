@@ -15,19 +15,20 @@
 
 /* eslint-env browser */
 
+const BUTTON_DISABLED_CLASS = 'button_disabled';
+
 export default class SignInOnlineAwareButton {
   static setup(querySelector) {
     const changeListener = e => {
       const element = e.target;
       const online = element.dataset.online === 'true';
       const signedin = element.dataset.signedin === 'true';
+      console.log(element, element.dataset);
       if (online && signedin) {
-        element.style.opacity = 1;
-        element.onclick = null;
-      } else {
-        element.style.opacity = 0.5;
-        element.onclick = f => f.preventDefault();
+        element.classList.remove(BUTTON_DISABLED_CLASS);
+        return;
       }
+      element.classList.add(BUTTON_DISABLED_CLASS);
     };
 
     document.querySelectorAll(querySelector)

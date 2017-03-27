@@ -19,15 +19,11 @@ export default class OfflineBanner {
   static setup(querySelector) {
     const changeListener = e => {
       const element = e.target;
-      element.style.opacity = 1;
-      element.style.display = 'block';
       if (JSON.parse(element.dataset.online)) {
-        element.style.transition = 'opacity .5s ease-in-out';
-        element.style.opacity = 0;
-      } else {
-        element.style.transition = 'opacity .5s ease-in-out';
-        element.style.opacity = 1;
+        element.classList.add('offline-stats_hidden');
+        return;
       }
+      element.classList.remove('offline-stats_hidden');
     };
 
     document.querySelectorAll(querySelector)

@@ -234,6 +234,12 @@ main {
   border: none;
   text-transform: uppercase;
   margin: 0;
+  transition: opacity 0.2s ease-in-out;  
+}
+
+.button_disabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 button:active,
@@ -266,7 +272,16 @@ button:disabled {
   align-items: center;
   height: 132px;
   flex-direction: column;
+  transition: opacity .2s ease-in-out;
+  pointer-events: auto;
 }
+
+.card-pwa_disabled {
+  opacity: 0.3;
+  pointer-events: none;
+  box-shadow: none;
+}
+
 a.card-pwa:hover {
   text-decoration: none;
 }
@@ -468,8 +483,15 @@ tr:last-child td {
   height: 56px;
   line-height: 56px;
   padding-left: 20px;
-  display: none;
   pointer-events: none;
+  transition-property: transform,opacity;
+  transition-duration: .5s;
+  transition-timing-function: ease-in-out;  
+}
+
+.offline-stats_hidden {
+  opacity: 0;
+  transform: translateY(56px);
 }
 
 /* Footer */

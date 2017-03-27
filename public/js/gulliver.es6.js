@@ -32,6 +32,7 @@ import Messaging from './messaging';
 import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
 import SignIn from './signin';
+import Offline from './offline';
 import SignInButton from './ui/signin-button';
 import OfflineBanner from './ui/offline-banner';
 import ClientTransition from './ui/client-transition';
@@ -41,52 +42,17 @@ class Gulliver {
     this.config = Config.from(document.querySelector('#config'));
     this._setupUIComponents();
     this._setupSignin();
-    this.setupEventHandlers();
+    this._setupEventHandlers();
     this.setupServiceWorker();
     this.setupMessaging();
   }
   /**
    * Translate generic "system" event like 'online', 'offline' and 'userchange'
    * into Gulliver-specific events. (e.g. as indicated by classes.)
-   *
-   * What this function does:
-   *
-   *   * all elements with class .gulliver-online-aware will:
-   *     * have an 'online' dataset property that reflects the current online state.
-   *     * receive a 'change' event whenever the state changes.
-   *
-   *   * all elements with class .gulliver-signedin-aware will:
-   *     * have a 'signedin' dataset property that reflects the current signed in state.
-   *     * receive a 'change' event whenever the state changes.
    */
-  setupEventHandlers() {
-    window.addEventListener('online', () => {
-      console.log('ONLINE');
-      const onlineAware = document.querySelectorAll('.gulliver-online-aware');
-      for (const e of onlineAware) {
-        e.dataset.online = JSON.stringify(true);
-        e.dispatchEvent(new CustomEvent('change'));
-      }
-    });
-
-    window.addEventListener('offline', () => {
-      console.log('OFFLINE');
-      const onlineAware = document.querySelectorAll('.gulliver-online-aware');
-      for (const e of onlineAware) {
-        e.dataset.online = JSON.stringify(false);
-        e.dispatchEvent(new CustomEvent('change'));
-      }
-    });
-
-    window.addEventListener('userchange', e => {
-      const user = e.detail;
-      const signedinAware = document.querySelectorAll('.gulliver-signedin-aware');
-      for (const e of signedinAware) {
-        e.dataset.signedin = JSON.stringify(user.isSignedIn());
-        e.dataset.idToken = user.isSignedIn() ? user.getAuthResponse().id_token : '';
-        e.dispatchEvent(new CustomEvent('change'));
-      }
-    });
+  _setupEventHandlers() {
+    Offline.setupEventhandlers();
+    SignIn.setupEventHandlers();
   }
 
   _setupUIComponents() {
