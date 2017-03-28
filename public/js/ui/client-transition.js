@@ -16,7 +16,6 @@
 /* eslint-env browser */
 
 import PwaCard from './pwa-card';
-import SignInOnlineAwareButton from './signin-online-aware-btn';
 
 export default class ClientTransition {
 
@@ -121,7 +120,6 @@ export default class ClientTransition {
   * Needs to be called everytime the page/body changes.
   */
   static rewriteOnClicks() {
-    SignInOnlineAwareButton.setup('.signin-online-aware-button');
     PwaCard.setup('.card-pwa');
     const contentOnlyElements = document.getElementsByClassName('gulliver-content-only');
     for (const element of contentOnlyElements) {

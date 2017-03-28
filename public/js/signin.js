@@ -70,9 +70,14 @@ export default class SignIn {
    * receive a 'change' event whenever the state changes.
    */
   static setupEventHandlers() {
+    const body = document.querySelector('body');
     window.addEventListener('userchange', e => {
       const user = e.detail;
-      console.log(user);
+      if (user.isSignedIn()) {
+        body.setAttribute('signedIn', 'true');
+      } else {
+        body.removeAttribute('signedIn');
+      }
       const signedinAware = document.querySelectorAll('.gulliver-signedin-aware');
       for (const e of signedinAware) {
         e.dataset.signedin = JSON.stringify(user.isSignedIn());

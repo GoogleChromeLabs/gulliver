@@ -237,11 +237,6 @@ main {
   transition: opacity 0.2s ease-in-out;  
 }
 
-.button_disabled {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
 button:active,
 button[disabled=disabled], 
 button:disabled {
@@ -559,12 +554,28 @@ footer #github-logo {
 .pager svg {
   fill: #1976D2;
 }
+
+.previous, .next {
+  transition: opacity 0.2s ease-in-out;
+}
+
 .previous {
   float: left;
 }
+
 .next {
   float: right;
 }
+
+/* Controls Offline and SignedIn Behavirous */
+body[offline] .next,
+body[offline] .previous,
+body[offline] .signin-online-aware-button,
+body:not([signedIn]) .signin-online-aware-button {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 .pager a {
   color: #0D47A1;
   text-decoration: none;

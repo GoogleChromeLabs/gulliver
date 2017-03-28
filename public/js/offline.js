@@ -22,7 +22,9 @@ export default class Offline {
    * receive a 'change' event whenever the state changes.
    */
   static setupEventhandlers() {
+    const body = document.querySelector('body');
     window.addEventListener('online', () => {
+      body.removeAttribute('offline');
       console.log('ONLINE');
       const onlineAware = document.querySelectorAll('.gulliver-online-aware');
       for (const e of onlineAware) {
@@ -32,6 +34,7 @@ export default class Offline {
     });
 
     window.addEventListener('offline', () => {
+      body.setAttribute('offline', 'true');
       console.log('OFFLINE');
       const onlineAware = document.querySelectorAll('.gulliver-online-aware');
       for (const e of onlineAware) {
