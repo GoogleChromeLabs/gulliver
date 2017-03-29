@@ -16,7 +16,6 @@
 /* eslint-env browser */
 
 import PwaCard from './pwa-card';
-import SignInOnlineAwareButton from './signin-online-aware-btn';
 
 export default class ClientTransition {
 
@@ -121,8 +120,7 @@ export default class ClientTransition {
   * Needs to be called everytime the page/body changes.
   */
   static rewriteOnClicks() {
-    SignInOnlineAwareButton.setup('#pwaSubmit, #pwaAdd');
-    PwaCard.setup('.gulliver-online-aware');
+    PwaCard.setup('.card-pwa');
     const contentOnlyElements = document.getElementsByClassName('gulliver-content-only');
     for (const element of contentOnlyElements) {
       if (!element.dataset.rewroteClick) {
@@ -131,5 +129,16 @@ export default class ClientTransition {
       }
       element.dispatchEvent(new CustomEvent('change'));
     }
+
+    // TODO: Temporary Hack to rewire properties to the newly added elements.
+    window.dispatchEvent(new CustomEvent(navigator.onLine ? 'online' : 'offline'));
+    /* eslint-disable */
+    if (window.auth) {
+      window.dispatchEvent(new CustomEvent('userchange', {
+        detail: window.auth.currentUser.get()
+      }));
+    }
+    /* eslint-enable */
+    // TODO: End of Temporary hack
   }
 }
