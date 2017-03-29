@@ -560,7 +560,7 @@ footer #github-logo {
 }
 
 /* Controls Offline and SignedIn Behavirous */
-body[offline] .gulliver-online-aware:not([cached]),
+body[offline] .offline-aware:not([cached]),
 body:not([signedIn]) .signin-aware {
   opacity: 0.3;
   pointer-events: none;

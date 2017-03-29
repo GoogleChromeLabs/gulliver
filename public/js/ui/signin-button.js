@@ -18,7 +18,6 @@
 export default class SignInButton {
   static _setupEventListeners(signIn, element) {
     element.addEventListener('change', () => {
-      element.disabled = element.dataset.online !== 'true';
       element.innerText = element.dataset.signedin === 'true' ?
         'Logout' :
         'Login';

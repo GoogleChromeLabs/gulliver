@@ -16,10 +16,12 @@
 /* eslint-env browser */
 
 import ClientTransition from './client-transition';
-import Offline from '../offline';
+import ConnectivityManager from '../connectivity-manager';
 
 export default class PwaCard {
   static setup(querySelector) {
+    // TODO: Transform connectivityManager to an instance variable on refactor.
+    const connectivityManager = new ConnectivityManager(window);
     document.querySelectorAll(querySelector)
     .forEach(element => {
       element.addEventListener('click', ClientTransition.newOnClick);
@@ -28,7 +30,7 @@ export default class PwaCard {
     window.addEventListener('offline', () => {
       document.querySelectorAll(querySelector)
         .forEach(element => {
-          Offline.isAvailable(element.href + '?contentOnly=true')
+          connectivityManager.isAvailable(element.href + '?contentOnly=true')
             .then(available => {
               if (available) {
                 element.setAttribute('cached', 'true');

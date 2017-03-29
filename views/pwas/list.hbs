@@ -23,7 +23,7 @@
 {{/unless}}      
       <div class="toolbar">
       <a id="add">
-          <button id="pwaAdd" href="/pwas/add" type="submit" class="button-primary button gulliver-signedin-aware gulliver-online-aware gulliver-content-only signin-aware">
+          <button id="pwaAdd" href="/pwas/add" type="submit" class="button-primary button gulliver-signedin-aware offline-aware gulliver-content-only signin-aware">
           Add PWA
           </button>
       </a>
@@ -31,7 +31,7 @@
 
       <div class="items">
           {{#each pwas}}
-          <a id="{{id}}" class="item card-pwa gulliver-online-aware gulliver-content-only box-shadow" href="/pwas/{{id}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
+          <a id="{{id}}" class="item card-pwa offline-aware gulliver-content-only box-shadow" href="/pwas/{{id}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
           {{#if iconUrl64}}
               <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{displayName}}"/>
           {{else}}
@@ -48,12 +48,12 @@
 
       <div class="pager">
       {{#if hasPreviousPage}}
-      <a class="previous gulliver-content-only gulliver-online-aware" href="?sort={{sortOrder}}{{#if previousPageNumber}}&page={{previousPageNumber}}{{/if}}">
+      <a class="previous gulliver-content-only offline-aware" href="?sort={{sortOrder}}{{#if previousPageNumber}}&page={{previousPageNumber}}{{/if}}">
           {{> chevron_left }}
       </a>
       {{/if}}
       {{#if hasNextPage}}
-      <a class="next gulliver-content-only gulliver-online-aware" href="?sort={{sortOrder}}&page={{nextPageNumber}}">
+      <a class="next gulliver-content-only offline-aware" href="?sort={{sortOrder}}&page={{nextPageNumber}}">
           {{> chevron_right }}
       </a>
       {{/if}}

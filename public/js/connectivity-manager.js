@@ -15,32 +15,26 @@
 
 /* eslint-env browser */
 
-export default class Offline {
+export default class ConnectivityManager {
+
+  constructor(window) {
+    this.window = window;
+    this._setupEventhandlers();
+  }
+
   /**
    * All elements with class .gulliver-online-aware will:
    * have an 'online' dataset property that reflects the current online state.
    * receive a 'change' event whenever the state changes.
    */
-  static setupEventhandlers() {
-    const body = document.querySelector('body');
-    window.addEventListener('online', () => {
+  _setupEventhandlers() {
+    const body = this.window.document.querySelector('body');
+    this.window.addEventListener('online', () => {
       body.removeAttribute('offline');
-      console.log('ONLINE');
-      const onlineAware = document.querySelectorAll('.gulliver-online-aware');
-      for (const e of onlineAware) {
-        e.dataset.online = JSON.stringify(true);
-        e.dispatchEvent(new CustomEvent('change'));
-      }
     });
 
-    window.addEventListener('offline', () => {
+    this.window.addEventListener('offline', () => {
       body.setAttribute('offline', 'true');
-      console.log('OFFLINE');
-      const onlineAware = document.querySelectorAll('.gulliver-online-aware');
-      for (const e of onlineAware) {
-        e.dataset.online = JSON.stringify(false);
-        e.dispatchEvent(new CustomEvent('change'));
-      }
     });
   }
 
@@ -49,8 +43,8 @@ export default class Offline {
    * @param url the url to be checke for availability
    * @returns true if the user is online or the URL is cached
    */
-  static isAvailable(href) {
-    if (!href || window.navigator.onLine) return Promise.resolve(true);
+  isAvailable(href) {
+    if (!href || this.window.navigator.onLine) return Promise.resolve(true);
     return caches.match(href)
       .then(response => response.status === 200)
       .catch(() => false);
