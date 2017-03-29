@@ -34,7 +34,6 @@ import Config from './gulliver-config';
 import SignIn from './signin';
 import Offline from './offline';
 import SignInButton from './ui/signin-button';
-import OfflineBanner from './ui/offline-banner';
 import ClientTransition from './ui/client-transition';
 
 class Gulliver {
@@ -57,7 +56,6 @@ class Gulliver {
 
   _setupUIComponents() {
     ClientTransition.setup();
-    OfflineBanner.setup('div.offline-status');
     this.setupBacklink();
   }
 

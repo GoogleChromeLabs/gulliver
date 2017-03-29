@@ -271,15 +271,10 @@ button:disabled {
   pointer-events: auto;
 }
 
-.card-pwa_disabled {
-  opacity: 0.3;
-  pointer-events: none;
-  box-shadow: none;
-}
-
 a.card-pwa:hover {
   text-decoration: none;
 }
+
 .card-pwa .pwa-name {
   padding-top: 8px;
   font-size: 18px;
@@ -479,14 +474,11 @@ tr:last-child td {
   line-height: 56px;
   padding-left: 20px;
   pointer-events: none;
+  transform: translateY(56px);
+  opacity: 0;
   transition-property: transform,opacity;
   transition-duration: .5s;
   transition-timing-function: ease-in-out;  
-}
-
-.offline-stats_hidden {
-  opacity: 0;
-  transform: translateY(56px);
 }
 
 /* Footer */
@@ -568,12 +560,16 @@ footer #github-logo {
 }
 
 /* Controls Offline and SignedIn Behavirous */
-body[offline] .next,
-body[offline] .previous,
-body[offline] .signin-online-aware-button,
+body[offline] .gulliver-online-aware:not([cached]),
 body:not([signedIn]) .signin-online-aware-button {
   opacity: 0.3;
   pointer-events: none;
+  box-shadow: none;
+}
+
+body[offline] .offline-status {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .pager a {

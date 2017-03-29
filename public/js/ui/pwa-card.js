@@ -18,26 +18,25 @@
 import ClientTransition from './client-transition';
 import Offline from '../offline';
 
-const DISABLED_CARD_CLASS = 'card-pwa_disabled';
-
 export default class PwaCard {
   static setup(querySelector) {
-    const changeListener = event => {
-      const element = event.target;
-      element.addEventListener('click', ClientTransition.newOnClick);
-      Offline.isAvailable(element.href)
-        .then(available => {
-          if (available) {
-            element.classList.remove(DISABLED_CARD_CLASS);
-            return;
-          }
-          element.classList.add(DISABLED_CARD_CLASS);
-        });
-    };
-
     document.querySelectorAll(querySelector)
-      .forEach(element => {
-        element.addEventListener('change', changeListener);
-      });
+    .forEach(element => {
+      element.addEventListener('click', ClientTransition.newOnClick);
+    });
+
+    window.addEventListener('offline', () => {
+      document.querySelectorAll(querySelector)
+        .forEach(element => {
+          Offline.isAvailable(element.href + '?contentOnly=true')
+            .then(available => {
+              if (available) {
+                element.setAttribute('cached', 'true');
+                return;
+              }
+              element.removeAttribute('cached');
+            });
+        });
+    });
   }
 }
