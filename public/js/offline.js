@@ -52,14 +52,7 @@ export default class Offline {
   static isAvailable(href) {
     if (!href || window.navigator.onLine) return Promise.resolve(true);
     return caches.match(href)
-      .then(response => {
-        if (response.status === 200) {
-          return true;
-        }
-        return false;
-      })
-      .catch(() => {
-        return false;
-      });
+      .then(response => response.status === 200)
+      .catch(() => false);
   }
 }
