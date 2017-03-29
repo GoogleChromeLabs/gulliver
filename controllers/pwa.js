@@ -22,46 +22,24 @@ const lighthouseLib = require('../lib/lighthouse');
 const Pwa = require('../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const libMetadata = require('../lib/metadata');
-const cache = require('../lib/data-cache');
+const cacheController = require('./cache');
 
 const LIST_PAGE_SIZE = 32;
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_SORT_ORDER = 'newest';
 
-const CACHE_LIFETIME = 60 * 60 * 24; // 24 hours
-
 /**
  * GET /
  *
  * Display a page of PWAs (up to LIST_PAGE_SIZE at a time)
- * Stores the latest page in memcached.
  */
 router.get('/', (req, res, next) => {
-  cache.get(req.originalUrl)
-    .then(cachedPage => {
-      console.log('Served from memcache: ' + req.originalUrl);
-      res.send(cachedPage);
-      return cachedPage;
-    })
-    .catch(_ => {
-      console.log('Not in memcache: ' + req.originalUrl);
-    })
-    .then(cachedPage => {
-      renderPwaListPage(req, res)
-        .then(html => {
-          if (!cachedPage) {
-            res.send(html);
-          }
-          if (html !== cachedPage) {
-            cache.set(req.originalUrl, html, CACHE_LIFETIME)
-            .catch(_ => {
-              console.log('Error setting cache for: ' + req.originalUrl);
-            });
-          }
-        }).catch(err => {
-          err.status = 500;
-          next(err);
-        });
+  renderPwaListPage(req, res)
+    .then(html => {
+      res.send(html);
+    }).catch(err => {
+      err.status = 500;
+      next(err);
     });
 });
 
@@ -88,7 +66,7 @@ router.get('/add', (req, res) => {
  * POST /pwas/add
  *
  * Create a PWA.
- * Flushes memcached when a PWA is added.
+ * Remove list pages from cache when new PWA is added.
  */
 router.post('/add', (req, res, next) => {
   let manifestUrl = req.body.manifestUrl.trim();
@@ -114,7 +92,8 @@ router.post('/add', (req, res, next) => {
       return pwaLib.createOrUpdatePwa(pwa);
     })
     .then(savedData => {
-      cache.flush();
+      // Remove list pages from cache when new PWA is added
+      cacheController.flushCacheUrls();
       res.redirect(req.baseUrl + '/' + savedData.id);
       return;
     })
@@ -160,45 +139,25 @@ router.post('/add', (req, res, next) => {
  * GET /pwas/:id
  *
  * Display a PWA.
- * Stores the latest detail page in memcached.
  */
 router.get('/:pwa', (req, res, next) => {
-  const pwaId = req.params.pwa;
-  const contentOnly = false || req.query.contentOnly;
-  const url = req.originalUrl;
-  cache.get(url)
-    .then(cachedPage => {
-      console.log('Served from memcache: ' + url);
-      res.send(cachedPage);
-      return cachedPage;
+  renderOnePwa(req, res)
+    .then(html => {
+      res.send(html);
     })
-    .catch(_ => {
-      console.log('Not in memcache: ' + url);
-    })
-    .then(cachedPage => {
-      renderOnePwa(req, res, pwaId, contentOnly)
-        .then(html => {
-          if (!cachedPage) {
-            res.send(html);
-          }
-          if (html !== cachedPage) {
-            cache.set(url, html, CACHE_LIFETIME)
-            .catch(_ => {
-              console.log('Error setting cache for: ' + url);
-            });
-          }
-        })
-        .catch(err => {
-          err.status = 404;
-          return next(err);
-        });
+    .catch(err => {
+      err.status = 404;
+      return next(err);
     });
 });
 
 /**
  * Generate the HTML with 'pwas/view.hbs' for one PWA
  */
-function renderOnePwa(req, res, pwaId, contentOnly, url) {
+function renderOnePwa(req, res) {
+  const url = req.originalUrl;
+  const pwaId = req.params.pwa;
+  const contentOnly = false || req.query.contentOnly;
   return pwaLib.find(pwaId)
     .then(pwa => {
       return lighthouseLib.findByPwaId(pwaId)
@@ -234,7 +193,6 @@ function renderPwaListPage(req, res) {
       return pwaLib.list(start, limit, sortOrder);
     })
     .then(result => {
-      cachePwasFromList(req, res, result.pwas);
       let arg = Object.assign(libMetadata.fromRequest(req), {
         title: 'PWA Directory',
         description: 'PWA Directory: A Directory of Progressive Web Apps',
@@ -255,30 +213,6 @@ function renderPwaListPage(req, res) {
       });
       return render(res, 'pwas/list.hbs', arg);
     });
-}
-
-/**
- * Cache individual PWAs from the list page if not in cache already.
- */
-function cachePwasFromList(req, res, pwas) {
-  pwas.forEach(pwa => {
-    const url = '/pwas/' + pwa.id + '?contentOnly=true';
-    cache.get(url)
-    .catch(_ => {
-      console.log('Not in memcache: ' + url);
-    })
-    .then(cachedPage => {
-      renderOnePwa(req, res, pwa.id, true, url)
-        .then(html => {
-          if (html !== cachedPage) {
-            cache.set(url, html, CACHE_LIFETIME);
-          }
-        });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  });
 }
 
 /**
@@ -303,7 +237,7 @@ router.use((err, req, res, next) => {
   // Format error and forward to generic error handler for logging and
   // responding to the request
   err.response = err.message;
-  console.log(err);
+  console.error(err);
   next(err);
 });
 
