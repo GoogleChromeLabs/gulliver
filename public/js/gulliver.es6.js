@@ -41,32 +41,17 @@ class Gulliver {
     this.config = Config.from(document.querySelector('#config'));
     this.connectivityManager = new ConnectivityManager(window);
     this._setupUIComponents();
-    this._setupSignin();
-    this._setupEventHandlers();
     this.setupServiceWorker();
     this.setupMessaging();
-  }
-  /**
-   * Translate generic "system" event like 'online', 'offline' and 'userchange'
-   * into Gulliver-specific events. (e.g. as indicated by classes.)
-   */
-  _setupEventHandlers() {
-    SignIn.setupEventHandlers();
+
+    // Setup SignIn
+    this.signIn = new SignIn(window, this.config);
+    this.signInButton = new SignInButton(this.signIn, document.querySelector('#auth-button'));
   }
 
   _setupUIComponents() {
     ClientTransition.setup();
     this.setupBacklink();
-  }
-
-  /**
-   * Setup/configure Google signin itself. This translates GSI events into 'userchange'
-   * events on the window object.
-   */
-  _setupSignin() {
-    this.signIn = new SignIn();
-    SignInButton.setup(this.signIn, '#auth-button');
-    this.signIn.init(this.config);
   }
 
   /**
