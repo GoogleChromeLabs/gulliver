@@ -15,10 +15,11 @@
 
 /* eslint-env browser */
 
-export default class ConnectivityManager {
+export default class OfflineSupport {
 
-  constructor(window) {
+  constructor(window, router) {
     this.window = window;
+    this.router = router;
     this._setupEventhandlers();
   }
 
@@ -35,6 +36,7 @@ export default class ConnectivityManager {
 
     this.window.addEventListener('offline', () => {
       body.setAttribute('offline', 'true');
+      this.markAsCached(this.window.document.querySelectorAll('.offline-aware'));
     });
   }
 
@@ -48,5 +50,29 @@ export default class ConnectivityManager {
     return caches.match(href)
       .then(response => response.status === 200)
       .catch(() => false);
+  }
+
+  /**
+   * Checks if the href on the anchor is available in the cached
+   * and marks the element with the cached attribute.
+   *
+   * If the url is available, the `cached` attribute is added with
+   * the value `true`. Otherwise, the `cached` attribute is removed.
+   * @param {@NodeList} a list of anchors.
+   */
+  markAsCached(anchors) {
+    anchors.forEach(anchor => {
+      if (!anchor.href) {
+        return;
+      }
+      const contentHref = this.router.contentOnlyUrl(anchor.href);
+      this.isAvailable(contentHref).then(available => {
+        if (available) {
+          anchor.setAttribute('cached', 'true');
+          return;
+        }
+        anchor.removeAttribute('cached');
+      });
+    });
   }
 }

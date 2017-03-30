@@ -32,14 +32,14 @@ import Messaging from './messaging';
 import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
 import SignIn from './signin';
-import ConnectivityManager from './connectivity-manager';
+import OfflineSupport from './offline-support';
 import SignInButton from './ui/signin-button';
 import ClientTransition from './ui/client-transition';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
-    this.connectivityManager = new ConnectivityManager(window);
+    this.offlineSupport = new OfflineSupport(window, ClientTransition);
     this._setupUIComponents();
     this._setupSignin();
     this._setupEventHandlers();
