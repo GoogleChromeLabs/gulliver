@@ -48,6 +48,24 @@ export default class SignIn {
     });
   }
 
+  get signedIn() {
+    return this.user && this.user.isSignedIn();
+  }
+
+  get user() {
+    if (!this.auth) {
+      return null;
+    }
+    return this.auth.currentUser.get();
+  }
+
+  get idToken() {
+    if (!this.signedIn) {
+      return null;
+    }
+    return this.user.getAuthResponse().id_token;
+  }
+
   signIn() {
     if (!this.auth) {
       console.log('Auth not ready!');
