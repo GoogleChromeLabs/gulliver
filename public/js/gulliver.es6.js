@@ -32,13 +32,14 @@ import Messaging from './messaging';
 import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
 import SignIn from './signin';
-import Offline from './offline';
+import ConnectivityManager from './connectivity-manager';
 import SignInButton from './ui/signin-button';
 import ClientTransition from './ui/client-transition';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
+    this.connectivityManager = new ConnectivityManager(window);
     this._setupUIComponents();
     this._setupSignin();
     this._setupEventHandlers();
@@ -50,7 +51,6 @@ class Gulliver {
    * into Gulliver-specific events. (e.g. as indicated by classes.)
    */
   _setupEventHandlers() {
-    Offline.setupEventhandlers();
     SignIn.setupEventHandlers();
   }
 
