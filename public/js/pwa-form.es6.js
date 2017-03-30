@@ -16,7 +16,13 @@
 /* eslint-env browser */
 
 class PwaForm {
+  constructor(window) {
+    this.window = window;
+    this.signIn = window.gulliver.signIn;
+  }
+
   setup() {
+    console.log('Setting up PWA Form');
     this.pwaForm = document.querySelector('#pwaForm');
     if (!this.pwaForm) {
       console.log('%c#pwaForm not found.', 'color:red');
@@ -33,18 +39,21 @@ class PwaForm {
       console.log('%c#pwaSubmit not found.', 'color:red');
     }
 
-    this._setupChangeListener();
-    this._setupSaveButton();
+    this._updateFormFields();
+    this._setupListeners();
   }
 
-  _setupChangeListener() {
-    // Setup a listener for user change events.
-    this.pwaForm.addEventListener('change', () => {
-      this.idTokenInput.setAttribute('value', this.pwaForm.dataset.idToken);
-    });
+  _updateFormFields() {
+    this.idTokenInput.setAttribute('value', this.signIn.signedIn ? this.signIn.idToken : '');
   }
 
-  _setupSaveButton() {
+  /**
+   * Sets up a listeners for events.
+   */
+  _setupListeners() {
+    // Setup listener for the userchange event.
+    window.addEventListener('userchange', this._updateFormFields.bind(this));
+
     // Disable the save button after been clicked to avoid double submission.
     this.submitButton.addEventListener('click', _ => {
       this.submitButton.disabled = true;
@@ -53,5 +62,7 @@ class PwaForm {
   }
 }
 
-const pwaForm = new PwaForm();
-pwaForm.setup();
+// TODO: Setting pwaForm to window is a temporary hack to make the Form work after a transition.
+// To be removed before refactoring is finished.
+window.__pwaForm = new PwaForm(window);
+window.__pwaForm.setup();

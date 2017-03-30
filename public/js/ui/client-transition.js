@@ -80,6 +80,24 @@ export default class ClientTransition {
         .then(_ => {
           window.history.pushState(window.location.href, 'PWA Directory', url);
           ClientTransition.rewriteOnClicks();
+
+          // TODO: Temporary hack to make the Form work after a transition.
+          // To be replaced with proper dynamic module loading before refactor is finishd
+          const loadPwaFormJs = () => {
+            if (window.__pwaForm) {
+              window.__pwaForm.setup();
+              return;
+            }
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.defer = true;
+            script.src = '/js/pwa-form.js';
+            document.querySelector('head').appendChild(script);
+          };
+          if (url.includes('/pwas/add')) {
+            loadPwaFormJs();
+          }
+          // End of module loading hack.
         });
     }
   }

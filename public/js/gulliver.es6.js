@@ -104,7 +104,7 @@ class Gulliver {
   }
 }
 
-const gulliver = new Gulliver();
+window.gulliver = new Gulliver();
 
 // Fire 'online' or 'offline' event on page load. (Without this, would only
 // fire on change.)
