@@ -234,6 +234,7 @@ main {
   border: none;
   text-transform: uppercase;
   margin: 0;
+  transition: opacity 0.2s ease-in-out;  
 }
 
 button:active,
@@ -266,10 +267,14 @@ button:disabled {
   align-items: center;
   height: 132px;
   flex-direction: column;
+  transition: opacity .2s ease-in-out;
+  pointer-events: auto;
 }
+
 a.card-pwa:hover {
   text-decoration: none;
 }
+
 .card-pwa .pwa-name {
   padding-top: 8px;
   font-size: 18px;
@@ -468,8 +473,12 @@ tr:last-child td {
   height: 56px;
   line-height: 56px;
   padding-left: 20px;
-  display: none;
   pointer-events: none;
+  transform: translateY(56px);
+  opacity: 0;
+  transition-property: transform,opacity;
+  transition-duration: .5s;
+  transition-timing-function: ease-in-out;  
 }
 
 /* Footer */
@@ -537,12 +546,32 @@ footer #github-logo {
 .pager svg {
   fill: #1976D2;
 }
+
+.previous, .next {
+  transition: opacity 0.2s ease-in-out;
+}
+
 .previous {
   float: left;
 }
+
 .next {
   float: right;
 }
+
+/* Controls Offline and SignedIn Behavirous */
+body[offline] .offline-aware:not([cached]),
+body:not([signedIn]) .signin-aware {
+  opacity: 0.3;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+body[offline] .offline-status {
+  transform: translateY(0);
+  opacity: 1;
+}
+
 .pager a {
   color: #0D47A1;
   text-decoration: none;
