@@ -16,26 +16,20 @@
 /* eslint-env browser */
 
 export default class SignInButton {
-  static _setupEventListeners(signIn, element) {
-    element.addEventListener('change', () => {
-      element.innerText = element.dataset.signedin === 'true' ?
-        'Logout' :
-        'Login';
-    });
-
-    element.addEventListener('click', () => {
-      if (element.dataset.signedin === 'true') {
-        signIn.signOut();
-      } else {
-        signIn.signIn();
-      }
-    });
+  constructor(signIn, element) {
+    this.signIn = signIn;
+    this.element = element;
+    this._setupEventListeners();
   }
 
-  static setup(signIn, querySelector) {
-    document.querySelectorAll(querySelector)
-      .forEach(element => {
-        this._setupEventListeners(signIn, element);
-      });
+  _setupEventListeners() {
+    const clickListener = () => {
+      if (this.signIn.signedIn) {
+        this.signIn.signOut();
+      } else {
+        this.signIn.signIn();
+      }
+    };
+    this.element.addEventListener('click', clickListener);
   }
 }

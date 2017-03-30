@@ -17,11 +17,18 @@
 import {authInit} from './gapi.es6.js';
 
 export default class SignIn {
-  init(config) {
+  constructor(window, config) {
+    this.window = window;
+    this.config = config;
+    this._init();
+    this._setupEventHandlers();
+  }
+
+  _init() {
     /* eslint-disable camelcase */
     const params = {
       scope: 'profile',
-      client_id: config.client_id,
+      client_id: this.config.client_id,
       fetch_basic_profile: false
     };
     /* eslint-enable camelcase */
@@ -34,9 +41,9 @@ export default class SignIn {
   }
 
   _setupUserChangeEvents(auth) {
-    window.auth = auth; // TODO: Temporary Hack to Make 'ui/client-transition.js' work.
+    this.window.auth = auth; // TODO: Temporary Hack to Make 'ui/client-transition.js' work.
     // Fire 'userchange' event on page load (not just when status changes)
-    window.dispatchEvent(new CustomEvent('userchange', {
+    this.window.dispatchEvent(new CustomEvent('userchange', {
       detail: auth.currentUser.get()
     }));
 
@@ -87,20 +94,14 @@ export default class SignIn {
    * have a 'signedin' dataset property that reflects the current signed in state.
    * receive a 'change' event whenever the state changes.
    */
-  static setupEventHandlers() {
-    const body = document.querySelector('body');
-    window.addEventListener('userchange', e => {
+  _setupEventHandlers() {
+    const body = this.window.document.querySelector('body');
+    this.window.addEventListener('userchange', e => {
       const user = e.detail;
       if (user.isSignedIn()) {
         body.setAttribute('signedIn', 'true');
       } else {
         body.removeAttribute('signedIn');
-      }
-      const signedinAware = document.querySelectorAll('.gulliver-signedin-aware');
-      for (const e of signedinAware) {
-        e.dataset.signedin = JSON.stringify(user.isSignedIn());
-        e.dataset.idToken = user.isSignedIn() ? user.getAuthResponse().id_token : '';
-        e.dispatchEvent(new CustomEvent('change'));
       }
     });
   }

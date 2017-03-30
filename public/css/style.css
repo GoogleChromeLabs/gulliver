@@ -572,6 +572,11 @@ body[offline] .offline-status {
   opacity: 1;
 }
 
+body:not([signedIn]) .auth-button-label-logout,
+body[signedIn] .auth-button-label-login {
+  display: none;
+}
+
 .pager a {
   color: #0D47A1;
   text-decoration: none;
