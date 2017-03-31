@@ -51,7 +51,7 @@ class Gulliver {
     this.signInButton = new SignInButton(this.signIn, document.querySelector('#auth-button'));
 
     // Setup Analytics
-    this.analytics = new Analytics(navigator, window, this.config);
+    this.analytics = new Analytics(window, this.config);
     this.analytics.trackPageView(window.location.href);
   }
 

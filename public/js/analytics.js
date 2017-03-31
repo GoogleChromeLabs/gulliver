@@ -16,8 +16,8 @@
 /* eslint-env browser */
 
 export default class Analytics {
-  constructor(navigator, window, config) {
-    this.navigator = navigator;
+  constructor(window, config) {
+    this.navigator = window.navigator;
     this.window = window;
     this.config = config;
     this._init();
