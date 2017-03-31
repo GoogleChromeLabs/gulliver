@@ -35,23 +35,24 @@ import SignIn from './signin';
 import OfflineSupport from './offline-support';
 import SignInButton from './ui/signin-button';
 import ClientTransition from './ui/client-transition';
+import Analytics from './analytics';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
     this.offlineSupport = new OfflineSupport(window, ClientTransition);
-    this._setupUIComponents();
+    ClientTransition.setup();
+    this.setupBacklink();
     this.setupServiceWorker();
     this.setupMessaging();
 
     // Setup SignIn
     this.signIn = new SignIn(window, this.config);
     this.signInButton = new SignInButton(this.signIn, document.querySelector('#auth-button'));
-  }
 
-  _setupUIComponents() {
-    ClientTransition.setup();
-    this.setupBacklink();
+    // Setup Analytics
+    this.analytics = new Analytics(navigator, window, this.config);
+    this.analytics.trackPageView(window.location.href);
   }
 
   /**
@@ -91,24 +92,3 @@ class Gulliver {
 
 window.gulliver = new Gulliver();
 
-// Fire 'online' or 'offline' event on page load. (Without this, would only
-// fire on change.)
-window.dispatchEvent(new CustomEvent(navigator.onLine ? 'online' : 'offline'));
-
-// GA embed code
-/* eslint-disable */
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-ga('create', gulliver.config.ga_id, 'auto');
-ga('set', 'dimension1', navigator.onLine);
-ga('send', 'pageview');
-
-// Setup a listener to track Add to Homescreen events.
-window.addEventListener('beforeinstallprompt', e => {
-  e.userChoice.then(choiceResult => {
-    ga('send', 'event', 'A2H', choiceResult.outcome);      
-  });
-});
-/* eslint-enable */
