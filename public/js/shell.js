@@ -21,36 +21,11 @@ export default class Shell {
     this.backlink = document.querySelector('#backlink');
     this.tabs = document.querySelectorAll('#newest, #score');
     this.subtitle = document.querySelector('#subtitle');
-    this._createStates();
+    this.states = new Map();
   }
 
-  _createStates() {
-    this.states = new Map();
-    this.states.set('pwa-add', {
-      showTabs: false,
-      backlink: true,
-      subtitle: true
-    });
-
-    this.states.set('pwa-detail', {
-      showTabs: false,
-      backlink: true,
-      subtitle: false
-    });
-
-    this.states.set('list-newest', {
-      showTabs: true,
-      backlink: false,
-      subtitle: false,
-      currentTab: 'newest'
-    });
-
-    this.states.set('list-topscores', {
-      showTabs: true,
-      backlink: false,
-      subtitle: false,
-      currentTab: 'score'
-    });
+  addState(page, state) {
+    this.states.set(page, state);
   }
 
   _showElement(element, visible) {
@@ -74,8 +49,8 @@ export default class Shell {
     tab.classList.remove('activetab');
   }
 
-  afterAttach(state) {
-    const options = this.states.get(state);
+  afterAttach(page) {
+    const options = this.states.get(page);
     this._showElement(this.backlink, options.backlink);
     this._showElement(this.subtitle, options.subtitle);
     this.tabs.forEach(tab => this._updateTab(tab, options));

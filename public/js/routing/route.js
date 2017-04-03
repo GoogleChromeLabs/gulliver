@@ -15,12 +15,32 @@
 
 /* eslint-env browser */
 
-export default class Page {
-  constructor(type) {
-    this.type = type || '';
+export default class Route {
+  constructor(matchRegex) {
+    this.matchRegex = matchRegex;
   }
 
-  getContentOnlyUrl(url) {
+  matches(url) {
+    return this.matchRegex.test(url);
+  }
+
+  getContent(url) {
+    const contentUrl = this._getContentOnlyUrl(url);
+    return fetch(contentUrl)
+      .then(response => response.text());
+  }
+
+  transitionOut(container) {
+    container.classList.add('transition');
+    console.log('Transitin Out');
+  }
+
+  transitionIn(container) {
+    container.classList.remove('transition');
+    console.log('Transitin In');
+  }
+
+  _getContentOnlyUrl(url) {
     return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'contentOnly=true';
   }
 }
