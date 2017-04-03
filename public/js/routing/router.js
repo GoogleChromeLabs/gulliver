@@ -17,7 +17,7 @@
 
 export default class Router {
   constructor(window, shell, container) {
-    this._routes = new Set();
+    this._routes = [];
     this._shell = shell;
     this._window = window;
     this._container = container;
@@ -28,13 +28,7 @@ export default class Router {
   }
 
   findRoute(url) {
-    for (let route of this._routes) {
-      if (route.matches(url)) {
-        console.log('Matched route ', route, ' for url ', url);
-        return route;
-      }
-    }
-    return null;
+    return this._routes.find(route => route.matches(url));
   }
 
   _updateContent() {
@@ -61,7 +55,7 @@ export default class Router {
   }
 
   addRoute(route) {
-    this._routes.add(route);
+    this._routes.push(route);
   }
 
   navigate(url) {
