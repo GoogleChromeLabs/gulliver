@@ -17,15 +17,15 @@
 
 export default class Shell {
   constructor(document) {
-    this.document = document;
-    this.backlink = document.querySelector('#backlink');
-    this.tabs = document.querySelectorAll('#newest, #score');
-    this.subtitle = document.querySelector('#subtitle');
-    this.states = new Map();
+    this._document = document;
+    this._backlink = document.querySelector('#backlink');
+    this._tabs = document.querySelectorAll('#newest, #score');
+    this._subtitle = document.querySelector('#subtitle');
+    this._states = new Map();
   }
 
   addState(page, state) {
-    this.states.set(page, state);
+    this._states.set(page, state);
   }
 
   _showElement(element, visible) {
@@ -50,9 +50,9 @@ export default class Shell {
   }
 
   afterAttach(page) {
-    const options = this.states.get(page);
-    this._showElement(this.backlink, options.backlink);
-    this._showElement(this.subtitle, options.subtitle);
-    this.tabs.forEach(tab => this._updateTab(tab, options));
+    const options = this._states.get(page);
+    this._showElement(this._backlink, options.backlink);
+    this._showElement(this._subtitle, options.subtitle);
+    this._tabs.forEach(tab => this._updateTab(tab, options));
   }
 }

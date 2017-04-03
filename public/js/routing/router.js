@@ -17,18 +17,18 @@
 
 export default class Router {
   constructor(window, shell, container) {
-    this.routes = new Set();
-    this.shell = shell;
-    this.window = window;
-    this.container = container;
+    this._routes = new Set();
+    this._shell = shell;
+    this._window = window;
+    this._container = container;
 
     // Update UI when back is pressed.
-    this.window.addEventListener('popstate', this._updateContent.bind(this));
-    this._control(this.window.document);
+    this._window.addEventListener('popstate', this._updateContent.bind(this));
+    this._takeOverAnchorLinks(this._window.document);
   }
 
-  _findRoute(url) {
-    for (let route of this.routes) {
+  findRoute(url) {
+    for (let route of this._routes) {
       if (route.matches(url)) {
         console.log('Matched route ', route, ' for url ', url);
         return route;
@@ -38,22 +38,22 @@ export default class Router {
   }
 
   _updateContent() {
-    const location = window.document.location.href;
-    const page = this._findRoute(location);
+    const location = this._window.document.location.href;
+    const page = this.findRoute(location);
     if (!page) {
       console.error('Url did not match any router: ', location);
       // TODO: navigate to 404?
       return;
     }
 
-    page.transitionOut(this.container);
-    page.getContent(location)
+    page.transitionOut(this._container);
+    page.retrieveContent(location)
       .then(content => {
-        this.container.innerHTML = content;
-        this.shell.afterAttach(page);
-        this.window.scrollTo(0, 0);
-        page.transitionIn(this.container);
-        this._control(this.container);
+        this._container.innerHTML = content;
+        this._shell.afterAttach(page);
+        this._window.scrollTo(0, 0);
+        page.transitionIn(this._container);
+        this._takeOverAnchorLinks(this._container);
       })
       .catch(err => {
         console.error('Error getting page content for: ', location, ' Error: ', err);
@@ -61,16 +61,16 @@ export default class Router {
   }
 
   addRoute(route) {
-    this.routes.add(route);
+    this._routes.add(route);
   }
 
   navigate(url) {
     console.log('Navigating To: ', url);
-    this.window.history.pushState(null, null, url);
+    this._window.history.pushState(null, null, url);
     this._updateContent();
   }
 
-  _control(root) {
+  _takeOverAnchorLinks(root) {
     root.querySelectorAll('a').forEach(element => {
       element.addEventListener('click', e => {
         // Link does not have an url.
@@ -79,12 +79,12 @@ export default class Router {
         }
 
         // Never catch links to external websites.
-        if (!e.currentTarget.href.startsWith(this.window.location.origin)) {
+        if (!e.currentTarget.href.startsWith(this._window.location.origin)) {
           return false;
         }
 
         // Check if there's a route for this url.
-        const page = this._findRoute(e.currentTarget.href);
+        const page = this.findRoute(e.currentTarget.href);
         if (!page) {
           return false;
         }

@@ -34,7 +34,6 @@ import Config from './gulliver-config';
 import SignIn from './signin';
 import OfflineSupport from './offline-support';
 import SignInButton from './ui/signin-button';
-import ClientTransition from './ui/client-transition';
 import Analytics from './analytics';
 import Router from './routing/router';
 import Route from './routing/route';
@@ -43,9 +42,9 @@ import Shell from './shell';
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
-    this.offlineSupport = new OfflineSupport(window, ClientTransition);
     this.shell = new Shell(document);
     this.router = new Router(window, this.shell, document.querySelector('main'));
+    this.offlineSupport = new OfflineSupport(window, this.router);
     this._setupRoutes();
     this.setupBacklink();
     this.setupServiceWorker();

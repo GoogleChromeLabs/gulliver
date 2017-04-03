@@ -17,30 +17,30 @@
 
 export default class Route {
   constructor(matchRegex) {
-    this.matchRegex = matchRegex;
+    this._matchRegex = matchRegex;
   }
 
   matches(url) {
-    return this.matchRegex.test(url);
+    return this._matchRegex.test(url);
   }
 
-  getContent(url) {
-    const contentUrl = this._getContentOnlyUrl(url);
+  retrieveContent(url) {
+    const contentUrl = this.getContentOnlyUrl(url);
     return fetch(contentUrl)
       .then(response => response.text());
   }
 
   transitionOut(container) {
     container.classList.add('transition');
-    console.log('Transitin Out');
+    console.log('Transition Out');
   }
 
   transitionIn(container) {
     container.classList.remove('transition');
-    console.log('Transitin In');
+    console.log('Transition In');
   }
 
-  _getContentOnlyUrl(url) {
+  getContentOnlyUrl(url) {
     return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'contentOnly=true';
   }
 }

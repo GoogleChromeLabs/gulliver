@@ -65,7 +65,11 @@ export default class OfflineSupport {
       if (!anchor.href) {
         return;
       }
-      const contentHref = this.router.contentOnlyUrl(anchor.href);
+      const route = this.router.findRoute(anchor.href);
+      if (!route) {
+        return;
+      }
+      const contentHref = route.getContentOnlyUrl(anchor.href);
       this.isAvailable(contentHref).then(available => {
         if (available) {
           anchor.setAttribute('cached', 'true');
