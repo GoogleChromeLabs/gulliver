@@ -36,12 +36,14 @@ import OfflineSupport from './offline-support';
 import SignInButton from './ui/signin-button';
 import ClientTransition from './ui/client-transition';
 import Analytics from './analytics';
+import Router from './router';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
     this.offlineSupport = new OfflineSupport(window, ClientTransition);
-    ClientTransition.setup();
+    this.router = new Router(window, document.querySelector('main'));
+    // ClientTransition.setup();
     this.setupBacklink();
     this.setupServiceWorker();
     this.setupMessaging();
