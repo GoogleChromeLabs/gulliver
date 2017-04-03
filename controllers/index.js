@@ -29,18 +29,20 @@ router.use('/api', require('./api'));
 router.use('/tasks', require('./tasks'));
 
 // PWAs
-router.use('/pwas', require('./pwa'));
+router.use('/pwas',
+  require('./cache'),
+  require('./pwa'));
+
+router.get('/', (req, res) => {
+  req.url = '/pwas';
+  router.handle(req, res);
+});
 
 // Transitions
 router.use('/transitions', require('./transition'));
 
 // ServiceWorker
 router.use('/js', require('./sw'));
-
-router.get('/', (req, res) => {
-  req.url = '/pwas';
-  router.handle(req, res);
-});
 
 // /.shell hosts app shell dependencies
 router.use('/.shell', require('./shell'));
