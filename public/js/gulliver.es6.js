@@ -36,13 +36,17 @@ import OfflineSupport from './offline-support';
 import SignInButton from './ui/signin-button';
 import ClientTransition from './ui/client-transition';
 import Analytics from './analytics';
-import Router from './router';
+import Router from './routing/router';
+import Route from './routing/route';
+import Shell from './shell';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
     this.offlineSupport = new OfflineSupport(window, ClientTransition);
-    this.router = new Router(window, document.querySelector('main'));
+    this.shell = new Shell(document);
+    this.router = new Router(window, this.shell, document.querySelector('main'));
+    this._setupRoutes();
     // ClientTransition.setup();
     this.setupBacklink();
     this.setupServiceWorker();
@@ -55,6 +59,44 @@ class Gulliver {
     // Setup Analytics
     this.analytics = new Analytics(window, this.config);
     this.analytics.trackPageView(window.location.href);
+  }
+
+  _addRoute(regexp, shellState) {
+    const route = new Route(regexp);
+    this.shell.addState(route, shellState);
+    this.router.addRoute(route);
+  }
+
+  _setupRoutes() {
+    // Route for `/pwas/add`.
+    this._addRoute(/\/pwas\/add\//, {
+      showTabs: false,
+      backlink: true,
+      subtitle: true
+    });
+
+    // Route for `/pwas/[id]`.
+    this._addRoute(/\/pwas\/(\d+)/, {
+      showTabs: false,
+      backlink: true,
+      subtitle: false
+    });
+
+    // Route for `/?sort=score`.
+    this._addRoute(/\/\?.*sort=score/, {
+      showTabs: true,
+      backlink: false,
+      subtitle: false,
+      currentTab: 'score'
+    });
+
+    // Route for `/`.
+    this._addRoute(/.+/, {
+      showTabs: true,
+      backlink: false,
+      subtitle: false,
+      currentTab: 'newest'
+    });
   }
 
   /**
@@ -93,4 +135,3 @@ class Gulliver {
 }
 
 window.gulliver = new Gulliver();
-
