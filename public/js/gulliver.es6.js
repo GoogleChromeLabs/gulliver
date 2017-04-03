@@ -38,6 +38,7 @@ import Analytics from './analytics';
 import Router from './routing/router';
 import Route from './routing/route';
 import Shell from './shell';
+import FadeInOutTransitionStrategy from './routing/transitions';
 
 class Gulliver {
   constructor() {
@@ -59,29 +60,30 @@ class Gulliver {
     this.analytics.trackPageView(window.location.href);
   }
 
-  _addRoute(regexp, shellState) {
-    const route = new Route(regexp);
+  _addRoute(regexp, transitionStrategy, shellState) {
+    const route = new Route(regexp, transitionStrategy);
     this.shell.addState(route, shellState);
     this.router.addRoute(route);
   }
 
   _setupRoutes() {
+    const fadeInOutTransitionStrategy = new FadeInOutTransitionStrategy();
     // Route for `/pwas/add`.
-    this._addRoute(/\/pwas\/add\//, {
+    this._addRoute(/\/pwas\/add\//, fadeInOutTransitionStrategy, {
       showTabs: false,
       backlink: true,
       subtitle: true
     });
 
     // Route for `/pwas/[id]`.
-    this._addRoute(/\/pwas\/(\d+)/, {
+    this._addRoute(/\/pwas\/(\d+)/, fadeInOutTransitionStrategy, {
       showTabs: false,
       backlink: true,
       subtitle: false
     });
 
     // Route for `/?sort=score`.
-    this._addRoute(/\/\?.*sort=score/, {
+    this._addRoute(/\/\?.*sort=score/, fadeInOutTransitionStrategy, {
       showTabs: true,
       backlink: false,
       subtitle: false,
@@ -89,7 +91,7 @@ class Gulliver {
     });
 
     // Route for `/`.
-    this._addRoute(/.+/, {
+    this._addRoute(/.+/, fadeInOutTransitionStrategy, {
       showTabs: true,
       backlink: false,
       subtitle: false,

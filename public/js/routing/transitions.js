@@ -15,31 +15,14 @@
 
 /* eslint-env browser */
 
-export default class Route {
-  constructor(matchRegex, transitionStrategy) {
-    this._transitionStrategy = transitionStrategy;
-    this._matchRegex = matchRegex;
-  }
-
-  matches(url) {
-    return this._matchRegex.test(url);
-  }
-
-  retrieveContent(url) {
-    const contentUrl = this.getContentOnlyUrl(url);
-    return fetch(contentUrl)
-      .then(response => response.text());
+export default class FadeInOutTransitionStrategy {
+  transitionIn(container) {
+    console.log('Transition In');
+    container.classList.remove('transition');
   }
 
   transitionOut(container) {
-    this._transitionStrategy.transitionOut(container);
-  }
-
-  transitionIn(container) {
-    this._transitionStrategy.transitionIn(container);
-  }
-
-  getContentOnlyUrl(url) {
-    return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'contentOnly=true';
+    console.log('Transition Out');
+    container.classList.add('transition');
   }
 }
