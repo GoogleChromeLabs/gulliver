@@ -34,14 +34,19 @@ import Config from './gulliver-config';
 import SignIn from './signin';
 import OfflineSupport from './offline-support';
 import SignInButton from './ui/signin-button';
-import ClientTransition from './ui/client-transition';
 import Analytics from './analytics';
+import Router from './routing/router';
+import Route from './routing/route';
+import Shell from './shell';
+import FadeInOutTransitionStrategy from './routing/transitions';
 
 class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
-    this.offlineSupport = new OfflineSupport(window, ClientTransition);
-    ClientTransition.setup();
+    this.shell = new Shell(document);
+    this.router = new Router(window, this.shell, document.querySelector('main'));
+    this.offlineSupport = new OfflineSupport(window, this.router);
+    this._setupRoutes();
     this.setupBacklink();
     this.setupServiceWorker();
     this.setupMessaging();
@@ -53,6 +58,45 @@ class Gulliver {
     // Setup Analytics
     this.analytics = new Analytics(window, this.config);
     this.analytics.trackPageView(window.location.href);
+  }
+
+  _addRoute(regexp, transitionStrategy, shellState) {
+    const route = new Route(regexp, transitionStrategy);
+    this.shell.addState(route, shellState);
+    this.router.addRoute(route);
+  }
+
+  _setupRoutes() {
+    const fadeInOutTransitionStrategy = new FadeInOutTransitionStrategy();
+    // Route for `/pwas/add`.
+    this._addRoute(/\/pwas\/add/, fadeInOutTransitionStrategy, {
+      showTabs: false,
+      backlink: true,
+      subtitle: true
+    });
+
+    // Route for `/pwas/[id]`.
+    this._addRoute(/\/pwas\/(\d+)/, fadeInOutTransitionStrategy, {
+      showTabs: false,
+      backlink: true,
+      subtitle: false
+    });
+
+    // Route for `/?sort=score`.
+    this._addRoute(/\/\?.*sort=score/, fadeInOutTransitionStrategy, {
+      showTabs: true,
+      backlink: false,
+      subtitle: false,
+      currentTab: 'score'
+    });
+
+    // Route for `/`.
+    this._addRoute(/.+/, fadeInOutTransitionStrategy, {
+      showTabs: true,
+      backlink: false,
+      subtitle: false,
+      currentTab: 'newest'
+    });
   }
 
   /**
@@ -91,4 +135,3 @@ class Gulliver {
 }
 
 window.gulliver = new Gulliver();
-
