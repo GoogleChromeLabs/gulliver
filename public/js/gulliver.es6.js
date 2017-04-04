@@ -69,7 +69,7 @@ class Gulliver {
   _setupRoutes() {
     const fadeInOutTransitionStrategy = new FadeInOutTransitionStrategy();
     // Route for `/pwas/add`.
-    this._addRoute(/\/pwas\/add\//, fadeInOutTransitionStrategy, {
+    this._addRoute(/\/pwas\/add/, fadeInOutTransitionStrategy, {
       showTabs: false,
       backlink: true,
       subtitle: true
