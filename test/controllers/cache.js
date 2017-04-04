@@ -17,7 +17,7 @@
 'use strict';
 
 const controllersCache = require('../../controllers/cache');
-const cacheLib = require('../../lib/data-cache');
+const libCache = require('../../lib/data-cache');
 
 const express = require('express');
 const app = express();
@@ -46,33 +46,32 @@ describe('controllers.cache', () => {
     });
 
     it('Page from cache', done => {
-      simpleMock.mock(cacheLib, 'get').resolveWith('<html>PageFromCache</html>');
-      simpleMock.mock(cacheLib, 'set').resolveWith();
+      simpleMock.mock(libCache, 'get').resolveWith('<html>PageFromCache</html>');
+      simpleMock.mock(libCache, 'set').resolveWith();
       request(app)
         .get('/')
         .expect(200).should.be.fulfilled.then(res => {
-          assert.equal(cacheLib.get.callCount, 1);
+          assert.equal(libCache.get.callCount, 1);
           assert.equal(res.text, '<html>PageFromCache</html>');
           done();
         });
     });
 
     it('Not in cache, rendered directly', done => {
-      simpleMock.mock(cacheLib, 'get').rejectWith('Not in cache').resolveWith('/');
-      simpleMock.mock(cacheLib, 'set').resolveWith();
+      simpleMock.mock(libCache, 'get').rejectWith('Not in cache').resolveWith('/');
+      simpleMock.mock(libCache, 'set').resolveWith();
+      simpleMock.mock(libCache, 'storeCachedUrls').resolveWith();
       request(app)
         .get('/')
         .expect(200).should.be.fulfilled.then(res => {
           assert.equal(res.text, '<html>PageRendered</html>');
-          assert.equal(cacheLib.get.callCount, 2);
-          assert.equal(cacheLib.set.callCount, 2);
-          assert.equal(cacheLib.get.calls[0].args[0], '/');
-          assert.equal(cacheLib.set.calls[0].args[0], '/');
-          assert.equal(cacheLib.set.calls[0].args[1], '<html>PageRendered</html>');
-          // storeCachedUrls
-          assert.equal(cacheLib.get.calls[1].args[0], 'PAGELIST_URLS');
-          assert.equal(cacheLib.set.calls[1].args[0], 'PAGELIST_URLS');
-          assert.equal(cacheLib.set.calls[1].args[1][0], '/');
+          assert.equal(libCache.get.callCount, 1);
+          assert.equal(libCache.get.calls[0].args[0], '/');
+          assert.equal(libCache.set.callCount, 1);
+          assert.equal(libCache.set.calls[0].args[0], '/');
+          assert.equal(libCache.set.calls[0].args[1], '<html>PageRendered</html>');
+          assert.equal(libCache.storeCachedUrls.callCount, 1);
+          assert.equal(libCache.storeCachedUrls.calls[0].args[0], '/');
           done();
         })
         .catch(err => {

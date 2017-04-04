@@ -22,7 +22,6 @@ const lighthouseLib = require('../lib/lighthouse');
 const Pwa = require('../models/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const libMetadata = require('../lib/metadata');
-const cacheController = require('./cache');
 
 const LIST_PAGE_SIZE = 32;
 const DEFAULT_PAGE_NUMBER = 1;
@@ -66,7 +65,6 @@ router.get('/add', (req, res) => {
  * POST /pwas/add
  *
  * Create a PWA.
- * Remove list pages from cache when new PWA is added.
  */
 router.post('/add', (req, res, next) => {
   let manifestUrl = req.body.manifestUrl.trim();
@@ -92,8 +90,6 @@ router.post('/add', (req, res, next) => {
       return pwaLib.createOrUpdatePwa(pwa);
     })
     .then(savedData => {
-      // Remove list pages from cache when new PWA is added
-      cacheController.flushCacheUrls();
       res.redirect(req.baseUrl + '/' + savedData.id);
       return;
     })
