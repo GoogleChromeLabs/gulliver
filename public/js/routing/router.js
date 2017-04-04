@@ -69,22 +69,23 @@ export default class Router {
       element.addEventListener('click', e => {
         // Link does not have an url.
         if (!e.currentTarget.href) {
-          return false;
+          return true;
         }
 
         // Never catch links to external websites.
         if (!e.currentTarget.href.startsWith(this._window.location.origin)) {
-          return false;
+          return true;
         }
 
         // Check if there's a route for this url.
         const page = this.findRoute(e.currentTarget.href);
         if (!page) {
-          return false;
+          return true;
         }
 
         e.preventDefault();
         this.navigate(e.currentTarget.href);
+        return false;
       });
     });
   }
