@@ -67,6 +67,10 @@ export default class Router {
   _takeOverAnchorLinks(root) {
     root.querySelectorAll('a').forEach(element => {
       element.addEventListener('click', e => {
+        if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) {
+          return true;
+        }
+
         // Link does not have an url.
         if (!e.currentTarget.href) {
           return true;
