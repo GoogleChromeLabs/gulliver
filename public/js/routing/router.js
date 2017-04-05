@@ -64,14 +64,14 @@ export default class Router {
     this._updateContent();
   }
 
-  _isLeftClickWithoutModifiers(e) {
-    return e.button === 0 && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey;
+  _isNotLeftClickWithoutModifiers(e) {
+    return e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey;
   }
 
   _takeOverAnchorLinks(root) {
     root.querySelectorAll('a').forEach(element => {
       element.addEventListener('click', e => {
-        if (!this._isLeftClickWithoutModifiers(e)) {
+        if (this._isNotLeftClickWithoutModifiers(e)) {
           return true;
         }
 
