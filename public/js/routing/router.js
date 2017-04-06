@@ -48,6 +48,7 @@ export default class Router {
         this._window.scrollTo(0, 0);
         page.transitionIn(this._container);
         this._takeOverAnchorLinks(this._container);
+        page.onAttached();
       })
       .catch(err => {
         console.error('Error getting page content for: ', location, ' Error: ', err);

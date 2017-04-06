@@ -15,7 +15,6 @@
 
 /* eslint-env browser */
 
-import 'whatwg-fetch/fetch'; // Imports `fetch` polyfill
 import firebase from 'firebase/app';
 import 'firebase/messaging';
 

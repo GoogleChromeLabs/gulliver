@@ -20,14 +20,6 @@
 
 /* eslint-env browser */
 
-// A Promise polyfill, as used by
-// https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/Promise/config.json
-import 'yaku/dist/yaku.browser.global.min.js';
-// A fetch polyfill, as used by
-// https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
-import 'whatwg-fetch/fetch';
-
-import './loader.js';
 import Messaging from './messaging';
 import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
@@ -47,6 +39,10 @@ class Gulliver {
     this.router = new Router(window, this.shell, document.querySelector('main'));
     this.offlineSupport = new OfflineSupport(window, this.router);
     this._setupRoutes();
+    const currentPage = this.router.findRoute(window.location.href);
+    if (currentPage) {
+      currentPage.onAttached();
+    }
     this.setupBacklink();
     this.setupServiceWorker();
     this.setupMessaging();
@@ -60,8 +56,8 @@ class Gulliver {
     this.analytics.trackPageView(window.location.href);
   }
 
-  _addRoute(regexp, transitionStrategy, shellState) {
-    const route = new Route(regexp, transitionStrategy);
+  _addRoute(regexp, transitionStrategy, shellState, onAttached) {
+    const route = new Route(regexp, transitionStrategy, onAttached);
     this.shell.addState(route, shellState);
     this.router.addRoute(route);
   }
@@ -73,6 +69,11 @@ class Gulliver {
       showTabs: false,
       backlink: true,
       subtitle: true
+    }, () => {
+      import('./pwa-form').then(module => {      
+        const pwaForm = new module.PwaForm(window);
+        pwaForm.setup();
+      });          
     });
 
     // Route for `/pwas/[id]`.
@@ -80,6 +81,11 @@ class Gulliver {
       showTabs: false,
       backlink: true,
       subtitle: false
+    }, () => {
+      import('./lighthouse-chart').then(module => {      
+        const lighthouseChart = new module.LighthouseChart();
+        lighthouseChart.load();
+      });          
     });
 
     // Route for `/?sort=score`.
