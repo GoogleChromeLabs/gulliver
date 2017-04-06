@@ -44,7 +44,7 @@ export default class Router {
     route.retrieveContent(location)
       .then(content => {
         this._container.innerHTML = content;
-        this._shell.updateState(route);
+        this._shell.onRouteChange(route);
         this._window.scrollTo(0, 0);
         route.transitionIn(this._container);
         this._takeOverAnchorLinks(this._container);

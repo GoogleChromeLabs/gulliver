@@ -24,8 +24,8 @@ export default class Shell {
     this._states = new Map();
   }
 
-  addState(route, state) {
-    this._states.set(route, state);
+  setStateForRoute(route, shellState) {
+    this._states.set(route, shellState);
   }
 
   _showElement(element, visible) {
@@ -49,7 +49,7 @@ export default class Shell {
     tab.classList.remove('activetab');
   }
 
-  updateState(route) {
+  onRouteChange(route) {
     const options = this._states.get(route);
     this._showElement(this._backlink, options.backlink);
     this._showElement(this._subtitle, options.subtitle);
