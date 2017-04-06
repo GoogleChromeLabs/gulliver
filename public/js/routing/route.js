@@ -16,9 +16,10 @@
 /* eslint-env browser */
 
 export default class Route {
-  constructor(matchRegex, transitionStrategy) {
+  constructor(matchRegex, transitionStrategy, onAttached) {
     this._transitionStrategy = transitionStrategy;
     this._matchRegex = matchRegex;
+    this._onAttached = onAttached;
   }
 
   matches(url) {
@@ -37,6 +38,10 @@ export default class Route {
 
   transitionIn(container) {
     this._transitionStrategy.transitionIn(container);
+  }
+
+  onAttached() {
+    return this._onAttached && this._onAttached();
   }
 
   getContentOnlyUrl(url) {

@@ -15,7 +15,7 @@
 
 /* eslint-env browser */
 
-class PwaForm {
+export class PwaForm {
   constructor(window) {
     this.window = window;
     this.signIn = window.gulliver.signIn;
@@ -61,8 +61,3 @@ class PwaForm {
     });
   }
 }
-
-// TODO: Setting pwaForm to window is a temporary hack to make the Form work after a transition.
-// To be removed before refactoring is finished.
-window.__pwaForm = new PwaForm(window);
-window.__pwaForm.setup();

@@ -3,13 +3,12 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    'gulliver': './public/js/gulliver.es6.js',
-    'pwa-form': './public/js/pwa-form.es6.js',
-    'lighthouse-chart': './public/js/lighthouse-chart.es6.js'
+    'gulliver': './public/js/gulliver.es6.js'
   },
   output: {
     path: path.join(__dirname, 'public/js'),
-    filename: '[name].js'
+    filename: '[name].js',
+    publicPath: '/js/'
   },
   module: {
     loaders: [
@@ -19,7 +18,7 @@ module.exports = {
         exclude: /node_modules/,
         query: {
           presets: ['es2015'],
-          plugins: ['transform-runtime']
+          plugins: ['transform-runtime', 'syntax-dynamic-import']
         }
       }
     ]
