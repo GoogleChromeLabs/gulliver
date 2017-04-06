@@ -20,14 +20,6 @@
 
 /* eslint-env browser */
 
-// A Promise polyfill, as used by
-// https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/Promise/config.json
-import 'yaku/dist/yaku.browser.global.min.js';
-// A fetch polyfill, as used by
-// https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
-import 'whatwg-fetch/fetch';
-
-import './loader.js';
 import Messaging from './messaging';
 import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
