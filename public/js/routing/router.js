@@ -33,20 +33,20 @@ export default class Router {
 
   _updateContent() {
     const location = this._window.document.location.href;
-    const page = this.findRoute(location);
-    if (!page) {
+    const route = this.findRoute(location);
+    if (!route) {
       console.error('Url did not match any router: ', location);
       // TODO: navigate to 404?
       return;
     }
 
-    page.transitionOut(this._container);
-    page.retrieveContent(location)
+    route.transitionOut(this._container);
+    route.retrieveContent(location)
       .then(content => {
         this._container.innerHTML = content;
-        this._shell.afterAttach(page);
+        this._shell.updateState(route);
         this._window.scrollTo(0, 0);
-        page.transitionIn(this._container);
+        route.transitionIn(this._container);
         this._takeOverAnchorLinks(this._container);
       })
       .catch(err => {
@@ -86,8 +86,8 @@ export default class Router {
         }
 
         // Check if there's a route for this url.
-        const page = this.findRoute(e.currentTarget.href);
-        if (!page) {
+        const route = this.findRoute(e.currentTarget.href);
+        if (!route) {
           return true;
         }
 
