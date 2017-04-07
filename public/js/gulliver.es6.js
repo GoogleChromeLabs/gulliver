@@ -62,7 +62,7 @@ class Gulliver {
 
   _addRoute(regexp, transitionStrategy, shellState) {
     const route = new Route(regexp, transitionStrategy);
-    this.shell.addState(route, shellState);
+    this.shell.setStateForRoute(route, shellState);
     this.router.addRoute(route);
   }
 
