@@ -7,9 +7,5 @@ npm-debug.log
 key.json
 public/js/gulliver.js
 public/js/gulliver.js.map
-public/js/lighthouse-chart.js
-public/js/lighthouse-chart.js.map
-public/js/pwa-form.js
-public/js/pwa-form.js.map
 public/firebase-messaging-sw.js
 
