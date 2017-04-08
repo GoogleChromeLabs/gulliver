@@ -41,11 +41,10 @@ export default class LighthouseChart {
       script.defer = true;
       script.src = 'https://www.gstatic.com/charts/loader.js';
       script.onload = () => {
-        console.log(window.google);
         resolve(window.google);
       }
       script.onerror = reject;
-      document.querySelector('head').appendChild(script);
+      document.head.appendChild(script);
     });
   }
   load() {

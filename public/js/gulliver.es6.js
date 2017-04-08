@@ -97,8 +97,10 @@ class Gulliver {
       subtitle: false
     });
 
+    const nop = () => {};
+
     // Route for `/?sort=score`.
-    this._addRoute(/\/\?.*sort=score/, fadeInOutTransitionStrategy, null, {
+    this._addRoute(/\/\?.*sort=score/, fadeInOutTransitionStrategy, nop, {
       showTabs: true,
       backlink: false,
       subtitle: false,
@@ -106,7 +108,7 @@ class Gulliver {
     });
 
     // Route for `/`.
-    this._addRoute(/.+/, fadeInOutTransitionStrategy, null, {
+    this._addRoute(/.+/, fadeInOutTransitionStrategy, nop, {
       showTabs: true,
       backlink: false,
       subtitle: false,
