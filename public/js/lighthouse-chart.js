@@ -22,17 +22,38 @@ import Loader from './loader';
  */
 const CHART_BASE_URL = '/api/lighthouse/graph/';
 
-class LighthouseChart {
+export default class LighthouseChart {
 
   constructor() {
     this.chartElement = document.getElementById('chart');
     this.loader = new Loader(this.chartElement, 'dark-primary-background');
   }
 
+  _loadChartsApi() {
+    if (window.google && window.google.charts) {
+      console.log('Googler Charts Loader already loaded');      
+      return Promise.resolve(window.google);
+    }
+
+    console.log('Loading Googler Charts Loader');
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.defer = true;
+      script.src = 'https://www.gstatic.com/charts/loader.js';
+      script.onload = () => {
+        resolve(window.google);
+      }
+      script.onerror = reject;
+      document.head.appendChild(script);
+    });
+  }
   load() {
     this.loader.show();
-    google.charts.load('current', {packages: ['annotationchart']});
-    google.charts.setOnLoadCallback(this.drawChart.bind(this));
+    this._loadChartsApi()
+      .then(google => {
+        google.charts.load('current', {packages: ['annotationchart']});
+        google.charts.setOnLoadCallback(this.drawChart.bind(this));
+      });
   }
 
   drawChart() {
@@ -68,4 +89,3 @@ class LighthouseChart {
       });
   }
 }
-new LighthouseChart().load();

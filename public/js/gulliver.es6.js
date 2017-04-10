@@ -27,7 +27,6 @@ import 'yaku/dist/yaku.browser.global.min.js';
 // https://github.com/Financial-Times/polyfill-service/blob/master/polyfills/fetch/config.json
 import 'whatwg-fetch/fetch';
 
-import './loader.js';
 import Messaging from './messaging';
 import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
@@ -39,6 +38,8 @@ import Router from './routing/router';
 import Route from './routing/route';
 import Shell from './shell';
 import FadeInOutTransitionStrategy from './routing/transitions';
+import PwaForm from './pwa-form';
+import LighthouseChart from './lighthouse-chart';
 
 class Gulliver {
   constructor() {
@@ -55,13 +56,18 @@ class Gulliver {
     this.signIn = new SignIn(window, this.config);
     this.signInButton = new SignInButton(this.signIn, document.querySelector('#auth-button'));
 
+    const currentRoute = this.router.findRoute(window.location.href);
+    if (currentRoute) {
+      currentRoute.onAttached();
+    }
+
     // Setup Analytics
     this.analytics = new Analytics(window, this.config);
     this.analytics.trackPageView(window.location.href);
   }
 
-  _addRoute(regexp, transitionStrategy, shellState) {
-    const route = new Route(regexp, transitionStrategy);
+  _addRoute(regexp, transitionStrategy, onRouteAttached, shellState) {
+    const route = new Route(regexp, transitionStrategy, onRouteAttached);
     this.shell.setStateForRoute(route, shellState);
     this.router.addRoute(route);
   }
@@ -69,21 +75,32 @@ class Gulliver {
   _setupRoutes() {
     const fadeInOutTransitionStrategy = new FadeInOutTransitionStrategy();
     // Route for `/pwas/add`.
-    this._addRoute(/\/pwas\/add/, fadeInOutTransitionStrategy, {
+    const setupPwaForm = () => {
+      const pwaForm = new PwaForm(window, this.signIn);
+      pwaForm.setup();
+    };
+
+    this._addRoute(/\/pwas\/add/, fadeInOutTransitionStrategy, setupPwaForm, {
       showTabs: false,
       backlink: true,
       subtitle: true
     });
 
+    const setupLighthouseChart = () => {
+      new LighthouseChart().load();
+    };
+
     // Route for `/pwas/[id]`.
-    this._addRoute(/\/pwas\/(\d+)/, fadeInOutTransitionStrategy, {
+    this._addRoute(/\/pwas\/(\d+)/, fadeInOutTransitionStrategy, setupLighthouseChart, {
       showTabs: false,
       backlink: true,
       subtitle: false
     });
 
+    const nop = () => {};
+
     // Route for `/?sort=score`.
-    this._addRoute(/\/\?.*sort=score/, fadeInOutTransitionStrategy, {
+    this._addRoute(/\/\?.*sort=score/, fadeInOutTransitionStrategy, nop, {
       showTabs: true,
       backlink: false,
       subtitle: false,
@@ -91,7 +108,7 @@ class Gulliver {
     });
 
     // Route for `/`.
-    this._addRoute(/.+/, fadeInOutTransitionStrategy, {
+    this._addRoute(/.+/, fadeInOutTransitionStrategy, nop, {
       showTabs: true,
       backlink: false,
       subtitle: false,

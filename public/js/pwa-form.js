@@ -15,27 +15,27 @@
 
 /* eslint-env browser */
 
-class PwaForm {
-  constructor(window) {
-    this.window = window;
-    this.signIn = window.gulliver.signIn;
+export default class PwaForm {
+  constructor(window, signIn) {
+    this._window = window;
+    this._signIn = signIn;
   }
 
   setup() {
     console.log('Setting up PWA Form');
-    this.pwaForm = document.querySelector('#pwaForm');
-    if (!this.pwaForm) {
+    this._pwaForm = document.querySelector('#pwaForm');
+    if (!this._pwaForm) {
       console.log('%c#pwaForm not found.', 'color:red');
       return;
     }
 
-    this.idTokenInput = this.pwaForm.querySelector('#idToken');
-    if (!this.idTokenInput) {
+    this._idTokenInput = this._pwaForm.querySelector('#idToken');
+    if (!this._idTokenInput) {
       console.log('%c#idToken not found.', 'color:red');
     }
 
-    this.submitButton = this.pwaForm.querySelector('#pwaSubmit');
-    if (!this.idTokenInput) {
+    this._submitButton = this._pwaForm.querySelector('#pwaSubmit');
+    if (!this._idTokenInput) {
       console.log('%c#pwaSubmit not found.', 'color:red');
     }
 
@@ -44,7 +44,7 @@ class PwaForm {
   }
 
   _updateFormFields() {
-    this.idTokenInput.setAttribute('value', this.signIn.signedIn ? this.signIn.idToken : '');
+    this._idTokenInput.setAttribute('value', this._signIn.signedIn ? this._signIn.idToken : '');
   }
 
   /**
@@ -52,17 +52,12 @@ class PwaForm {
    */
   _setupListeners() {
     // Setup listener for the userchange event.
-    window.addEventListener('userchange', this._updateFormFields.bind(this));
+    this._window.addEventListener('userchange', this._updateFormFields.bind(this));
 
     // Disable the save button after been clicked to avoid double submission.
-    this.submitButton.addEventListener('click', _ => {
-      this.submitButton.disabled = true;
-      this.pwaForm.submit();
+    this._submitButton.addEventListener('click', _ => {
+      this._submitButton.disabled = true;
+      this._pwaForm.submit();
     });
   }
 }
-
-// TODO: Setting pwaForm to window is a temporary hack to make the Form work after a transition.
-// To be removed before refactoring is finished.
-window.__pwaForm = new PwaForm(window);
-window.__pwaForm.setup();
