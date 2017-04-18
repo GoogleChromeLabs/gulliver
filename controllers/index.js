@@ -38,9 +38,6 @@ router.get('/', (req, res) => {
   router.handle(req, res);
 });
 
-// Transitions
-router.use('/transitions', require('./transition'));
-
 // ServiceWorker
 router.use('/js', require('./sw'));
 
