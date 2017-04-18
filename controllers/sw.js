@@ -21,9 +21,7 @@ const asset = require('../lib/asset-hashing').asset;
 
 const ASSETS = JSON.stringify([
   '/css/style.css',
-  '/js/gulliver.js',
-  '/js/pwas-list-transition.js',
-  '/js/pwas-view-transition.js'
+  '/js/gulliver.js'
 ].map(assetPath => asset.encode(assetPath)));
 
 const ASSETS_JS = `const ASSETS = ${ASSETS};`;
