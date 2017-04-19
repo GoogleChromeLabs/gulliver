@@ -17,7 +17,7 @@ const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 
 // URL to return in place of the "offline dino" when client is
 // offline and requests a URL that's not in the cache.
-const OFFLINE_URL = '/.shell/offline';
+const OFFLINE_URL = '/.app/offline';
 
 const OFFLINE = [
   OFFLINE_URL,
