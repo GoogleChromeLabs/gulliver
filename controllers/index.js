@@ -42,7 +42,7 @@ router.get('/', (req, res) => {
 router.use('/js', require('./sw'));
 
 // /.shell hosts app shell dependencies
-router.use('/.shell', require('./shell'));
+router.use('/.app', require('./app'));
 
 /**
  * This route is used to send config.json to firebase-messaging-sw.js
