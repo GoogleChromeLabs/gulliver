@@ -45,8 +45,6 @@ export default class EventTarget {
       return;
     }
 
-    typeListeners.forEach(callback => {
-      callback(event);
-    });
+    typeListeners.forEach(callback => callback(event));
   }
 }
