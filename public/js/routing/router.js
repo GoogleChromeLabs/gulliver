@@ -15,10 +15,12 @@
 
 /* eslint-env browser */
 
-export default class Router {
-  constructor(window, shell, container) {
+import EventTarget from 'event-target-shim/dist/event-target-shim.min.js';
+
+export default class Router extends EventTarget {
+  constructor(window, container) {
+    super();
     this._routes = [];
-    this._shell = shell;
     this._window = window;
     this._container = container;
     this._document = window.document;
@@ -45,11 +47,11 @@ export default class Router {
     route.retrieveContent(location)
       .then(content => {
         this._container.innerHTML = content;
-        this._shell.onRouteChange(route);
         this._window.scrollTo(0, 0);
         route.transitionIn(this._container);
         this._takeOverAnchorLinks(this._container);
         route.onAttached();
+        this._dispatchNavigateEvent(location, route);
       })
       .catch(err => {
         console.error('Error getting page content for: ', location, ' Error: ', err);
@@ -72,10 +74,21 @@ export default class Router {
       this._updateContent();
       return;
     }
-    const location = this._window.document.location.href;
+    const location = this._document.location.href;
     const route = this.findRoute(location);
     this._takeOverAnchorLinks(this._container);
     route.onAttached();
+  }
+
+  _dispatchNavigateEvent(url, route) {
+    const event = this._document.createEvent('CustomEvent');
+    const detail = {
+      url: url,
+      route: route
+    };
+    event.initCustomEvent(
+        'navigate', /* bubbles */ false, /* cancelable */ false, detail);
+    this.dispatchEvent(event);
   }
 
   _isNotLeftClickWithoutModifiers(e) {

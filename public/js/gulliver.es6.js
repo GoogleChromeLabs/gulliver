@@ -45,7 +45,7 @@ class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
     this.shell = new Shell(document);
-    this.router = new Router(window, this.shell, document.querySelector('main'));
+    this.router = new Router(window, document.querySelector('main'));
     this.offlineSupport = new OfflineSupport(window, this.router);
     this._setupRoutes();
     this.setupBacklink();
@@ -59,6 +59,10 @@ class Gulliver {
     // Setup Analytics
     this.analytics = new Analytics(window, this.config);
     this.analytics.trackPageView(window.location.href);
+    this.router.addEventListener('navigate', e => {
+      this.analytics.trackPageView(e.detail.url);
+      this.shell.onRouteChange(e.detail.route);
+    });
   }
 
   _addRoute(regexp, transitionStrategy, onRouteAttached, shellState) {
