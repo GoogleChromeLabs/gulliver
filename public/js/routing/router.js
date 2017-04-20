@@ -15,15 +15,15 @@
 
 /* eslint-env browser */
 
-import EventTarget from 'event-target-shim/dist/event-target-shim.min.js';
+import EventTarget from '../eventtarget';
 
-export default class Router extends EventTarget {
+export default class Router {
   constructor(window, container) {
-    super();
     this._routes = [];
     this._window = window;
     this._container = container;
     this._document = window.document;
+    this._eventTarget = new EventTarget();
 
     // Update UI when back is pressed.
     this._window.addEventListener('popstate', this._updateContent.bind(this));
@@ -32,6 +32,10 @@ export default class Router extends EventTarget {
 
   findRoute(url) {
     return this._routes.find(route => route.matches(url));
+  }
+
+  addEventListener(type, callback) {
+    this._eventTarget.addEventListener(type, callback);
   }
 
   _updateContent() {
@@ -88,7 +92,7 @@ export default class Router extends EventTarget {
     };
     event.initCustomEvent(
         'navigate', /* bubbles */ false, /* cancelable */ false, detail);
-    this.dispatchEvent(event);
+    this._eventTarget.dispatchEvent(event);
   }
 
   _isNotLeftClickWithoutModifiers(e) {
