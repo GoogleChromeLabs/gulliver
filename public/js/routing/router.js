@@ -15,7 +15,7 @@
 
 /* eslint-env browser */
 
-import EventTarget from '../eventtarget';
+import EventTarget from '../event-target';
 
 export default class Router {
   constructor(window, container) {
