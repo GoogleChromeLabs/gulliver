@@ -60,7 +60,7 @@ toolbox.router.get(/.*\.(js|png|svg|jpg|css)$/, (request, values, options) => {
 });
 
 /**
- * Utility method to retrueve a url from the `toolbox.options.cache.name` cache
+ * Utility method to retrieve a url from the `toolbox.options.cache.name` cache
  *
  * @param {*} url url to be requested fromt he cache.
  */
