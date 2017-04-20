@@ -18,9 +18,11 @@ const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 // URL to return in place of the "offline dino" when client is
 // offline and requests a URL that's not in the cache.
 const OFFLINE_URL = '/.app/offline';
+const SHELL_URL = '/.app/shell';
 
 const OFFLINE = [
   OFFLINE_URL,
+  SHELL_URL,
   '/favicons/android-chrome-72x72.png',
   '/manifest.json',
   '/img/GitHub-Mark-Light-24px.png',
@@ -57,19 +59,39 @@ toolbox.router.get(/.*\.(js|png|svg|jpg|css)$/, (request, values, options) => {
   return toolbox.cacheFirst(request, values, options);
 });
 
-toolbox.router.default = (request, values, options) => {
+/**
+ * Utility method to retrieve a url from the `toolbox.options.cache.name` cache
+ *
+ * @param {*} url url to be requested fromt he cache.
+ */
+const getFromCache = url => {
+  return caches.open(toolbox.options.cache.name)
+    .then(cache => cache.match(url));
+};
+
+/**
+ * A sw-toolbox handler that tries to serve content using networkFirst, and if
+ * it fails, returns a custom offline page.
+ */
+const gulliverHandler = (request, values, options) => {
   return toolbox.networkFirst(request, values, options)
     .catch(_ => {
       // networkFirst failed (no network and not in cache)
-      return caches.open(toolbox.options.cache.name).then(cache => {
-        return cache.match(OFFLINE_URL).then(response => {
-          return response || new Response('', {
-            status: 500,
-            statusText: 'Offline Page Missing'
-          });
+      getFromCache(OFFLINE_URL).then(response => {
+        return response || new Response('', {
+          status: 500,
+          statusText: 'Offline Page Missing'
         });
       });
     });
+};
+
+toolbox.router.default = (request, values, options) => {
+  if (request.mode === 'navigate') {
+    return getFromCache(SHELL_URL)
+      .then(response => response || gulliverHandler(request, values, options));
+  }
+  return gulliverHandler(request, values, options);
 };
 
 // Claim all clients and delete old caches that are no longer needed.

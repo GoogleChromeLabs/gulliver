@@ -21,6 +21,7 @@ export default class Router {
     this._shell = shell;
     this._window = window;
     this._container = container;
+    this._document = window.document;
 
     // Update UI when back is pressed.
     this._window.addEventListener('popstate', this._updateContent.bind(this));
@@ -63,6 +64,18 @@ export default class Router {
     console.log('Navigating To: ', url);
     this._window.history.pushState(null, null, url);
     this._updateContent();
+  }
+
+  setupInitialRoute() {
+    const body = this._document.querySelector('body');
+    if (body.hasAttribute('data-empty-shell')) {
+      this._updateContent();
+      return;
+    }
+    const location = this._window.document.location.href;
+    const route = this.findRoute(location);
+    this._takeOverAnchorLinks(this._container);
+    route.onAttached();
   }
 
   _isNotLeftClickWithoutModifiers(e) {

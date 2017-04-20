@@ -56,11 +56,6 @@ class Gulliver {
     this.signIn = new SignIn(window, this.config);
     this.signInButton = new SignInButton(this.signIn, document.querySelector('#auth-button'));
 
-    const currentRoute = this.router.findRoute(window.location.href);
-    if (currentRoute) {
-      currentRoute.onAttached();
-    }
-
     // Setup Analytics
     this.analytics = new Analytics(window, this.config);
     this.analytics.trackPageView(window.location.href);
@@ -114,6 +109,8 @@ class Gulliver {
       subtitle: false,
       currentTab: 'newest'
     });
+
+    this.router.setupInitialRoute();
   }
 
   /**
