@@ -15,13 +15,15 @@
 
 /* eslint-env browser */
 
+import EventTarget from '../event-target';
+
 export default class Router {
-  constructor(window, shell, container) {
+  constructor(window, container) {
     this._routes = [];
-    this._shell = shell;
     this._window = window;
     this._container = container;
     this._document = window.document;
+    this._eventTarget = new EventTarget();
 
     // Update UI when back is pressed.
     this._window.addEventListener('popstate', this._updateContent.bind(this));
@@ -30,6 +32,10 @@ export default class Router {
 
   findRoute(url) {
     return this._routes.find(route => route.matches(url));
+  }
+
+  addEventListener(type, callback) {
+    this._eventTarget.addEventListener(type, callback);
   }
 
   _updateContent() {
@@ -45,11 +51,11 @@ export default class Router {
     route.retrieveContent(location)
       .then(content => {
         this._container.innerHTML = content;
-        this._shell.onRouteChange(route);
         this._window.scrollTo(0, 0);
         route.transitionIn(this._container);
         this._takeOverAnchorLinks(this._container);
         route.onAttached();
+        this._dispatchNavigateEvent(location, route);
       })
       .catch(err => {
         console.error('Error getting page content for: ', location, ' Error: ', err);
@@ -72,10 +78,21 @@ export default class Router {
       this._updateContent();
       return;
     }
-    const location = this._window.document.location.href;
+    const location = this._document.location.href;
     const route = this.findRoute(location);
     this._takeOverAnchorLinks(this._container);
     route.onAttached();
+  }
+
+  _dispatchNavigateEvent(url, route) {
+    const event = this._document.createEvent('CustomEvent');
+    const detail = {
+      url: url,
+      route: route
+    };
+    event.initCustomEvent(
+        'navigate', /* bubbles */ false, /* cancelable */ false, detail);
+    this._eventTarget.dispatchEvent(event);
   }
 
   _isNotLeftClickWithoutModifiers(e) {
