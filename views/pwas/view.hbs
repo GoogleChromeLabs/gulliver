@@ -22,6 +22,8 @@
     <main>
 {{/unless}}
       {{> pwadetails pwa=pwa}}
+      {{> webpagetest}}
+      {{> pagespeedinsight}}
       {{> lighthouse lighthouse=lighthouse}}
       {{#if pwa.manifest}}
       <div class="detail-general">

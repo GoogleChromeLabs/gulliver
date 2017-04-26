@@ -20,18 +20,17 @@ import Loader from './loader';
 /**
  * Use to make the API request to get the Lighthouse chart data for a PWA.
  */
-const CHART_BASE_URL = '/api/lighthouse/graph/';
+export default class Chart {
 
-export default class LighthouseChart {
-
-  constructor() {
-    this.chartElement = document.getElementById('chart');
+  constructor(chartElementId, chartBaseUrl) {
+    this.chartElement = document.getElementById(chartElementId);
+    this.baseUrl = chartBaseUrl;
     this.loader = new Loader(this.chartElement, 'dark-primary-background');
   }
 
   _loadChartsApi() {
     if (window.google && window.google.charts) {
-      console.log('Googler Charts Loader already loaded');      
+      console.log('Googler Charts Loader already loaded');
       return Promise.resolve(window.google);
     }
 
@@ -42,7 +41,7 @@ export default class LighthouseChart {
       script.src = 'https://www.gstatic.com/charts/loader.js';
       script.onload = () => {
         resolve(window.google);
-      }
+      };
       script.onerror = reject;
       document.head.appendChild(script);
     });
@@ -62,7 +61,7 @@ export default class LighthouseChart {
       return;
     }
     const pagewith = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    fetch(CHART_BASE_URL + pwaId)
+    fetch(this.baseUrl + pwaId + '?graph=true')
       .then(response => response.json())
       .then(jsonData => {
         // Create our data table out of JSON data loaded from server.

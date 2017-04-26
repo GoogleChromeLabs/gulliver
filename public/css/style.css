@@ -371,7 +371,7 @@ body:not(.transition) #pwa:hover {
 }
 
 /* Lighthouse graph */
-#chart {
+.chart {
   width: 100%;
   min-height: 276px;
   padding: 16px;
@@ -380,13 +380,13 @@ body:not(.transition) #pwa:hover {
   border-color: #ccc;
   position: relative;
 }
-#chart #chart-missing {
+.chart #chart-missing {
   position: absolute;
   text-align: center;
   top: 45%;
   width: 100%;
 }
-#chart #chart-missing.fadeIn {
+.chart #chart-missing.fadeIn {
   display: block;
 }
 #chart_AnnotationChart_borderDiv {

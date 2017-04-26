@@ -39,7 +39,7 @@ import Route from './routing/route';
 import Shell from './shell';
 import FadeInOutTransitionStrategy from './routing/transitions';
 import PwaForm from './pwa-form';
-import LighthouseChart from './lighthouse-chart';
+import Charts from './charts';
 
 class Gulliver {
   constructor() {
@@ -85,12 +85,14 @@ class Gulliver {
       subtitle: true
     });
 
-    const setupLighthouseChart = () => {
-      new LighthouseChart().load();
+    const setupCharts = () => {
+      new Charts('lighthouse-chart', '/api/lighthouse/graph/').load();
+      new Charts('psi-chart', 'https://web-performance-dot-pwa-directory.appspot.com/pagespeedreport/').load();
+      new Charts('wpt-chart', 'https://web-performance-dot-pwa-directory.appspot.com/webpagetestreport/').load();
     };
 
     // Route for `/pwas/[id]`.
-    this._addRoute(/\/pwas\/(\d+)/, fadeInOutTransitionStrategy, setupLighthouseChart, {
+    this._addRoute(/\/pwas\/(\d+)/, fadeInOutTransitionStrategy, setupCharts, {
       showTabs: false,
       backlink: true,
       subtitle: false
