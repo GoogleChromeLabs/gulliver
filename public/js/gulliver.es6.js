@@ -39,7 +39,13 @@ import Route from './routing/route';
 import Shell from './shell';
 import FadeInOutTransitionStrategy from './routing/transitions';
 import PwaForm from './pwa-form';
-import Charts from './charts';
+import Chart from './chart';
+
+const CHART_BASE_URLS = {
+  lighthouse: '/api/lighthouse/graph/PWAID',
+  psi: 'https://web-performance-dot-pwa-directory.appspot.com/pagespeedreport/PWAID?graph=true',
+  wpt: 'https://web-performance-dot-pwa-directory.appspot.com/webpagetestreport/PWAID?graph=true'
+};
 
 class Gulliver {
   constructor() {
@@ -86,9 +92,14 @@ class Gulliver {
     });
 
     const setupCharts = () => {
-      new Charts('lighthouse-chart', '/api/lighthouse/graph/').load();
-      new Charts('psi-chart', 'https://web-performance-dot-pwa-directory.appspot.com/pagespeedreport/').load();
-      new Charts('wpt-chart', 'https://web-performance-dot-pwa-directory.appspot.com/webpagetestreport/').load();
+      const generateChartConfig = chartElement => {
+        const pwaId = chartElement.getAttribute('pwa');
+        const type = chartElement.getAttribute('type');
+        const url = CHART_BASE_URLS[type].replace('PWAID', pwaId);
+        return {chartElement: chartElement, url: url};
+      };
+      const charts = Array.from(document.getElementsByClassName('chart'));
+      charts.forEach(chart => new Chart(generateChartConfig(chart)).load());
     };
 
     // Route for `/pwas/[id]`.
