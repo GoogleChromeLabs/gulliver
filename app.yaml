@@ -11,8 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-runtime: nodejs
-vm: true
+runtime: custom
+env: flex
 
 # Temporary setting to keep gcloud from uploading node_modules
 skip_files:
