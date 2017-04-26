@@ -16,9 +16,9 @@
 /* global describe it afterEach before */
 'use strict';
 
-const libImages = require('../../lib/images');
-const dataFetcher = require('../../lib/data-fetcher');
-const Manifest = require('../../models/manifest');
+const libImages = require('../../../lib/images');
+const dataFetcher = require('../../../lib/data-fetcher');
+const Manifest = require('../../../models/manifest');
 
 const httpMocks = require('node-mocks-http');
 const simpleMock = require('simple-mock');
@@ -29,7 +29,7 @@ chai.should();
 const assert = require('chai').assert;
 
 const MANIFEST_URL = 'https://mobile.twitter.com/manifest.json';
-const MANIFEST_DATA = './test/manifests/inline-image-large-content.json';
+const MANIFEST_DATA = './test/app/manifests/inline-image-large-content.json';
 
 describe('lib.images', () => {
   let manifest;

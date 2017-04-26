@@ -16,11 +16,11 @@
 /* global describe it before afterEach */
 'use strict';
 
-const controllerTasks = require('../../controllers/tasks');
-const tasksLib = require('../../lib/tasks');
-const pwaLib = require('../../lib/pwa');
-const Pwa = require('../../models/pwa');
-const Task = require('../../models/task');
+const controllerTasks = require('../../../controllers/tasks');
+const tasksLib = require('../../../lib/tasks');
+const pwaLib = require('../../../lib/pwa');
+const Pwa = require('../../../models/pwa');
+const Task = require('../../../models/task');
 
 const express = require('express');
 const app = express();

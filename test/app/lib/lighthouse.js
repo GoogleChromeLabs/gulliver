@@ -16,8 +16,8 @@
 /* global describe it */
 'use strict';
 
-const lighthouseLib = require('../../lib/lighthouse');
-const dataFetcher = require('../../lib/data-fetcher');
+const lighthouseLib = require('../../../lib/lighthouse');
+const dataFetcher = require('../../../lib/data-fetcher');
 
 let simpleMock = require('simple-mock');
 let chai = require('chai');
@@ -26,7 +26,7 @@ chai.use(chaiAsPromised);
 chai.should();
 let assert = require('chai').assert;
 
-const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
+const LIGHTHOUSE_JSON_EXAMPLE = './test/app/lib/lighthouse-example.json';
 
 describe('lib.lighthouse', () => {
   it('processLighthouseJson(lighthouse-example.json) should work', () => {

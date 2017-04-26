@@ -15,24 +15,28 @@
 
 export default class EventTarget {
   constructor() {
-    this.listeners = new Map();
+    this._listeners = new Map();
   }
 
   addEventListener(type, callback) {
-    let typeListeners = this.listeners.get(type);
+    let typeListeners = this._listeners.get(type);
     if (!typeListeners) {
       typeListeners = new Set();
-      this.listeners.set(type, typeListeners);
+      this._listeners.set(type, typeListeners);
     }
     typeListeners.add(callback);
   }
 
   removeEventListener(type, callback) {
-    const typeListeners = this.listeners.get(type);
+    const typeListeners = this._listeners.get(type);
     if (!typeListeners) {
       return;
     }
     typeListeners.delete(callback);
+  }
+
+  getEventListeners(type) {
+    return this._listeners.get(type);
   }
 
   dispatchEvent(event) {
@@ -40,7 +44,7 @@ export default class EventTarget {
       return;
     }
 
-    const typeListeners = this.listeners.get(event.type);
+    const typeListeners = this._listeners.get(event.type);
     if (!typeListeners) {
       return;
     }

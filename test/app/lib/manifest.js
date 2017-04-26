@@ -24,35 +24,35 @@ const assert = require('chai').assert;
 chai.use(chaiAsPromised);
 chai.should();
 
-const libManifest = require('../../lib/manifest');
+const libManifest = require('../../../lib/manifest');
 
 describe('lib.manifest', () => {
   describe('#validateManifest', () => {
     // We assume lighthouse has tests for the manifest parser, just run some
     // minimal smoke tests here.
     it('returns empty array if manifest ok', () => {
-      const manifest = fs.readFileSync('./test/manifests/icon-url-with-parameter.json');
+      const manifest = fs.readFileSync('./test/app/manifests/icon-url-with-parameter.json');
       const manifestUrl = 'https://example.com/';
       const documentUrl = 'https://www.example.com/';
       const actual = libManifest.validateManifest(manifest, manifestUrl, documentUrl);
       assert.deepEqual(actual, []);
     });
     it('returns same-origin error if documentUrl does not match', () => {
-      const manifest = fs.readFileSync('./test/manifests/icon-url-with-parameter.json');
+      const manifest = fs.readFileSync('./test/app/manifests/icon-url-with-parameter.json');
       const manifestUrl = 'https://example.com/';
       const documentUrl = 'https://bar.com/';
       const actual = libManifest.validateManifest(manifest, manifestUrl, documentUrl);
       assert.deepEqual(actual, ['ERROR: start_url must be same-origin as document']);
     });
     it('returns icon error if icon value invalid', () => {
-      const manifest = fs.readFileSync('./test/manifests/no-icon-array.json');
+      const manifest = fs.readFileSync('./test/app/manifests/no-icon-array.json');
       const manifestUrl = 'https://example.com/';
       const documentUrl = 'https://bar.com/';
       const actual = libManifest.validateManifest(manifest, manifestUrl, documentUrl);
       assert.deepEqual(actual, ['ERROR: \'icons\' expected to be an array but is not.']);
     });
     it('returns multiple errors if start_url and theme_color invalid', () => {
-      const manifest = fs.readFileSync('./test/manifests/invalid-theme-color.json');
+      const manifest = fs.readFileSync('./test/app/manifests/invalid-theme-color.json');
       const manifestUrl = 'https://example.com/';
       const documentUrl = 'https://bar.com/';
       const actual = libManifest.validateManifest(manifest, manifestUrl, documentUrl);

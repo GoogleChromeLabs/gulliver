@@ -17,8 +17,8 @@
 'use strict';
 
 const assert = require('assert');
-const Manifest = require('../../models/manifest');
-const Pwa = require('../../models/pwa');
+const Manifest = require('../../../models/manifest');
+const Pwa = require('../../../models/pwa');
 
 const MANIFEST_URL = 'http://www.example.com/';
 

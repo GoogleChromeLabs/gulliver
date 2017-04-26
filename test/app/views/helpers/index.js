@@ -17,7 +17,7 @@
 'use strict';
 
 let assert = require('assert');
-let helpers = require('../../../views/helpers');
+let helpers = require('../../../../views/helpers');
 
 describe('views.helpers', () => {
   describe('#contrastColor', () => {

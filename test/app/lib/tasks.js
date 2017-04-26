@@ -16,13 +16,13 @@
 /* global describe it before afterEach */
 'use strict';
 
-let dataFetcher = require('../../lib/data-fetcher');
-let libTasks = require('../../lib/tasks');
-let libPwa = require('../../lib/pwa');
-let db = require('../../lib/model-datastore');
-let Pwa = require('../../models/pwa');
-let Task = require('../../models/task');
-let Manifest = require('../../models/manifest');
+let dataFetcher = require('../../../lib/data-fetcher');
+let libTasks = require('../../../lib/tasks');
+let libPwa = require('../../../lib/pwa');
+let db = require('../../../lib/model-datastore');
+let Pwa = require('../../../models/pwa');
+let Task = require('../../../models/task');
+let Manifest = require('../../../models/manifest');
 
 let simpleMock = require('simple-mock');
 let chai = require('chai');
@@ -32,7 +32,7 @@ chai.should();
 let assert = require('chai').assert;
 
 const MANIFEST_URL = 'https://www.terra.com.br/manifest-br.json';
-const MANIFEST_DATA = './test/manifests/icon-url-with-parameter.json';
+const MANIFEST_DATA = './test/app/manifests/icon-url-with-parameter.json';
 
 describe('lib.tasks', () => {
   let manifest;
@@ -88,7 +88,7 @@ describe('lib.tasks', () => {
       simpleMock.restore();
     });
     it('execute a task', () => {
-      const modulePath = require.resolve('../../lib/pwa');
+      const modulePath = require.resolve('../../../lib/pwa');
       const task = new Task(987654321, modulePath, 'createOrUpdatePwa', 1);
       simpleMock.mock(libPwa, 'find').resolveWith(pwa);
       simpleMock.mock(libPwa, 'createOrUpdatePwa').resolveWith(pwa);
@@ -102,7 +102,7 @@ describe('lib.tasks', () => {
       });
     });
     it('retry a task', () => {
-      const modulePath = require.resolve('../../lib/pwa');
+      const modulePath = require.resolve('../../../lib/pwa');
       const task = new Task(987654321, modulePath, 'createOrUpdatePwa', 1);
       simpleMock.mock(libPwa, 'find').resolveWith(pwa);
       simpleMock.mock(libPwa, 'createOrUpdatePwa').rejectWith(new Error('Retry task'));

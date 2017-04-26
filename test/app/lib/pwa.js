@@ -17,15 +17,15 @@
 'use strict';
 
 const fs = require('fs');
-const dataFetcher = require('../../lib/data-fetcher');
-const libPwa = require('../../lib/pwa');
-const libImages = require('../../lib/images');
-const libManifest = require('../../lib/manifest');
-const libLighthouse = require('../../lib/lighthouse');
-const promiseSequential = require('../../lib/promise-sequential');
+const dataFetcher = require('../../../lib/data-fetcher');
+const libPwa = require('../../../lib/pwa');
+const libImages = require('../../../lib/images');
+const libManifest = require('../../../lib/manifest');
+const libLighthouse = require('../../../lib/lighthouse');
+const promiseSequential = require('../../../lib/promise-sequential');
 
-const Lighthouse = require('../../models/lighthouse');
-const Pwa = require('../../models/pwa');
+const Lighthouse = require('../../../models/lighthouse');
+const Pwa = require('../../../models/pwa');
 
 const testPwa = require('../models/pwa');
 const simpleMock = require('simple-mock');
@@ -37,7 +37,7 @@ const assert = require('chai').assert;
 
 const MANIFEST_URL = 'https://www.domain.com/manifest-br.json';
 const START_URL = 'https://www.domain.com/?utm_source=homescreen';
-const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
+const LIGHTHOUSE_JSON_EXAMPLE = './test/app/lib/lighthouse-example.json';
 
 /* eslint-disable camelcase */
 const MANIFEST_DATA = {

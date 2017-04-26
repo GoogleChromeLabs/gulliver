@@ -13,13 +13,20 @@
  * limitations under the License.
  */
 {
-  "presets": [
-    [
-      "es2015",
-      {
-        "modules": false
-      }
-    ]
-  ],
-  "plugins": ["external-helpers"]
+  "env": {
+    "test": {
+      "presets": ["es2015"]
+    },
+    "default": {
+      "presets": [
+        [
+          "es2015",
+          {
+            "modules": false
+          }
+        ]
+      ],
+      "plugins": ["external-helpers"]
+    }
+  }
 }

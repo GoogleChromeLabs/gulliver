@@ -15,14 +15,14 @@
 
 /* global describe it afterEach */
 
-const dataFetcher = require('../../lib/data-fetcher');
+const dataFetcher = require('../../../lib/data-fetcher');
 const simpleMock = require('simple-mock');
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 const assert = require('chai').assert;
 chai.use(chaiAsPromised);
 chai.should();
-const notificationsLib = require('../../lib/notifications');
+const notificationsLib = require('../../../lib/notifications');
 
 describe('lib.notifications', () => {
   describe('#list', () => {

@@ -18,13 +18,13 @@
 
 const assert = require('assert');
 const gcloud = require('google-cloud');
-const config = require('../../config/config');
+const config = require('../../../config/config');
 const ds = gcloud.datastore({
   projectId: config.get('GCLOUD_PROJECT')
 });
 
-const FavoritePwa = require('../../models/favorite-pwa');
-const libFavoritePwa = require('../../lib/favorite-pwa');
+const FavoritePwa = require('../../../models/favorite-pwa');
+const libFavoritePwa = require('../../../lib/favorite-pwa');
 
 const ENTITY_NAME = 'FAVORITE-PWA';
 const TEST_FAV_PWA = new FavoritePwa(123456789, 987654321);

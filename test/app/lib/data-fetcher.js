@@ -16,7 +16,7 @@
 /* global describe it afterEach*/
 'use strict';
 
-let dataFetcher = require('../../lib/data-fetcher');
+let dataFetcher = require('../../../lib/data-fetcher');
 const simpleMock = require('simple-mock');
 let chai = require('chai');
 let chaiAsPromised = require('chai-as-promised');
@@ -24,7 +24,7 @@ const assert = require('chai').assert;
 chai.use(chaiAsPromised);
 chai.should();
 
-const LIGHTHOUSE_JSON_EXAMPLE = './test/lib/lighthouse-example.json';
+const LIGHTHOUSE_JSON_EXAMPLE = './test/app/lib/lighthouse-example.json';
 
 describe('lib.data-fetcher', () => {
   it('fetchMetadataDescription(null) should fail', () => {

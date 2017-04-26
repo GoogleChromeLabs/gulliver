@@ -6,13 +6,14 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "prestart": "rollup -c rollup-config/gulliver.js && npm run generate-msg-sw",
+    "prestart": "BABEL_ENV=default rollup -c rollup-config/gulliver.js && npm run generate-msg-sw",
     "monitor": "nodemon app.js",
     "deploy": "npm run prestart && gcloud app deploy app.yaml",
-    "mocha": "_mocha test/**/*",
-    "coverage": "istanbul cover _mocha test/**/*",
+    "mocha-app": "_mocha test/app/**/*",
+    "mocha-client": "BABEL_ENV=test _mocha --compilers js:babel-core/register test/client/**/*.js",
+    "coverage": "istanbul cover _mocha --compilers js:babel-core/register test/app/**/*",
     "lint": "eslint .",
-    "test": "npm run lint && npm run coverage",
+    "test": "npm run lint && npm run mocha-client && npm run mocha-app",
     "generate-msg-sw": "node firebase-messaging-sw-generator.js",
     "lint-fix": "eslint --fix ."
   },
