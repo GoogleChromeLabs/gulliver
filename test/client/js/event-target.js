@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-/* global describe it before afterEach */
+/* global describe it beforeEach afterEach */
 'use strict';
 import EventTarget from '../../../public/js/event-target';
 const assert = require('assert');
@@ -23,7 +23,7 @@ describe('js.event-target', () => {
   let eventTarget;
   const callbackA = simpleMock.spy(() => {});
 
-  before(() => {
+  beforeEach(() => {
     eventTarget = new EventTarget();
   });
 
@@ -32,22 +32,16 @@ describe('js.event-target', () => {
     callbackA.reset();
   });
 
-  it('Fires the correct callback', done => {
+  it('Fires the correct callback', () => {
     eventTarget.addEventListener('event-a', callbackA);
     eventTarget.dispatchEvent({type: 'event-a'});
-    setTimeout(() => {
-      assert.equal(callbackA.callCount, 1);
-      done();
-    }, 10);
+    assert.equal(callbackA.callCount, 1);
   });
 
-  it('Does not invoke a removed callback', done => {
+  it('Does not invoke a removed callback', () => {
     eventTarget.addEventListener('event-a', callbackA);
     eventTarget.removeEventListener('event-a', callbackA);
     eventTarget.dispatchEvent({type: 'event-a'});
-    setTimeout(() => {
-      assert.equal(callbackA.callCount, 0);
-      done();
-    }, 10);
+    assert.equal(callbackA.callCount, 0);
   });
 });
