@@ -16,8 +16,8 @@
 /* global describe it before afterEach */
 'use strict';
 
-const controllerApi = require('../../../controllers/api');
-const lighthouseLib = require('../../../lib/lighthouse');
+const controllerApi = require('../../../../controllers/api');
+const lighthouseLib = require('../../../../lib/lighthouse');
 
 const express = require('express');
 const app = express();

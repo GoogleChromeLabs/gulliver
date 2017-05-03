@@ -16,7 +16,7 @@
 /* global describe it */
 'use strict';
 
-const promiseSequential = require('../../lib/promise-sequential');
+const promiseSequential = require('../../../lib/promise-sequential');
 
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');

@@ -19,7 +19,7 @@
 const assert = require('chai').assert;
 const simple = require('simple-mock');
 
-const assetHashing = require('../../lib/asset-hashing');
+const assetHashing = require('../../../lib/asset-hashing');
 
 describe('ChecksumProvider', () => {
   it('calculates checksum', () => {

@@ -16,9 +16,9 @@
 /* global describe it before afterEach */
 'use strict';
 
-const controllerApi = require('../../../controllers/api');
-const libFavoritePwa = require('../../../lib/favorite-pwa');
-const verifyIdToken = require('../../../lib/verify-id-token');
+const controllerApi = require('../../../../controllers/api');
+const libFavoritePwa = require('../../../../lib/favorite-pwa');
+const verifyIdToken = require('../../../../lib/verify-id-token');
 
 const express = require('express');
 const app = express();

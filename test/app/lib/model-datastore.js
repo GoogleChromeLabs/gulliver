@@ -18,8 +18,8 @@
 
 const assert = require('assert');
 const gcloud = require('google-cloud');
-const config = require('../../config/config');
-const db = require('../../lib/model-datastore');
+const config = require('../../../config/config');
+const db = require('../../../lib/model-datastore');
 const ds = gcloud.datastore({
   projectId: config.get('GCLOUD_PROJECT')
 });

@@ -16,8 +16,8 @@
 /* global describe it before afterEach */
 'use strict';
 
-const controllersCache = require('../../controllers/cache');
-const libCache = require('../../lib/data-cache');
+const controllersCache = require('../../../controllers/cache');
+const libCache = require('../../../lib/data-cache');
 
 const express = require('express');
 const app = express();
