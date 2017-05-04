@@ -19,9 +19,6 @@ const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
 const config = require('../config/config');
 const bodyParser = require('body-parser');
-const compression = require('compression');
-
-router.use(compression());
 
 router.use(bodyParser.json());
 
