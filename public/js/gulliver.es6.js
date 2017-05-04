@@ -37,7 +37,7 @@ import Analytics from './analytics';
 import Router from './routing/router';
 import Route from './routing/route';
 import Shell from './shell';
-import FadeInOutTransitionStrategy from './routing/transitions';
+import {LoaderTransitionStrategy} from './routing/transitions';
 import PwaForm from './pwa-form';
 import Chart from './chart';
 
@@ -78,14 +78,14 @@ class Gulliver {
   }
 
   _setupRoutes() {
-    const fadeInOutTransitionStrategy = new FadeInOutTransitionStrategy();
+    const transitionStrategy = new LoaderTransitionStrategy(window);
     // Route for `/pwas/add`.
     const setupPwaForm = () => {
       const pwaForm = new PwaForm(window, this.signIn);
       pwaForm.setup();
     };
 
-    this._addRoute(/\/pwas\/add/, fadeInOutTransitionStrategy, setupPwaForm, {
+    this._addRoute(/\/pwas\/add/, transitionStrategy, setupPwaForm, {
       showTabs: false,
       backlink: true,
       subtitle: true
@@ -103,7 +103,7 @@ class Gulliver {
     };
 
     // Route for `/pwas/[id]`.
-    this._addRoute(/\/pwas\/(\d+)/, fadeInOutTransitionStrategy, setupCharts, {
+    this._addRoute(/\/pwas\/(\d+)/, transitionStrategy, setupCharts, {
       showTabs: false,
       backlink: true,
       subtitle: false
@@ -112,7 +112,7 @@ class Gulliver {
     const nop = () => {};
 
     // Route for `/?sort=score`.
-    this._addRoute(/\/\?.*sort=score/, fadeInOutTransitionStrategy, nop, {
+    this._addRoute(/\/\?.*sort=score/, transitionStrategy, nop, {
       showTabs: true,
       backlink: false,
       subtitle: false,
@@ -120,7 +120,7 @@ class Gulliver {
     });
 
     // Route for `/`.
-    this._addRoute(/.+/, fadeInOutTransitionStrategy, nop, {
+    this._addRoute(/.+/, transitionStrategy, nop, {
       showTabs: true,
       backlink: false,
       subtitle: false,

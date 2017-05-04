@@ -14,8 +14,9 @@
  */
 
 /* eslint-env browser */
+import Loader from '../loader';
 
-export default class FadeInOutTransitionStrategy {
+export class FadeInOutTransitionStrategy {
   transitionIn(container) {
     console.log('Transition In');
     container.classList.remove('transition');
@@ -24,5 +25,25 @@ export default class FadeInOutTransitionStrategy {
   transitionOut(container) {
     console.log('Transition Out');
     container.classList.add('transition');
+  }
+}
+
+export class LoaderTransitionStrategy {
+  constructor(window) {
+    this._window = window;
+    const loaderDiv = window.document.querySelector('.page-loader');
+    this._loader = new Loader(loaderDiv);
+  }
+
+  transitionIn(container) {
+    console.log('Transition In');
+    container.classList.remove('transition');
+    this._loader.hide();
+  }
+
+  transitionOut(container) {
+    console.log('Transition Out');
+    container.classList.add('transition');
+    this._loader.show();
   }
 }
