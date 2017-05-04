@@ -47,7 +47,7 @@ class Loader {
       dot.classList.add('loader-dot');
       if (this.style.startsWith('#')) {
         dot.style['background-color'] = this.style;
-      } else {
+      } else if (this.style) {
         dot.classList.add(this.style);
       }
       loader.appendChild(dot);

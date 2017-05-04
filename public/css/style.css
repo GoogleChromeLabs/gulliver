@@ -63,6 +63,7 @@ main {
   padding-left: 8px;
   padding-bottom: 44px;
   transition: opacity 0.3s ease-in-out;
+  width: 100vw;
 }
 
 /* Navbar */
@@ -575,6 +576,20 @@ footer #github-logo {
   vertical-align: top;
   width: 24px;
   height: 24px;
+}
+
+.page-holder {
+  position: relative;
+  display: flex;
+}
+
+.page-loader {
+  position: absolute;
+  width: 100%;
+  height: calc(100vh - 120px);
+  background: #F5F5F5;
+  transition: opacity 0.3s ease-in-out;
+  z-index: -1;
 }
 
 /* Pager */
