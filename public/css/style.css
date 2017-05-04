@@ -330,6 +330,44 @@ a.card-pwa:hover {
   opacity: 0;
 }
 
+/* Lighthouse expandable details */
+#toggle {
+  display: none;
+  visibility: hidden;
+}
+#lighthouse-details {
+  display: block;
+  padding: 0.5em;
+  text-align: center;
+  border-bottom: 1px solid #CCC;
+  color: #666;
+}
+#lighthouse-details:hover {
+  color: #000;
+}
+#lighthouse-details::before {
+  content: "-";
+  vertical-align: text-top;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 3px;
+  background: radial-gradient(ellipse at center, #CCC 50%, transparent 50%);
+}
+#expand {
+  max-height: 3100px;
+  transition: max-height 0.3s ease-in;
+  overflow: hidden;
+}
+#toggle:checked ~ #expand {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+#toggle:checked ~ #lighthouse-details::before {
+  content: "+";
+}
+
 /* PWA Overview */
 #pwa {
   padding: 16px;
@@ -371,7 +409,7 @@ body:not(.transition) #pwa:hover {
 }
 
 /* Lighthouse graph */
-#chart {
+.chart {
   width: 100%;
   min-height: 276px;
   padding: 16px;
@@ -380,13 +418,13 @@ body:not(.transition) #pwa:hover {
   border-color: #ccc;
   position: relative;
 }
-#chart #chart-missing {
+.chart #chart-missing {
   position: absolute;
   text-align: center;
   top: 45%;
   width: 100%;
 }
-#chart #chart-missing.fadeIn {
+.chart #chart-missing.fadeIn {
   display: block;
 }
 #chart_AnnotationChart_borderDiv {

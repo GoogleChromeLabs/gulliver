@@ -21,7 +21,7 @@ router.use((req, res, next) => {
 
   /* eslint-disable quotes */
   res.setHeader('content-security-policy', [
-    `connect-src 'self' https://www.google-analytics.com`,
+    `connect-src 'self' https://www.google-analytics.com https://web-performance-dot-pwa-directory.appspot.com`,
     `default-src 'self' https://accounts.google.com https://apis.google.com https://fcm.googleapis.com`,
     `script-src 'self' 'unsafe-eval' https://apis.google.com https://www.google-analytics.com https://www.gstatic.com`,
     `style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/font-awesome/ https://www.gstatic.com`,

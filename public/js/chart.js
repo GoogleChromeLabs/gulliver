@@ -20,49 +20,51 @@ import Loader from './loader';
 /**
  * Use to make the API request to get the Lighthouse chart data for a PWA.
  */
-const CHART_BASE_URL = '/api/lighthouse/graph/';
+export default class Chart {
 
-export default class LighthouseChart {
-
-  constructor() {
-    this.chartElement = document.getElementById('chart');
+  constructor(config) {
+    this.chartElement = config.chartElement;
+    this.url = config.url;
     this.loader = new Loader(this.chartElement, 'dark-primary-background');
   }
 
   _loadChartsApi() {
-    if (window.google && window.google.charts) {
-      console.log('Googler Charts Loader already loaded');      
-      return Promise.resolve(window.google);
-    }
-
-    console.log('Loading Googler Charts Loader');
     return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.defer = true;
-      script.src = 'https://www.gstatic.com/charts/loader.js';
-      script.onload = () => {
-        resolve(window.google);
+      const chartScript = document.getElementById('google-chart');
+      if (chartScript) {
+        console.log('Googler Charts Loader already loaded');
+        if (window.google) {
+          resolve(window.google);
+        } else {
+          chartScript.addEventListener('load', _ => resolve(window.google));
+        }
+      } else {
+        console.log('Loading Googler Charts Loader');
+        const script = document.createElement('script');
+        script.id = 'google-chart';
+        script.defer = true;
+        script.src = 'https://www.gstatic.com/charts/loader.js';
+        script.onload = _ => resolve(window.google);
+        script.onerror = reject;
+        document.head.appendChild(script);
       }
-      script.onerror = reject;
-      document.head.appendChild(script);
     });
   }
+
   load() {
     this.loader.show();
-    this._loadChartsApi()
-      .then(google => {
-        google.charts.load('current', {packages: ['annotationchart']});
-        google.charts.setOnLoadCallback(this.drawChart.bind(this));
-      });
+    this._loadChartsApi().then(google => {
+      google.charts.load('current', {packages: ['annotationchart']});
+      google.charts.setOnLoadCallback(this.drawChart.bind(this));
+    });
   }
 
   drawChart() {
-    const pwaId = this.chartElement.getAttribute('pwa');
-    if (!pwaId) {
+    if (!this.url) {
       return;
     }
     const pagewith = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-    fetch(CHART_BASE_URL + pwaId)
+    fetch(this.url)
       .then(response => response.json())
       .then(jsonData => {
         // Create our data table out of JSON data loaded from server.

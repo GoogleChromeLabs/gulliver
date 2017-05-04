@@ -11,7 +11,7 @@ toolbox.options.debug = false;
 
 importScripts('/js/sw-assets-precache.js'); /* global ASSETS */
 
-const VERSION = '6';
+const VERSION = '7';
 const PREFIX = 'gulliver';
 const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 
