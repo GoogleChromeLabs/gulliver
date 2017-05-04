@@ -34,9 +34,9 @@ export default class Chart {
       if (chartScript) {
         console.log('Googler Charts Loader already loaded');
         if (window.google) {
-          resolve();
+          resolve(window.google);
         } else {
-          chartScript.addEventListener('load', resolve);
+          chartScript.addEventListener('load', _ => resolve(window.google));
         }
       } else {
         console.log('Loading Googler Charts Loader');
@@ -44,7 +44,7 @@ export default class Chart {
         script.id = 'google-chart';
         script.defer = true;
         script.src = 'https://www.gstatic.com/charts/loader.js';
-        script.onload = resolve;
+        script.onload = _ => resolve(window.google);
         script.onerror = reject;
         document.head.appendChild(script);
       }
@@ -53,9 +53,9 @@ export default class Chart {
 
   load() {
     this.loader.show();
-    this._loadChartsApi().then(_ => {
-      window.google.charts.load('current', {packages: ['annotationchart']});
-      window.google.charts.setOnLoadCallback(this.drawChart.bind(this));
+    this._loadChartsApi().then(google => {
+      google.charts.load('current', {packages: ['annotationchart']});
+      google.charts.setOnLoadCallback(this.drawChart.bind(this));
     });
   }
 
