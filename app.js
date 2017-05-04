@@ -21,6 +21,7 @@ process.binding('http_parser').HTTPParser = require('http-parser-js').HTTPParser
 
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 const config = require('./config/config');
 const asset = require('./lib/asset-hashing').asset;
 const hbs = require('hbs');
@@ -41,6 +42,8 @@ app.set('view engine', 'hbs');
 app.set('trust proxy', true);
 hbs.registerPartials(path.join(__dirname, '/views/includes/'));
 helpers.registerHelpers(hbs);
+
+app.use(compression());
 
 // Make variables available to *all* templates
 hbs.localsAsTemplateData(app);
