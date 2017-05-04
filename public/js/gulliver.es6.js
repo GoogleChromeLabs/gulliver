@@ -68,6 +68,7 @@ class Gulliver {
     this.router.addEventListener('navigate', e => {
       this.analytics.trackPageView(e.detail.url);
       this.shell.onRouteChange(e.detail.route);
+      this.offlineSupport.markAsCached(document.querySelectorAll('.offline-aware'));
     });
   }
 

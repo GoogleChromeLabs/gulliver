@@ -38,6 +38,11 @@ export default class OfflineSupport {
       body.setAttribute('offline', 'true');
       this.markAsCached(this.window.document.querySelectorAll('.offline-aware'));
     });
+
+    const onLine = this.window.navigator.onLine;
+    if (onLine !== undefined && !onLine) {
+      body.setAttribute('offline', 'true');
+    }
   }
 
   /**
