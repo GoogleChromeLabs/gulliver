@@ -11,32 +11,36 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
  
- <!DOCTYPE html>
+{{#unless contentOnly}}
+<!DOCTYPE html>
 <html lang="en">
   <head>
     {{> head}}
   </head>
   <body>
     {{> header}}
-    <div class="section-title">
-      <a href="/" class="back"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
-      <div id="subtitle">Submit a PWA</div>
-    </div>
-
-    <main>
-      <form id="pwaForm" method="POST">
+    <div class="page-holder">
+      <main class="page">
+{{/unless}}
+        <form id="pwaForm" method="POST">
         <div class="form-group">
-          <label for="manifestUrl">Manifest URL</label>
-          <input type="text" name="manifestUrl" id="manifestUrl" class="form-input" value="{{pwa.manifestUrl}}" autofocus>
-          <button id="pwaSubmit" type="submit" class="button button-primary gulliver-signedin-aware gulliver-online-aware"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+            <label for="manifestUrl">Manifest URL</label>
+            <input type="text" name="manifestUrl" id="manifestUrl" class="form-input" value="{{pwa.manifestUrl}}" autofocus>
+            <button id="pwaSubmit" type="submit" href="/pwas/add" class="button button-primary offline-aware signin-aware">
+              <i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
         </div>
         {{#if error}}
         <p class="error">Error: {{error}}.</p>
         {{/if}}
         <input id="idToken" type="hidden" name="idToken" />
-      </form>
-      </div>            
-    </main>
+        </form>
+        </div>
+{{#unless contentOnly}}
+      </main>
+      <div class='page-loader'>
+      </div>
+    </div>
     {{> footer}}
   </body>
 </html>
+{{/unless}}

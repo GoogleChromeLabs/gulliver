@@ -62,7 +62,10 @@ main {
   padding-right: 8px;
   padding-left: 8px;
   padding-bottom: 44px;
+  transition: opacity 0.3s ease-in-out;
+  width: 100vw;
 }
+
 /* Navbar */
 .navbar {
   position: relative;
@@ -166,7 +169,6 @@ main {
   opacity: 0.7;
   font-weight: 500;
   text-transform: uppercase;
-
 }
 .section-title .activetab {
   color: white;
@@ -213,6 +215,7 @@ main {
   border: 1px solid transparent;
   border-radius: 2px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+  max-width: 200px;
 }
 .button {
   background: none;
@@ -234,6 +237,7 @@ main {
   border: none;
   text-transform: uppercase;
   margin: 0;
+  transition: opacity 0.2s ease-in-out;  
 }
 
 button:active,
@@ -252,21 +256,26 @@ button:disabled {
   width: 100%;
   height: 100%;
 }
-/* PWA List Box */
-.card {
-  text-overflow: hidden;
+
+.box-shadow {
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+}
+
+/* PWA List Box */
+.card-pwa {
+  text-overflow: hidden;
   border-radius: 2px;
   padding: 8px;
-}
-a.card:hover {
-  text-decoration: none;
-}
-.card-pwa {
   display: flex;
   align-items: center;
   height: 132px;
   flex-direction: column;
+  transition: opacity .2s ease-in-out;
+  pointer-events: auto;
+}
+
+a.card-pwa:hover {
+  text-decoration: none;
 }
 
 .card-pwa .pwa-name {
@@ -322,6 +331,44 @@ a.card:hover {
   opacity: 0;
 }
 
+/* Lighthouse expandable details */
+#toggle {
+  display: none;
+  visibility: hidden;
+}
+#lighthouse-details {
+  display: block;
+  padding: 0.5em;
+  text-align: center;
+  border-bottom: 1px solid #CCC;
+  color: #666;
+}
+#lighthouse-details:hover {
+  color: #000;
+}
+#lighthouse-details::before {
+  content: "-";
+  vertical-align: text-top;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 3px;
+  background: radial-gradient(ellipse at center, #CCC 50%, transparent 50%);
+}
+#expand {
+  max-height: 3100px;
+  transition: max-height 0.3s ease-in;
+  overflow: hidden;
+}
+#toggle:checked ~ #expand {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+}
+#toggle:checked ~ #lighthouse-details::before {
+  content: "+";
+}
+
 /* PWA Overview */
 #pwa {
   padding: 16px;
@@ -363,7 +410,7 @@ body:not(.transition) #pwa:hover {
 }
 
 /* Lighthouse graph */
-#chart {
+.chart {
   width: 100%;
   min-height: 276px;
   padding: 16px;
@@ -372,13 +419,13 @@ body:not(.transition) #pwa:hover {
   border-color: #ccc;
   position: relative;
 }
-#chart #chart-missing {
+.chart #chart-missing {
   position: absolute;
   text-align: center;
   top: 45%;
   width: 100%;
 }
-#chart #chart-missing.fadeIn {
+.chart #chart-missing.fadeIn {
   display: block;
 }
 #chart_AnnotationChart_borderDiv {
@@ -464,11 +511,15 @@ tr:last-child td {
   width: 100%;
   background-color: #dc322f;
   color: #ffffff;
-  height: 52px;
-  line-height: 52px;
+  height: 56px;
+  line-height: 56px;
   padding-left: 20px;
-  display: none;
   pointer-events: none;
+  transform: translateY(56px);
+  opacity: 0;
+  transition-property: transform,opacity;
+  transition-duration: .5s;
+  transition-timing-function: ease-in-out;  
 }
 
 /* Footer */
@@ -527,6 +578,20 @@ footer #github-logo {
   height: 24px;
 }
 
+.page-holder {
+  position: relative;
+  display: flex;
+}
+
+.page-loader {
+  position: absolute;
+  width: 100%;
+  height: calc(100vh - 120px);
+  background: #F5F5F5;
+  transition: opacity 0.3s ease-in-out;
+  z-index: -1;
+}
+
 /* Pager */
 .pager {
   height: 48px;
@@ -536,12 +601,38 @@ footer #github-logo {
 .pager svg {
   fill: #1976D2;
 }
+
+.previous, .next {
+  transition: opacity 0.2s ease-in-out;
+}
+
 .previous {
   float: left;
 }
+
 .next {
   float: right;
 }
+
+/* Controls Offline and SignedIn Behavirous */
+main.transition,
+body[offline] .offline-aware:not([cached]),
+body:not([signedIn]) .signin-aware {
+  opacity: 0.3;
+  pointer-events: none;
+  box-shadow: none;
+}
+
+body[offline] .offline-status {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+body:not([signedIn]) .auth-button-label-logout,
+body[signedIn] .auth-button-label-login {
+  display: none;
+}
+
 .pager a {
   color: #0D47A1;
   text-decoration: none;

@@ -19,6 +19,9 @@ const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
 const config = require('../config/config');
 const bodyParser = require('body-parser');
+const compression = require('compression');
+
+router.use(compression());
 
 router.use(bodyParser.json());
 
@@ -29,21 +32,20 @@ router.use('/api', require('./api'));
 router.use('/tasks', require('./tasks'));
 
 // PWAs
-router.use('/pwas', require('./pwa'));
-
-// Transitions
-router.use('/transitions', require('./transition'));
-
-// ServiceWorker
-router.use('/js', require('./sw'));
+router.use('/pwas',
+  require('./cache'),
+  require('./pwa'));
 
 router.get('/', (req, res) => {
   req.url = '/pwas';
   router.handle(req, res);
 });
 
+// ServiceWorker
+router.use('/js', require('./sw'));
+
 // /.shell hosts app shell dependencies
-router.use('/.shell', require('./shell'));
+router.use('/.app', require('./app'));
 
 /**
  * This route is used to send config.json to firebase-messaging-sw.js

@@ -11,34 +11,33 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
 
+{{#unless contentOnly}}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     {{> head}}
   </head>
-  <body {{#if transition}}class="transition"{{/if}}>
-    {{> header}}    
-    <div class="section-title">
-      <a href="{{backlink}}" class="back">
-        {{> chevron_left }}
-      </a>
-    </div>
-    <main>
-      {{> pwadetails pwa=pwa}}
-      {{> lighthouse lighthouse=lighthouse}}
-      {{#if pwa.manifest}}
-      <div class="detail-general">
+  <body>
+    {{> header}}
+    <div class="page-holder">
+      <main class="page">
+{{/unless}}
+        {{> pwadetails pwa=pwa}}
+        {{> lighthouse lighthouse=lighthouse}}
+        {{> webpagetest}}
+        {{> pagespeedinsight}}
+        {{#if pwa.manifest}}
+        <div class="detail-general">
         <h3><a href="{{pwa.manifestUrl}}" target="_blank">MANIFEST</a></h3>
         <pre>{{{highlightedJson rawManifestJson}}}</pre>
+        </div>
+        {{/if}}
+{{#unless contentOnly}}
+      </main>
+      <div class='page-loader'>
       </div>
-      {{/if}}
-    </main>
+    </div>
     {{> footer}}
-    {{#if transition}}
-    <script src="{{asset '/js/pwas-view-transition.js'}}" defer></script>
-    {{else}}
-    <script src="https://www.gstatic.com/charts/loader.js" defer></script>
-    <script src="{{asset '/js/lighthouse-chart.js'}}" defer></script>
-    {{/if}}
   </body>
 </html>
+{{/unless}}

@@ -17,6 +17,7 @@
 const DEFAULT_LIGHT = '#ffffff';
 const DEFAULT_DARK = '#000000';
 
+const escapeHtml = require('escape-html');
 const moment = require('moment');
 const parseColor = require('parse-color');
 const assetHashing = require('../../lib/asset-hashing').asset;
@@ -90,14 +91,14 @@ exports.highlightedJson = function(object) {
 
 exports.getAggregationTableRow = function(aggregation) {
   return '<tr>' +
-    '<td>' + aggregation.name + '</td>' +
+    '<td>' + escapeHtml(aggregation.name) + '</td>' +
     '<td>' + aggregation.overall + '</td>' +
     '</tr>';
 };
 
 exports.getAuditTableRow = function(audit) {
   return '<tr>' +
-    '<td>' + audit.description + '</td>' +
+    '<td>' + escapeHtml(audit.description) + '</td>' +
     '<td>' + audit.score + '</td>' +
     '</tr>';
 };
