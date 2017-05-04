@@ -592,12 +592,6 @@ footer #github-logo {
   z-index: -1;
 }
 
-.page-loader span {
-  width: 100%;
-  text-align: center;
-  vertical-align: middle;
-}
-
 /* Pager */
 .pager {
   height: 48px;
