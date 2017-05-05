@@ -20,6 +20,7 @@ const pwaLib = require('../lib/pwa');
 const tasksLib = require('../lib/tasks');
 const Task = require('../models/task');
 const router = express.Router(); // eslint-disable-line new-cap
+const promiseSequential = require('../lib/promise-sequential');
 
 const APP_ENGINE_CRON = 'X-Appengine-Cron';
 
@@ -51,24 +52,29 @@ router.get('/cron', (req, res, next) => {
 });
 
 /**
- * GET /tasks/execute
+ * GET /tasks/execute?tasks=1
  *
  * We use a GET from the cron job to execute each PWA update task
+ * The tasks parameter is the number of tasks to execute per run
  */
 router.get('/execute', (req, res, next) => {
   // Checks for the presence of the 'X-Appengine-Cron' header on the request.
   // Only requests from the App Engine cron are allowed.
+  const tasksToExecute = req.query.tasks ? req.query.tasks : 1;
+  const tasksList = [];
   if (req.get(APP_ENGINE_CRON)) {
-    tasksLib.pop()
-      .then(task => {
-        if (task) {
-          tasksLib.executePwaTask(task);
-        }
-        res.sendStatus(200);
-      })
-      .catch(err => {
-        next(err);
-      });
+    try {
+      for (let i = 0; i < tasksToExecute; i++) {
+        tasksList.push(tasksLib.popExecute);
+      }
+      // Execute sequentially the 1 OR req.query.tasks of tasks
+      promiseSequential.all(tasksList)
+        .then(_ => {
+          res.sendStatus(200);
+        });
+    } catch (err) {
+      next(err);
+    }
   } else {
     res.sendStatus(403);
   }

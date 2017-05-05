@@ -60,7 +60,6 @@ describe('controllers.tasks', () => {
     });
 
     it('respond with 200 when X-Appengine-Cron is present', done => {
-      // Mock lib to avoid making real calls
       simpleMock.mock(tasksLib, 'push').resolveWith(null);
       simpleMock.mock(pwaLib, 'list').resolveWith(listPwas);
       request(app)
@@ -86,7 +85,16 @@ describe('controllers.tasks', () => {
     });
 
     it('respond with 200 when X-Appengine-Cron is present', done => {
-      // Mock lib to avoid making real calls
+      simpleMock.mock(tasksLib, 'pop').resolveWith(null);
+      request(app)
+        .get('/execute')
+        .set(APP_ENGINE_CRON, true)
+        .expect(200).should.be.fulfilled.then(_ => {
+          done();
+        });
+    });
+
+    it('Execute 1 task', done => {
       simpleMock.mock(tasksLib, 'pop').resolveWith(task);
       simpleMock.mock(tasksLib, 'executePwaTask').resolveWith(null);
       request(app)
@@ -95,6 +103,21 @@ describe('controllers.tasks', () => {
         .expect(200).should.be.fulfilled.then(_ => {
           assert.equal(tasksLib.pop.callCount, 1);
           assert.equal(tasksLib.executePwaTask.callCount, 1);
+          done();
+        });
+    });
+
+    it('Execute 3 tasks', done => {
+      simpleMock.mock(tasksLib, 'popExecute');
+      simpleMock.mock(tasksLib, 'pop').resolveWith(task);
+      simpleMock.mock(tasksLib, 'executePwaTask').resolveWith(null);
+      request(app)
+        .get('/execute?tasks=3')
+        .set(APP_ENGINE_CRON, true)
+        .expect(200).should.be.fulfilled.then(_ => {
+          assert.equal(tasksLib.popExecute.callCount, 3);
+          assert.equal(tasksLib.pop.callCount, 3);
+          assert.equal(tasksLib.executePwaTask.callCount, 3);
           done();
         });
     });
