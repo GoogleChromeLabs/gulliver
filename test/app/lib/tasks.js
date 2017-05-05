@@ -116,4 +116,28 @@ describe('lib.tasks', () => {
       });
     });
   });
+
+  describe('#popExecute', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+    it('pop and execute a task', () => {
+      simpleMock.mock(libTasks, 'pop').resolveWith(task);
+      simpleMock.mock(libTasks, 'executePwaTask').resolveWith(task);
+      return libTasks.popExecute().should.be.fulfilled.then(savedTask => {
+        assert.equal(savedTask.pwaId, 123456789);
+        assert.equal(libTasks.pop.callCount, 1);
+        assert.equal(libTasks.executePwaTask.callCount, 1);
+      });
+    });
+    it('pop and execute a task (pop is null)', () => {
+      simpleMock.mock(libTasks, 'pop').resolveWith(null);
+      simpleMock.mock(libTasks, 'executePwaTask');
+      return libTasks.popExecute().should.be.fulfilled.then(savedTask => {
+        assert.equal(savedTask, null);
+        assert.equal(libTasks.pop.callCount, 1);
+        assert.equal(libTasks.executePwaTask.callCount, 0);
+      });
+    });
+  });
 });
