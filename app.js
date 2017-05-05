@@ -21,6 +21,7 @@ process.binding('http_parser').HTTPParser = require('http-parser-js').HTTPParser
 
 const path = require('path');
 const express = require('express');
+const enforce = require('express-sslify');
 const compression = require('compression');
 const config = require('./config/config');
 const asset = require('./lib/asset-hashing').asset;
@@ -35,6 +36,9 @@ const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
 const CACHE_CONTROL_NEVER_EXPIRE = 31536000;
 const ENVIRONMENT_PRODUCTION = 'production';
 
+if (app.get('env') === ENVIRONMENT_PRODUCTION) {
+  app.use(enforce.HTTPS({trustProtoHeader: true})); // eslint-disable-line new-cap
+}
 app.use(compression());
 
 app.disable('x-powered-by');
