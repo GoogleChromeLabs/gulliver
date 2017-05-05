@@ -35,6 +35,8 @@ const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
 const CACHE_CONTROL_NEVER_EXPIRE = 31536000;
 const ENVIRONMENT_PRODUCTION = 'production';
 
+app.use(compression());
+
 app.disable('x-powered-by');
 app.disable('etag');
 app.set('views', path.join(__dirname, 'views'));
@@ -42,8 +44,6 @@ app.set('view engine', 'hbs');
 app.set('trust proxy', true);
 hbs.registerPartials(path.join(__dirname, '/views/includes/'));
 helpers.registerHelpers(hbs);
-
-app.use(compression());
 
 // Make variables available to *all* templates
 hbs.localsAsTemplateData(app);
