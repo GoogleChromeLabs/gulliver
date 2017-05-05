@@ -14,6 +14,21 @@ importScripts('/js/sw-assets-precache.js'); /* global ASSETS */
 const VERSION = '7';
 const PREFIX = 'gulliver';
 const CACHE_NAME = `${PREFIX}-v${VERSION}`;
+const PWA_OPTION = {
+  cache: {
+    name: `PWA-${CACHE_NAME}`,
+    maxAgeSeconds: 60 * 60 * 12,
+    queryOptions: {
+      ignoreSearch: true
+    }
+  }
+};
+const PWA_LIST_OPTION = {
+  cache: {
+    name: `LIST-${CACHE_NAME}`,
+    maxAgeSeconds: 60 * 60 * 6
+  }
+};
 
 // URL to return in place of the "offline dino" when client is
 // offline and requests a URL that's not in the cache.
@@ -44,21 +59,6 @@ toolbox.precache(
   })
 );
 
-toolbox.router.get('/', (request, values, options) => {
-  // Replace requests to start_url with the lastest version of the root page.
-  // TODO Make more generic: strip utm_* parameters from *every* request.
-  // TODO Pass through credentials (e.g. cookies) and other request metadata, see
-  // https://github.com/ithinkihaveacat/sw-proxy/blob/master/http-proxy.ts#L249.
-  if (request.url.endsWith('/?utm_source=homescreen')) {
-    request = new Request('/');
-  }
-  return toolbox.router.default(request, values, options);
-});
-
-toolbox.router.get(/.*\.(js|png|svg|jpg|css)$/, (request, values, options) => {
-  return toolbox.cacheFirst(request, values, options);
-});
-
 /**
  * Utility method to retrieve a url from the `toolbox.options.cache.name` cache
  *
@@ -74,7 +74,7 @@ const getFromCache = url => {
  * it fails, returns a custom offline page.
  */
 const gulliverHandler = (request, values, options) => {
-  return toolbox.networkFirst(request, values, options)
+  return toolbox.fastest(request, values, options)
     .catch(_ => {
       // networkFirst failed (no network and not in cache)
       getFromCache(OFFLINE_URL).then(response => {
@@ -93,6 +93,23 @@ toolbox.router.default = (request, values, options) => {
   }
   return gulliverHandler(request, values, options);
 };
+
+toolbox.router.get(/\/pwas\/\d+/, toolbox.router.default, PWA_OPTION);
+
+toolbox.router.get('/', (request, values) => {
+  // Replace requests to start_url with the lastest version of the root page.
+  // TODO Make more generic: strip utm_* parameters from *every* request.
+  // TODO Pass through credentials (e.g. cookies) and other request metadata, see
+  // https://github.com/ithinkihaveacat/sw-proxy/blob/master/http-proxy.ts#L249.
+  if (request.url.endsWith('/?utm_source=homescreen')) {
+    request = new Request('/');
+  }
+  return toolbox.router.default(request, values, PWA_LIST_OPTION);
+});
+
+toolbox.router.get(/.*\.(js|png|svg|jpg|css)$/, (request, values, options) => {
+  return toolbox.cacheFirst(request, values, options);
+});
 
 // Claim all clients and delete old caches that are no longer needed.
 self.addEventListener('activate', event => {
