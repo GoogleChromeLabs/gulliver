@@ -15,6 +15,8 @@
 
 /* eslint-env browser */
 
+import './util/requestIdleCallback';
+
 const FADE_OUT_ANIMATION_LENGTH = 500;
 
 /**
@@ -61,14 +63,13 @@ class Loader {
    * @param container {HTMLElement} the element containing the loader.
    */
   hide() {
-    const loaders = this.container.getElementsByClassName('loader');
-    for (let loader of loaders) {
+    const loaders = this.container.querySelectorAll('.loader');
+    loaders.forEach(loader => {
       loader.classList.add('fadeOut');
       window.requestIdleCallback(() => loader.remove(), {
         timeout: FADE_OUT_ANIMATION_LENGTH
       });
-    }
+    });
   }
-
 }
 export default Loader;
