@@ -58,7 +58,7 @@ Finally (and optionally), you need a Firebase project, and the Firebase Cloud Me
 
 1. Run **`npm install`** to install dependencies.
 
-1. Configure your project either via a config file or environment variables (which override the corresponding keys in the config file). To create a config file, copy the [sample config](config/config.sample.json) and adjust the values accordingly:
+1. Configure your project either via a config file or environment variables (which override the corresponding keys in the config file). To create a config file, copy the [sample config](config/config.example.json) and adjust the values accordingly:
 
 ```
 $ cp config/config.example.json config.json
