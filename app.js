@@ -37,8 +37,15 @@ const CACHE_CONTROL_NEVER_EXPIRE = 31536000;
 const ENVIRONMENT_PRODUCTION = 'production';
 
 if (app.get('env') === ENVIRONMENT_PRODUCTION) {
-  app.use(enforce.HTTPS({trustProtoHeader: true})); // eslint-disable-line new-cap
+  app.use((req, res, next) => {
+    if (req.path.startsWith('/tasks/')) {
+      next();
+    } else {
+      enforce.HTTPS({trustProtoHeader: true})(req, res, next); // eslint-disable-line new-cap
+    }
+  });
 }
+
 app.use(compression());
 
 app.disable('x-powered-by');
