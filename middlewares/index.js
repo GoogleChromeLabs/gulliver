@@ -14,7 +14,10 @@
  */
 
 const express = require('express');
+const asset = require('../lib/asset-hashing').asset;
 const router = express.Router(); // eslint-disable-line new-cap
+const CSSPATH = asset.encode('/css/style.css');
+const JSPATH = asset.encode('/js/gulliver.js');
 
 router.use((req, res, next) => {
   res.setHeader('Content-Type', 'text/html');
@@ -34,6 +37,12 @@ router.use((req, res, next) => {
   res.setHeader('x-download-options', 'noopen');
   res.setHeader('x-frame-options', 'SAMEORIGIN');
   res.setHeader('x-xss-protection', '1; mode=block');
+
+  // Set the preload header if a full render is being requested.
+  if (!req.query.contentOnly) {
+    res.setHeader('Link',
+      `<${CSSPATH}>; rel=preload; as=style, <${JSPATH}>; rel=preload; as=script`);
+  }
   next();
 });
 
