@@ -31,6 +31,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const serveStatic = require('serve-static');
 const minifyHTML = require('express-minify-html');
+const libPwa = require('./lib/pwa');
 
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
 const CACHE_CONTROL_NEVER_EXPIRE = 31536000;
@@ -137,6 +138,9 @@ if (module === require.main) {
     const port = server.address().port;
     console.log('App listening on port %s', port);
   });
+
+  // Index all PWAs
+  libPwa.indexAllPwas();
 }
 
 module.exports = app;

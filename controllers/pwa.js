@@ -182,10 +182,14 @@ function renderPwaListPage(req, res) {
   const limit = parseInt(req.query.limit, 10) || LIST_PAGE_SIZE;
   const end = pageNumber * LIST_PAGE_SIZE;
   const contentOnly = false || req.query.contentOnly;
+  const search = false || req.query.search;
   let pwaCount = 0;
   return pwaLib.count()
     .then(count => {
       pwaCount = count;
+      if (search) {
+        return pwaLib.searchPwas(search);
+      }
       return pwaLib.list(start, limit, sortOrder);
     })
     .then(result => {
