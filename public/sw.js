@@ -38,6 +38,7 @@ const SHELL_URL = '/.app/shell';
 const OFFLINE = [
   OFFLINE_URL,
   SHELL_URL,
+  '/?cacheOnly=true',
   '/favicons/android-chrome-72x72.png',
   '/manifest.json',
   '/img/GitHub-Mark-Light-24px.png',
@@ -49,15 +50,6 @@ const OFFLINE = [
 
 toolbox.precache(OFFLINE.concat(ASSETS));
 toolbox.options.cache.name = CACHE_NAME;
-
-// Cache the page registering the service worker. Without this, the
-// "first" page the user visits is only cached on the second visit,
-// since the first load is uncontrolled.
-toolbox.precache(
-  clients.matchAll({includeUncontrolled: true}).then(l => {
-    return l.map(c => c.url);
-  })
-);
 
 /**
  * Utility method to retrieve a url from the `toolbox.options.cache.name` cache
