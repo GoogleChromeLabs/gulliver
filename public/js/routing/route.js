@@ -16,22 +16,22 @@
 /* eslint-env browser */
 
 import 'url-polyfill/url-polyfill';
+import ContentStreamer from '../util/content-streamer';
 
 export default class Route {
   constructor(matchRegex, transitionStrategy, onAttached) {
     this._transitionStrategy = transitionStrategy;
     this._matchRegex = matchRegex;
     this._onAttached = onAttached;
+    this._contentStreamer = new ContentStreamer();
   }
 
   matches(url) {
     return this._matchRegex.test(url);
   }
 
-  retrieveContent(url) {
-    const contentUrl = this.getContentOnlyUrl(url);
-    return fetch(contentUrl)
-      .then(response => response.text());
+  render(container, url) {
+    return this._contentStreamer.stream(container, this.getContentOnlyUrl(url));
   }
 
   transitionOut(container) {

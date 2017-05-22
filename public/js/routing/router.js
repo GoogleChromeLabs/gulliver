@@ -49,9 +49,8 @@ export default class Router {
 
     this._window.scrollTo(0, 0);
     route.transitionOut(this._container);
-    route.retrieveContent(location)
-      .then(content => {
-        this._container.innerHTML = content;
+    route.render(this._container, location)
+      .then(() => {
         route.transitionIn(this._container);
         this._takeOverAnchorLinks(this._container);
         route.onAttached();
