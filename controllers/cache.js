@@ -28,6 +28,12 @@ const CACHE_LIFETIME = 60 * 60 * 6; // 6 hours
  * overrides res.send to be able to cache rendered HTML before sending.
  */
 router.get('*', (req, res, next) => {
+  // do not cache search queries
+  if (req.query.search) {
+    next();
+    return;
+  }
+
   const url = req.originalUrl;
   libCache.get(url)
     .then(cachedHtml => {
