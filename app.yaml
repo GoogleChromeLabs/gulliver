@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-runtime: custom
+runtime: nodejs
 env: flex
 
 # Temporary setting to keep gcloud from uploading node_modules
@@ -22,3 +22,6 @@ handlers:
  - url: /.*
    script: IGNORED
    secure: always
+
+network:
+  instance_tag: memcached-service

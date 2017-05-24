@@ -90,7 +90,7 @@ app.use((req, res, next) => {
   const path = req.url;
   req.url = asset.decode(path);
   let mime = serveStatic.mime.lookup(req.url);
-  if (mime.match('image*')) {
+  if (mime.match('image*') || req.url.includes('manifest.json')) {
     res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
   } else if (req.url === path) {
     res.setHeader('Cache-Control', 'no-cache, max-age=0');

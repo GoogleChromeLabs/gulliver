@@ -39,7 +39,7 @@ router.use((req, res, next) => {
   res.setHeader('x-xss-protection', '1; mode=block');
 
   // Set the preload header if a full render is being requested.
-  if (!req.query.contentOnly) {
+  if (!req.query.contentOnly && !req.originalUrl.startsWith('/.app/')) {
     res.setHeader('Link',
       `<${CSSPATH}>; rel=preload; as=style, <${JSPATH}>; rel=preload; as=script`);
   }
