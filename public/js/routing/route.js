@@ -15,6 +15,8 @@
 
 /* eslint-env browser */
 
+import 'url-polyfill/url-polyfill';
+
 export default class Route {
   constructor(matchRegex, transitionStrategy, onAttached) {
     this._transitionStrategy = transitionStrategy;
@@ -46,6 +48,8 @@ export default class Route {
   }
 
   getContentOnlyUrl(url) {
-    return url + (url.indexOf('?') >= 0 ? '&' : '?') + 'contentOnly=true';
+    const u = new URL(url);
+    u.searchParams.append('contentOnly', 'true');
+    return u.toString();
   }
 }
