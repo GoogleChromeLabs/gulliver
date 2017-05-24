@@ -29,7 +29,7 @@ router.use('/api', require('./api'));
 router.use('/tasks', require('./tasks'));
 
 // PWAs
-router.use('/pwas', require('./pwa'));
+router.use('/pwas', require('./cache'), require('./pwa'));
 
 router.get('/', (req, res) => {
   req.url = '/pwas';
