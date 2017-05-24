@@ -32,6 +32,7 @@ const bodyParser = require('body-parser');
 const serveStatic = require('serve-static');
 const minifyHTML = require('express-minify-html');
 
+const CACHE_CONTROL_SHORT_EXPIRES = 60 * 10; // 10 minutes.
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 24; // 1 day.
 const CACHE_CONTROL_NEVER_EXPIRE = 31536000;
 const ENVIRONMENT_PRODUCTION = 'production';
@@ -92,7 +93,7 @@ app.use((req, res, next) => {
   if (mime.match('image*') || req.url.includes('manifest.json')) {
     res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
   } else if (req.url === path) {
-    res.setHeader('Cache-Control', 'no-cache, max-age=0');
+    res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_SHORT_EXPIRES);
   } else {
     // versioned assets don't expire
     res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_NEVER_EXPIRE);
