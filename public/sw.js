@@ -78,8 +78,19 @@ const gulliverHandler = (request, values, options) => {
     });
 };
 
+const getContentOnlyUrl = url => {
+  const u = new URL(url);
+  u.searchParams.append('contentOnly', 'true');
+  return u.toString();
+};
+
 toolbox.router.default = (request, values, options) => {
   if (request.mode === 'navigate') {
+    // Launch and early request to the content URL that will be loaded from the shell.
+    // Since the response has a short timeout, the browser will re-use the request.
+    toolbox.cacheFirst(new Request(getContentOnlyUrl(request.url)), values, options);
+
+    // Replace the request with the App Shell.
     return getFromCache(SHELL_URL)
       .then(response => response || gulliverHandler(request, values, options));
   }
