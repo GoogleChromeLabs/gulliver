@@ -211,7 +211,7 @@ describe('lib.pwa', () => {
         assert.equal(libPwa.updatePwaMetadataDescription.callCount, 1);
         assert.equal(libPwa.updatePwaIcon.callCount, 1);
         assert.equal(libPwa.savePwa.callCount, 2);
-        assert.equal(promiseSequential.all.callCount, 2);
+        assert.equal(promiseSequential.all.callCount, 1);
         assert.equal(result, pwa);
         assert.equal(libPwa.submitWebPageUrlForWebPerformanceInformation.callCount, 1);
       });
