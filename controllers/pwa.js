@@ -17,6 +17,7 @@
 
 const express = require('express');
 const pwaLib = require('../lib/pwa');
+const libPwaIndex = require('../lib/pwa-index');
 const verifyIdToken = require('../lib/verify-id-token');
 const lighthouseLib = require('../lib/lighthouse');
 const Pwa = require('../models/pwa');
@@ -188,7 +189,7 @@ function renderPwaListPage(req, res) {
     .then(count => {
       pwaCount = count;
       if (search) {
-        return pwaLib.searchPwas(search);
+        return libPwaIndex.searchPwas(search);
       }
       return pwaLib.list(start, limit, sortOrder);
     })
