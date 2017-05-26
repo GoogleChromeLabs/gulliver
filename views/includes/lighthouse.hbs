@@ -3,39 +3,22 @@
   <div class="chart" type='lighthouse' {{#if pwa.id }} pwa={{pwa.id}} {{/if}}>
     <div id="chart-missing" class="hidden">No lighthouse data available</div>
   </div>
-
+  {{#if lighthouse.lighthouseInfo.reportCategories}}
   <input id="toggle" type="checkbox" checked>
   <label id="lighthouse-details" for="toggle">Details</label>
   <div id="expand">
-    {{#if lighthouse.lighthouseInfo.aggregation.scores}}
+    {{#each lighthouse.lighthouseInfo.reportCategories}}
     <table>
       <thead>
-        <tr>
-          <th scope="col">Aggregated Checks</th>
-          <th scope="col">Score</th>
-        </tr>
+        {{{getReportCategoryTableRow this}}}
       </thead>
       <tbody>
-        {{#each lighthouse.lighthouseInfo.aggregation.scores}} 
-          {{{getAggregationTableRow this}}}
-        {{/each}}
-      </tbody>
-    </table>
-    {{/if}}
-    {{#if lighthouse.lighthouseInfo.audits}}
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Audits</th>
-          <th scope="col">Score</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each lighthouse.lighthouseInfo.audits }} 
+        {{#each this.audits}}
           {{{getAuditTableRow this}}}
         {{/each}}
       </tbody>
     </table>
-    {{/if}}
+    {{/each}}
   </div>
+  {{/if}}
 </section>
