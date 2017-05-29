@@ -187,13 +187,28 @@ function renderPwaListPage(req, res) {
   const limit = parseInt(req.query.limit, 10) || LIST_PAGE_SIZE;
   const end = pageNumber * LIST_PAGE_SIZE;
   const contentOnly = false || req.query.contentOnly;
-  const search = false || req.query.search;
+
+  let mainPage = false;
+  let search = false;
+  let searchValue;
+  let backlink = false;
+  if (typeof req.query.search === 'undefined') {
+    mainPage = true;
+    backlink = false;
+    search = false;
+  } else {
+    mainPage = false;
+    backlink = true;
+    search = true;
+    searchValue = req.query.search;
+  }
+
   let pwaCount = 0;
   return pwaLib.count()
     .then(count => {
       pwaCount = count;
       if (search) {
-        return libPwaIndex.searchPwas(search);
+        return libPwaIndex.searchPwas(searchValue);
       }
       return pwaLib.list(start, limit, sortOrder);
     })
@@ -213,7 +228,10 @@ function renderPwaListPage(req, res) {
         pwaCount: pwaCount,
         startPwa: start + 1,
         endPwa: Math.min(pwaCount, end),
-        mainPage: true,
+        mainPage: mainPage,
+        search: search,
+        backlink: backlink,
+        searchValue: searchValue,
         contentOnly: contentOnly
       });
       return render(res, 'pwas/list.hbs', arg);

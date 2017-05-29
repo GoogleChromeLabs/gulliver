@@ -57,6 +57,7 @@ class Gulliver {
     this.setupBacklink();
     this.setupServiceWorker();
     this.setupMessaging();
+    this.setupSearchElements();
 
     // Setup SignIn
     this.signIn = new SignIn(window, this.config);
@@ -89,10 +90,13 @@ class Gulliver {
     this._addRoute(/\/pwas\/add/, transitionStrategy, setupPwaForm, {
       showTabs: false,
       backlink: true,
-      subtitle: true
+      subtitle: true,
+      search: false
     });
 
     const setupCharts = () => {
+      // Clear search-input value
+      document.querySelector('#search-input').value = '';
       const generateChartConfig = chartElement => {
         const pwaId = chartElement.getAttribute('pwa');
         const type = chartElement.getAttribute('type');
@@ -107,16 +111,35 @@ class Gulliver {
     this._addRoute(/\/pwas\/(\d+)/, transitionStrategy, setupCharts, {
       showTabs: false,
       backlink: true,
-      subtitle: false
+      subtitle: true,
+      search: false
     });
 
-    const nop = () => {};
+    const nop = () => {
+      // Clear search-input value
+      document.querySelector('#search-input').value = '';
+    };
+
+    // Link search-input value to search query paramter
+    const setupSearchInput = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      document.querySelector('#search-input').value = urlParams.get('search');
+    };
+
+    // Route for `/?search=`.
+    this._addRoute(/\/\?.*search/, transitionStrategy, setupSearchInput, {
+      showTabs: false,
+      backlink: true,
+      subtitle: true,
+      search: true
+    });
 
     // Route for `/?sort=score`.
     this._addRoute(/\/\?.*sort=score/, transitionStrategy, nop, {
       showTabs: true,
       backlink: false,
-      subtitle: false,
+      subtitle: true,
+      search: false,
       currentTab: 'score'
     });
 
@@ -124,7 +147,8 @@ class Gulliver {
     this._addRoute(/.+/, transitionStrategy, nop, {
       showTabs: true,
       backlink: false,
-      subtitle: false,
+      subtitle: true,
+      search: false,
       currentTab: 'newest'
     });
 
@@ -163,6 +187,33 @@ class Gulliver {
     document.querySelector('a#backlink').addEventListener('click', _ => {
       window.history.back();
     });
+  }
+
+ /**
+  * Setup/configure search button
+  */
+  setupSearchElements() {
+    const eventHandler = event => {
+      event.preventDefault();
+      document.querySelector('#search-button').blur();
+      const searchValue = document.querySelector('#search-input').value;
+      if (searchValue.length === 0) {
+        if (document.querySelector('#backlink').classList.contains('hidden')) {
+          document.querySelector('#newest').classList.toggle('hidden');
+          document.querySelector('#score').classList.toggle('hidden');
+        }
+        document.querySelector('#search').classList.toggle('hidden');
+      } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        // Only navigate if the search query changes
+        if (searchValue !== urlParams.get('search')) {
+          this.router.navigate('/?search=' + searchValue);
+        }
+      }
+      document.querySelector('#search-input').focus();
+    };
+    document.querySelector('#search').addEventListener('submit', eventHandler);
+    document.querySelector('#search-button').addEventListener('click', eventHandler);
   }
 }
 

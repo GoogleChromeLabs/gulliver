@@ -109,7 +109,7 @@ main {
 }
 
 /* Flex NavBar */
-@media (max-width: 903px) {
+@media (max-width: 607px) {
   .navbar {
     height: 55px;
     padding-left: 16px;
@@ -137,13 +137,10 @@ main {
 .section-title {
   height: 48px;
   line-height: 48px;
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  display: -webkit-flex;
+  align-items: center;
+  -webkit-align-items: center;
   font-weight: 500;
   color: white;
   font-size: 16px;
@@ -153,6 +150,10 @@ main {
 }
 .section-title #subtitle {
   margin: 0 16px;
+}
+.section-title .back {
+  align-self: flex-start;
+  margin-right: auto;
 }
 .section-title .back svg {
   fill: white;
@@ -169,6 +170,9 @@ main {
   opacity: 0.7;
   font-weight: 500;
   text-transform: uppercase;
+  flex-grow: 1;
+  max-width: 200px;
+  text-align: center;
 }
 .section-title .activetab {
   color: white;
@@ -186,36 +190,21 @@ main {
   border-width: 2dp;
   opacity: 1;
 }
-@media (min-width: 600px) {
-  .section-title .tab:first-child {
-    margin-left: auto;
-  }
-  .section-title .tab:last-child {
-    margin-right: auto;
-  }
-  .section-title #subtitle {
-    margin: 0 auto;
-  }
-}
-@media (max-width: 410px) {
+@media (max-width: 607px) {
   .section-title .tab {
     padding: 0 16px;
+    max-width: 112px;
+    margin-left: 0 !important;
   }
-}
-#auth-button {
-  position: absolute;
-  bottom: -48px;
-  right: 8px;
-  min-width: 0;
-  height: 48px;
-  line-height: 48px;
-  padding: 0 16px;
+  .section-title {
+    justify-content: flex-start;
+  }
 }
 .button-primary {
   border: 1px solid transparent;
   border-radius: 2px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
-  max-width: 200px;
+  max-width: 100px;
 }
 .button {
   background: none;
@@ -483,25 +472,83 @@ tr:last-child td {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  margin-bottom: 8px;
-  margin-left: 8px;
-  height: 96px;
+  margin: 8px;
+  height: 120px;
   justify-content: space-between;
 }
 .form-input {
-  height: 20px;
-  width: 80%;
-}
-.form-textbox {
-  width: 80%;
-  padding: 10px 16px;
-  background: #F5F5F5;
-  overflow: scroll;
-  border: 1px solid lightgray;
+  height: 30px;
+  max-width: 420px;
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 2px;
+  background: #FFFFFF;
+  border: 0px solid lightgray;
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
 }
 .error {
   margin-left: 8px;
   color: #f07;
+}
+
+/* Serch PWA */
+.search-form {
+  flex-grow: 1;
+}
+.search-form .form-input {
+  margin-left: auto;
+}
+.search-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+  height: 48px;
+  line-height: 48px;
+  padding-left: 8px;
+  margin-right: 88px;
+}
+.search-group input {
+  flex-grow: 1;
+}
+#search-button {
+  min-width: 0;
+  position: absolute;
+  right: 42px;
+  height: 48px;
+}
+#search-button:active {
+  background: #90CAF9;
+  opacity: 1;
+}
+#search-button:focus {
+  outline:0;
+}
+.toolbar-icon svg {
+  height: 48px;
+  width: 30px;
+  fill: #FFFFFF;
+}
+#auth-button {
+  min-width: 0;
+  position: absolute;
+  right: 0px;
+  height: 48px;
+}
+#auth-button:active {
+  background: #90CAF9;
+  opacity: 1;
+}
+#auth-button:focus {
+  outline:0;
+}
+#newest {
+  margin-left: auto;
+  margin-right: 8px;
+}
+#score {
+  margin-left: 8px;
+  margin-right: auto;
 }
 
 /* Footer */

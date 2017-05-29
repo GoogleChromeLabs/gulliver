@@ -21,6 +21,7 @@ export default class Shell {
     this._backlink = document.querySelector('#backlink');
     this._tabs = document.querySelectorAll('#newest, #score');
     this._subtitle = document.querySelector('#subtitle');
+    this._search = document.querySelector('#search');
     this._states = new Map();
   }
 
@@ -53,6 +54,7 @@ export default class Shell {
     const options = this._states.get(route);
     this._showElement(this._backlink, options.backlink);
     this._showElement(this._subtitle, options.subtitle);
+    this._showElement(this._search, options.search);
     this._tabs.forEach(tab => this._updateTab(tab, options));
   }
 }

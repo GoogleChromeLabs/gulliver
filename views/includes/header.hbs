@@ -24,16 +24,19 @@
     {{> notifications_off }}
     <label for="notifications" class="switch-label"></label>
   </div>
-  <button
-    id="auth-button"
-    class="button blue offline-aware"><span class="auth-button-label-login">Login</span><span class="auth-button-label-logout">Logout</span></button>
 </div>
+
 <div class="section-title">
+  <a id="backlink" class="back{{#unless backlink}} hidden{{/unless}}">{{> chevron_left }}</a>
   <a id="newest" class="tab{{#if showNewest}} activetab{{/if}}{{#unless mainPage}} hidden{{/unless}} gulliver-content-only offline-aware" href="/">New</a>
-  <a id="backlink" class="back {{#unless backlink}}hidden{{/unless}}">
-    {{> chevron_left }}
-  </a>
-  <div id="subtitle" class="{{#unless submit}}hidden{{/unless}} gulliver-content-only">Submit a PWA</div>
   <a id="score" class="tab{{#if showScore}} activetab{{/if}}{{#unless mainPage}} hidden{{/unless}} gulliver-content-only offline-aware" href="/?sort=score">Score</a>
+  <form id="search" class="search-form {{#unless search}}hidden{{/unless}}">
+    <div class="search-group">
+      <input id="search-input" type="text" name="search" class="form-input" value="{{searchValue}}" placeholder="Search for PWAs">
+    </div>
+  </form>
+    <button id="search-button" class="button blue offline-aware"><a class="toolbar-icon">{{> icon_search }}</a></button>
+    <button id="auth-button" class="button blue offline-aware">
+      <span class="auth-button-label-login toolbar-icon">{{> icon_log_in}}</span><span class="auth-button-label-logout toolbar-icon">{{> icon_log_out}}</span></button>
 </div>
 <!-- End of header include. -->
