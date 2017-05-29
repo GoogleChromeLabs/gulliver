@@ -89,17 +89,17 @@ exports.highlightedJson = function(object) {
   return syntaxHighlight(JSON.stringify(object, null, 2));
 };
 
-exports.getAggregationTableRow = function(aggregation) {
+exports.getReportCategoryTableRow = function(reportCategory) {
   return '<tr>' +
-    '<td>' + escapeHtml(aggregation.name) + '</td>' +
-    '<td>' + aggregation.overall + '</td>' +
+    '<th scope="col">' + escapeHtml(reportCategory.name) + '</td>' +
+    '<th scope="col">' + Math.round(reportCategory.score) + '</td>' +
     '</tr>';
 };
 
 exports.getAuditTableRow = function(audit) {
   return '<tr>' +
-    '<td>' + escapeHtml(audit.description) + '</td>' +
-    '<td>' + audit.score + '</td>' +
+    '<td>' + escapeHtml(audit.result.description) + '</td>' +
+    '<td>' + audit.result.score + '</td>' +
     '</tr>';
 };
 
@@ -121,7 +121,7 @@ exports.registerHelpers = function(hbs) {
   hbs.registerHelper('moment', exports.moment);
   hbs.registerHelper('prettyJson', exports.prettyJson);
   hbs.registerHelper('highlightedJson', exports.highlightedJson);
-  hbs.registerHelper('getAggregationTableRow', exports.getAggregationTableRow);
+  hbs.registerHelper('getReportCategoryTableRow', exports.getReportCategoryTableRow);
   hbs.registerHelper('getAuditTableRow', exports.getAuditTableRow);
   hbs.registerHelper('asset', assetPath => assetHashing.encode(assetPath));
   hbs.registerHelper('truncate', exports.truncate);

@@ -159,6 +159,10 @@ function renderOnePwa(req, res) {
     .then(pwa => {
       return lighthouseLib.findByPwaId(pwaId)
         .then(lighthouse => {
+          if (lighthouse && lighthouse.lighthouseInfo &&
+              Object.prototype.toString.call(lighthouse.lighthouseInfo) === '[object String]') {
+            lighthouse.lighthouseInfo = JSON.parse(lighthouse.lighthouseInfo);
+          }
           let arg = Object.assign(libMetadata.fromRequest(req, url), {
             pwa: pwa,
             lighthouse: lighthouse,

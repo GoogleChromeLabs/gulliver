@@ -356,7 +356,7 @@ a.card-pwa:hover {
   background: radial-gradient(ellipse at center, #CCC 50%, transparent 50%);
 }
 #expand {
-  max-height: 3100px;
+  max-height: 3760px;
   transition: max-height 0.3s ease-in;
   overflow: hidden;
 }
