@@ -43,7 +43,12 @@ export default class Route {
   }
 
   onAttached() {
-    console.log('onAttached');
+    if (this._onAttached && Array.isArray(this._onAttached)) {
+      this._onAttached.forEach(onAttached => {
+        onAttached && onAttached();
+      });
+      return;
+    }
     return this._onAttached && this._onAttached();
   }
 

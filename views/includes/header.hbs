@@ -12,7 +12,7 @@
  limitations under the License. --}}
 
 <!-- Start of header include. -->
-<div class="navbar">
+<div class="navbar dark-primary-background">
   <div class="navbar-title"><a id="title" class="gulliver-content-only offline-aware" href="/">PWA Directory</a></div>
   <div class="navbar-subtitle hide-on-mobile">
     <a id="subtitle" href="/" class="gulliver-content-only offline-aware">A Directory of Progressive Web Apps</a>
@@ -22,21 +22,25 @@
     <input type="checkbox" id="notifications" class="switch hidden"/>
     {{> notifications_active }}
     {{> notifications_off }}
-    <label for="notifications" class="switch-label"></label>
+    <label for="notifications" class="switch-label box-shadow"></label>
   </div>
 </div>
 
-<div class="section-title">
+<div class="section primary-background box-shadow">
   <a id="backlink" class="back{{#unless backlink}} hidden{{/unless}}">{{> chevron_left }}</a>
-  <a id="newest" class="tab{{#if showNewest}} activetab{{/if}}{{#unless mainPage}} hidden{{/unless}} gulliver-content-only offline-aware" href="/">New</a>
-  <a id="score" class="tab{{#if showScore}} activetab{{/if}}{{#unless mainPage}} hidden{{/unless}} gulliver-content-only offline-aware" href="/?sort=score">Score</a>
-  <form id="search" class="search-form {{#unless search}}hidden{{/unless}}">
-    <div class="search-group">
-      <input id="search-input" type="text" name="search" class="form-input" value="{{searchValue}}" placeholder="Search for PWAs">
-    </div>
-  </form>
-    <button id="search-button" class="button blue offline-aware"><a class="toolbar-icon">{{> icon_search }}</a></button>
-    <button id="auth-button" class="button blue offline-aware">
-      <span class="auth-button-label-login toolbar-icon">{{> icon_log_in}}</span><span class="auth-button-label-logout toolbar-icon">{{> icon_log_out}}</span></button>
+  <div class="section-top"> 
+    <form id="search" class="search-form">
+      <div class="search-group">
+        <input id="search-input" type="text" name="search" class="form-input box-shadow" value="{{searchQuery}}" placeholder="Search for PWAs">
+        <a id="search-icon">{{> icon_search }}</a>
+      </div>
+    </form>
+      <button id="auth-button" class="button blue offline-aware">
+        <span class="auth-button-label-login toolbar-icon">{{> icon_log_in}}</span><span class="auth-button-label-logout toolbar-icon">{{> icon_log_out}}</span></button>
+  </div>
+  <div id="tabs" class="section-tabs{{#unless mainPage}} hidden{{/unless}}">
+    <a id="newest" class="tab{{#if showNewest}} activetab{{/if}} gulliver-content-only offline-aware" href="/">New</a>
+    <a id="score" class="tab{{#if showScore}} activetab{{/if}} gulliver-content-only offline-aware" href="/?sort=score">Score</a>
+  </div>
 </div>
 <!-- End of header include. -->

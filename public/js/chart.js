@@ -32,14 +32,12 @@ export default class Chart {
     return new Promise((resolve, reject) => {
       const chartScript = document.getElementById('google-chart');
       if (chartScript) {
-        console.log('Googler Charts Loader already loaded');
         if (window.google) {
           resolve(window.google);
         } else {
           chartScript.addEventListener('load', _ => resolve(window.google));
         }
       } else {
-        console.log('Loading Googler Charts Loader');
         const script = document.createElement('script');
         script.id = 'google-chart';
         script.defer = true;

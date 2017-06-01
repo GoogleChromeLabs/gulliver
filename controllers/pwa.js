@@ -29,18 +29,84 @@ const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_SORT_ORDER = 'newest';
 
 /**
+ * Setup the list template view state
+ */
+function setupListViewState(req) {
+  const viewState = {};
+  if (typeof req.query.query === 'undefined') {
+    viewState.mainPage = true;
+    viewState.backlink = false;
+    viewState.search = false;
+  } else {
+    viewState.mainPage = false;
+    viewState.backlink = true;
+    viewState.search = true;
+    viewState.searchQuery = req.query.query;
+  }
+  viewState.contentOnly = false || req.query.contentOnly;
+  viewState.pageNumber = parseInt(req.query.page, 10) || DEFAULT_PAGE_NUMBER;
+  viewState.sortOrder = req.query.sort || DEFAULT_SORT_ORDER;
+  viewState.start = parseInt(req.query.start, 10) || (viewState.pageNumber - 1) * LIST_PAGE_SIZE;
+  viewState.limit = parseInt(req.query.limit, 10) || LIST_PAGE_SIZE;
+  viewState.end = viewState.pageNumber * LIST_PAGE_SIZE;
+  return viewState;
+}
+
+/**
+ * Setup the list template view arguments
+ */
+function setupListViewArguments(req, viewState, result) {
+  return Object.assign(libMetadata.fromRequest(req), {
+    title: 'PWA Directory',
+    description: 'PWA Directory: A Directory of Progressive Web Apps',
+    pwas: result.pwas,
+    hasNextPage: result.hasMore,
+    hasPreviousPage: viewState.pageNumber > 1,
+    nextPageNumber: viewState.pageNumber + 1,
+    previousPageNumber: (viewState.pageNumber === 2) ? false : viewState.pageNumber - 1,
+    currentPageNumber: viewState.pageNumber,
+    sortOrder: (viewState.sortOrder === DEFAULT_SORT_ORDER) ? false : viewState.sortOrder,
+    showNewest: viewState.sortOrder === 'newest',
+    showScore: viewState.sortOrder === 'score',
+    startPwa: viewState.start + 1,
+    mainPage: viewState.mainPage,
+    search: viewState.search,
+    backlink: viewState.backlink,
+    searchQuery: viewState.searchQuery,
+    contentOnly: viewState.contentOnly
+  });
+}
+
+/**
  * GET /
  *
  * Display a page of PWAs (up to LIST_PAGE_SIZE at a time)
  */
 router.get('/', (req, res, next) => {
-  renderPwaListPage(req, res)
-    .then(html => {
-      res.send(html);
-    }).catch(err => {
-      err.status = 500;
-      next(err);
-    });
+  const viewState = setupListViewState(req);
+  pwaLib.list(viewState.start, viewState.limit, viewState.sortOrder).then(result =>
+    render(res, 'pwas/list.hbs', setupListViewArguments(req, viewState, result)))
+  .then(html => res.send(html))
+  .catch(err => {
+    err.status = 500;
+    next(err);
+  });
+});
+
+/**
+ * GET /pwas/search
+ *
+ * Display a search result page of PWAs
+ */
+router.get('/search', (req, res, next) => {
+  const viewState = setupListViewState(req);
+  libPwaIndex.searchPwas(viewState.searchQuery).then(result =>
+    render(res, 'pwas/list.hbs', setupListViewArguments(req, viewState, result)))
+  .then(html => res.send(html))
+  .catch(err => {
+    err.status = 500;
+    next(err);
+  });
 });
 
 /**
@@ -139,9 +205,7 @@ router.post('/add', (req, res, next) => {
  */
 router.get('/:pwa', (req, res, next) => {
   renderOnePwa(req, res)
-    .then(html => {
-      res.send(html);
-    })
+    .then(html => res.send(html))
     .catch(err => {
       err.status = 404;
       return next(err);
@@ -174,67 +238,6 @@ function renderOnePwa(req, res) {
           });
           return render(res, 'pwas/view.hbs', arg);
         });
-    });
-}
-
-/**
- * Generate the HTML with 'pwas/list.hbs' for a list of PWAs
- */
-function renderPwaListPage(req, res) {
-  const pageNumber = parseInt(req.query.page, 10) || DEFAULT_PAGE_NUMBER;
-  const sortOrder = req.query.sort || DEFAULT_SORT_ORDER;
-  const start = parseInt(req.query.start, 10) || (pageNumber - 1) * LIST_PAGE_SIZE;
-  const limit = parseInt(req.query.limit, 10) || LIST_PAGE_SIZE;
-  const end = pageNumber * LIST_PAGE_SIZE;
-  const contentOnly = false || req.query.contentOnly;
-
-  let mainPage = false;
-  let search = false;
-  let searchValue;
-  let backlink = false;
-  if (typeof req.query.search === 'undefined') {
-    mainPage = true;
-    backlink = false;
-    search = false;
-  } else {
-    mainPage = false;
-    backlink = true;
-    search = true;
-    searchValue = req.query.search;
-  }
-
-  let pwaCount = 0;
-  return pwaLib.count()
-    .then(count => {
-      pwaCount = count;
-      if (search) {
-        return libPwaIndex.searchPwas(searchValue);
-      }
-      return pwaLib.list(start, limit, sortOrder);
-    })
-    .then(result => {
-      let arg = Object.assign(libMetadata.fromRequest(req), {
-        title: 'PWA Directory',
-        description: 'PWA Directory: A Directory of Progressive Web Apps',
-        pwas: result.pwas,
-        hasNextPage: result.hasMore,
-        hasPreviousPage: pageNumber > 1,
-        nextPageNumber: pageNumber + 1,
-        previousPageNumber: (pageNumber === 2) ? false : pageNumber - 1,
-        currentPageNumber: pageNumber,
-        sortOrder: (sortOrder === DEFAULT_SORT_ORDER) ? false : sortOrder,
-        showNewest: sortOrder === 'newest',
-        showScore: sortOrder === 'score',
-        pwaCount: pwaCount,
-        startPwa: start + 1,
-        endPwa: Math.min(pwaCount, end),
-        mainPage: mainPage,
-        search: search,
-        backlink: backlink,
-        searchValue: searchValue,
-        contentOnly: contentOnly
-      });
-      return render(res, 'pwas/list.hbs', arg);
     });
 }
 
