@@ -34,7 +34,7 @@ The following components are required to run the project (tested on macOS):
 
 In addition, you will need to set up a GCP project, and configure OAuth:
 
-1. Create a [Google Cloud Platform](https://console.cloud.google.com/) project. A GCP project forms the basis of accessing the GCP. (How to verify? Run `gcloud info` and check that the `Account` and `Project` properties are what you expect. Use `gcloud init` to configure `gcloud` if you don't have one already.)
+1. Create a [Google Cloud Platform](https://console.cloud.google.com/) project. A GCP project forms the basis of accessing the GCP. Then, run `gcloud init` to configure `gcloud` locally, if you get the error "Could not load the default credentials" run `gcloud auth login`.
 
 1. Get the OAuth *client id* and *client secret* associated with this project. (How to verify? There's no automatic way, but see [Creating a Google API Console project and client ID](https://developers.google.com/identity/sign-in/web/devconsole-project) for how to create one. Make sure you list `http://localhost:8080` as one of the `Authorized JavaScript origins`.)
 
