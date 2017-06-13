@@ -138,7 +138,7 @@ router.post('/add', (req, res, next) => {
  * Display a PWA or redirects to the encodedStartUrl of the PWA.
  */
 router.get('/:pwa', (req, res, next) => {
-  if (isNaN(+req.params.pwa)) {
+  if (isNaN(Number(req.params.pwa))) {
     // This URL is not a number, assume encodedStartUrl.
     renderOnePwa(req, res)
       .then(html => {
