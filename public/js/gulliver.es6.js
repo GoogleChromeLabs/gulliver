@@ -103,8 +103,8 @@ class Gulliver {
       charts.forEach(chart => new Chart(generateChartConfig(chart)).load());
     };
 
-    // Route for `/pwas/[id]`.
-    this._addRoute(/\/pwas\/(\d+)/, transitionStrategy, setupCharts, {
+    // Route for `/pwas/[id]`. Match allowed characters from encodeURIComponent.
+    this._addRoute(/\/pwas\/[\w\-\.!~*'()%]+/, transitionStrategy, setupCharts, {
       showTabs: false,
       backlink: true,
       subtitle: false
