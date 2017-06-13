@@ -118,7 +118,8 @@ app.use(require('./controllers'));
 
 // If no route has matched, return 404
 app.use((req, res) => {
-  res.status(404).render('404.hbs', {nonce1: req.nonce1, nonce2: req.nonce2});
+  res.status(404).render('404.hbs', 
+    {nonce1: req.nonce1, nonce2: req.nonce2, contentOnly: req.query.contentOnly || false});
 });
 
 // Basic error handler

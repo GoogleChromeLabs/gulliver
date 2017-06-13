@@ -11,18 +11,24 @@
  See the License for the specific language governing permissions and
  limitations under the License. -->
 
+{{#unless contentOnly}}
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Gulliver - PWA Directory - File Not Found</title>
-
     {{> head}}
   </head>
   <body>
-    {{> header}}    
-    <div class="section-title">File Not Found</div>
-    <main>
-    </main>
+    {{> header}}
+    <div class="page-holder">
+      <main class="page">
+{{/unless}}
+    <div class="section-title">Page Not Found</div>
+{{#unless contentOnly}}
+      </main>
+      <div class='page-loader'>
+      </div>
+    </div>
     {{> footer}}
   </body>
 </html>
+{{/unless}}
