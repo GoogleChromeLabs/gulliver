@@ -148,15 +148,16 @@ router.get('/:pwa', (req, res, next) => {
         err.status = 404;
         return next(err);
       });
-  } else {
-    // Otherwise, redirect to /pwas/<encodedStartUrl>.
-    pwaLib.find(req.params.pwa).then(pwa => {
-      res.redirect(req.baseUrl + '/' + pwa.encodedStartUrl);
-    }).catch(err => {
-      err.status = 404;
-      return next(err);
-    });
+    return;
   }
+
+  // Otherwise, redirect to /pwas/<encodedStartUrl>.
+  pwaLib.find(req.params.pwa).then(pwa => {
+    res.redirect(req.baseUrl + '/' + pwa.encodedStartUrl);
+  }).catch(err => {
+    err.status = 404;
+    return next(err);
+  });
 });
 
 /**
