@@ -153,7 +153,7 @@ router.get('/:pwa', (req, res, next) => {
 
   // Otherwise, redirect to /pwas/<encodedStartUrl>.
   pwaLib.find(req.params.pwa).then(pwa => {
-    res.redirect(req.baseUrl + '/' + pwa.encodedStartUrl);
+    res.redirect(301, req.baseUrl + '/' + pwa.encodedStartUrl);
   }).catch(err => {
     err.status = 404;
     return next(err);
