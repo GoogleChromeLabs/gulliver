@@ -32,7 +32,7 @@
 
         <div class="items">
             {{#each pwas}}
-            <a id="{{id}}" class="item card-pwa offline-aware gulliver-content-only box-shadow" href="/pwas/{{id}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
+            <a id="{{id}}" class="item card-pwa offline-aware gulliver-content-only box-shadow" href="/pwas/{{encodedStartUrl}}" style="background-color: {{backgroundColor}}; color:{{contrastColor backgroundColor}}">
             {{#if iconUrl64}}
                 <img class="pwa-icon" src="{{iconUrl64}}" srcset="{{iconUrl64}} 1x, {{iconUrl128}} 2x" width="64" height="64" alt="logo for {{displayName}}"/>
             {{else}}

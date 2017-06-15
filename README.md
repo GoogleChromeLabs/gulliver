@@ -26,7 +26,7 @@ Gulliver was built using the [ExpressJS](https://expressjs.com/) web framework f
 
 The following components are required to run the project (tested on macOS):
 
-1. [NodeJS](https://nodejs.org/) (version ~6.0.0). A JavaScript runtime built on Chrome's V8 JavaScript engine. (How to verify? Run `node --version`.)
+1. [NodeJS](https://nodejs.org/) (LTS version ~6.11.0). A JavaScript runtime built on Chrome's V8 JavaScript engine. (How to verify? Run `node --version`.) If you have a later version, install the LTS version with `nvm`.
 
 1. [Google Cloud SDK](https://cloud.google.com/sdk/). A set of tools for the Google Cloud Platform (GCP) that you can use to access the Google Compute Engine and the Google Cloud Storage, which are two components of GCP used by Gulliver. (How to verify? Run `gcloud --version`.)
 
@@ -34,7 +34,7 @@ The following components are required to run the project (tested on macOS):
 
 In addition, you will need to set up a GCP project, and configure OAuth:
 
-1. Create a [Google Cloud Platform](https://console.cloud.google.com/) project. A GCP project forms the basis of accessing the GCP. (How to verify? Run `gcloud info` and check that the `Account` and `Project` properties are what you expect. Use `gcloud init` to configure `gcloud` if you don't have one already.)
+1. Create a [Google Cloud Platform](https://console.cloud.google.com/) project. A GCP project forms the basis of accessing the GCP. Then, run `gcloud init` to configure `gcloud` locally, if you get the error "Could not load the default credentials" run `gcloud auth login`.
 
 1. Get the OAuth *client id* and *client secret* associated with this project. (How to verify? There's no automatic way, but see [Creating a Google API Console project and client ID](https://developers.google.com/identity/sign-in/web/devconsole-project) for how to create one. Make sure you list `http://localhost:8080` as one of the `Authorized JavaScript origins`.)
 
@@ -50,7 +50,7 @@ Finally (and optionally), you need a Firebase project, and the Firebase Cloud Me
 
 1. Switch into the project directory: `cd gulliver`
 
-1. Create indexes for the [Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview): `gcloud preview datastore create-indexes index.yaml`
+1. Create indexes for the [Google Cloud Datastore](https://cloud.google.com/datastore/docs/concepts/overview): `gcloud datastore create-indexes index.yaml`
 
 1. (Optional) Deploy cron jobs for scheduled PWA updates: `gcloud app deploy cron.yaml`
 
@@ -61,7 +61,7 @@ Finally (and optionally), you need a Firebase project, and the Firebase Cloud Me
 1. Configure your project either via a config file or environment variables (which override the corresponding keys in the config file). To create a config file, copy the [sample config](config/config.example.json) and adjust the values accordingly:
 
 ```
-$ cp config/config.example.json config.json
+$ cp config/config.example.json config/config.json
 $ vim config/config.json
 ```
 

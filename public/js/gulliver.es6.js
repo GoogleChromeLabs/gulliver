@@ -112,8 +112,8 @@ class Gulliver {
       charts.forEach(chart => new Chart(generateChartConfig(chart)).load());
     };
 
-    // Route for `/pwas/[id]`.
-    this._addRoute(/\/pwas\/(\d+)/, transitionStrategy, [setupCharts, setupSearchInput], {
+    // Route for `/pwas/[id]`. Allow most characters (but will only ever be encodedURIComponent).
+    this._addRoute(/\/pwas\/.+/, transitionStrategy, [setupCharts, setupSearchInput], {
       showTabs: false,
       backlink: true,
       subtitle: true,
