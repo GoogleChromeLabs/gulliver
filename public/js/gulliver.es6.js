@@ -179,6 +179,10 @@ class Gulliver {
   */
   setupBacklink() {
     document.querySelector('a#backlink').addEventListener('click', _ => {
+      if (!document.referrer.startsWith(document.location.origin)) {
+        this.router.navigate('/');
+        return;
+      }
       window.history.back();
     });
   }
