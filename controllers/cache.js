@@ -19,7 +19,7 @@ const express = require('express');
 const router = express.Router(); // eslint-disable-line new-cap
 const libCache = require('../lib/data-cache');
 
-const CACHE_LIFETIME = 60 * 60 * 6; // 6 hours
+const CACHE_LIFETIME = 60 * 60; // 1 hour
 
 /**
  * GET *

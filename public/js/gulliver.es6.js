@@ -40,6 +40,7 @@ import Shell from './shell';
 import {LoaderTransitionStrategy} from './routing/transitions';
 import PwaForm from './pwa-form';
 import Chart from './chart';
+import SearchInput from './search-input';
 
 const CHART_BASE_URLS = {
   lighthouse: '/api/lighthouse/graph/PWAID',
@@ -57,6 +58,7 @@ class Gulliver {
     this.setupBacklink();
     this.setupServiceWorker();
     this.setupMessaging();
+    SearchInput.setupSearchElements(this.router);
 
     // Setup SignIn
     this.signIn = new SignIn(window, this.config);
@@ -86,10 +88,17 @@ class Gulliver {
       pwaForm.setup();
     };
 
-    this._addRoute(/\/pwas\/add/, transitionStrategy, setupPwaForm, {
+    // Link search-input value to search query paramter
+    const setupSearchInput = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      document.querySelector('#search-input').value = urlParams.get('query');
+    };
+
+    this._addRoute(/\/pwas\/add/, transitionStrategy, [setupPwaForm, setupSearchInput], {
       showTabs: false,
       backlink: true,
-      subtitle: true
+      subtitle: true,
+      search: true
     });
 
     const setupCharts = () => {
@@ -104,27 +113,36 @@ class Gulliver {
     };
 
     // Route for `/pwas/[id]`. Allow most characters (but will only ever be encodedURIComponent).
-    this._addRoute(/\/pwas\/.+/, transitionStrategy, setupCharts, {
+    this._addRoute(/\/pwas\/.+/, transitionStrategy, [setupCharts, setupSearchInput], {
       showTabs: false,
       backlink: true,
-      subtitle: false
+      subtitle: true,
+      search: true
     });
 
-    const nop = () => {};
+    // Route for `/?search=`.
+    this._addRoute(/\/pwas\/search\?query/, transitionStrategy, setupSearchInput, {
+      showTabs: false,
+      backlink: true,
+      subtitle: true,
+      search: true
+    });
 
     // Route for `/?sort=score`.
-    this._addRoute(/\/\?.*sort=score/, transitionStrategy, nop, {
+    this._addRoute(/\/\?.*sort=score/, transitionStrategy, setupSearchInput, {
       showTabs: true,
       backlink: false,
-      subtitle: false,
+      subtitle: true,
+      search: true,
       currentTab: 'score'
     });
 
     // Route for `/`.
-    this._addRoute(/.+/, transitionStrategy, nop, {
+    this._addRoute(/.+/, transitionStrategy, setupSearchInput, {
       showTabs: true,
       backlink: false,
-      subtitle: false,
+      subtitle: true,
+      search: true,
       currentTab: 'newest'
     });
 

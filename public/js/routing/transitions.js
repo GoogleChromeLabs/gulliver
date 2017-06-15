@@ -18,12 +18,10 @@ import Loader from '../loader';
 
 export class FadeInOutTransitionStrategy {
   transitionIn(container) {
-    console.log('Transition In');
     container.classList.remove('transition');
   }
 
   transitionOut(container) {
-    console.log('Transition Out');
     container.classList.add('transition');
   }
 }
@@ -36,13 +34,11 @@ export class LoaderTransitionStrategy {
   }
 
   transitionIn(container) {
-    console.log('Transition In');
     container.classList.remove('transition');
     this._loader.hide();
   }
 
   transitionOut(container) {
-    console.log('Transition Out');
     container.classList.add('transition');
     this._loader.show();
   }
