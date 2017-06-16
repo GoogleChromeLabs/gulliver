@@ -204,26 +204,15 @@ router.post('/add', (req, res, next) => {
  * Display a PWA or redirects to the encodedStartUrl of the PWA.
  */
 router.get('/:pwa', (req, res, next) => {
-  if (isNaN(Number(req.params.pwa))) {
-    // This URL is not a number, assume encodedStartUrl.
-    renderOnePwa(req, res)
-      .then(html => {
-        res.send(html);
-      })
-      .catch(err => {
-        err.status = 404;
-        return next(err);
-      });
-    return;
-  }
-
-  // Otherwise, redirect to /pwas/<encodedStartUrl>.
-  pwaLib.find(req.params.pwa).then(pwa => {
-    res.redirect(301, req.baseUrl + '/' + pwa.encodedStartUrl);
-  }).catch(err => {
-    err.status = 404;
-    return next(err);
-  });
+  renderOnePwa(req, res)
+    .then(html => {
+      res.send(html);
+    })
+    .catch(err => {
+      err.status = 404;
+      return next(err);
+    });
+  return;
 });
 
 /**
@@ -233,7 +222,7 @@ function renderOnePwa(req, res) {
   const url = req.originalUrl;
   const pwaId = encodeURIComponent(req.params.pwa);  // we have foo/ here, need foo%2F
   const contentOnly = false || req.query.contentOnly;
-  return pwaLib.findByEncodedStartUrl(pwaId)
+  return pwaLib.find(pwaId)
     .then(pwa => {
       return lighthouseLib.findByPwaId(pwaId)
         .then(lighthouse => {
