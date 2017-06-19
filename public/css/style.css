@@ -322,10 +322,15 @@ a.card-pwa:hover {
   border-radius: 2px;
 }
 .detail-general h3 { 
-  color: #1976D2;
+  color: #333333;
   margin: 0;
   padding: 16px;
 }
+
+.detail-general a {
+  color: #1976D2;
+}
+
 .detail-general h3 > .score {
   float: right;
 }
