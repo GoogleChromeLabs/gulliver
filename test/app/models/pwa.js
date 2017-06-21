@@ -95,6 +95,27 @@ describe('models/pwa.js', () => {
     assert.equal(pwa.description, 'manifestDescription');
   });
 
+  it('Generates encodedStartUrl and saves in previousEncodedStartUrl', () => {
+    const manifestJson = {start_url: '/'};
+    const manifest = new Manifest(MANIFEST_URL, manifestJson);
+    const pwa = new Pwa(MANIFEST_URL, manifest);
+    assert.equal(pwa.absoluteStartUrl, 'http://www.example.com/');
+    pwa.generateEncodedStartUrl();
+    assert.equal(pwa.encodedStartUrl, 'www.example.com%2F');
+
+    manifestJson.start_url = '/landing.html';
+    const manifestUpdate = new Manifest(MANIFEST_URL, manifestJson);
+    pwa.manifest = manifestUpdate;
+    assert.equal(pwa.absoluteStartUrl, 'http://www.example.com/landing.html');
+    pwa.generateEncodedStartUrl();
+    assert.equal(pwa.encodedStartUrl, 'www.example.com%2Flanding.html');
+    assert.deepEqual(pwa.previousEncodedStartUrl, ['www.example.com%2F']);
+
+    pwa.generateEncodedStartUrl();
+    assert.deepEqual(pwa.previousEncodedStartUrl, ['www.example.com%2F'],
+        'previousEncodedStartUrl should not change');
+  });
+
   describe('displayName', () => {
     it('is name', () => {
       const pwa = this.newPwa('www.manifesturl.com', {

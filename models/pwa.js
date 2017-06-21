@@ -28,6 +28,7 @@ class Pwa {
     this.created = new Date();
     this.updated = this.created;
     this.visible = true;
+    this.previousEncodedStartUrl = [];
   }
 
   get shortName() {
@@ -106,8 +107,17 @@ class Pwa {
   }
 
   generateEncodedStartUrl() {
+    const previous = this.encodedStartUrl;
     const parsedUrl = URL.parse(this.absoluteStartUrl);
-    this.encodedStartUrl = encodeURIComponent(parsedUrl.hostname + parsedUrl.pathname);
+    const update = encodeURIComponent(parsedUrl.hostname + parsedUrl.pathname);
+    if (update !== previous) {
+      // nb. This writes all previous URLs, not just ones that change in encoding. Instead, this
+      // could check if absoluteStartUrl has NOT changed.
+      if (previous && this.previousEncodedStartUrl.indexOf(previous) === -1) {
+        this.previousEncodedStartUrl.push(previous);
+      }
+      this.encodedStartUrl = update;
+    }
     return this.encodedStartUrl;
   }
 

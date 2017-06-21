@@ -204,9 +204,28 @@ router.post('/add', (req, res, next) => {
  * Display a PWA or redirects to the encodedStartUrl of the PWA.
  */
 router.get('/:pwa', (req, res, next) => {
-  if (isNaN(Number(req.params.pwa))) {
-    // This URL is not a number, assume encodedStartUrl.
-    renderOnePwa(req, res)
+  function redirect(pwa) {
+    return new Promise(resolve => {
+      res.redirect(301, req.baseUrl + '/' + pwa.encodedStartUrl);
+      resolve();
+    }).catch(err => {
+      err.status = 404;
+      return next(err);
+    });
+  }
+
+  if (!isNaN(Number(req.params.pwa))) {
+    // this is a number, find and redirect to encodedUrl
+    pwaLib.find(req.params.pwa).then(redirect);
+    return;
+  }
+  const pwaId = encodeURIComponent(req.params.pwa);  // we have foo/ here, need foo%2F
+  pwaLib.findByEncodedStartUrl(pwaId).then(pwa => {
+    if (!pwa) {
+      // check previous URLs and redirect if found
+      return pwaLib.findByPreviousEncodedStartUrl(pwaId).then(redirect);
+    }
+    return renderOnePwa(pwa, req, res)
       .then(html => {
         res.send(html);
       })
@@ -214,44 +233,31 @@ router.get('/:pwa', (req, res, next) => {
         err.status = 404;
         return next(err);
       });
-    return;
-  }
-
-  // Otherwise, redirect to /pwas/<encodedStartUrl>.
-  pwaLib.find(req.params.pwa).then(pwa => {
-    res.redirect(301, req.baseUrl + '/' + pwa.encodedStartUrl);
-  }).catch(err => {
-    err.status = 404;
-    return next(err);
   });
 });
 
 /**
  * Generate the HTML with 'pwas/view.hbs' for one PWA
  */
-function renderOnePwa(req, res) {
+function renderOnePwa(pwa, req, res) {
   const url = req.originalUrl;
-  const pwaId = encodeURIComponent(req.params.pwa);  // we have foo/ here, need foo%2F
   const contentOnly = false || req.query.contentOnly;
-  return pwaLib.findByEncodedStartUrl(pwaId)
-    .then(pwa => {
-      return lighthouseLib.findByPwaId(pwaId)
-        .then(lighthouse => {
-          if (lighthouse && lighthouse.lighthouseInfo &&
-              Object.prototype.toString.call(lighthouse.lighthouseInfo) === '[object String]') {
-            lighthouse.lighthouseInfo = JSON.parse(lighthouse.lighthouseInfo);
-          }
-          let arg = Object.assign(libMetadata.fromRequest(req, url), {
-            pwa: pwa,
-            lighthouse: lighthouse,
-            rawManifestJson: JSON.parse(pwa.manifest.raw),
-            title: 'PWA Directory: ' + pwa.name,
-            description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description,
-            backlink: true,
-            contentOnly: contentOnly
-          });
-          return render(res, 'pwas/view.hbs', arg);
-        });
+  return lighthouseLib.findByPwaId(pwa.id)
+    .then(lighthouse => {
+      if (lighthouse && lighthouse.lighthouseInfo &&
+          Object.prototype.toString.call(lighthouse.lighthouseInfo) === '[object String]') {
+        lighthouse.lighthouseInfo = JSON.parse(lighthouse.lighthouseInfo);
+      }
+      let arg = Object.assign(libMetadata.fromRequest(req, url), {
+        pwa: pwa,
+        lighthouse: lighthouse,
+        rawManifestJson: JSON.parse(pwa.manifest.raw),
+        title: 'PWA Directory: ' + pwa.name,
+        description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description,
+        backlink: true,
+        contentOnly: contentOnly
+      });
+      return render(res, 'pwas/view.hbs', arg);
     });
 }
 
