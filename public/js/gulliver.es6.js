@@ -179,8 +179,6 @@ class Gulliver {
   */
   setupBacklink() {
     document.querySelector('a#backlink').addEventListener('click', _ => {
-      console.log('referrer:' + document.referrer);
-      console.log('location.origin:' + document.location.origin);
       if (document.referrer.length > 0 &&
           !document.referrer.startsWith(document.location.origin)) {
         this.router.navigate('/');
