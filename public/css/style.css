@@ -37,6 +37,7 @@ body {
   position: relative;
   min-height: 100%;
   padding-bottom: 10px;
+  overflow-x: hidden;
 }
 
 pre, code {
