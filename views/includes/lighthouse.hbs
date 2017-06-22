@@ -1,5 +1,5 @@
 <section class="detail-general">
-  <h3>LIGHTHOUSE  {{> score pwa}} </h3>    
+  <h3>LIGHTHOUSE  {{> score pwa}} </h3>  
   <div class="chart" type='lighthouse' {{#if pwa.id }} pwa={{pwa.id}} {{/if}}>
     <div id="chart-missing" class="hidden">No lighthouse data available</div>
   </div>
@@ -7,6 +7,14 @@
   <input id="toggle" type="checkbox" checked>
   <label id="lighthouse-details" for="toggle">Details</label>
   <div id="expand">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Lighthouse version</th>
+          <th scope="col">{{lighthouse.lighthouseVersion}}</th>
+        </tr>
+      </thead>
+    </table>
     {{#each lighthouse.lighthouseInfo.reportCategories}}
     <table>
       <thead>

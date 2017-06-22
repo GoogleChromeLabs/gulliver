@@ -91,8 +91,8 @@ exports.highlightedJson = function(object) {
 
 exports.getReportCategoryTableRow = function(reportCategory) {
   return '<tr>' +
-    '<th scope="col">' + escapeHtml(reportCategory.name) + '</td>' +
-    '<th scope="col">' + Math.round(reportCategory.score) + '</td>' +
+    '<th scope="col">' + escapeHtml(reportCategory.name) + '</th>' +
+    '<th scope="col">' + Math.round(reportCategory.score) + '</th>' +
     '</tr>';
 };
 

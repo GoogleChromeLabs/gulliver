@@ -292,8 +292,7 @@ a.card-pwa:hover {
 }
 
 .score {
-  align-self: flex-end;
-  height: 16px;
+  float: right;
   font-weight: 600;
   background: no-repeat center left url(/img/lighthouse-18.png);
   background: no-repeat center left -webkit-image-set(
@@ -327,13 +326,9 @@ a.card-pwa:hover {
   margin: 0;
   padding: 16px;
 }
-
 .detail-general a {
   color: #1976D2;
-}
-
-.detail-general h3 > .score {
-  float: right;
+  text-decoration: underline;
 }
 .transition .detail-general {
   opacity: 0;
