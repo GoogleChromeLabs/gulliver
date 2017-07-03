@@ -95,6 +95,15 @@ export default class Router {
     this._eventTarget.dispatchEvent(event);
   }
 
+  _dispatchOutboundNavigationEvent(url) {
+    const event = this._document.createEvent('CustomEvent');
+    const detail = {
+      url: url
+    };
+    event.initCustomEvent('navigateoutbound', false, false, detail);
+    this._eventTarget.dispatchEvent(event);
+  }
+
   _isNotLeftClickWithoutModifiers(e) {
     return e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey;
   }
@@ -113,6 +122,7 @@ export default class Router {
 
         // Never catch links to external websites.
         if (!e.currentTarget.href.startsWith(this._window.location.origin)) {
+          this._dispatchOutboundNavigationEvent(e.currentTarget.href);
           return true;
         }
 

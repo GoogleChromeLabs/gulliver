@@ -47,6 +47,10 @@ export default class Analytics {
     });
   }
 
+  trackOutboundClick(url) {
+    this.window.ga('send', 'event', 'outbound', 'click', url, {transport: 'beacon'});
+  }
+
   trackPageView(url) {
     this.window.ga('set', 'page', url);
     this.window.ga('set', 'dimension1', this.navigator.onLine);
