@@ -67,6 +67,10 @@ class Gulliver {
     // Setup Analytics
     this.analytics = new Analytics(window, this.config);
     this.analytics.trackPageView(window.location.href);
+    this.router.addEventListener('navigateoutbound', e => {
+      this.analytics.trackOutboundClick(e.detail.url);
+    });
+
     this.router.addEventListener('navigate', e => {
       this.analytics.trackPageView(e.detail.url);
       this.shell.onRouteChange(e.detail.route);
