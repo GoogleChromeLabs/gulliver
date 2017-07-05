@@ -88,7 +88,8 @@ export default class Router {
     const event = this._document.createEvent('CustomEvent');
     const detail = {
       url: url,
-      route: route
+      route: route,
+      container: this._container
     };
     event.initCustomEvent(
         'navigate', /* bubbles */ false, /* cancelable */ false, detail);
