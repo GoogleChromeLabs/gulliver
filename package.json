@@ -2,7 +2,7 @@
   "name": "gulliver",
   "version": "1.0.0",
   "description": "A directory of PWAs",
-  "repository": "https://github.com/GoogleCloudPlatform/nodejs-getting-started",
+  "repository": "https://github.com/GoogleChrome/gulliver",
   "private": true,
   "scripts": {
     "start": "node app.js",
