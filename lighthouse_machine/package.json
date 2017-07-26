@@ -1,0 +1,25 @@
+{
+  "name": "lighthouse_machine_server",
+  "version": "1.0.0",
+  "description": "A server for the lighthouse machine",
+  "repository": "https://github.com/GoogleChrome/gulliver/lighthouse_machine",
+  "author": "Google Inc.",
+  "contributors": [
+    {
+      "name": "Cedric Bellet",
+      "email": "cbellet@google.com"
+    },
+    {
+      "name": "Julian Toledo",
+      "email": "jtoledo@google.com"
+    }
+  ],
+  "license": "Apache-2.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.13.3"
+  }
+}
