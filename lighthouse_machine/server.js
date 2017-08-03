@@ -101,8 +101,7 @@ app.get('/_ah/health', (req, res) => {
   if (chromePanick) {
     // If we have a Chrome panick send a 500
     res.sendStatus(500);
-  }
-  else if (cpuAlert) {
+  } else if (cpuAlert) {
     // if we have a CPU alert send a 500, otherwise send a 200
     res.sendStatus(500);
   } else {
