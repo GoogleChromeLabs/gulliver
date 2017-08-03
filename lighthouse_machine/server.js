@@ -22,6 +22,9 @@ const https = require('https');
 const fs = require('fs');
 const cpuMonitor = require('./cpu_monitor');
 
+// Chrome panick
+let chromePanick = false;
+
 // CPU monitoring
 let cpuPoints = new Array(5);
 let cpuAlert = false;
@@ -50,7 +53,7 @@ const HTTPS_PORT = 8443;
 // HTTPS options
 const options = {
   key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
+  cert: fs.readFileSync('cert.pem'),
 };
 
 // App
@@ -69,14 +72,21 @@ app.get('/', (req, res) => {
         --output=${req.query.format} ${req.query.url}`,
         {
           cwd: '/lighthouse',
-          timeout: 500000
+          timeout: 500000,
         },
         error => {
           if (error !== null) {
             console.log(`exec error: ${error}`);
+
+            // This is for when Chrome crashes and Lighthouse is unable to reconnect
+            // to an appropriate instance of Chrome
+            if (error.message.includes('Unable to connect')) {
+              chromePanick = true;
+            }
           }
-          res.sendFile(`/report.${req.query.format}`);
+
           isBusy = false;
+          res.sendFile(`/report.${req.query.format}`);
         }
       );
     } catch (e) {
@@ -88,8 +98,13 @@ app.get('/', (req, res) => {
 
 // Auto-healing endpoint
 app.get('/_ah/health', (req, res) => {
+  // If we have a Chrome panick send a 500
+  if (chromePanick) {
+    res.sendStatus(500);
+  }
+
   // if we have a CPU alert send a 500, otherwise send a 200
-  if (cpuAlert) {
+  else if (cpuAlert) {
     res.sendStatus(500);
   } else {
     res.sendStatus(200);
