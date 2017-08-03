@@ -53,7 +53,7 @@ const HTTPS_PORT = 8443;
 // HTTPS options
 const options = {
   key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem'),
+  cert: fs.readFileSync('cert.pem')
 };
 
 // App
@@ -72,7 +72,7 @@ app.get('/', (req, res) => {
         --output=${req.query.format} ${req.query.url}`,
         {
           cwd: '/lighthouse',
-          timeout: 500000,
+          timeout: 500000
         },
         error => {
           if (error !== null) {
@@ -98,13 +98,12 @@ app.get('/', (req, res) => {
 
 // Auto-healing endpoint
 app.get('/_ah/health', (req, res) => {
-  // If we have a Chrome panick send a 500
   if (chromePanick) {
+    // If we have a Chrome panick send a 500
     res.sendStatus(500);
   }
-
-  // if we have a CPU alert send a 500, otherwise send a 200
   else if (cpuAlert) {
+    // if we have a CPU alert send a 500, otherwise send a 200
     res.sendStatus(500);
   } else {
     res.sendStatus(200);
