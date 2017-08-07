@@ -18,7 +18,7 @@ FROM ubuntu:latest
 
 # Install utilities
 RUN apt-get update --fix-missing && apt-get -y upgrade &&\
-apt-get install -y sudo curl wget unzip git
+apt-get install -y sudo apt-utils curl wget unzip git
 
 # Install node 6
 RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &&\
@@ -55,7 +55,7 @@ RUN chmod +x /chromeuser-script.sh
 # Download lighthouse
 RUN git clone https://github.com/googlechrome/lighthouse &&\
 cd /lighthouse &&\
-git checkout tags/v2.2.1 &&\
+git checkout tags/v2.3.0 &&\
 npm install -g yarn &&\
 npm install -g yarnpkg &&\
 npm install -g @types/mkdirp &&\
@@ -64,7 +64,7 @@ npm install -g typescript &&\
 npm install -g &&\
 yarn &&\
 yarn install-all &&\
-yarn build-all 
+yarn build-all
 
 ## PART 3: Express server
 ## ======================
@@ -103,5 +103,3 @@ EXPOSE 8443
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-
-# CMD ["/bin/bash"]

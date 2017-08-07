@@ -22,6 +22,9 @@ const https = require('https');
 const fs = require('fs');
 const cpuMonitor = require('./cpu_monitor');
 
+// Chrome panick
+let chromePanick = false;
+
 // CPU monitoring
 let cpuPoints = new Array(5);
 let cpuAlert = false;
@@ -74,9 +77,16 @@ app.get('/', (req, res) => {
         error => {
           if (error !== null) {
             console.log(`exec error: ${error}`);
+
+            // This is for when Chrome crashes and Lighthouse is unable to reconnect
+            // to an appropriate instance of Chrome
+            if (error.message.includes('Unable to connect')) {
+              chromePanick = true;
+            }
           }
-          res.sendFile(`/report.${req.query.format}`);
+
           isBusy = false;
+          res.sendFile(`/report.${req.query.format}`);
         }
       );
     } catch (e) {
@@ -88,8 +98,11 @@ app.get('/', (req, res) => {
 
 // Auto-healing endpoint
 app.get('/_ah/health', (req, res) => {
-  // if we have a CPU alert send a 500, otherwise send a 200
-  if (cpuAlert) {
+  if (chromePanick) {
+    // If we have a Chrome panick send a 500
+    res.sendStatus(500);
+  } else if (cpuAlert) {
+    // if we have a CPU alert send a 500, otherwise send a 200
     res.sendStatus(500);
   } else {
     res.sendStatus(200);
