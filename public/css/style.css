@@ -406,6 +406,8 @@ body:not(.transition) #pwa:hover {
 #pwa > div {
   margin-top: 16px;
   min-height: 18px;
+  width: 100%;
+  text-align: center;  
 }
 #pwa .dates {
   font-style: italic;
