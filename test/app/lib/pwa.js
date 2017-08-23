@@ -205,12 +205,13 @@ describe('lib.pwa', () => {
       simpleMock.mock(libPwa, 'sendNewAppNotification').resolveWith(pwa);
       simpleMock.mock(libPwa, 'savePwa').resolveWith(pwa);
       simpleMock.mock(libPwa, 'submitWebPageUrlForWebPerformanceInformation').resolveWith(pwa);
+      simpleMock.mock(libPwa, 'removePwaFromCache').resolveWith(pwa);
       simpleMock.mock(promiseSequential, 'all');
       return libPwa.createOrUpdatePwa(pwa).should.be.fulfilled.then(result => {
         assert.equal(libPwa.updatePwaManifest.callCount, 1);
-        assert.equal(libPwa.updatePwaMetadataDescription.callCount, 1);
         assert.equal(libPwa.updatePwaIcon.callCount, 1);
         assert.equal(libPwa.savePwa.callCount, 2);
+        assert.equal(libPwa.removePwaFromCache.callCount, 1);
         assert.equal(promiseSequential.all.callCount, 1);
         assert.equal(result, pwa);
         assert.equal(libPwa.submitWebPageUrlForWebPerformanceInformation.callCount, 1);
