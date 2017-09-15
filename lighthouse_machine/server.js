@@ -109,6 +109,15 @@ app.get('/_ah/health', (req, res) => {
   }
 });
 
+// Busy-ness endpoit
+app.get('/_ah/busy', (req, res) => {
+  if (isBusy) {
+    res.sendStatus(503);
+  } else {
+    res.sendStatus(200);
+  }
+});
+
 http.createServer(app).listen(HTTP_PORT);
 https.createServer(options, app).listen(HTTPS_PORT);
 

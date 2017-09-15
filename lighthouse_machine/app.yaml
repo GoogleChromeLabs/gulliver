@@ -30,9 +30,18 @@ handlers:
   script: IGNORED
   secure: always
 
-health_check:
-  enable_health_check: True
-  check_interval_sec: 10
-  timeout_sec: 10
-  unhealthy_threshold: 2
-  healthy_threshold: 2
+liveness_check:
+   path: '/_ah/health'
+   check_interval_sec: 30
+   timeout_sec: 4
+   failure_threshold: 3
+   success_threshold: 2
+   initial_delay_sec: 60
+
+readiness_check:
+  path: '/_ah/busy'
+  check_interval_sec: 3
+  timeout_sec: 2
+  failure_threshold: 1
+  success_threshold: 1
+  app_start_timeout_sec: 300
