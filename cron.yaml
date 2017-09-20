@@ -11,3 +11,7 @@ cron:
   url: /taskcreator
   schedule: every day 00:00
   target: web-performance
+
+- description: update unscored PWAs
+  url: /tasks/updateunscored
+  schedule: every 6 hours

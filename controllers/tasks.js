@@ -25,30 +25,64 @@ const promiseSequential = require('../lib/promise-sequential');
 const APP_ENGINE_CRON = 'X-Appengine-Cron';
 
 /**
+ * Checks for the presence of the 'X-Appengine-Cron' header on the request.
+ * Only requests from the App Engine cron are allowed.
+ */
+function checkAppEngineCron(req, res, next) {
+  if (!req.get(APP_ENGINE_CRON)) {
+    return res.sendStatus(403);
+  }
+  return next();
+}
+
+/**
+ * Creates a pwaLib.createOrUpdatePwa task for the given pwaId
+ */
+function createOrUpdatePwaTasks(pwaList) {
+  const modulePath = require.resolve('../lib/pwa');
+  pwaList.forEach(pwa => {
+    tasksLib.push(new Task(pwa.id, modulePath, 'createOrUpdatePwa', 0));
+  });
+}
+
+/**
  * GET /tasks/cron
  *
  * We use a GET from the cron job to launch a PWA update process
  * for all PWAs.
+ *
+ * Uses checkAppEngineCron to allow only request from cron job.
  */
-router.get('/cron', (req, res, next) => {
-  // Checks for the presence of the 'X-Appengine-Cron' header on the request.
-  // Only requests from the App Engine cron are allowed.
-  if (req.get(APP_ENGINE_CRON)) {
-    pwaLib.list()
-      .then(result => {
-        // Create one update task for each PWA
-        result.pwas.forEach(pwa => {
-          const modulePath = require.resolve('../lib/pwa');
-          tasksLib.push(new Task(pwa.id, modulePath, 'createOrUpdatePwa', 0));
-        });
-        res.sendStatus(200);
-      })
-      .catch(err => {
-        next(err);
-      });
-  } else {
-    res.sendStatus(403);
-  }
+router.get('/cron', checkAppEngineCron, (req, res, next) => {
+  pwaLib.list(undefined, undefined, 'newest')
+    .then(result => {
+      // Create one update task for each PWA
+      createOrUpdatePwaTasks(result.pwas);
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      next(err);
+    });
+});
+
+/**
+ * GET /tasks/updateunscored
+ *
+ * We use a GET from the cron job to launch a PWA update process
+ * for all PWAs.
+ *
+ * Uses checkAppEngineCron to allow only request from cron job.
+ */
+router.get('/updateunscored', checkAppEngineCron, (req, res, next) => {
+  return pwaLib.list(undefined, undefined, 'newest')
+    .then(result => {
+      // Create one update task for each unscored PWA
+      createOrUpdatePwaTasks(result.pwas.filter(pwa => !pwa.lighthouseScore));
+      res.sendStatus(200);
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 
 /**
@@ -56,27 +90,23 @@ router.get('/cron', (req, res, next) => {
  *
  * We use a GET from the cron job to execute each PWA update task
  * The tasks parameter is the number of tasks to execute per run
+ *
+ * Uses checkAppEngineCron to allow only request from cron job.
  */
-router.get('/execute', (req, res, next) => {
-  // Checks for the presence of the 'X-Appengine-Cron' header on the request.
-  // Only requests from the App Engine cron are allowed.
+router.get('/execute', checkAppEngineCron, (req, res, next) => {
   const tasksToExecute = req.query.tasks ? req.query.tasks : 1;
   const tasksList = [];
-  if (req.get(APP_ENGINE_CRON)) {
-    try {
-      for (let i = 0; i < tasksToExecute; i++) {
-        tasksList.push(tasksLib.popExecute);
-      }
-      // Execute sequentially the 1 OR req.query.tasks of tasks
-      promiseSequential.all(tasksList)
-        .then(_ => {
-          res.sendStatus(200);
-        });
-    } catch (err) {
-      next(err);
+  try {
+    for (let i = 0; i < tasksToExecute; i++) {
+      tasksList.push(tasksLib.popExecute);
     }
-  } else {
-    res.sendStatus(403);
+    // Execute sequentially the 1 OR req.query.tasks of tasks
+    promiseSequential.all(tasksList)
+      .then(_ => {
+        res.sendStatus(200);
+      });
+  } catch (err) {
+    next(err);
   }
 });
 
