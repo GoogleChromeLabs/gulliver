@@ -119,17 +119,16 @@ export default class Messaging {
           return Promise.resolve([]);
         }
         const url = TOPICS_ENDPOINT + '?token=' + token;
-        return fetch(url, {
-          headers: {
-            Accept: 'application/json'
-          }
-        });
-      })
-      .then(response => {
-        return response.json();
-      })
-      .then(json => {
-        return json.subscriptions;
+        return fetch(url, {headers: {Accept: 'application/json'}})
+          .then(response => {
+            if (response.status !== 200) {
+              return [];
+            }
+            return response.json()
+              .then(json => {
+                return json.subscriptions;
+              });
+          });
       })
       .catch(err => {
         console.error('Error fetching subscriptions: ', err);
