@@ -36,14 +36,16 @@ const APP_ENGINE_CRON = 'X-Appengine-Cron';
 const MANIFEST_URL = 'https://www.terra.com.br/manifest-br.json';
 
 describe('controllers.tasks', () => {
-  let pwa;
   let listPwas = {};
   let task;
   before(done => {
     app.use(controllerTasks);
-    pwa = new Pwa(MANIFEST_URL, null);
-    pwa.id = 123456789;
-    listPwas.pwas = new Array(pwa);
+    let pwa1 = new Pwa(MANIFEST_URL, null);
+    pwa1.id = 123456789;
+    let pwa2 = new Pwa(MANIFEST_URL, null);
+    pwa2.id = 234567890;
+    pwa2.lighthouseScore = 99;
+    listPwas.pwas = [pwa1, pwa2];
     task = new Task(123456789);
     done();
   });
@@ -64,6 +66,31 @@ describe('controllers.tasks', () => {
       simpleMock.mock(pwaLib, 'list').resolveWith(listPwas);
       request(app)
         .get('/cron')
+        .set(APP_ENGINE_CRON, true)
+        .expect(200).should.be.fulfilled.then(_ => {
+          assert.equal(pwaLib.list.callCount, 1);
+          assert.equal(tasksLib.push.callCount, 2);
+          done();
+        });
+    });
+  });
+
+  describe('GET /tasks/updateunscored', () => {
+    afterEach(() => {
+      simpleMock.restore();
+    });
+
+    it('respond with 403 forbidden when X-Appengine-Cron not present', done => {
+      request(app)
+        .get('/updateunscored')
+        .expect(403, done);
+    });
+
+    it('respond with 200 when X-Appengine-Cron is present', done => {
+      simpleMock.mock(tasksLib, 'push').resolveWith(null);
+      simpleMock.mock(pwaLib, 'list').resolveWith(listPwas);
+      request(app)
+        .get('/updateunscored')
         .set(APP_ENGINE_CRON, true)
         .expect(200).should.be.fulfilled.then(_ => {
           assert.equal(pwaLib.list.callCount, 1);
