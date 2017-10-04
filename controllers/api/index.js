@@ -27,4 +27,7 @@ router.use('/notifications', require('./notifications'));
 // Includes APIs for FavoritePwas (/api/favoritepwa)
 router.use('/favorite-pwa', require('./favorite-pwa'));
 
+// Includes APIs for PWAs (/api/pwa)
+router.use('/pwa', require('./pwa'));
+
 module.exports = router;

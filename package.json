@@ -51,6 +51,7 @@
     "elasticlunr": "^0.9.5",
     "escape-html": "^1.0.3",
     "express": "^4.13.4",
+    "express-csv": "^0.6.0",
     "express-minify-html": "^0.9.0",
     "express-sslify": "^1.2.0",
     "firebase": "^3.6.3",
