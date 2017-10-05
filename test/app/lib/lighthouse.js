@@ -49,7 +49,7 @@ describe('lib.lighthouse', () => {
   });
 
   let lighthouseData = {};
-  lighthouseData.data = {
+  lighthouseData = {
     date: '2016-10-27',
     id: '5768151446847488-2016-10-27',
     totalScore: 69,

@@ -1,6 +1,5 @@
 {
   "extends": "google",
-  "installedESLint": true,
   // http://eslint.org/docs/rules/
   "rules": {
     "max-len": [2, 100, {
