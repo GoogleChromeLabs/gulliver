@@ -28,12 +28,11 @@ const apiKeyArray = config.get('API_TOKENS');
  * Checks for the presence of an API key from API_TOKENS in config.json
  */
 function checkApiKey(req, res, next) {
-  if (!req.query.key ||
-      !Array.isArray(apiKeyArray) ||
-      apiKeyArray.indexOf(req.query.key) === -1) {
-    return res.sendStatus(403);
+  if (req.query.key &&
+      (apiKeyArray === req.query.key || apiKeyArray.indexOf(req.query.key) !== -1)) {
+    return next();
   }
-  return next();
+  return res.sendStatus(403);
 }
 
 /**

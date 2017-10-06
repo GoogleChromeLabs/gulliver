@@ -35,7 +35,8 @@ nconf
     'GOOGLE_ANALYTICS',
     'FIREBASE_AUTH',
     'CANONICAL_ROOT',
-    'FIREBASE_MSG_SENDER_ID'
+    'FIREBASE_MSG_SENDER_ID',
+    'API_TOKENS'
   ])
   // 3. Config file
   .file({file: path.join(__dirname, 'config.json')})
