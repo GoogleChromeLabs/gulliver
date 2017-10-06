@@ -21,12 +21,27 @@ const pwaLib = require('../../lib/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 1; // 1 hour
 
+const config = require('../../config/config');
+const apiKeyArray = config.get('API_TOKENS');
+
+/**
+ * Checks for the presence of an API key from API_TOKENS in config.json
+ */
+function checkApiKey(req, res, next) {
+  if (!req.query.key ||
+      !Array.isArray(apiKeyArray) ||
+      apiKeyArray.indexOf(req.query.key) === -1) {
+    return res.sendStatus(403);
+  }
+  return next();
+}
+
 /**
  * GET /api/pwa
  *
  * Returns all PWAs as JSON or ?format=csv for CSV.
  */
-router.get('/', (req, res) => {
+router.get('/', checkApiKey, (req, res) => {
   let format = req.query.format;
   pwaLib.list()
     .then(result => {

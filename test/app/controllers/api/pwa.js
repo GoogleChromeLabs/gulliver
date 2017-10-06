@@ -19,6 +19,8 @@
 const controllerApi = require('../../../../controllers/api');
 const libPwa = require('../../../../lib/pwa');
 const testPwa = require('../../models/pwa');
+const config = require('../../../../config/config');
+const apiKeyArray = config.get('API_TOKENS');
 
 const express = require('express');
 const app = express();
@@ -51,16 +53,40 @@ describe('controllers.api.pwa', () => {
     result.pwas = [pwa];
 
     afterEach(() => {
-      simpleMock.restore();
+      // simpleMock.restore();
+    });
+
+    it('respond with 400 without API key', done => {
+      simpleMock.mock(libPwa, 'list');
+      // /api/ is part of the router, we need to start from /pwa/
+      request(app)
+        .get('/pwa/')
+        .expect(400)
+        .expect('Content-Type', 'text/plain; charset=utf-8').should.be.rejected.then(_ => {
+          assert.equal(libPwa.list.callCount, 0);
+          done();
+        });
+    });
+
+    it('respond with 400 with wrong API key', done => {
+      simpleMock.mock(libPwa, 'list');
+      // /api/ is part of the router, we need to start from /pwa/
+      request(app)
+        .get('/pwa?key=xxxxxxx')
+        .expect(400)
+        .expect('Content-Type', 'text/plain; charset=utf-8').should.be.rejected.then(_ => {
+          assert.equal(libPwa.list.callCount, 0);
+          done();
+        });
     });
 
     it('respond with 200 and json', done => {
       simpleMock.mock(libPwa, 'list').resolveWith(Promise.resolve(result));
       // /api/ is part of the router, we need to start from /pwa/
       request(app)
-        .get('/pwa/')
-        .expect('Content-Type', /json/)
-        .expect(200).should.be.fulfilled.then(_ => {
+        .get('/pwa?key=' + apiKeyArray[0])
+        .expect(200)
+        .expect('Content-Type', /json/).should.be.fulfilled.then(_ => {
           assert.equal(libPwa.list.callCount, 1);
           done();
         });
@@ -70,9 +96,9 @@ describe('controllers.api.pwa', () => {
       simpleMock.mock(libPwa, 'list').resolveWith(Promise.resolve(result));
       // /api/ is part of the router, we need to start from /pwa/
       request(app)
-        .get('/pwa?format=csv')
-        .expect('Content-Type', 'text/csv; charset=utf-8')
-        .expect(200).should.be.fulfilled.then(_ => {
+        .get('/pwa?format=csv&key=' + apiKeyArray[0])
+        .expect(200)
+        .expect('Content-Type', 'text/csv; charset=utf-8').should.be.fulfilled.then(_ => {
           assert.equal(libPwa.list.callCount, 1);
           done();
         });
