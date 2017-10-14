@@ -49,6 +49,7 @@ cpuMonitor(60000, load => {
 // Constants
 const HTTP_PORT = 8080;
 const HTTPS_PORT = 8443;
+const HOST = '0.0.0.0';
 
 // HTTPS options
 const options = {
@@ -118,9 +119,9 @@ app.get('/_ah/busy', (req, res) => {
   }
 });
 
-http.createServer(app).listen(HTTP_PORT);
-https.createServer(options, app).listen(HTTPS_PORT);
+http.createServer(app).listen(HTTP_PORT, HOST);
+https.createServer(options, app).listen(HTTPS_PORT, HOST);
 
 console.log(
-  `Running on https://localhost:${HTTPS_PORT} and http://localhost:${HTTP_PORT}`
+  `Running on https://${HOST}:${HTTPS_PORT} and http://${HOST}:${HTTP_PORT}`
 );
