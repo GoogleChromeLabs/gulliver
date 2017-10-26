@@ -17,12 +17,14 @@
 'use strict';
 
 const assert = require('assert');
-const gcloud = require('google-cloud');
 const config = require('../../../config/config');
 const db = require('../../../lib/model-datastore');
-const ds = gcloud.datastore({
+
+const datastore = require('@google-cloud/datastore');
+const ds = datastore({
   projectId: config.get('GCLOUD_PROJECT')
 });
+
 const ENTITY_NAME = 'test';
 
 class TestClass {
@@ -58,7 +60,7 @@ describe('lib.model-datastore', () => {
         }
 
         const keys = entities.map(entity => {
-          return entity.key;
+          return entity[datastore.KEY];
         });
 
         // Delete counts for 'test'.
