@@ -95,6 +95,29 @@ describe('models/pwa.js', () => {
     assert.equal(pwa.description, 'manifestDescription');
   });
 
+  describe('absoluteStartUrl', () => {
+    it('works with relative paths', () => {
+      const pwa = this.newPwa('https://www.example.com', {
+        start_url: '/'
+      });
+      assert.equal(pwa.absoluteStartUrl, 'https://www.example.com/');
+    });
+
+    it('works with absolute paths', () => {
+      const pwa = this.newPwa('https://www.example.com', {
+        start_url: 'https://www.example.com'
+      });
+      assert.equal(pwa.absoluteStartUrl, 'https://www.example.com/');
+    });
+
+    it('removes utm_* query parameters', () => {
+      const pwa = this.newPwa('https://www.example.com', {
+        start_url: 'https://www.example.com?utm_source=test&homescreen=1'
+      });
+      assert.equal(pwa.absoluteStartUrl, 'https://www.example.com/?homescreen=1');
+    });
+  });
+
   describe('displayName', () => {
     it('is name', () => {
       const pwa = this.newPwa('www.manifesturl.com', {

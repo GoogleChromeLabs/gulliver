@@ -71,7 +71,7 @@ class Pwa {
     }
 
     const startUrl = this.startUrl || '/';
-    return uri(startUrl).absoluteTo(this.manifestUrl).toString();
+    return this._cleanUrl(uri(startUrl).absoluteTo(this.manifestUrl).toString());
   }
 
   get backgroundColor() {
@@ -113,6 +113,16 @@ class Pwa {
 
   isNew() {
     return this.created === this.updated;
+  }
+
+  _cleanUrl(input) {
+    const url = new URL.URL(input);
+    for (const name of url.searchParams.keys()) {
+      if (name.toLowerCase().startsWith('utm_')) {
+        url.searchParams.delete(name);
+      }
+    }
+    return url.toString();
   }
 }
 
