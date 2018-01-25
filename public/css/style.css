@@ -335,42 +335,16 @@ a.card-pwa:hover {
   opacity: 0;
 }
 
-/* Lighthouse expandable details */
-#toggle {
-  display: none;
-  visibility: hidden;
-}
-#lighthouse-details {
-  display: block;
-  padding: 0.5em;
+/* Lighthouse details */
+.lighthouse-details {
+  padding-bottom: 0.5em;
   text-align: center;
-  border-bottom: 1px solid #CCC;
-  color: #666;
+  font-size: 18px;
 }
-#lighthouse-details:hover {
-  color: #000;
-}
-#lighthouse-details::before {
-  content: "-";
-  vertical-align: text-top;
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  margin-right: 3px;
-  background: radial-gradient(ellipse at center, #CCC 50%, transparent 50%);
-}
-#expand {
-  max-height: 3760px;
-  transition: max-height 0.3s ease-in;
-  overflow: hidden;
-}
-#toggle:checked ~ #expand {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease-out;
-}
-#toggle:checked ~ #lighthouse-details::before {
-  content: "+";
+.viewer-placeholder-logo {
+  height: 56px;
+  vertical-align:middle;
+  padding-right: 8px;
 }
 
 /* PWA Overview */

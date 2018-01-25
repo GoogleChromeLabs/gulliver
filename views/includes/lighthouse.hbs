@@ -4,29 +4,11 @@
     <div id="chart-missing" class="hidden">No lighthouse data available</div>
   </div>
   {{#if lighthouse.lighthouseInfo.reportCategories}}
-  <input id="toggle" type="checkbox" checked>
-  <label id="lighthouse-details" for="toggle">Details</label>
-  <div id="expand">
-    <table>
-      <thead>
-        <tr>
-          <th scope="col">Lighthouse version</th>
-          <th scope="col">{{lighthouse.lighthouseVersion}}</th>
-        </tr>
-      </thead>
-    </table>
-    {{#each lighthouse.lighthouseInfo.reportCategories}}
-    <table>
-      <thead>
-        {{{getReportCategoryTableRow this}}}
-      </thead>
-      <tbody>
-        {{#each this.audits}}
-          {{{getAuditTableRow this}}}
-        {{/each}}
-      </tbody>
-    </table>
-    {{/each}}
+  <div class="lighthouse-details">
+    <a href="/lighthouse-viewer/?pwadir={{pwa.id}}" target="_blank" rel="noopener">
+      <img src="/lighthouse-viewer/images/lh_logo_bg.png" class="viewer-placeholder-logo" alt="Lighthouse logo">
+      <span>Lighthouse Report Viewer</span>
+    </a>
   </div>
   {{/if}}
 </section>
