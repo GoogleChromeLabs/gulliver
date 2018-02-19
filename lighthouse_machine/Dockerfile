@@ -55,7 +55,7 @@ RUN chmod +x /chromeuser-script.sh
 # Download lighthouse
 RUN git clone https://github.com/googlechrome/lighthouse &&\
 cd /lighthouse &&\
-git checkout tags/v2.8.0 &&\
+git checkout tags/v2.9.1 &&\
 npm install -g yarn &&\
 npm install -g yarnpkg &&\
 npm install -g @types/mkdirp &&\
