@@ -43,7 +43,7 @@ import Chart from './chart';
 import SearchInput from './search-input';
 
 const CHART_BASE_URLS = {
-  lighthouse: '/api/lighthouse/graph/PWAID',
+  lighthouse: 'https://web-performance-dot-pwa-directory.appspot.com/lighthousereport/PWAID?graph=true',
   psi: 'https://web-performance-dot-pwa-directory.appspot.com/pagespeedreport/PWAID?graph=true',
   wpt: 'https://web-performance-dot-pwa-directory.appspot.com/webpagetestreport/PWAID?graph=true'
 };
