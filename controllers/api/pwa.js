@@ -20,6 +20,7 @@ require('express-csv');
 const pwaLib = require('../../lib/pwa');
 const router = express.Router(); // eslint-disable-line new-cap
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 1; // 1 hour
+const RSS = require('rss');
 
 const config = require('../../config/config');
 const apiKeyArray = config.get('API_TOKENS');
@@ -35,53 +36,106 @@ function checkApiKey(req, res, next) {
   return res.sendStatus(403);
 }
 
+function getDate(date) {
+  return new Date(date).toISOString().split('T')[0];
+}
+
+class CsvWriter {
+  write(result, pwas) {
+    const csv = [];
+    pwas.forEach(pwa => {
+      const created = getDate(pwa.created);
+      const updated = getDate(pwa.updated);
+      const csvLine = [];
+      csvLine.push(pwa.id);
+      csvLine.push(pwa.absoluteStartUrl);
+      csvLine.push(pwa.manifestUrl);
+      csvLine.push(pwa.lighthouseScore);
+      csvLine.push(created);
+      csvLine.push(updated);
+      csv.push(csvLine);
+    });
+    result.set('Content-Type', 'text/csv');
+    csv.unshift(
+      ['id', 'absoluteStartUrl', 'manifestUrl', 'lighthouseScore', 'created', 'updated']);
+    result.csv(csv);
+  }
+}
+
+class JsonWriter {
+  write(result, pwas) {
+    const pwaList = [];
+    pwas.forEach(dbPwa => {
+      const created = getDate(dbPwa.created);
+      const updated = getDate(dbPwa.updated);
+      const pwa = {};
+      pwa.id = dbPwa.id;
+      pwa.absoluteStartUrl = dbPwa.absoluteStartUrl;
+      pwa.manifestUrl = dbPwa.manifestUrl;
+      pwa.lighthouseScore = dbPwa.lighthouseScore;
+      pwa.webPageTest = dbPwa.webPageTest;
+      pwa.pageSpeed = dbPwa.pageSpeed;
+      pwa.created = created;
+      pwa.updated = updated;
+      pwaList.push(pwa);
+    });
+    result.setHeader('Content-Type', 'application/json');
+    result.json(pwaList);
+  }
+}
+
+class RssWriter {
+  write(result, pwas) {
+    const feed = new RSS({
+      /* eslint-disable camelcase */
+      title: 'PWA Directory',
+      description: 'A Directory of Progressive Web Apps',
+      feed_url: 'https://pwa-directory.appspot.com/api/pwa?format=rss',
+      site_url: 'https://pwa-directory.appspot.com/',
+      pubDate: new Date()
+      /* eslint-enable camelcase */
+    });
+
+    pwas.forEach(pwa => {
+      feed.item({
+        title: pwa.displayName,
+        description: pwa.description,
+        url: 'https://pwa-directory.appspot.com/pwas/' + pwa.id,
+        guid: pwa.id
+      });
+    });
+    result.setHeader('Content-Type', 'application/rss+xml');
+    result.status(200).send(feed.xml());
+  }
+}
+
+const csvWriter = new CsvWriter();
+const jsonWriter = new JsonWriter();
+const rssWriter = new RssWriter();
+
 /**
  * GET /api/pwa
  *
  * Returns all PWAs as JSON or ?format=csv for CSV.
  */
 router.get('/', checkApiKey, (req, res) => {
-  let format = req.query.format;
+  let format = req.query.format || 'json';
   pwaLib.list()
     .then(result => {
-      let pwaList = [];
-      result.pwas.forEach(dbPwa => {
-        let created = new Date(dbPwa.created);
-        created = created.toISOString().split('T')[0];
-        let updated = new Date(dbPwa.updated);
-        updated = updated.toISOString().split('T')[0];
-        let pwa;
-        if (format && format === 'csv') {
-          pwa = [];
-          pwa.push(dbPwa.id);
-          pwa.push(dbPwa.absoluteStartUrl);
-          pwa.push(dbPwa.manifestUrl);
-          pwa.push(dbPwa.lighthouseScore);
-          pwa.push(created);
-          pwa.push(updated);
-        } else {
-          pwa = {};
-          pwa.id = dbPwa.id;
-          pwa.absoluteStartUrl = dbPwa.absoluteStartUrl;
-          pwa.manifestUrl = dbPwa.manifestUrl;
-          pwa.lighthouseScore = dbPwa.lighthouseScore;
-          pwa.webPageTest = dbPwa.webPageTest;
-          pwa.pageSpeed = dbPwa.pageSpeed;
-          pwa.created = created;
-          pwa.updated = updated;
+      switch (format) {
+        case 'csv': {
+          csvWriter.write(res, result.pwas);
+          break;
         }
-        pwaList.push(pwa);
-      });
-      res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
-      if (format && format === 'csv') {
-        res.set('Content-Type', 'text/csv');
-        pwaList.unshift(
-          ['id', 'absoluteStartUrl', 'manifestUrl', 'lighthouseScore', 'created', 'updated']);
-        res.csv(pwaList);
-      } else {
-        res.setHeader('Content-Type', 'application/json');
-        res.json(pwaList);
+        case 'rss': {
+          rssWriter.write(res, result.pwas);
+          break;
+        }
+        default: {
+          jsonWriter.write(res, result.pwas);
+        }
       }
+      res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
     })
     .catch(err => {
       console.log(err);
