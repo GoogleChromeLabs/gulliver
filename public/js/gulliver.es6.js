@@ -52,7 +52,8 @@ class Gulliver {
   constructor() {
     this.config = Config.from(document.querySelector('#config'));
     this.shell = new Shell(document);
-    this.router = new Router(window, document.querySelector('main'));
+    const routeContainer = document.querySelector('main');
+    this.router = new Router(window, routeContainer);
     this.offlineSupport = new OfflineSupport(window, this.router);
     this._setupRoutes();
     this.setupBacklink();
@@ -74,8 +75,11 @@ class Gulliver {
     this.router.addEventListener('navigate', e => {
       this.analytics.trackPageView(e.detail.url);
       this.shell.onRouteChange(e.detail.route);
+      this.offlineSupport.prefetchLinks(e.detail.route, e.detail.container);
       this.offlineSupport.markAsCached(document.querySelectorAll('.offline-aware'));
     });
+    const route = this.router.findRoute(document.location.href);
+    this.offlineSupport.prefetchLinks(route, routeContainer);
   }
 
   _addRoute(regexp, transitionStrategy, onRouteAttached, shellState) {

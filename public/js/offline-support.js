@@ -20,6 +20,7 @@ export default class OfflineSupport {
   constructor(window, router) {
     this.window = window;
     this.router = router;
+    this._document = window.document;
     this._setupEventhandlers();
   }
 
@@ -52,9 +53,33 @@ export default class OfflineSupport {
    */
   isAvailable(href) {
     if (!href || this.window.navigator.onLine) return Promise.resolve(true);
+    return this.isCached(href);
+  }
+
+  isCached(href) {
     return caches.match(href)
       .then(response => response.status === 200)
       .catch(() => false);
+  }
+
+  _ensureCached(href) {
+    return this.isCached(href)
+      .then(cached => cached || fetch(href));
+  }
+
+  prefetchLinks(route, root) {
+    root.querySelectorAll('a').forEach(a => {
+      if (a.href.startsWith(this._document.location.origin)) {
+        const contentUrl = route.getContentOnlyUrl(a.href);
+
+        // Use requestIdleCallback, if available.
+        if (this.window.requestIdleCallback) {
+          this.window.requestIdleCallback(() => this._ensureCached(contentUrl));
+          return;
+        }
+        setTimeout(() => this._ensureCached(contentUrl), 1000);
+      }
+    });
   }
 
   /**
