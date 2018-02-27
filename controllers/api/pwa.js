@@ -27,10 +27,14 @@ const apiKeyArray = config.get('API_TOKENS');
 
 /**
  * Checks for the presence of an API key from API_TOKENS in config.json
+ *
+ * Skip API key check of RSS feed
  */
 function checkApiKey(req, res, next) {
   if (req.query.key &&
-      (apiKeyArray === req.query.key || apiKeyArray.indexOf(req.query.key) !== -1)) {
+      (apiKeyArray === req.query.key ||
+       apiKeyArray.indexOf(req.query.key) !== -1) ||
+       req.query.format === 'rss') {
     return next();
   }
   return res.sendStatus(403);
@@ -55,7 +59,7 @@ class CsvWriter {
       csvLine.push(updated);
       csv.push(csvLine);
     });
-    result.set('Content-Type', 'text/csv');
+    result.setHeader('Content-Type', 'text/csv');
     csv.unshift(
       ['id', 'absoluteStartUrl', 'manifestUrl', 'lighthouseScore', 'created', 'updated']);
     result.csv(csv);
@@ -92,8 +96,11 @@ class RssWriter {
       description: 'A Directory of Progressive Web Apps',
       feed_url: 'https://pwa-directory.appspot.com/api/pwa?format=rss',
       site_url: 'https://pwa-directory.appspot.com/',
-      pubDate: new Date()
-      /* eslint-enable camelcase */
+      image_url: 'https://pwa-directory.appspot.com/favicons/android-chrome-144x144.png',
+      pubDate: new Date(),
+      custom_namespaces: {
+        content: 'http://purl.org/rss/1.0/modules/content/'
+      }
     });
 
     pwas.forEach(pwa => {
@@ -101,9 +108,12 @@ class RssWriter {
         title: pwa.displayName,
         description: pwa.description,
         url: 'https://pwa-directory.appspot.com/pwas/' + pwa.id,
-        guid: pwa.id
+        guid: pwa.id,
+        date: pwa.created,
+        custom_elements: [{'content:encoded': JSON.stringify(pwa)}]
       });
     });
+    /* eslint-enable camelcase */
     result.setHeader('Content-Type', 'application/rss+xml');
     result.status(200).send(feed.xml());
   }
@@ -120,7 +130,12 @@ const rssWriter = new RssWriter();
  */
 router.get('/', checkApiKey, (req, res) => {
   let format = req.query.format || 'json';
-  pwaLib.list()
+  let sort = req.query.sort || 'newest';
+  let skip = parseInt(req.query.skip, 10);
+  let limit = parseInt(req.query.limit, 10);
+
+  res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
+  pwaLib.list(skip, limit, sort)
     .then(result => {
       switch (format) {
         case 'csv': {
@@ -135,7 +150,6 @@ router.get('/', checkApiKey, (req, res) => {
           jsonWriter.write(res, result.pwas);
         }
       }
-      res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
     })
     .catch(err => {
       console.log(err);
