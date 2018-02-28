@@ -103,5 +103,18 @@ describe('controllers.api.pwa', () => {
           done();
         });
     });
+
+    it('respond with 200 and rss, without key', done => {
+      simpleMock.mock(libPwa, 'list').resolveWith(Promise.resolve(result));
+      // /api/ is part of the router, we need to start from /pwa/
+      request(app)
+        .get('/pwa?format=rss')
+        .expect(200)
+        .expect('Content-Type', 'application/rss+xml; charset=utf-8')
+        .should.be.fulfilled.then(_ => {
+          assert.equal(libPwa.list.callCount, 1);
+          done();
+        });
+    });
   });
 });
