@@ -11,7 +11,7 @@ toolbox.options.debug = false;
 
 importScripts('/js/sw-assets-precache.js'); /* global ASSETS */
 
-const VERSION = '9';
+const VERSION = '10';
 const PREFIX = 'gulliver';
 const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 const PWA_OPTION = {
@@ -112,6 +112,11 @@ toolbox.router.get('/', (request, values) => {
 
 toolbox.router.get(/.*\.(js|png|svg|jpg|css)$/, (request, values, options) => {
   return toolbox.cacheFirst(request, values, options);
+});
+
+// API request bypass the Shell
+toolbox.router.get(/\/api\/.*/, (request, values, options) => {
+  return toolbox.networkFirst(request, values, options);
 });
 
 // Claim all clients and delete old caches that are no longer needed.
