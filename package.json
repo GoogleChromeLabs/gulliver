@@ -64,7 +64,7 @@
     "jsdom": "^9.5.0",
     "lodash.template": "^4.4.0",
     "memcached": "^2.2.2",
-    "moment": "^2.14.1",
+    "moment": "^2.21.0",
     "multer": "^1.1.0",
     "nconf": "^0.8.4",
     "node-fetch": "^1.5.3",
