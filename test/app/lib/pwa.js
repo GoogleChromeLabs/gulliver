@@ -21,10 +21,9 @@ const dataFetcher = require('../../../lib/data-fetcher');
 const libPwa = require('../../../lib/pwa');
 const libImages = require('../../../lib/images');
 const libManifest = require('../../../lib/manifest');
-const libLighthouse = require('../../../lib/lighthouse');
+const libWebPerformance = require('../../../lib/web-performance');
 const promiseSequential = require('../../../lib/promise-sequential');
 
-const Lighthouse = require('../../../models/lighthouse');
 const Pwa = require('../../../models/pwa');
 
 const testPwa = require('../models/pwa');
@@ -62,8 +61,6 @@ describe('lib.pwa', () => {
   const manifest = pwa.manifest;
   const pwaNoIcon = testPwa.newPwa(MANIFEST_URL, MANIFEST_NO_ICON);
   const pwaInvalidThemeColor = testPwa.newPwa(MANIFEST_URL, MANIFEST_INVALID_THEME_COLOR);
-  const lighthouse = new Lighthouse(
-    '123456789', 'www.domain.com', JSON.parse(fs.readFileSync(LIGHTHOUSE_JSON_EXAMPLE)));
 
   describe('#updatePwaMetadataDescription', () => {
     afterEach(() => {
@@ -120,11 +117,12 @@ describe('lib.pwa', () => {
       simpleMock.restore();
     });
     it('sets lighthouseScore', () => {
-      simpleMock.mock(libLighthouse, 'fetchAndSave').resolveWith(lighthouse);
+      simpleMock.mock(libWebPerformance, 'getLighthouseReport').resolveWith(
+        JSON.parse(fs.readFileSync(LIGHTHOUSE_JSON_EXAMPLE)));
       return libPwa.updatePwaLighthouseInfo(pwa).should.be.fulfilled.then(updatedPwa => {
-        assert.equal(libLighthouse.fetchAndSave.callCount, 1);
-        assert.equal(libLighthouse.fetchAndSave.lastCall.args[0], '123456789');
-        assert.equal(updatedPwa.lighthouseScore, 100);
+        assert.equal(libWebPerformance.getLighthouseReport.callCount, 1);
+        assert.equal(libWebPerformance.getLighthouseReport.lastCall.args[0], pwa);
+        assert.equal(updatedPwa.lighthouseScore, 91);
       });
     });
   });
