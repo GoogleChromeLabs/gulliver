@@ -3,7 +3,7 @@
   <div class="chart" type='lighthouse' {{#if pwa.id }} pwa={{pwa.id}} {{/if}}>
     <div id="chart-missing" class="hidden">No lighthouse data available</div>
   </div>
-  {{#if lighthouse.lighthouseInfo.reportCategories}}
+  {{#if pwa.lighthouseScore}}
   <div class="lighthouse-details">
     <a href="https://web-performance-dot-pwa-directory.appspot.com/lighthouse-viewer/?pwadir={{pwa.id}}" target="_blank" rel="noopener">
       <img srcset="/img/lh-logo-64.png 1x, /img/lh-logo-128.png 2x" width="64" height="64" class="viewer-placeholder-logo" alt="Lighthouse logo">

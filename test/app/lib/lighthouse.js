@@ -32,11 +32,11 @@ describe('lib.lighthouse', () => {
   it('processLighthouseJson(lighthouse-example.json) should work', () => {
     return dataFetcher.readFile(LIGHTHOUSE_JSON_EXAMPLE)
       .then(data => {
-        let lighthouseInfo = lighthouseLib.processLighthouseJson(JSON.parse(data));
-        assert.equal(lighthouseInfo.totalScore, 100);
-        assert.equal(lighthouseInfo.lighthouseVersion, '2.0.0-alpha.3');
-        assert.equal(lighthouseInfo.reportCategories[0].name, 'Progressive Web App');
-        assert.equal(lighthouseInfo.reportCategories[0].audits.length, 11);
+        const rawData = JSON.parse(data)[0].rawData.value;
+        const lighthouseInfo = lighthouseLib.processLighthouseJson(JSON.parse(rawData));
+        assert.equal(lighthouseInfo.totalScore, 91);
+        assert.equal(lighthouseInfo.lighthouseVersion, '2.9.1');
+        assert.equal(lighthouseInfo.reportCategories[1].name, 'Progressive Web App');
       });
   });
 
