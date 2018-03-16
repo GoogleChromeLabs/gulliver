@@ -18,27 +18,10 @@
 const express = require('express');
 require('express-csv');
 const pwaLib = require('../../lib/pwa');
+const libMetadata = require('../../lib/metadata');
 const router = express.Router(); // eslint-disable-line new-cap
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 1; // 1 hour
 const RSS = require('rss');
-
-const config = require('../../config/config');
-const apiKeyArray = config.get('API_TOKENS');
-
-/**
- * Checks for the presence of an API key from API_TOKENS in config.json
- *
- * Skip API key check of RSS feed
- */
-function checkApiKey(req, res, next) {
-  if (req.query.key &&
-      (apiKeyArray === req.query.key ||
-       apiKeyArray.indexOf(req.query.key) !== -1) ||
-       req.query.format === 'rss') {
-    return next();
-  }
-  return res.sendStatus(403);
-}
 
 function getDate(date) {
   return new Date(date).toISOString().split('T')[0];
@@ -88,34 +71,83 @@ class JsonWriter {
   }
 }
 
+function render(res, view, options) {
+  return new Promise((resolve, reject) => {
+    res.render(view, options, (err, html) => {
+      if (err) {
+        console.log(err);
+        reject(err);
+      }
+      resolve(html);
+    });
+  });
+}
+
+function renderOnePwaRss(pwa, req, res) {
+  const url = req.originalUrl;
+  const contentOnly = false || req.query.contentOnly;
+  let arg = Object.assign(libMetadata.fromRequest(req, url), {
+    pwa: pwa,
+    title: 'PWA Directory: ' + pwa.name,
+    description: 'PWA Directory: ' + pwa.name + ' - ' + pwa.description,
+    backlink: true,
+    contentOnly: contentOnly
+  });
+  return render(res, 'pwas/view-rss.hbs', arg);
+}
+
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+
 class RssWriter {
-  write(result, pwas) {
+  write(req, res, pwas) {
     const feed = new RSS({
       /* eslint-disable camelcase */
       title: 'PWA Directory',
       description: 'A Directory of Progressive Web Apps',
-      feed_url: 'https://pwa-directory.appspot.com/api/pwa?format=rss',
+      feed_url: 'https://pwa-directory.appspot.com/api/pwa/?format=rss',
       site_url: 'https://pwa-directory.appspot.com/',
       image_url: 'https://pwa-directory.appspot.com/favicons/android-chrome-144x144.png',
       pubDate: new Date(),
       custom_namespaces: {
+        rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        l: 'http://purl.org/rss/1.0/modules/link/',
+        media: 'http://search.yahoo.com/mrss/',
         content: 'http://purl.org/rss/1.0/modules/content/'
       }
     });
 
-    pwas.forEach(pwa => {
-      feed.item({
-        title: pwa.displayName,
-        description: pwa.description,
-        url: 'https://pwa-directory.appspot.com/pwas/' + pwa.id,
-        guid: pwa.id,
-        date: pwa.created,
-        custom_elements: [{'content:encoded': JSON.stringify(pwa)}]
+    const start = async _ => {
+      await asyncForEach(pwas, async pwa => {
+        let html = await renderOnePwaRss(pwa, req, res);
+
+        const customElements = [];
+        customElements.push({'content:encoded': html});
+        customElements.push({'l:link': {_attr: {'l:rel': 'http://purl.org/rss/1.0/modules/link/#alternate',
+          'l:type': 'application/json',
+          'rdf:resource': 'https://pwa-directory.appspot.com/api/pwa/' + pwa.id}}});
+        if (pwa.iconUrl128) {
+          customElements.push({'media:thumbnail': {_attr: {url: pwa.iconUrl128,
+            height: '128', width: '128'}}});
+        }
+
+        feed.item({
+          title: pwa.displayName,
+          url: 'https://pwa-directory.appspot.com/pwas/' + pwa.id,
+          description: html,
+          guid: pwa.id,
+          date: pwa.created,
+          custom_elements: customElements
+        });
       });
-    });
+      res.setHeader('Content-Type', 'application/rss+xml');
+      res.status(200).send(feed.xml());
+    };
+    start();
     /* eslint-enable camelcase */
-    result.setHeader('Content-Type', 'application/rss+xml');
-    result.status(200).send(feed.xml());
   }
 }
 
@@ -128,34 +160,48 @@ const rssWriter = new RssWriter();
  *
  * Returns all PWAs as JSON or ?format=csv for CSV.
  */
-router.get('/', checkApiKey, (req, res) => {
+router.get('/:id*?', (req, res) => {
   let format = req.query.format || 'json';
   let sort = req.query.sort || 'newest';
   let skip = parseInt(req.query.skip, 10);
-  let limit = parseInt(req.query.limit, 10);
-
+  let limit = parseInt(req.query.limit, 10) || 100;
   res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
-  pwaLib.list(skip, limit, sort)
-    .then(result => {
-      switch (format) {
-        case 'csv': {
-          csvWriter.write(res, result.pwas);
-          break;
-        }
-        case 'rss': {
-          rssWriter.write(res, result.pwas);
-          break;
-        }
-        default: {
-          jsonWriter.write(res, result.pwas);
-        }
+
+  return new Promise((resolve, reject) => {
+    if (req.params.id) { // Single PWA
+      pwaLib.find(req.params.id)
+        .then(onePwa => {
+          resolve({pwas: [onePwa]});
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(404);
+          res.json(err);
+        });
+    } else {
+      resolve(pwaLib.list(skip, limit, sort));
+    }
+  })
+  .then(result => {
+    switch (format) {
+      case 'csv': {
+        csvWriter.write(res, result.pwas);
+        break;
       }
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500);
-      res.json(err);
-    });
+      case 'rss': {
+        rssWriter.write(req, res, result.pwas);
+        break;
+      }
+      default: {
+        jsonWriter.write(res, result.pwas);
+      }
+    }
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(500);
+    res.json(err);
+  });
 });
 
 module.exports = router;

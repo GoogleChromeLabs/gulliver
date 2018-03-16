@@ -31,5 +31,8 @@
   // http://eslint.org/docs/user-guide/configuring#specifying-environments
   "env": {
     "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
   }
 }
