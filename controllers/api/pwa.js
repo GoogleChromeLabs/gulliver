@@ -158,7 +158,7 @@ const rssWriter = new RssWriter();
 /**
  * GET /api/pwa
  *
- * Returns all PWAs as JSON or ?format=csv for CSV.
+  * Returns all PWAs as JSON, ?format=csv for CSV or ?format=rss for RSS feed
  */
 router.get('/:id*?', (req, res) => {
   let format = req.query.format || 'json';
@@ -167,22 +167,10 @@ router.get('/:id*?', (req, res) => {
   let limit = parseInt(req.query.limit, 10) || 100;
   res.setHeader('Cache-Control', 'public, max-age=' + CACHE_CONTROL_EXPIRES);
 
-  return new Promise((resolve, reject) => {
-    if (req.params.id) { // Single PWA
-      pwaLib.find(req.params.id)
-        .then(onePwa => {
-          resolve({pwas: [onePwa]});
-        })
-        .catch(err => {
-          console.log(err);
-          res.status(404);
-          res.json(err);
-        });
-    } else {
-      resolve(pwaLib.list(skip, limit, sort));
-    }
-  })
+  let queryPromise = req.params.id ? pwaLib.find(req.params.id) : pwaLib.list(skip, limit, sort);
+  queryPromise
   .then(result => {
+    result = result.pwas ? result : {pwas: [result]};
     switch (format) {
       case 'csv': {
         csvWriter.write(res, result.pwas);
@@ -199,7 +187,8 @@ router.get('/:id*?', (req, res) => {
   })
   .catch(err => {
     console.log(err);
-    res.status(500);
+    let code = err.code || 500;
+    res.status(code);
     res.json(err);
   });
 });

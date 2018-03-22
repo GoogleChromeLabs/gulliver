@@ -53,7 +53,7 @@ describe('controllers.api.pwa', () => {
     result.pwas = [pwa];
 
     afterEach(() => {
-      // simpleMock.restore();
+      simpleMock.restore();
     });
 
     it('respond with 200 and json', done => {
