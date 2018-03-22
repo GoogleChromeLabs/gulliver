@@ -1,0 +1,14 @@
+<div style="text-align: center; vertical-align: middle; background-color:{{pwa.backgroundColor}}; color:{{contrastColor pwa.backgroundColor}}; padding: 16px;">
+<a href="{{pwa.absoluteStartUrl}}" target="_blank" rel="noopener">
+  {{#if pwa.iconUrl128}}
+    <img src="{{pwa.iconUrl128}}" width="128" height="128"/>
+  {{/if}}
+</a>
+<a href="{{pwa.absoluteStartUrl}}" target="_blank" rel="noopener" style="color:{{contrastColor pwa.backgroundColor}}; text-decoration: none;"><h2>{{pwa.displayName}}</h2></a>
+<div>{{pwa.description}}</div>
+</div>
+
+<a href="https://pwa-directory.appspot.com/pwas/{{pwa.id}}" target="_blank" rel="noopener">
+  <img style="vertical-align:middle" src="https://pwa-directory.appspot.com/favicons/android-chrome-36x36.png">
+  <span style="">Open in PWA Directory</span>
+</a>
