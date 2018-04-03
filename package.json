@@ -60,7 +60,7 @@
     "google-auth-library": "^0.10.0",
     "handlebars": "^4.0.5",
     "hbs": "^4.0.0",
-    "http-parser-js": "^0.4.4",
+    "http-parser-js": "^0.4.11",
     "jsdom": "^9.5.0",
     "lodash.template": "^4.4.0",
     "memcached": "^2.2.2",
