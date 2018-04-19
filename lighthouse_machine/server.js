@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
     isBusy = true;
     try {
       exec(
-        `node lighthouse-cli --port 9222 --output-path=../report.${req.query.format}\
+        `node lighthouse-cli --chrome-flags="--headless" --port 9222 --output-path=../report.${req.query.format}\
         --output=${req.query.format} '${req.query.url}'`,
         {
           cwd: '/lighthouse',
