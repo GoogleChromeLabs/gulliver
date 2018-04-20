@@ -66,6 +66,10 @@ app.get('/', (req, res) => {
     res.sendStatus(503);
   } else {
     isBusy = true;
+    res.setTimeout(500000, _ => {
+      console.log('Request has timed out.');
+      res.send(408);
+    });
     try {
       exec(
         `node lighthouse-cli --chrome-flags="--headless" --port 9222 --output-path=../report.${req.query.format}\
