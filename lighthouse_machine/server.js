@@ -63,7 +63,7 @@ let isBusy = false;
 // Main endpoint
 app.get('/', (req, res) => {
   if (isBusy) {
-    res.sendStatus(503);
+    res.sendStatus(429);
   } else {
     isBusy = true;
     res.setTimeout(500000, _ => {
