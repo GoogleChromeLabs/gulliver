@@ -27,6 +27,7 @@ const libMetadata = require('../lib/metadata');
 const LIST_PAGE_SIZE = 32;
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_SORT_ORDER = 'newest';
+const DEFAULT_TAB = 'newest';
 
 /**
  * Setup the list template view state
@@ -66,8 +67,7 @@ function setupListViewArguments(req, viewState, result) {
     previousPageNumber: (viewState.pageNumber === 2) ? false : viewState.pageNumber - 1,
     currentPageNumber: viewState.pageNumber,
     sortOrder: (viewState.sortOrder === DEFAULT_SORT_ORDER) ? false : viewState.sortOrder,
-    showNewest: viewState.sortOrder === 'newest',
-    showScore: viewState.sortOrder === 'score',
+    currentTab: req.path.substring(1, req.path.length) || DEFAULT_TAB,
     startPwa: viewState.start + 1,
     mainPage: viewState.mainPage,
     search: viewState.search,
@@ -77,20 +77,55 @@ function setupListViewArguments(req, viewState, result) {
   });
 }
 
+function listPwas(req, res, next, sortOrder, filters) {
+  const viewState = setupListViewState(req);
+  pwaLib.list(viewState.start, viewState.limit, sortOrder, filters)
+    .then(result =>
+      render(res, 'pwas/list.hbs', setupListViewArguments(req, viewState, result)))
+    .then(html => res.send(html))
+    .catch(err => {
+      err.status = 500;
+      next(err);
+    });
+}
+
 /**
  * GET /
  *
  * Display a page of PWAs (up to LIST_PAGE_SIZE at a time)
  */
 router.get('/', (req, res, next) => {
-  const viewState = setupListViewState(req);
-  pwaLib.list(viewState.start, viewState.limit, viewState.sortOrder).then(result =>
-    render(res, 'pwas/list.hbs', setupListViewArguments(req, viewState, result)))
-  .then(html => res.send(html))
-  .catch(err => {
-    err.status = 500;
-    next(err);
-  });
+  listPwas(req, res, next, DEFAULT_SORT_ORDER);
+});
+
+/**
+ * GET /newest
+ *
+ * Display a page of PWAs sorted by score.
+ */
+router.get('/newest', (req, res, next) => {
+  listPwas(req, res, next, 'newest');
+});
+
+/**
+ * GET /score
+ *
+ * Display a page of PWAs sorted by score.
+ */
+router.get('/score', (req, res, next) => {
+  listPwas(req, res, next, 'score');
+});
+
+/**
+ * GET /installable
+ *
+ * Display a page of installable PWAs.
+ */
+router.get('/installable', (req, res, next) => {
+  const filters = {
+    minLighthouseScore: 90
+  };
+  listPwas(req, res, next, 'score', filters);
 });
 
 /**

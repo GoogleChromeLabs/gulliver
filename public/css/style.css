@@ -157,6 +157,7 @@ main {
   text-transform: uppercase;
   flex-grow: 1;
   text-align: center;
+  width: 0.333%;
 }
 .section-tabs .activetab {
   color: white;
