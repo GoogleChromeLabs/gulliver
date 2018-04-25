@@ -1,7 +1,7 @@
 cron:
 - description: daily PWA update job
   url: /tasks/cron
-  schedule: every day 06:00
+  schedule: every day 12:00
 
 - description: execute PWA update tasks
   url: /tasks/execute?tasks=20
