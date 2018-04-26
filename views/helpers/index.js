@@ -114,6 +114,10 @@ exports.truncate = function(str, len) {
   return str;
 };
 
+exports.equals = function(p1, p2) {
+  return p1 === p2;
+};
+
 exports.registerHelpers = function(hbs) {
   hbs.registerHelper('firstLetter', exports.firstLetter);
   hbs.registerHelper('contrastColor', exports.contrastColor);
@@ -125,4 +129,5 @@ exports.registerHelpers = function(hbs) {
   hbs.registerHelper('getAuditTableRow', exports.getAuditTableRow);
   hbs.registerHelper('asset', assetPath => assetHashing.encode(assetPath));
   hbs.registerHelper('truncate', exports.truncate);
+  hbs.registerHelper('equals', exports.equals);
 };

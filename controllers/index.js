@@ -36,6 +36,11 @@ router.get('/', (req, res) => {
   router.handle(req, res);
 });
 
+router.get('/installable', (req, res) => {
+  req.url = '/pwas/installable';
+  router.handle(req, res);
+});
+
 // ServiceWorker
 router.use('/js', require('./sw'));
 

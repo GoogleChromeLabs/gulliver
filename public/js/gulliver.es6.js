@@ -116,6 +116,24 @@ class Gulliver {
       charts.forEach(chart => new Chart(generateChartConfig(chart)).load());
     };
 
+    // Route for `/pwas/score`.
+    this._addRoute(/\/pwas\/score/, transitionStrategy, setupSearchInput, {
+      showTabs: true,
+      backlink: false,
+      subtitle: true,
+      search: true,
+      currentTab: 'score'
+    });
+
+    // Route for `/pwas/installable`.
+    this._addRoute(/\/pwas\/installable/, transitionStrategy, setupSearchInput, {
+      showTabs: true,
+      backlink: false,
+      subtitle: true,
+      search: true,
+      currentTab: 'installable'
+    });
+
     // Route for `/pwas/[id]`. Allow most characters (but will only ever be encodedURIComponent).
     this._addRoute(/\/pwas\/.+/, transitionStrategy, [setupCharts, setupSearchInput], {
       showTabs: false,
@@ -130,15 +148,6 @@ class Gulliver {
       backlink: true,
       subtitle: true,
       search: true
-    });
-
-    // Route for `/?sort=score`.
-    this._addRoute(/\/\?.*sort=score/, transitionStrategy, setupSearchInput, {
-      showTabs: true,
-      backlink: false,
-      subtitle: true,
-      search: true,
-      currentTab: 'score'
     });
 
     // Route for `/`.

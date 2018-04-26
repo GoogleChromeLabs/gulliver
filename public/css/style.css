@@ -151,7 +151,6 @@ main {
   height: 48px;
   line-height: 48px;
   margin: 0;
-  padding: 0 40px 0 40px;
   opacity: 0.7;
   font-weight: 500;
   text-transform: uppercase;
@@ -537,6 +536,11 @@ tr:last-child td {
 }
 #score {
   margin-right: auto;
+}
+
+/** Disabling the installable tab until ready for production */
+#installable {
+  display: none;
 }
 
 /* Footer */

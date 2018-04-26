@@ -19,7 +19,7 @@ export default class Shell {
   constructor(document) {
     this._document = document;
     this._backlink = document.querySelector('#backlink');
-    this._tabs = document.querySelectorAll('#newest, #score, #tabs');
+    this._tabs = document.querySelectorAll('#installable, #newest, #score, #tabs');
     this._subtitle = document.querySelector('#subtitle');
     this._search = document.querySelector('#search');
     this._states = new Map();
