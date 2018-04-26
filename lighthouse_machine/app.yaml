@@ -46,3 +46,6 @@ readiness_check:
   failure_threshold: 1
   success_threshold: 1
   app_start_timeout_sec: 300
+
+network:
+  instance_tag: lighthouse-machine

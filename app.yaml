@@ -24,4 +24,4 @@ handlers:
    secure: always
 
 network:
-  instance_tag: memcached-service
+  instance_tag: default-service
