@@ -538,6 +538,11 @@ tr:last-child td {
   margin-right: auto;
 }
 
+/** Disabling the installable tab until ready for production */
+#installable {
+  display: none;
+}
+
 /* Footer */
 .offline-status {
   position: fixed;
