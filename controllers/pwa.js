@@ -123,7 +123,7 @@ router.get('/score', (req, res, next) => {
  */
 router.get('/installable', (req, res, next) => {
   const filters = {
-    minLighthouseScore: 90
+    installable: true
   };
   listPwas(req, res, next, 'score', filters);
 });
