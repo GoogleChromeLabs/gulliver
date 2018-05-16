@@ -35,9 +35,12 @@
         <a id="search-icon">{{> icon_search }}</a>
       </div>
     </form>
-      <button id="auth-button" class="button blue offline-aware">
+      <button id="signin-button" class="auth-button button blue offline-aware" aria-label="Sign In">
         <span class="auth-button-label-login toolbar-icon">{{> icon_log_in}}</span>
-        <span class="auth-button-label-logout toolbar-icon">{{> icon_log_out}}</span></button>
+      </button>
+      <button id="signout-button" class="auth-button button blue offline-aware hidden" aria-label="Sign Out">
+        <span class="auth-button-label-logout toolbar-icon">{{> icon_log_out}}</span>
+      </button>
   </div>
   <div id="tabs" class="section-tabs{{#unless mainPage}} hidden{{/unless}}">
     <a id="installable" 

@@ -15,19 +15,54 @@
 
 /* eslint-env browser */
 
-export default class SignInButton {
-  constructor(signIn, element) {
+export class SignInButton {
+  constructor(window, signIn, element) {
     this.signIn = signIn;
     this.element = element;
+    this._window = window;
     this._setupEventListeners();
   }
 
   _setupEventListeners() {
+    // Make SignIn button react to userchange events.
+    this._window.addEventListener('userchange', () => {
+      if (this.signIn.signedIn) {
+        this.element.classList.add('hidden');
+      } else {
+        this.element.classList.remove('hidden');
+      }
+    });
+
+    const clickListener = () => {
+      if (!this.signIn.signedIn) {
+        this.signIn.signIn();
+      }
+    };
+    this.element.addEventListener('click', clickListener);
+  }
+}
+
+export class SignOutButton {
+  constructor(window, signIn, element) {
+    this.signIn = signIn;
+    this.element = element;
+    this._window = window;
+    this._setupEventListeners();
+  }
+
+  _setupEventListeners() {
+    // Make SignOut button react to userchange events.
+    this._window.addEventListener('userchange', () => {
+      if (this.signIn.signedIn) {
+        this.element.classList.remove('hidden');
+      } else {
+        this.element.classList.add('hidden');
+      }
+    });
+
     const clickListener = () => {
       if (this.signIn.signedIn) {
         this.signIn.signOut();
-      } else {
-        this.signIn.signIn();
       }
     };
     this.element.addEventListener('click', clickListener);

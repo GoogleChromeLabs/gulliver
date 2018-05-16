@@ -519,16 +519,16 @@ tr:last-child td {
   width: 34px;
   fill: #FFFFFF;
 }
-#auth-button {
+.auth-button {
   min-width: 0;
   position: relative;
   height: 48px;
 }
-#auth-button:active {
+.auth-button:active {
   background: #90CAF9;
   opacity: 1;
 }
-#auth-button:focus {
+.auth-button:focus {
   outline:0;
 }
 #newest {
