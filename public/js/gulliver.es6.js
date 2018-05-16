@@ -32,7 +32,7 @@ import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
 import SignIn from './signin';
 import OfflineSupport from './offline-support';
-import SignInButton from './ui/signin-button';
+import {SignInButton, SignOutButton} from './ui/signin-button';
 import Analytics from './analytics';
 import Router from './routing/router';
 import Route from './routing/route';
@@ -62,7 +62,10 @@ class Gulliver {
 
     // Setup SignIn
     this.signIn = new SignIn(window, this.config);
-    this.signInButton = new SignInButton(this.signIn, document.querySelector('#auth-button'));
+    this.signInButton =
+        new SignInButton(window, this.signIn, document.querySelector('#signin-button'));
+    this.signOutButton =
+        new SignOutButton(window, this.signIn, document.querySelector('#signout-button'));
 
     // Setup Analytics
     this.analytics = new Analytics(window, this.config);
