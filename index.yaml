@@ -5,3 +5,9 @@ indexes:
     direction: asc
   - name: date
     direction: desc
+- kind: PWA
+  properties:
+  - name: installable
+  - name: lighthouseScore
+    direction: desc
+
