@@ -27,7 +27,10 @@ const libMetadata = require('../lib/metadata');
 const LIST_PAGE_SIZE = 32;
 const DEFAULT_PAGE_NUMBER = 1;
 const DEFAULT_SORT_ORDER = 'newest';
-const DEFAULT_TAB = 'newest';
+const DEFAULT_TAB = 'installable';
+const DEFAULT_FILTER = {
+  installable: true
+};
 
 /**
  * Setup the list template view state
@@ -95,7 +98,7 @@ function listPwas(req, res, next, sortOrder, filters) {
  * Display a page of PWAs (up to LIST_PAGE_SIZE at a time)
  */
 router.get('/', (req, res, next) => {
-  listPwas(req, res, next, DEFAULT_SORT_ORDER);
+  listPwas(req, res, next, DEFAULT_SORT_ORDER, DEFAULT_FILTER);
 });
 
 /**

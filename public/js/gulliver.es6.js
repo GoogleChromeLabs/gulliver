@@ -128,13 +128,13 @@ class Gulliver {
       currentTab: 'score'
     });
 
-    // Route for `/pwas/installable`.
-    this._addRoute(/\/pwas\/installable/, transitionStrategy, setupSearchInput, {
+    // Route for `/pwas/newest`.
+    this._addRoute(/\/pwas\/newest/, transitionStrategy, setupSearchInput, {
       showTabs: true,
       backlink: false,
       subtitle: true,
       search: true,
-      currentTab: 'installable'
+      currentTab: 'newest'
     });
 
     // Route for `/pwas/[id]`. Allow most characters (but will only ever be encodedURIComponent).
@@ -159,7 +159,7 @@ class Gulliver {
       backlink: false,
       subtitle: true,
       search: true,
-      currentTab: 'newest'
+      currentTab: 'installable'
     });
 
     this.router.setupInitialRoute();
