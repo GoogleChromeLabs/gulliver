@@ -24,6 +24,7 @@ describe('views.helpers', () => {
     it('should return "white" when the value is not present', () => {
       assert.equal('#ffffff', helpers.contrastColor(null));
       assert.equal('#ffffff', helpers.contrastColor(''));
+      assert.equal('#ffffff', helpers.contrastColor('transparent'));
     });
   });
 
