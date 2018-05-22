@@ -22,8 +22,9 @@ let helpers = require('../../../../views/helpers');
 describe('views.helpers', () => {
   describe('#contrastColor', () => {
     it('should return "white" when the value is not present', () => {
-      assert.equal('#ffffff', helpers.contrastColor(null));
-      assert.equal('#ffffff', helpers.contrastColor(''));
+      assert.equal('#000000', helpers.contrastColor(null));
+      assert.equal('#000000', helpers.contrastColor(''));
+      assert.equal('#000000', helpers.contrastColor('transparent'));
     });
   });
 

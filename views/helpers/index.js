@@ -19,24 +19,19 @@ const DEFAULT_DARK = '#000000';
 
 const escapeHtml = require('escape-html');
 const moment = require('moment');
-const parseColor = require('parse-color');
+const {bestContrastRatio} = require('../../lib/color');
 const assetHashing = require('../../lib/asset-hashing').asset;
 
 function contrastColor(hexcolor) {
   if (!hexcolor) {
-    return DEFAULT_LIGHT;
-  }
-
-  const parsedColor = parseColor(hexcolor);
-  if (!parsedColor || !parsedColor.rgb) {
     return DEFAULT_DARK;
   }
-  const r = parsedColor.rgb[0];
-  const g = parsedColor.rgb[1];
-  const b = parsedColor.rgb[2];
 
-  const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-  return (yiq >= 128) ? DEFAULT_DARK : DEFAULT_LIGHT;
+  if (!hexcolor.match(/#[A-Fa-f0-9]{1,8}/)) {
+    return DEFAULT_DARK;
+  }
+
+  return bestContrastRatio(DEFAULT_DARK, DEFAULT_LIGHT, hexcolor);
 }
 
 exports.contrastColor = contrastColor;
