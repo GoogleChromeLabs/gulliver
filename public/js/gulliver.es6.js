@@ -182,12 +182,16 @@ class Gulliver {
    * Setup/configure Firebase Cloud Messaging.
    */
   setupMessaging() {
-    const NEW_APPS_TOPIC = 'new-apps';
-    const firebaseMsgSenderId = this.config.firebase_msg_sender_id;
-    const checkbox = document.getElementById('notifications');
-    const messaging = new Messaging(firebaseMsgSenderId);
-    // eslint-disable-next-line no-unused-vars
-    const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
+    try {
+      const NEW_APPS_TOPIC = 'new-apps';
+      const firebaseMsgSenderId = this.config.firebase_msg_sender_id;
+      const checkbox = document.getElementById('notifications');
+      const messaging = new Messaging(firebaseMsgSenderId);
+      // eslint-disable-next-line no-unused-vars
+      const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
  /**
