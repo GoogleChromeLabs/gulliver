@@ -74,9 +74,7 @@ class Gulliver {
       this.analytics.trackOutboundClick(e.detail.url);
     });
 
-    console.log('router.addEventListener');
     this.router.addEventListener('navigate', e => {
-      console.log('navigate event!');
       this.analytics.trackPageView(e.detail.url);
       this.shell.onRouteChange(e.detail.route);
       this.offlineSupport.markAsCached(document.querySelectorAll('.offline-aware'));
