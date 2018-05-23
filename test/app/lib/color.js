@@ -59,5 +59,10 @@ describe('color.js', () => {
       const luminance = color.relativeLuminance('#000000');
       assert.equal(luminance, 0);
     });
+
+    it('Calculates correct luminance for "#000000 "', () => {
+      const luminance = color.relativeLuminance('#000000 ');
+      assert.equal(luminance, 0);
+    });
   });
 });

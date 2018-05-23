@@ -74,7 +74,9 @@ class Gulliver {
       this.analytics.trackOutboundClick(e.detail.url);
     });
 
+    console.log('router.addEventListener');
     this.router.addEventListener('navigate', e => {
+      console.log('navigate event!');
       this.analytics.trackPageView(e.detail.url);
       this.shell.onRouteChange(e.detail.route);
       this.offlineSupport.markAsCached(document.querySelectorAll('.offline-aware'));
@@ -182,12 +184,16 @@ class Gulliver {
    * Setup/configure Firebase Cloud Messaging.
    */
   setupMessaging() {
-    const NEW_APPS_TOPIC = 'new-apps';
-    const firebaseMsgSenderId = this.config.firebase_msg_sender_id;
-    const checkbox = document.getElementById('notifications');
-    const messaging = new Messaging(firebaseMsgSenderId);
-    // eslint-disable-next-line no-unused-vars
-    const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
+    try {
+      const NEW_APPS_TOPIC = 'new-apps';
+      const firebaseMsgSenderId = this.config.firebase_msg_sender_id;
+      const checkbox = document.getElementById('notifications');
+      const messaging = new Messaging(firebaseMsgSenderId);
+      // eslint-disable-next-line no-unused-vars
+      const notificationCheckbox = new NotificationCheckbox(messaging, checkbox, NEW_APPS_TOPIC);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
  /**
