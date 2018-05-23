@@ -11,7 +11,7 @@ toolbox.options.debug = false;
 
 importScripts('/js/sw-assets-precache.js'); /* global ASSETS */
 
-const VERSION = '15';
+const VERSION = '16';
 const PREFIX = 'gulliver';
 const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 const PWA_OPTION = {
@@ -99,6 +99,9 @@ toolbox.router.default = (request, values, options) => {
 
 toolbox.router.get(/\/pwas\/\d+/, toolbox.router.default, PWA_OPTION);
 
+toolbox.router.get('/pwas/score', toolbox.router.default, PWA_LIST_OPTION);
+toolbox.router.get('/pwas/newest', toolbox.router.default, PWA_LIST_OPTION);
+
 toolbox.router.get('/', (request, values) => {
   // Replace requests to start_url with the lastest version of the root page.
   // TODO Make more generic: strip utm_* parameters from *every* request.
@@ -125,7 +128,9 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames =>
       Promise.all(
-        cacheNames.filter(cacheName => cacheName !== CACHE_NAME)
+        cacheNames.filter(cacheName => cacheName !== CACHE_NAME &&
+            cacheName !== PWA_OPTION.name &&
+            cacheName !== PWA_LIST_OPTION.name)
           .map(cacheName => caches.delete(cacheName))
       )
     )

@@ -42,7 +42,7 @@ function setupListViewState(req) {
     viewState.backlink = false;
     viewState.search = false;
   } else {
-    viewState.mainPage = false;
+    viewState.mainPage = true;
     viewState.backlink = true;
     viewState.search = true;
     viewState.searchQuery = req.query.query;
