@@ -27,7 +27,7 @@ where `format`is one of `json`, `html` (see [cli-options](https://github.com/Goo
 
 ## FAQ
 
-Q: I get an "Empty response" frmo the server. What's happening?
+Q: I get an "Empty response" from the server. What's happening?
 
 A: Either you have a conflict on one of the mapped ports, or a network issue with your container. If the former, just change the mapped port to a different number, e.g. -p 8081:8080
 
