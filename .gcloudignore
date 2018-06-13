@@ -1,2 +1,2 @@
- node_modules/**
-lighthouse_machine/**
+node_modules/
+lighthouse_machine/
