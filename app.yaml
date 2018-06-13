@@ -11,12 +11,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-runtime: nodejs
-env: flex
+runtime: nodejs8
 
-# Temporary setting to keep gcloud from uploading node_modules
-skip_files:
- - ^node_modules$
+instance_class: F4_1G
 
 handlers:
  - url: /.*
