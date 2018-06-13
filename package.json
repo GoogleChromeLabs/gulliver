@@ -43,6 +43,9 @@
       "it"
     ]
   },
+  "engines": {
+    "nodejs8": "8.11.3"
+  },
   "dependencies": {
     "@google-cloud/datastore": "^1.1.0",
     "@google-cloud/storage": "^1.3.1",
@@ -98,8 +101,5 @@
     "node-mocks-http": "^1.5.4",
     "simple-mock": "^0.7.0",
     "supertest": "^3.1.0"
-  },
-  "engines": {
-    "node": "8.9.0"
   }
 }
