@@ -26,7 +26,7 @@ const libMetadata = require('../lib/metadata');
 
 const LIST_PAGE_SIZE = 32;
 const DEFAULT_PAGE_NUMBER = 1;
-const DEFAULT_SORT_ORDER = 'score';
+const DEFAULT_SORT_ORDER = 'newest';
 const DEFAULT_TAB = 'installable';
 const DEFAULT_FILTER = {
   installable: true
@@ -128,7 +128,7 @@ router.get('/installable', (req, res, next) => {
   const filters = {
     installable: true
   };
-  listPwas(req, res, next, 'score', filters);
+  listPwas(req, res, next, 'newest', filters);
 });
 
 /**

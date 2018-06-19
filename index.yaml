@@ -10,4 +10,8 @@ indexes:
   - name: installable
   - name: lighthouseScore
     direction: desc
-
+- kind: PWA
+  properties:
+  - name: installable
+  - name: created
+    direction: desc
