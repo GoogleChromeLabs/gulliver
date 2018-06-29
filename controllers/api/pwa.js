@@ -20,6 +20,9 @@ require('express-csv');
 const pwaLib = require('../../lib/pwa');
 const libMetadata = require('../../lib/metadata');
 const router = express.Router(); // eslint-disable-line new-cap
+const verifyIdToken = require('../../lib/verify-id-token');
+const bodyParser = require('body-parser');
+const Pwa = require('../../models/pwa');
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 1; // 1 hour
 const RSS = require('rss');
 
@@ -191,6 +194,35 @@ router.get('/:id*?', (req, res) => {
     res.status(code);
     res.json(err);
   });
+});
+
+router.post('/add', bodyParser.json(), (req, res) => {
+  const idToken = req.body.idToken;
+
+  if (!idToken) {
+    res.sendStatus(401, JSON.stringify({error: 'user not logged in'}));
+    return;
+  }
+
+  const manifestUrl = req.body.manifestUrl;
+  if (!manifestUrl) {
+    res.sendStatus(400, JSON.stringify({error: 'no manifest provided'}));
+    return;
+  }
+
+  (async () => {
+    try {
+      const pwa = new Pwa(manifestUrl);
+      const user = await verifyIdToken.verifyIdToken(idToken);
+      pwa.setUser(user);
+      const savedPwa = await pwaLib.createOrUpdatePwa(pwa);
+      res.json({
+        id: savedPwa.id
+      });
+    } catch (e) {
+      res.sendStatus(400, JSON.stringify({error: e}));
+    }
+  })();
 });
 
 module.exports = router;
