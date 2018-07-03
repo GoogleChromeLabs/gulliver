@@ -20,8 +20,13 @@ require('express-csv');
 const pwaLib = require('../../lib/pwa');
 const libMetadata = require('../../lib/metadata');
 const router = express.Router(); // eslint-disable-line new-cap
+const verifyIdToken = require('../../lib/verify-id-token');
+const bodyParser = require('body-parser');
+const Pwa = require('../../models/pwa');
+const color = require('../../lib/color');
 const CACHE_CONTROL_EXPIRES = 60 * 60 * 1; // 1 hour
 const RSS = require('rss');
+const {URL} = require('url');
 
 function getDate(date) {
   return new Date(date).toISOString().split('T')[0];
@@ -191,6 +196,44 @@ router.get('/:id*?', (req, res) => {
     res.status(code);
     res.json(err);
   });
+});
+
+router.post('/add', bodyParser.json(), (req, res) => {
+  const idToken = req.body.idToken;
+
+  if (!idToken) {
+    res.status(400).send({error: 'user not logged in'});
+    return;
+  }
+
+  const manifestUrl = req.body.manifestUrl;
+  if (!manifestUrl) {
+    res.status(400).send({error: 'no manifest provided'});
+    return;
+  }
+
+  try {
+    const url = new URL(manifestUrl);
+    (async () => {
+      try {
+        const pwa = new Pwa(url.toString());
+        const user = await verifyIdToken.verifyIdToken(idToken);
+        pwa.setUser(user);
+        const savedPwa = await pwaLib.createOrUpdatePwa(pwa);
+        res.json({
+          id: savedPwa.id,
+          name: savedPwa.name,
+          backgroundColor: savedPwa.backgroundColor,
+          foregroundColor: color.bestContrastRatio('#FFFFFF', '#000000', savedPwa.backgroundColor)
+        });
+      } catch (e) {
+        const message = e.message || e;
+        res.status(400).json({error: message});
+      }
+    })();
+  } catch (e) {
+    res.status(400).send({error: 'manifestUrl is not an URL'});
+  }
 });
 
 module.exports = router;
