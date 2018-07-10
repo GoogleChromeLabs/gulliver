@@ -22,19 +22,26 @@
     <div class="page-holder">
       <main class="page">
 {{/unless}}
-        <form id="pwaForm" method="POST">
-        <div class="form-group">
+        <form id="pwaForm" action="">
+          <div class="form-group">
             <label for="manifestUrl">Manifest URL</label>
-            <input type="text" name="manifestUrl" id="manifestUrl" class="form-input box-shadow" value="{{pwa.manifestUrl}}" autofocus>
-            <button id="pwaSubmit" type="submit" href="/pwas/add" class="button button-primary offline-aware signin-aware">
-              <i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
-        </div>
-        {{#if error}}
-        <p class="error">Error: {{error}}.</p>
-        {{/if}}
-        <input id="idToken" type="hidden" name="idToken" />
+
+            <input type="text" name="manifestUrl" id="manifestUrl" class="form-input box-shadow" autofocus required>
+
+            <button id="pwaSubmit" type="submit" class="button button-primary offline-aware signin-aware">Save</button>
+          </div>
         </form>
+
+        <div class="items">
+
         </div>
+
+        <template id="template-load-pwa">
+          <a href="" class="item card-pwa link-disabled box-shadow" target="_blank" rel="noopener">
+              <div class="icon pwa-icon"></div>
+              <div class="pwa-name"></div>
+          </a>
+        </template>
 {{#unless contentOnly}}
       </main>
       <div class='page-loader'>

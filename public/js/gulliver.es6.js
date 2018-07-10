@@ -54,10 +54,7 @@ class Gulliver {
     this.shell = new Shell(document);
     this.router = new Router(window, document.querySelector('main'));
     this.offlineSupport = new OfflineSupport(window, this.router);
-    this._setupRoutes();
-    this.setupBacklink();
-    this.setupServiceWorker();
-    this.setupMessaging();
+
     SearchInput.setupSearchElements(this.router);
 
     // Setup SignIn
@@ -79,6 +76,11 @@ class Gulliver {
       this.shell.onRouteChange(e.detail.route);
       this.offlineSupport.markAsCached(document.querySelectorAll('.offline-aware'));
     });
+
+    this._setupRoutes();
+    this.setupBacklink();
+    this.setupServiceWorker();
+    this.setupMessaging();
   }
 
   _addRoute(regexp, transitionStrategy, onRouteAttached, shellState) {

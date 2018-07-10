@@ -285,10 +285,20 @@ a.card-pwa:hover {
   padding-top: 8px;
   font-size: 18px;
   font-weight: 600;
-  width: auto;
   height: 36px;
   text-align: center;
   letter-spacing: .005em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  white-space: nowrap;    
+}
+
+.pwa-icon {
+  width: 64px;
+  height: 64px;
+  text-align: center;
+  font-size: 64px;
 }
 
 .score {
@@ -620,7 +630,7 @@ footer #github-logo {
 .page-loader {
   position: absolute;
   width: 100%;
-  height: calc(100vh - 120px);
+  top: 120px;
   background: #F5F5F5;
   transition: opacity 0.3s ease-in-out;
   z-index: -1;
@@ -632,6 +642,7 @@ footer #github-logo {
   width: 200px;
   margin: 16px auto;
 }
+
 .pager svg {
   fill: #1976D2;
 }
@@ -692,9 +703,10 @@ body[signedIn] .auth-button-label-login {
   -webkit-box-flex: 1;
       -ms-flex: 1 0 280px;
           flex: 1 0 280px;
-  background: #e0ddd5;
+  background: white;
   color: #171e42;
   margin:  8px;
+  max-width: calc(100% - 16px);
 }
 
 /* Fixes last flex row 
@@ -857,14 +869,9 @@ pre {
 
 /* Loader */
 .loader {
-  position: absolute;
   text-align: center;
   display: block;
   height: 10px;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
-  transform-origin: 50% 50%;
   white-space: nowrap;
   z-index: 1;
 }
@@ -934,4 +941,7 @@ pre {
 .button-primary,
 .accent-background {
   background: #FF5722;
+}
+.link-disabled {
+  pointer-events: none;
 }
