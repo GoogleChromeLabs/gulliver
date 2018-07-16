@@ -47,6 +47,11 @@ describe('color.js', () => {
       const bestContrast = color.bestContrastRatio('#000000', '#FFFFFF', '#000000');
       assert.equal(bestContrast, '#FFFFFF');
     });
+
+    it('Selects best contrast between #000000 and #FFFFFF agains black', () => {
+      const bestContrast = color.bestContrastRatio('#000000', '#FFFFFF', 'black');
+      assert.equal(bestContrast, '#FFFFFF');
+    });
   });
 
   describe('relativeLuminance', () => {
@@ -62,6 +67,11 @@ describe('color.js', () => {
 
     it('Calculates correct luminance for "#000000 "', () => {
       const luminance = color.relativeLuminance('#000000 ');
+      assert.equal(luminance, 0);
+    });
+
+    it('Calculates correct luminance for "black"', () => {
+      const luminance = color.relativeLuminance('black');
       assert.equal(luminance, 0);
     });
   });

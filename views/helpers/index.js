@@ -27,11 +27,11 @@ function contrastColor(hexcolor) {
     return DEFAULT_DARK;
   }
 
-  if (!hexcolor.match(/#[A-Fa-f0-9]{1,8}/)) {
+  try {
+    return bestContrastRatio(DEFAULT_DARK, DEFAULT_LIGHT, hexcolor);
+  } catch (e) {
     return DEFAULT_DARK;
   }
-
-  return bestContrastRatio(DEFAULT_DARK, DEFAULT_LIGHT, hexcolor);
 }
 
 exports.contrastColor = contrastColor;

@@ -26,6 +26,11 @@ describe('views.helpers', () => {
       assert.equal('#000000', helpers.contrastColor(''));
       assert.equal('#000000', helpers.contrastColor('transparent'));
     });
+
+    it('it should understand HTML colors by name', () => {
+      assert.equal('#ffffff', helpers.contrastColor('black'));
+      assert.equal('#000000', helpers.contrastColor('white'));
+    });
   });
 
   describe('#firstLetter', () => {
