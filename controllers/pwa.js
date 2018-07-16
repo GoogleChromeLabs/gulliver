@@ -16,6 +16,7 @@
 'use strict';
 
 const express = require('express');
+const dataFetcher = require('../lib/data-fetcher');
 const pwaLib = require('../lib/pwa');
 const libPwaIndex = require('../lib/pwa-index');
 const verifyIdToken = require('../lib/verify-id-token');
@@ -152,18 +153,35 @@ router.get('/search', (req, res, next) => {
  *
  * Display a form for creating a PWA.
  */
-router.get('/add', (req, res) => {
-  const contentOnly = false || req.query.contentOnly;
-  let arg = Object.assign(libMetadata.fromRequest(req), {
-    title: 'PWA Directory - Submit a PWA',
-    description: 'PWA Directory: Submit a Progressive Web Apps',
-    pwa: {},
-    action: 'Add',
-    backlink: true,
-    submit: true,
-    contentOnly: contentOnly
-  });
-  res.render('pwas/form.hbs', arg);
+router.get('/add', async (req, res, next) => {
+  try {
+    const contentOnly = req.query.contentOnly || false;
+
+    const url = req.query.url || '';
+    let manifestUrl = req.query.manifestUrl || '';
+    if (url !== '' && manifestUrl !== '') {
+      const err = new Error('only one of url or manifestUrl may be set');
+      err.status = 400;
+      throw err;
+    }
+    if (url !== '') {
+      manifestUrl = await dataFetcher.fetchLinkRelManifestUrl(url);
+    }
+
+    let arg = Object.assign(libMetadata.fromRequest(req), {
+      title: 'PWA Directory - Submit a PWA',
+      description: 'PWA Directory: Submit a Progressive Web Apps',
+      pwa: {},
+      action: 'Add',
+      backlink: true,
+      submit: true,
+      contentOnly,
+      manifestUrl,
+    });
+    res.render('pwas/form.hbs', arg);
+  } catch(err) {
+    next(err);
+  }
 });
 
 /**
