@@ -176,10 +176,10 @@ router.get('/add', async (req, res, next) => {
       backlink: true,
       submit: true,
       contentOnly,
-      manifestUrl,
+      manifestUrl
     });
     res.render('pwas/form.hbs', arg);
-  } catch(err) {
+  } catch (err) {
     next(err);
   }
 });
