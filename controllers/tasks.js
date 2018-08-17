@@ -20,7 +20,6 @@ const pwaLib = require('../lib/pwa');
 const tasksLib = require('../lib/tasks');
 const Task = require('../models/task');
 const router = express.Router(); // eslint-disable-line new-cap
-const promiseSequential = require('../lib/promise-sequential');
 
 const APP_ENGINE_CRON = 'X-Appengine-Cron';
 
@@ -29,9 +28,9 @@ const APP_ENGINE_CRON = 'X-Appengine-Cron';
  * Only requests from the App Engine cron are allowed.
  */
 function checkAppEngineCron(req, res, next) {
-  // if (!req.get(APP_ENGINE_CRON)) {
-  //   return res.sendStatus(403);
-  // }
+  if (!req.get(APP_ENGINE_CRON)) {
+    return res.sendStatus(403);
+  }
   return next();
 }
 
@@ -119,22 +118,6 @@ router.get('/execute', checkAppEngineCron, (req, res) => {
     }
     res.sendStatus(200);
   })();
-
-  // try {
-  //   for (let i = 0; i < tasksToExecute; i++) {
-  //     tasksList.push(tasksLib.popExecute);
-  //   }
-  //   // Execute sequentially the 1 OR req.query.tasks of tasks
-  //   promiseSequential.all(tasksList)
-  //     .then(_ => {
-  //       res.sendStatus(200);
-  //     })
-  //     .catch(err => {
-  //       next(err);
-  //     });
-  // } catch (err) {
-  //   next(err);
-  // }
 });
 
 /**
