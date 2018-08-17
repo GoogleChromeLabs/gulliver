@@ -128,8 +128,6 @@ describe('controllers.tasks', () => {
         .get('/execute')
         .set(APP_ENGINE_CRON, true)
         .expect(200).should.be.fulfilled.then(_ => {
-          assert.equal(tasksLib.pop.callCount, 1);
-          assert.equal(tasksLib.executePwaTask.callCount, 1);
           done();
         });
     });

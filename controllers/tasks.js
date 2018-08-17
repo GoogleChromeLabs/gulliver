@@ -20,7 +20,6 @@ const pwaLib = require('../lib/pwa');
 const tasksLib = require('../lib/tasks');
 const Task = require('../models/task');
 const router = express.Router(); // eslint-disable-line new-cap
-const promiseSequential = require('../lib/promise-sequential');
 
 const APP_ENGINE_CRON = 'X-Appengine-Cron';
 
@@ -93,21 +92,32 @@ router.get('/updateunscored', checkAppEngineCron, (req, res, next) => {
  *
  * Uses checkAppEngineCron to allow only request from cron job.
  */
-router.get('/execute', checkAppEngineCron, (req, res, next) => {
+router.get('/execute', checkAppEngineCron, (req, res) => {
   const tasksToExecute = req.query.tasks ? req.query.tasks : 1;
-  const tasksList = [];
-  try {
-    for (let i = 0; i < tasksToExecute; i++) {
-      tasksList.push(tasksLib.popExecute);
+  // const tasksList = [];
+
+  (async () => {
+    const tasks = await tasksLib.getTasks(tasksToExecute);
+    console.log(`Executing ${tasks.length} tasks`);
+
+    for (let task of tasks) {
+      try {
+        console.log(`Will Execute Task: ${task.id}`);
+        // Delete before executing, so we ensure that if the task breaks
+        // something it is removed from the queue anyway.
+        try {
+          await tasksLib.deleteTask(task.id);
+        } catch (err) {
+          console.error(`Error deleting task: ${task.id}`);
+        }
+        await tasksLib.executePwaTask(task);
+        console.log(`Executed Task: ${task.id}`);
+      } catch (err) {
+        console.error(`Failed to execute task: ${task.id}`);
+      }
     }
-    // Execute sequentially the 1 OR req.query.tasks of tasks
-    promiseSequential.all(tasksList)
-      .then(_ => {
-        res.sendStatus(200);
-      });
-  } catch (err) {
-    next(err);
-  }
+    res.sendStatus(200);
+  })();
 });
 
 /**
