@@ -1,17 +1,32 @@
 cron:
 - description: daily PWA update job
   url: /tasks/cron
-  schedule: every monday 12:00
+  schedule: every day 12:00
 
 - description: execute PWA update tasks
   url: /tasks/execute?tasks=30
   schedule: every 1 minutes
 
-- description: daily Web Performance Service job
-  url: /taskcreator
-  schedule: every monday 00:00
-  target: web-performance
-
 - description: update unscored PWAs
   url: /tasks/updateunscored
   schedule: every 6 hours
+
+- description: UpdateManifestTask
+  url: /taskcreator/task/UpdateManifestTask
+  schedule: every day 20:00
+  target: web-performance
+
+- description: PageSpeedReportTask
+  url: /taskcreator/task/PageSpeedReportTask
+  schedule: every day 22:00
+  target: web-performance
+
+- description: WebPageTestReportTask
+  url: /taskcreator/task/WebPageTestReportTask
+  schedule: every 48 hours
+  target: web-performance
+
+- description: LighthouseReportTask
+  url: /taskcreator/task/LighthouseReportTask
+  schedule: every 48 hours
+  target: web-performance
