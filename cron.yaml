@@ -1,13 +1,13 @@
 cron:
-- description: daily PWA update job
+- description: (Node) Daily PWA info update job
   url: /tasks/cron
-  schedule: every day 12:00
+  schedule: every day 10:00
 
-- description: execute PWA update tasks
+- description: (Node) Execute PWA update tasks
   url: /tasks/execute?tasks=30
   schedule: every 1 minutes
 
-- description: update unscored PWAs
+- description: (Node) Update unscored PWAs
   url: /tasks/updateunscored
   schedule: every 6 hours
 
