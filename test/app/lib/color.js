@@ -40,6 +40,11 @@ describe('color.js', () => {
       const ratio = color.contrastRatio('#FFFFFF', '#FFFFFF');
       assert.equal(ratio, 1);
     });
+
+    it('Calculates correct ratio for #FFFFFF / transparent', () => {
+      const ratio = color.contrastRatio('#FFFFFF', 'transparent');
+      assert.equal(ratio, 1);
+    });
   });
 
   describe('bestContrastRatio', () => {

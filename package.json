@@ -9,7 +9,7 @@
     "prestart": "BABEL_ENV=default rollup -c rollup-config/gulliver.js && npm run generate-msg-sw",
     "monitor": "nodemon app.js",
     "deploy": "npm run prestart && gcloud app deploy app.yaml",
-    "mocha-app": "_mocha test/app/**/*",
+    "mocha-app": "_mocha test/app/**/* --exit",
     "mocha-client": "BABEL_ENV=test _mocha --compilers js:babel-core/register test/client/**/*.js",
     "coverage": "istanbul cover _mocha --compilers js:babel-core/register test/app/**/*",
     "lint": "eslint .",
