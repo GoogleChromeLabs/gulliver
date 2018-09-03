@@ -47,11 +47,10 @@ class Manifest {
     let bestIcon;
     let bestIconSize;
 
-    this.icons.forEach(icon => {
+    for (let icon of this.icons) {
       if (!bestIcon) {
         bestIcon = icon;
         bestIconSize = getIconSize(icon);
-        return;
       }
 
       const iconSize = getIconSize(icon);
@@ -59,8 +58,12 @@ class Manifest {
         bestIcon = icon;
         bestIconSize = iconSize;
       }
-    });
 
+      // We can return 128 and 144 even if there are bigger ones.
+      if (iconSize == 128 || iconSize == 144) {
+        return icon;
+      }
+    };
     return bestIcon;
   }
 
