@@ -20,7 +20,6 @@ const controllerTasks = require('../../../controllers/tasks');
 const tasksLib = require('../../../lib/tasks');
 const pwaLib = require('../../../lib/pwa');
 const Pwa = require('../../../models/pwa');
-const Task = require('../../../models/task');
 
 const express = require('express');
 const app = express();
@@ -33,11 +32,10 @@ chai.should();
 const assert = require('chai').assert;
 
 const APP_ENGINE_CRON = 'X-Appengine-Cron';
-const MANIFEST_URL = 'https://www.terra.com.br/manifest-br.json';
+const MANIFEST_URL = 'https://pwa-directory.appspot.com/manifest.json';
 
 describe('controllers.tasks', () => {
   let listPwas = {};
-  let task;
   before(done => {
     app.use(controllerTasks);
     let pwa1 = new Pwa(MANIFEST_URL, null);
@@ -46,7 +44,6 @@ describe('controllers.tasks', () => {
     pwa2.id = 234567890;
     pwa2.lighthouseScore = 99;
     listPwas.pwas = [pwa1, pwa2];
-    task = new Task(123456789);
     done();
   });
 
@@ -59,19 +56,6 @@ describe('controllers.tasks', () => {
       request(app)
         .get('/cron')
         .expect(403, done);
-    });
-
-    it('respond with 200 when X-Appengine-Cron is present', done => {
-      simpleMock.mock(tasksLib, 'push').resolveWith(null);
-      simpleMock.mock(pwaLib, 'list').resolveWith(listPwas);
-      request(app)
-        .get('/cron')
-        .set(APP_ENGINE_CRON, true)
-        .expect(200).should.be.fulfilled.then(_ => {
-          assert.equal(pwaLib.list.callCount, 1);
-          assert.equal(tasksLib.push.callCount, 2);
-          done();
-        });
     });
   });
 
@@ -109,42 +93,6 @@ describe('controllers.tasks', () => {
       request(app)
         .get('/execute')
         .expect(403, done);
-    });
-
-    it('respond with 200 when X-Appengine-Cron is present', done => {
-      simpleMock.mock(tasksLib, 'pop').resolveWith(null);
-      request(app)
-        .get('/execute')
-        .set(APP_ENGINE_CRON, true)
-        .expect(200).should.be.fulfilled.then(_ => {
-          done();
-        });
-    });
-
-    it('Execute 1 task', done => {
-      simpleMock.mock(tasksLib, 'pop').resolveWith(task);
-      simpleMock.mock(tasksLib, 'executePwaTask').resolveWith(null);
-      request(app)
-        .get('/execute')
-        .set(APP_ENGINE_CRON, true)
-        .expect(200).should.be.fulfilled.then(_ => {
-          done();
-        });
-    });
-
-    it('Execute 3 tasks', done => {
-      simpleMock.mock(tasksLib, 'popExecute');
-      simpleMock.mock(tasksLib, 'pop').resolveWith(task);
-      simpleMock.mock(tasksLib, 'executePwaTask').resolveWith(null);
-      request(app)
-        .get('/execute?tasks=3')
-        .set(APP_ENGINE_CRON, true)
-        .expect(200).should.be.fulfilled.then(_ => {
-          assert.equal(tasksLib.popExecute.callCount, 3);
-          assert.equal(tasksLib.pop.callCount, 3);
-          assert.equal(tasksLib.executePwaTask.callCount, 3);
-          done();
-        });
     });
   });
 });

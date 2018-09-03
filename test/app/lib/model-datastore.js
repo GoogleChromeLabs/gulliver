@@ -127,28 +127,6 @@ describe('lib.model-datastore', () => {
     });
   });
 
-  describe.skip('#list', () => {
-    beforeEach(function() {
-      if (skipTests) {
-        this.skip();
-        return;
-      }
-
-      return Promise.all([
-        db.update(ENTITY_NAME, null, DB_OBJECT),
-        db.update(ENTITY_NAME, null, DB_OBJECT),
-        db.update(ENTITY_NAME, null, DB_OBJECT)
-      ]);
-    });
-
-    it('list objects', () => {
-      return db.list(ENTITY_NAME)
-        .then(result => {
-          assert.equal(result.entities.length, 3, 'Returns 3 entities');
-        });
-    });
-  });
-
   describe('#delete', () => {
     let objectId;
 

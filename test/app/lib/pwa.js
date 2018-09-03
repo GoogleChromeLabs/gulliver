@@ -22,7 +22,6 @@ const libPwa = require('../../../lib/pwa');
 const libImages = require('../../../lib/images');
 const libManifest = require('../../../lib/manifest');
 const libWebPerformance = require('../../../lib/web-performance');
-const promiseSequential = require('../../../lib/promise-sequential');
 
 const Pwa = require('../../../models/pwa');
 
@@ -183,36 +182,6 @@ describe('lib.pwa', () => {
       simpleMock.mock(libPwa, 'findByManifestUrl').resolveWith(pwaInvalidThemeColor);
       return libPwa.updatePwaManifest(pwaInvalidThemeColor).should.be.rejected.then(error => {
         assert.equal(error, 'Error while validating the manifest: ERROR: color parsing failed.');
-      });
-    });
-  });
-
-  describe('#createOrUpdatePwa', () => {
-    afterEach(() => {
-      simpleMock.restore();
-    });
-    /* eslint max-nested-callbacks: ["error", 5] */
-    it('performs all the createOrUpdatePwa steps', () => {
-      simpleMock.mock(libPwa, 'validatePwa').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'updatePwaManifest').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'updatePwaMetadataDescription').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'updatePwaIcon').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'updatePwaLighthouseInfo').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'updatePwaPageSpeedInformation').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'updatePwaWebPageTestInformation').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'sendNewAppNotification').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'savePwa').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'submitWebPageUrlForWebPerformanceInformation').resolveWith(pwa);
-      simpleMock.mock(libPwa, 'removePwaFromCache').resolveWith(pwa);
-      simpleMock.mock(promiseSequential, 'all');
-      return libPwa.createOrUpdatePwa(pwa).should.be.fulfilled.then(result => {
-        assert.equal(libPwa.updatePwaManifest.callCount, 1);
-        assert.equal(libPwa.updatePwaIcon.callCount, 1);
-        assert.equal(libPwa.savePwa.callCount, 2);
-        assert.equal(libPwa.removePwaFromCache.callCount, 1);
-        assert.equal(promiseSequential.all.callCount, 1);
-        assert.equal(result, pwa);
-        assert.equal(libPwa.submitWebPageUrlForWebPerformanceInformation.callCount, 1);
       });
     });
   });

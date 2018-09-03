@@ -60,10 +60,10 @@ class Manifest {
       }
 
       // We can return 128 and 144 even if there are bigger ones.
-      if (iconSize == 128 || iconSize == 144) {
+      if (iconSize === 128 || iconSize === 144) {
         return icon;
       }
-    };
+    }
     return bestIcon;
   }
 
