@@ -32,6 +32,7 @@ import NotificationCheckbox from './ui/notification-checkbox';
 import Config from './gulliver-config';
 import SignIn from './signin';
 import OfflineSupport from './offline-support';
+import {ShareButton} from './ui/share-button';
 import {SignInButton, SignOutButton} from './ui/signin-button';
 import Analytics from './analytics';
 import Router from './routing/router';
@@ -56,6 +57,9 @@ class Gulliver {
     this.offlineSupport = new OfflineSupport(window, this.router);
 
     SearchInput.setupSearchElements(this.router);
+
+    // Setup share button
+    this.shareButton = new ShareButton(window, document.querySelector('#share-button'));
 
     // Setup SignIn
     this.signIn = new SignIn(window, this.config);
