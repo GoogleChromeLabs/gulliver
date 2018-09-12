@@ -24,11 +24,11 @@ export class ShareButton {
   }
 
   _init() {
-    if (this._window.navigator.share) {
-      this._setupEventListeners();
-    } else {
-      this.element.disabled = true;
+    if (!this._window.navigator.share) {
+      return;
     }
+    this.element.classList.remove('hidden');
+    this._setupEventListeners();
   }
 
   _setupEventListeners() {
@@ -47,10 +47,6 @@ export class ShareButton {
   }
 
   share() {
-    if (!this._window.navigator.share) {
-      return;
-    }
-
     const title = this._getTitle();
     this._window.navigator.share({
       title,
