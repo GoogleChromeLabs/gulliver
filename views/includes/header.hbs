@@ -28,32 +28,32 @@
 
 <div class="section dark-primary-background box-shadow">
   <a id="backlink" class="back{{#unless backlink}} hidden{{/unless}}">{{> chevron_left }}</a>
-  <div class="section-top"> 
+  <div class="section-top">
     <form id="search" class="search-form">
       <div class="search-group">
         <input id="search-input" type="text" name="search" class="form-input box-shadow" value="{{searchQuery}}" placeholder="Search for PWAs" aria-label="Seach for PWAs">
         <a id="search-icon">{{> icon_search }}</a>
       </div>
     </form>
-      <button id="signin-button" class="auth-button button blue offline-aware" aria-label="Sign In">
+      <button id="signin-button" class="toolbar-button button blue offline-aware" aria-label="Sign In">
         <span class="auth-button-label-login toolbar-icon">{{> icon_log_in}}</span>
       </button>
-      <button id="signout-button" class="auth-button button blue offline-aware hidden" aria-label="Sign Out">
+      <button id="signout-button" class="toolbar-button button blue offline-aware hidden" aria-label="Sign Out">
         <span class="auth-button-label-logout toolbar-icon">{{> icon_log_out}}</span>
       </button>
   </div>
   <div id="tabs" class="section-tabs{{#unless mainPage}} hidden{{/unless}}">
-    <a id="installable" 
+    <a id="installable"
       class="tab{{#if (equals currentTab 'installable')}} activetab{{/if}} gulliver-content-only offline-aware"
       href="/">
       Installable
-    </a>  
+    </a>
     <a id="newest"
       class="tab{{#if (equals currentTab 'newest')}} activetab{{/if}} gulliver-content-only offline-aware"
       href="/pwas/newest">
       New
     </a>
-    <a id="score" 
+    <a id="score"
       class="tab{{#if (equals currentTab 'score')}} activetab{{/if}} gulliver-content-only offline-aware"
       href="/pwas/score">
       Score

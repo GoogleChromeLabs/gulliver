@@ -45,19 +45,19 @@ pre, code {
   font-size: 14px;
 }
 
-h3 { 
+h3 {
   font-size: 22px;
   font-weight: 400;
   letter-spacing: -.018em;
   text-overflow: ellipsis;
 }
 
-a { 
+a {
   text-decoration: none;
   color: inherit;
 }
-a:hover { 
-  text-decoration: underline; 
+a:hover {
+  text-decoration: underline;
 }
 main {
   padding-top: 16px;
@@ -197,7 +197,7 @@ main {
   }
   .navbar-title {
     font-size: 24px;
-    text-align: left; 
+    text-align: left;
   }
   .navbar-title #title {
     padding-left: 40px;
@@ -240,11 +240,11 @@ main {
   border: none;
   text-transform: uppercase;
   margin: 0;
-  transition: opacity 0.2s ease-in-out;  
+  transition: opacity 0.2s ease-in-out;
 }
 
 button:active,
-button[disabled=disabled], 
+button[disabled=disabled],
 button:disabled {
   opacity: 0.5;
   cursor: default;
@@ -291,7 +291,7 @@ a.card-pwa:hover {
   overflow: hidden;
   text-overflow: ellipsis;
   width: 100%;
-  white-space: nowrap;    
+  white-space: nowrap;
 }
 
 .pwa-icon {
@@ -331,7 +331,7 @@ a.card-pwa:hover {
   background: white;
   border-radius: 2px;
 }
-.detail-general h3 { 
+.detail-general h3 {
   color: #333333;
   margin: 0;
   padding: 16px;
@@ -358,7 +358,7 @@ a.card-pwa:hover {
 /* PWA Overview */
 #pwa {
   padding: 16px;
-  display: flex; 
+  display: flex;
   flex-direction: column;
   align-items: center;
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
@@ -389,7 +389,7 @@ body:not(.transition) #pwa:hover {
   margin-top: 16px;
   min-height: 18px;
   width: 100%;
-  text-align: center;  
+  text-align: center;
 }
 #pwa .dates {
   font-style: italic;
@@ -440,12 +440,12 @@ th {
   text-transform: uppercase;
 }
 th:nth-child(1),
-td:nth-child(1) { 
+td:nth-child(1) {
   text-align: left;
   padding-left: 16px;
 }
 th:nth-child(2),
-td:nth-child(2) { 
+td:nth-child(2) {
   width: 60px;
   text-align: right;
   padding-right: 16px;
@@ -529,16 +529,16 @@ tr:last-child td {
   width: 34px;
   fill: #FFFFFF;
 }
-.auth-button {
+.toolbar-button {
   min-width: 0;
   position: relative;
   height: 48px;
 }
-.auth-button:active {
+.toolbar-button:active {
   background: #90CAF9;
   opacity: 1;
 }
-.auth-button:focus {
+.toolbar-button:focus {
   outline:0;
 }
 #newest {
@@ -563,7 +563,7 @@ tr:last-child td {
   opacity: 0;
   transition-property: transform,opacity;
   transition-duration: .5s;
-  transition-timing-function: ease-in-out;  
+  transition-timing-function: ease-in-out;
 }
 
 /* Footer */
@@ -600,7 +600,7 @@ footer li {
   display: block;
   padding: 0 1em;
   border-left: 1px solid #fff;
-  line-height: 24px; 
+  line-height: 24px;
   height: 24px;
 }
 footer ul li a {
@@ -709,7 +709,7 @@ body[signedIn] .auth-button-label-login {
   max-width: calc(100% - 16px);
 }
 
-/* Fixes last flex row 
+/* Fixes last flex row
    min-widt: 280*colums+16*(colums+1) */
 @media (min-width: 608px) {
   .items .item {
@@ -750,8 +750,8 @@ body[signedIn] .auth-button-label-login {
 /* Styles for highlighted JSON */
 pre {
   tab-size: 2;
-  padding: 16px; 
-  margin: 0; 
+  padding: 16px;
+  margin: 0;
   overflow-x: auto;
 }
 .string { color: #0288D1; }
@@ -773,7 +773,7 @@ pre {
 .pwa-count {
   font-weight: 600;
   height: 50px;
-  line-height: 22px;  
+  line-height: 22px;
   text-align: end;
   padding-right: 5px;
 }
@@ -843,8 +843,8 @@ pre {
   visibility: hidden;
 }
 
-.hidden { 
-  display: none; 
+.hidden {
+  display: none;
 }
 
 .fadeIn {
