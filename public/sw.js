@@ -11,7 +11,7 @@ toolbox.options.debug = false;
 
 importScripts('/js/sw-assets-precache.js'); /* global ASSETS */
 
-const VERSION = '19';
+const VERSION = '20';
 const PREFIX = 'gulliver';
 const CACHE_NAME = `${PREFIX}-v${VERSION}`;
 const PWA_OPTION = {
