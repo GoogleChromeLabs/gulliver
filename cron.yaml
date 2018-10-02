@@ -13,7 +13,12 @@ cron:
 
 - description: UpdateManifestTask
   url: /taskcreator/task/UpdateManifestTask
-  schedule: every day 20:00
+  schedule: every day 16:00
+  target: web-performance
+
+- description: UpdateIconTask
+  url: /taskcreator/task/UpdateIconTask
+  schedule: every day 22:00
   target: web-performance
 
 - description: PageSpeedReportTask
