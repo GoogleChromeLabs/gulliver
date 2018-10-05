@@ -9,7 +9,12 @@ cron:
 
 - description: (Node) Update unscored PWAs
   url: /tasks/updateunscored
-  schedule: every 4 hours
+  schedule: every 1 hours
+
+- description: Update unscored PWAs
+  url: /taskcreator/task?unscored=true
+  schedule: every 6 hours
+  target: web-performance
 
 - description: UpdateManifestTask
   url: /taskcreator/task/UpdateManifestTask
