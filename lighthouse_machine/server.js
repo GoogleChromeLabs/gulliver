@@ -72,8 +72,7 @@ app.get('/', (req, res) => {
     });
     try {
       exec(
-        `node lighthouse-cli --port 9222 --output-path=../report.${req.query.format}\
-        --output=${req.query.format} '${req.query.url}'`,
+        `lighthouse '${req.query.url}' --port 9222 --output-path ../report.${req.query.format} --output ${req.query.format}`,
         {
           cwd: '/lighthouse',
           timeout: 500000

@@ -18,10 +18,10 @@ FROM ubuntu:latest
 
 # Install utilities
 RUN apt-get update --fix-missing && apt-get -y upgrade &&\
-apt-get install -y sudo apt-utils curl wget unzip git
+apt-get install -y sudo apt-utils curl wget unzip git gnupg
 
 # Install node 6
-RUN curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash - &&\
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash - &&\
 sudo apt-get install -y nodejs
 
 # Install Xvfb and dbus for X11
@@ -55,7 +55,7 @@ RUN chmod +x /chromeuser-script.sh
 # Download lighthouse
 RUN git clone https://github.com/googlechrome/lighthouse &&\
 cd /lighthouse &&\
-git checkout tags/v2.9.3 &&\
+git checkout tags/v3.2.1 &&\
 npm install -g yarn &&\
 npm install -g yarnpkg &&\
 npm install -g @types/mkdirp &&\
