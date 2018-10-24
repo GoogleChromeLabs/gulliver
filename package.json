@@ -59,7 +59,7 @@
     "express-csv": "^0.6.0",
     "express-minify-html": "^0.9.0",
     "express-sslify": "^1.2.0",
-    "firebase": "^5.0.2",
+    "firebase": "^5.5.5",
     "google-auth-library": "^1.6.1",
     "handlebars": "^4.0.5",
     "hbs": "^4.0.0",
