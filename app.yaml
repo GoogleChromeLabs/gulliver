@@ -11,9 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-runtime: nodejs8
+runtime: nodejs
+env: flex
 
-instance_class: F4_1G
+instance_class: B4_1G
+manual_scaling:
+  instances: 2
 
 handlers:
  - url: /.*
