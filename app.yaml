@@ -11,8 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-runtime: nodejs
-env: flex
+runtime: nodejs8
 
 instance_class: B4_1G
 manual_scaling:
