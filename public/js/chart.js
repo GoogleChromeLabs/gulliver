@@ -52,7 +52,7 @@ export default class Chart {
   load() {
     this.loader.show();
     this._loadChartsApi().then(google => {
-      google.charts.load('current', {packages: ['annotationchart']});
+      google.charts.load('45.2', {packages: ['annotationchart']});
       google.charts.setOnLoadCallback(this.drawChart.bind(this));
     });
   }
