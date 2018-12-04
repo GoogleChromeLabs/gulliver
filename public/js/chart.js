@@ -67,19 +67,25 @@ export default class Chart {
       .then(jsonData => {
         // Create our data table out of JSON data loaded from server.
         const data = new google.visualization.DataTable(jsonData);
-        const chart = new google.visualization.AnnotationChart(this.chartElement);
-        const options = {
-          height: 242,
-          displayAnnotations: false,
-          displayRangeSelector: false,
-          displayZoomButtons: (pagewith > 420),
-          legendPosition: 'newRow',
-          thickness: 4,
-          min: 0,
-          max: 100
-        };
-        chart.draw(data, options);
-        this.loader.hide();
+        if (data.getNumberOfRows() > 0) {
+          const chart = new google.visualization.AnnotationChart(this.chartElement);
+          const options = {
+            height: 242,
+            displayAnnotations: false,
+            displayRangeSelector: false,
+            displayZoomButtons: (pagewith > 420),
+            legendPosition: 'newRow',
+            thickness: 4,
+            min: 0,
+            max: 100
+          };
+          chart.draw(data, options);
+          this.loader.hide();
+        } else {
+          this.loader.hide();
+          const missingChart = this.chartElement.querySelector('div#chart-missing');
+          missingChart.classList.add('fadeIn');
+        }
       })
       .catch(err => {
         this.loader.hide();
