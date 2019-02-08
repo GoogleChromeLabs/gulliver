@@ -1,0 +1,7 @@
+[{
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.appspot.pwa_directory",
+      "sha256_cert_fingerprints": ["1A:64:23:29:C2:BB:FA:18:45:A3:BE:02:08:DD:B4:8F:51:21:F9:2E:95:75:75:CA:2B:8B:47:75:94:C5:0F:64"]}
+  }]
