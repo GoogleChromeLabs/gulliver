@@ -13,7 +13,7 @@ cron:
 
 - description: Update unscored PWAs
   url: /taskcreator/task?unscored=true
-  schedule: every 6 hours
+  schedule: every 1 hours
   target: web-performance
 
 - description: UpdateManifestTask
@@ -33,7 +33,7 @@ cron:
 
 - description: WebPageTestReportTask
   url: /taskcreator/task/WebPageTestReportTask
-  schedule: every 48 hours
+  schedule: every 96 hours
   target: web-performance
 
 - description: LighthouseReportTask
