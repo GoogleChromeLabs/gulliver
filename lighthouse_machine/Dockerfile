@@ -55,16 +55,14 @@ RUN chmod +x /chromeuser-script.sh
 # Download lighthouse
 RUN git clone https://github.com/googlechrome/lighthouse &&\
 cd /lighthouse &&\
-git checkout tags/v3.2.1 &&\
+git checkout tags/v4.2.0 &&\
 npm install -g yarn &&\
 npm install -g yarnpkg &&\
 npm install -g @types/mkdirp &&\
 npm install -g --save-dev run-sequence &&\
 npm install -g typescript &&\
 npm install -g &&\
-yarn &&\
-yarn install-all &&\
-yarn build-all
+yarn global add lighthouse
 
 ## PART 3: Express server
 ## ======================
