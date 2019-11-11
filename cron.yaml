@@ -35,8 +35,3 @@ cron:
   url: /taskcreator/task/WebPageTestReportTask
   schedule: every 96 hours
   target: web-performance
-
-- description: LighthouseReportTask
-  url: /taskcreator/task/LighthouseReportTask
-  schedule: every 48 hours
-  target: web-performance
