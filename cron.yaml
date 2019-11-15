@@ -23,15 +23,20 @@ cron:
 
 - description: UpdateIconTask
   url: /taskcreator/task/UpdateIconTask
-  schedule: every day 22:00
+  schedule: every monday 01:00
   target: web-performance
 
 - description: PageSpeedReportTask
   url: /taskcreator/task/PageSpeedReportTask
-  schedule: every 48 hours
+  schedule: every friday 01:00
   target: web-performance
 
 - description: WebPageTestReportTask
   url: /taskcreator/task/WebPageTestReportTask
-  schedule: every 96 hours
+  schedule: every sunday 01:00
+  target: web-performance
+
+- description: LighthouseReportTask
+  url: /taskcreator/task/LighthouseReportTask
+  schedule: every saturday 01:00
   target: web-performance

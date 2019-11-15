@@ -15,8 +15,8 @@ runtime: custom
 env: flex
 service: lighthouse-machine
 automatic_scaling:
-  min_num_instances: 6
-  max_num_instances: 8
+  min_num_instances: 2
+  max_num_instances: 6
   cool_down_period_sec: 60
   cpu_utilization:
     target_utilization: 0.6
