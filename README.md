@@ -1,5 +1,3 @@
-# We will deprecate this project in the next few weeks.
-
 # Gulliver
 
 [Gulliver](https://pwa-directory.appspot.com/) is a directory of [Progressive Web Apps](https://infrequently.org/2016/09/what-exactly-makes-something-a-progressive-web-app/).
