@@ -54,7 +54,7 @@ toolbox.options.cache.name = CACHE_NAME;
 /**
  * Utility method to retrieve a url from the `toolbox.options.cache.name` cache
  *
- * @param {*} url url to be requested fromt he cache.
+ * @param {*} url url to be requested from the cache.
  */
 const getFromCache = url => {
   return caches.open(toolbox.options.cache.name)
