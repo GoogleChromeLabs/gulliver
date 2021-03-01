@@ -88,7 +88,7 @@
     "strong-data-uri": "^1.0.6",
     "sw-offline-google-analytics": "^1.1.1",
     "sw-toolbox": "^3.2.1",
-    "urijs": "^1.18.1",
+    "urijs": "^1.19.6",
     "url-polyfill": "^1.1.0",
     "whatwg-fetch": "^2.0.1",
     "yaku": "^0.17.6"
