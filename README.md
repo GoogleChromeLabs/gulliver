@@ -1,5 +1,5 @@
 ```diff
-! We will deprecate this project in the next few weeks.
+! This project has been deprecated.
 ```
 
 # Gulliver
