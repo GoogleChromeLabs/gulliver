@@ -83,7 +83,7 @@
     "rollup-plugin-uglify": "^1.0.1",
     "rss": "^1.2.2",
     "serve-static": "^1.11.1",
-    "sharp": "^0.17.0",
+    "sharp": "^0.30.5",
     "spdy": "^3.4.7",
     "strong-data-uri": "^1.0.6",
     "sw-offline-google-analytics": "^1.1.1",
