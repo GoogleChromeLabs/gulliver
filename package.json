@@ -55,7 +55,7 @@
     "compression": "^1.7.3",
     "elasticlunr": "^0.9.5",
     "escape-html": "^1.0.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "express-csv": "^0.6.0",
     "express-minify-html": "^0.12.0",
     "express-sslify": "^1.2.0",
