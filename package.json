@@ -76,7 +76,7 @@
     "parse-color": "^1.0.0",
     "request": "^2.88.0",
     "rev-hash": "^1.0.0",
-    "rollup": "^0.58.2",
+    "rollup": "^3.29.5",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^2.0.0",
