@@ -52,7 +52,7 @@
     "babel-preset-es2015-rollup": "^3.0.0",
     "body-parser": "^1.18.3",
     "cheerio": "^0.22.0",
-    "compression": "^1.7.3",
+    "compression": "^1.8.1",
     "elasticlunr": "^0.9.5",
     "escape-html": "^1.0.3",
     "express": "^4.16.4",
