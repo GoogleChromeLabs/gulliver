@@ -100,7 +100,7 @@
     "eslint": "^6.6.0",
     "eslint-config-google": "^0.6.0",
     "istanbul": "^0.4.4",
-    "mocha": "^5.2.0",
+    "mocha": "^11.7.5",
     "node-mocks-http": "^1.7.3",
     "simple-mock": "^0.7.0",
     "supertest": "^3.3.0"
