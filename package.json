@@ -70,7 +70,7 @@
     "memcached": "^2.2.2",
     "mime-types": "^2.1.21",
     "moment": "^2.22.2",
-    "multer": "^1.4.1",
+    "multer": "^2.2.0",
     "nconf": "^0.8.4",
     "node-fetch": "^2.6.1",
     "parse-color": "^1.0.0",
